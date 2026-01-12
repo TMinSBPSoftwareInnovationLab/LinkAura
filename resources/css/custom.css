@@ -1,0 +1,136 @@
+.fade-in-left {
+  animation: fadeInLeft 0.8s ease-out;
+}
+
+.fade-in-right {
+  animation: fadeInRight 0.8s ease-out;
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.fade-in-scale {
+  animation: fadeInScale 1s ease-out;
+}
+
+.custom-fade-in {
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* NEW: Scroll-triggered animation classes */
+.scroll-trigger {
+  /* Pause animation initially */
+  animation-play-state: paused;
+  /* Make animation fill both forwards and backwards */
+  animation-fill-mode: both;
+  
+  /* Remove these from your original classes since we're overriding them */
+  /* animation: fadeInLeft 0.8s ease-out; */
+  /* Instead, we'll use animation-name separately */
+}
+
+/* Trigger when element comes into view */
+.trigger-on-view {
+  animation-timeline: view();
+  animation-range: entry 30%; /* Start when 30% of element is visible */
+  animation-play-state: running;
+}
+
+/* For each animation type */
+.fade-in-left.trigger-on-view {
+  animation-name: fadeInLeft;
+  animation-duration: 0.8s;
+  animation-timing-function: ease-out;
+}
+
+.fade-in-right.trigger-on-view {
+  animation-name: fadeInRight;
+  animation-duration: 0.8s;
+  animation-timing-function: ease-out;
+}
+
+.fade-in-up.trigger-on-view {
+  animation-name: fadeInUp;
+  animation-duration: 0.8s;
+  animation-timing-function: ease-out;
+}
+
+.fade-in-scale.trigger-on-view {
+  animation-name: fadeInScale;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+}
+
+.custom-fade-in.trigger-on-view {
+  animation-name: fadeIn;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-in-out;
+}
+
+/* Stagger effect for multiple elements */
+.stagger > * {
+  animation-delay: calc(var(--stagger-index, 0) * 0.2s);
+}
+
+/* Utility classes for spacing */
+.spacer {
+  height: 100vh;
+}
+
+.content-block {
+  min-height: 300px;
+  padding: 40px;
+  margin: 40px 0;
+  background: #f5f5f5;
+  border-radius: 12px;
+}

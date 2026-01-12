@@ -1,0 +1,1282 @@
+<?php
+
+namespace App\Http\Controllers;
+// namespace App\Http\Controllers\Auth;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+
+class MiniWebsiteController extends Controller
+{
+    // save company details
+    public function save_company_details(Request $request){
+        // return $request;
+        $request->validate([
+            "company_name" => 'required',
+            "owner_name" => 'required',
+            'designation' => 'required'
+        ]);
+
+        $now = Carbon::now();
+        $formattedDate = $now->toDateTimeString(); 
+        $currDate = Carbon::today();
+        $companyName = trim($request->company_name);
+        $owner_name = trim($request->owner_name);
+        $designation = trim($request->designation);
+        $user_id = $request->user_id;
+        $path = ''; 
+        $rowid = $request->rowid;
+
+        if ($request->hasFile('logo') && 1==2) {
+            $businessName = preg_replace('/[^A-Za-z0-9\-]/', '_', $request->company_name);
+            $dateTime = now()->format('Ymd_His');
+            $extension = $request->file('logo')->getClientOriginalExtension();
+
+            $fileName = "{$user_id}_{$businessName}_{$dateTime}.{$extension}";
+            $destinationPath = public_path('company_logos');
+
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0777, true);
+            }
+            $request->file('logo')->move($destinationPath, $fileName);
+            $path = $fileName;
+        }
+
+        if ($request->hasFile('logo')) {
+
+            // New file name pattern
+            $businessName = preg_replace('/[^A-Za-z0-9\-]/', '_', $companyName);
+            $dateTime = now()->format('Ymd_His');
+            $extension = $request->file('logo')->getClientOriginalExtension();
+
+            $fileName = "{$user_id}_{$businessName}_{$dateTime}.{$extension}";
+            $destinationPath = public_path('company_logos');
+
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0777, true);
+            }
+
+            // If update & new file uploaded → delete old file
+            if ($rowid) {
+                $existing = DB::table('miniweb_company_details')
+                    ->where('id', $rowid)
+                    ->first();
+
+                if ($existing && $existing->logo_path) {
+                    $oldFile = $destinationPath . '/' . $existing->logo_path;
+
+                    if (file_exists($oldFile)) {
+                        unlink($oldFile);
+                    }
+                }
+            }
+
+            // Upload new file
+            $request->file('logo')->move($destinationPath, $fileName);
+            $path = $fileName;
+        }
+
+
+        $addData = [
+            'user_id' => $user_id,
+            'company_name' => $companyName,
+            'owner_name' => $owner_name,
+            'designation' => $designation
+        ];
+        if ($path) {
+            $addData['logo_path'] = $path;
+        }
+        // return $addData;
+        if($rowid){ // update 
+            $addData['m_date'] = Carbon::now('Asia/Kolkata');
+            $update = DB::table('miniweb_company_details')
+                ->where('id', $rowid)
+                ->update($addData);
+
+            return [
+                'status'  => $update ? true : false,
+                'message' => $update ? 'Company Details Updated Successfully' : 'No Changes Made',
+                'cardId'  => $rowid
+            ];
+        }
+        else
+        { //  new mini website insert
+            $insert = DB::table('miniweb_company_details')->insertOrIgnore($addData);
+            $last_Id = DB::getPdo()->lastInsertId();
+            return [
+                'status' => $insert ? true : false,
+                'message' => $insert ? 'Company Details Created Successfully' : 'Company Details Not Created',
+                'cardId' => $last_Id
+            ];
+        }
+    }
+
+    // get website datas
+    public function getWebsiteDetails(Request $request){
+        // return $request
+        $cardId = $request->cardId;
+        $table_name = $request->table;
+
+        if ($cardId && $table_name) {
+            switch ($table_name) {
+                // company data
+                case 'miniweb_company_details':
+                    $getData = DB::table('miniweb_company_details')
+                        ->where("id", "=", $cardId)
+                        ->get();
+                    break;
+                
+                // address
+                case 'miniweb_contact':
+                    $getData = DB::table('miniweb_contact')
+                        ->where("mini_website_id", "=", $cardId)
+                        ->get();
+                    break;
+                
+                // about us
+                case 'miniweb_aboutus':
+                    $getData = DB::table('miniweb_aboutus')
+                        ->where("mini_website_id", "=", $cardId)
+                        ->get();
+                    break;
+                
+                // media links
+                case 'miniweb_social_links':
+                    $getData = DB::table('miniweb_social_links')
+                        ->where("mini_website_id", "=", $cardId)
+                        ->get();
+                    break;
+                
+                // Products
+                case 'miniweb_products':
+                    $getData = DB::table('miniweb_products')
+                        ->where("mini_website_id", "=", $cardId)
+                        ->get();
+                    break;
+                
+                // Services
+                case 'miniweb_services':
+                    $getData = DB::table('miniweb_services')
+                        ->where("mini_website_id", "=", $cardId)
+                        ->get();
+                    break;
+                
+                // Gallery
+                case 'miniweb_gallery':
+                    $getData = DB::table('miniweb_gallery')
+                        ->where("mini_website_id", "=", $cardId)
+                        ->get();
+                    break;
+                
+                // Payment details
+                case 'miniweb_payments_details':
+                    $getData = DB::table('miniweb_payments_details')
+                        ->where("mini_website_id", "=", $cardId)
+                        ->get();
+                    break;
+                
+
+                default:
+                    return [
+                        'status' => false,
+                        'message' => 'No Website data found'
+                    ];
+            }
+        }
+
+        return [
+            'status' => !empty($getData) ? true:false,
+            'getData' => !empty($getData) ? $getData : [],
+        ];
+    }
+
+    // save mini website enquires
+    public function saveEnquiryData(Request $request){
+        $enquiryUserName = $request->enquiryUserName;
+        $Enquiryphone = $request->Enquiryphone;
+        $productnameEnquiry = $request->productnameEnquiry;
+        $enquiryMessage = $request->enquiryMessage;
+        $miniWebId = $request->miniWebId ?? $request->miniWebId;
+
+        if($miniWebId){
+            $adData = [
+                'miniWebId' => $miniWebId,
+                'name' => $enquiryUserName,
+                'phone_number' => $Enquiryphone,
+                'product_name' => $productnameEnquiry,
+                'enquiry_message' => $enquiryMessage,
+            ];
+
+            $ins = DB::table('miniweb_enquiries')->insertOrIgnore($adData);
+
+            return [
+                'status' => $ins ? true:false,
+                'message' => $ins ? 'Enquiry is Form submit Successfully':'Enquiry is not submitted! Plase try again'
+            ];
+        }
+        else{
+            return [
+                'status' => false,
+                'message' => 'Something went wrong! Enquiry Not Save!'
+            ];
+        }
+    }
+
+    // save mini website feedback
+    public function saveFeedBackData(Request $request){
+        $fbUserName = $request->fbUserName;
+        $fbphone = $request->fbphone;
+        $fbmessage = $request->fbmessage;
+        $miniWebId = $request->miniWebId ?? $request->miniWebId;
+
+        if($miniWebId){
+            $adData = [
+                'miniWebId' => $miniWebId,
+                'name' => $fbUserName,
+                'phone' => $fbphone,
+                'feedback_message' => $fbmessage
+            ];
+            
+            $ins = DB::table('miniweb_feedback')->insertOrIgnore($adData);
+
+            return [
+                'status' => $ins ? true:false,
+                'message' => $ins ? 'FeedBack is Form submit Successfully':'FeedBack is not submit! Plase try again'
+            ];
+        }
+        else{
+            return [
+                'status' => false,
+                'message' => 'Something Went wrong! FeedBack Not Save!'
+            ];
+        }
+    }
+
+    // save website templates
+    public function saveWebsiteTemp(Request $request){
+        $cardId = $request->cardId;
+        $website_ID = $request->website_ID;
+        $websiteTemp_id = $request->websiteTemp_id;
+    
+
+        if($website_ID && $cardId){
+            $getData = DB::table('miniweb_company_details')
+                ->where('id', '=', $cardId)
+                ->update([
+                    'website_id' => $website_ID,
+                    'websiteTemp_id' => $websiteTemp_id ?? 0,
+                    'm_date' =>  Carbon::now('Asia/Kolkata')->toDateTimeString()
+                ]);
+                // return $getData;
+            return [
+                'status' => $getData ? true:false,
+                'getData' => $getData ?$getData:[],
+                'message' => $getData ? 'Website Updated Successfully':'No changes made'
+            ];
+        }
+        else{
+            return [
+                'status' => false,
+                'message' => 'Invalid themeid or card id'
+            ];
+        }
+    }
+
+    // save website address
+    public function save_website_address(Request $request)
+    {
+        $rowid = $request->rowid;
+        $mini_website_id = $request->card_id;
+
+        
+        $data = [
+            'mini_website_id'   => $mini_website_id,
+            'email'             => $request->email ?? '',
+            'phone_number'      => $request->phone_number ?? 0,
+            'whatsapp_number'   => $request->whatsapp_number ?? 0,
+            'address'           => $request->address ?? '',
+        ];
+
+        if ($rowid) {
+            $data['m_date'] = Carbon::now('Asia/Kolkata')->toDateTimeString();
+            $updated = DB::table('miniweb_contact')
+                ->where('id', $rowid)
+                ->update($data);
+
+            return [
+                'status'  => $updated ? true : false,
+                'message' => $updated ? 'Contact Details Updated Successfully' : 'Nothing Updated'
+            ];
+        }
+
+        if ($mini_website_id) {
+            $inserted = DB::table('miniweb_contact')->insert($data);
+
+            return [
+                'status'  => $inserted ? true : false,
+                'message' => $inserted ? 'Contact Details Inserted Successfully' : 'Contact Details Insert Failed'
+            ];
+        }
+
+        return [
+            'status'  => false,
+            'message' => 'Invalid Website ID'
+        ];
+    }
+
+    // save about us
+    public function save_aboutus(Request $request){
+        $rowid = $request->rowid;
+        $mini_website_id = $request->card_id;
+
+        $data = [
+            'mini_website_id' => $mini_website_id,
+            'aboutus_text'  => trim($request->aboutusPara) ?? '',
+        ];
+
+        if ($rowid) {
+            $data['m_date'] = Carbon::now('Asia/Kolkata')->toDateTimeString();
+            $updated = DB::table('miniweb_aboutus')
+                ->where('id', $rowid)
+                ->update($data);
+
+            return [
+                'status'  => $updated ? true : false,
+                'message' => $updated ? 'About Us Updated Successfully' : 'Nothing Updated'
+            ];
+        }
+
+        if ($mini_website_id) {
+            $inserted = DB::table('miniweb_aboutus')->insert($data);
+
+            return [
+                'status'  => $inserted ? true : false,
+                'message' => $inserted ? 'About Us Inserted Successfully' : 'About Us Insert Failed'
+            ];
+        }
+
+        return [
+            'status'  => false,
+            'message' => 'Invalid Website ID'
+        ];
+    }
+
+    // save social media links
+    public function save_media_links(Request $request){
+        $rowid = $request->rowid;
+        $mini_website_id = $request->card_id;
+
+        $data = [
+            'mini_website_id' => $mini_website_id,
+            'facebook_url'  => $request->facebookUrl ?? '',
+            'instagram_url' => $request->instagramUrl ?? '',
+            'whatsapp_link' => $request->whatsappUrl ?? '',
+            'youtube_Url1' => $request->youtubeUrl1 ?? '',
+            'youtube_Url2' => $request->youtubeUrl2 ?? '',
+            'instaReals_Url1' => $request->instaReals1 ?? '',
+            'instaReals_Url2' => $request->instaReals2 ?? '',
+        ];
+
+        if ($rowid) {
+            $data['m_date'] = Carbon::now('Asia/Kolkata')->toDateTimeString();
+            $updated = DB::table('miniweb_social_links')
+                ->where('id', $rowid)
+                ->update($data);
+
+            return [
+                'status'  => $updated ? true : false,
+                'message' => $updated ? 'Media links Updated Successfully' : 'Nothing Updated'
+            ];
+        }
+
+        if ($mini_website_id) {
+            $inserted = DB::table('miniweb_social_links')->insert($data);
+
+            return [
+                'status'  => $inserted ? true : false,
+                'message' => $inserted ? 'Media links Inserted Successfully' : 'About Us Insert Failed'
+            ];
+        }
+
+        return [
+            'status'  => false,
+            'message' => 'Invalid Website ID'
+        ];
+    }
+
+    // save product
+    public function saveWebProducts(Request $request){
+        $products = $request->products;
+        $mini_website_id = $request->cardId;
+        $rowid = $request->rowid;
+        $inserted = false;
+        $anyChanges  = false; 
+        $messages    = [];
+
+        if(!$mini_website_id){
+            return [
+                'status'  => false,
+                'message' => 'No Products Insert!',
+            ];
+        }
+
+        foreach ($products as $index => $p) {
+            $newImagePath = '';
+            if (isset($p['image']) && $p['image'] instanceof \Illuminate\Http\UploadedFile) {
+
+                // Generate image name
+                $folderPath = public_path('product_images');
+                if (!file_exists($folderPath)) {
+                    mkdir($folderPath, 0777, true);
+                }
+
+                $dateTime  = now()->format('Ymd_His');
+                $ext       = $p['image']->getClientOriginalExtension();
+                $imageName = "{$mini_website_id}_"."la"."_{$dateTime}_" . uniqid() . ".{$ext}";
+
+                // Move new image
+                $p['image']->move($folderPath, $imageName);
+                $newImagePath = $imageName;
+            }
+
+            // prices
+            $original = floatval($p['original_price'] ?? 0);
+            $discount = floatval($p['discount_price'] ?? 0);
+            $final    = floatval($p['final_price'] ?? 0);
+
+            // Data to update
+            $data = [
+                'mini_website_id'  => $mini_website_id,
+                'product_name'   => ($p['name'] && $p['name'] !='undefined') ? $p['name'] : '',
+                'orginal_price'  => $original,
+                'discount_price' => $discount,
+                'final_price'    => $final,
+            ];
+
+            // ============= UPDATE MODE =============
+            if (!empty($rowid) && isset($rowid[$index])) {
+
+                $productId = $rowid[$index];
+
+                // First get old product
+                $oldProduct = DB::table('miniweb_products')
+                    ->where('id', $productId)
+                    ->first();
+
+                // If new image uploaded → delete old image
+                if ($newImagePath) {
+
+                    if ($oldProduct && $oldProduct->product_img) {
+                        $oldFile = public_path('product_images/' . $oldProduct->product_img);
+                        if (file_exists($oldFile)) {
+                            unlink($oldFile);  // delete old image
+                        }
+                    }
+
+                    // Save new path
+                    $data['product_img'] = $newImagePath;
+                }
+
+                $data['m_date'] = now('Asia/Kolkata')->toDateTimeString();
+                $updated = DB::table('miniweb_products')
+                    ->where('id', $productId)
+                    ->update($data);
+
+                if ($updated) {
+                    $anyChanges = true;
+                    $messages[] = "Product ID {$productId} updated successfully.";
+                } else {
+                    $messages[] = "No changes for Product ID {$productId}.";
+                }
+            }
+            else { // insert
+                if ($newImagePath) {
+                    $data['product_img'] = $newImagePath;
+                }
+
+                $inserted = DB::table('miniweb_products')->insert($data);
+
+                if ($inserted) {
+                    $anyChanges = true;
+                    $messages[] = "New product inserted successfully.";
+                } else {
+                    $messages[] = "Failed to insert product.";
+                }
+            }
+
+        }
+
+        return [
+            'status'  => $anyChanges,
+            'message' => $anyChanges ? implode(" ", $messages) : "No changes made",
+        ];
+    }
+
+    // remove product image
+    public function removeProductImage(Request $request){
+        $id    = $request->id;
+        $image = $request->image;
+        if (!$id || !$image) {
+            return ['status' => false, 'message' => 'Invalid request'];
+        }
+        
+        $path = public_path("product_images/{$image}");
+
+        
+        if (is_file($path)) {
+            @unlink($path);
+        }
+
+        $updated = DB::table('miniweb_products')
+            ->where('id', $id)
+            ->update(['product_img' => '']);
+
+        return [
+            'status'  => (bool) $updated,
+            'message' => $updated ? 'Image Removed successfully.' : 'No changes made.'
+        ];
+    }
+
+    // remove service image 
+    public function removeServiceImage(Request $request){
+        $id    = $request->id;
+        $image = $request->image;
+        if (!$id || !$image) {
+            return ['status' => false, 'message' => 'Invalid request'];
+        }
+        
+        $path = public_path("service_images/{$image}");
+
+        
+        if (is_file($path)) {
+            @unlink($path);
+        }
+
+        $updated = DB::table('miniweb_services')
+            ->where('id', $id)
+            ->update(['service_img' => '']);
+
+        return [
+            'status'  => (bool) $updated,
+            'message' => $updated ? 'Image Removed successfully.' : 'No changes made.'
+        ];
+    }
+
+    // save service
+    public function saveWebServices(Request $request){
+        $services = $request->services;
+        $mini_website_id = $request->cardId;
+        $rowid = $request->rowid;
+        $inserted = false;
+        $anyChanges  = false; 
+        $messages    = [];
+
+        if(!$mini_website_id){
+            return [
+                'status'  => false,
+                'message' => 'No Services Insert!',
+            ];
+        }
+
+        foreach ($services as $index => $p) {
+            $newImagePath = '';
+            if (isset($p['image']) && $p['image'] instanceof \Illuminate\Http\UploadedFile) {
+
+                // Generate image name
+                $folderPath = public_path('service_images');
+                if (!file_exists($folderPath)) {
+                    mkdir($folderPath, 0777, true);
+                }
+
+                $dateTime  = now()->format('Ymd_His');
+                $ext       = $p['image']->getClientOriginalExtension();
+                $imageName = "{$mini_website_id}_"."la"."_{$dateTime}_" . uniqid() . ".{$ext}";
+
+                // Move new image
+                $p['image']->move($folderPath, $imageName);
+                $newImagePath = $imageName;
+            }
+
+            // Data to update
+            $data = [
+                'mini_website_id'  => $mini_website_id,
+                'service_name'   => ($p['service_name'] && $p['service_name'] !='undefined') ? $p['service_name'] : '',
+            ];
+
+            // ============= UPDATE MODE =============
+            if (!empty($rowid) && isset($rowid[$index])) {
+
+                $serviceId = $rowid[$index];
+
+                // First get old product
+                $oldService = DB::table('miniweb_services')
+                    ->where('id', $serviceId)
+                    ->first();
+
+                // If new image uploaded → delete old image
+                if ($newImagePath) {
+
+                    if ($oldService && $oldService->service_img) {
+                        $oldFile = public_path('service_images/' . $oldService->service_img);
+                        if (file_exists($oldFile)) {
+                            unlink($oldFile);  // delete old image
+                        }
+                    }
+
+                    // Save new path
+                    $data['service_img'] = $newImagePath;
+                }
+
+                $data['m_date'] = now('Asia/Kolkata')->toDateTimeString();
+                $updated = DB::table('miniweb_services')
+                    ->where('id', $serviceId)
+                    ->update($data);
+
+                if ($updated) {
+                    $anyChanges = true;
+                    $messages[] = "Service ID {$serviceId} updated successfully.";
+                } else {
+                    $messages[] = "No changes for Service ID {$serviceId}.";
+                }
+            }
+            else { // insert
+                if ($newImagePath) {
+                    $data['service_img'] = $newImagePath;
+                }
+
+                $inserted = DB::table('miniweb_services')->insert($data);
+
+                if ($inserted) {
+                    $anyChanges = true;
+                    $messages[] = "New Service inserted successfully.";
+                } else {
+                    $messages[] = "Failed to Service product.";
+                }
+            }
+
+        }
+
+        return [
+            'status'  => $anyChanges,
+            'message' => $anyChanges ? implode(" ", $messages) : "No changes made",
+        ];
+    }
+
+    // remove gallery 
+    public function removeGalleryImage(Request $request){
+        $id    = $request->id;
+        $image = $request->image;
+        if (!$id || !$image) {
+            return ['status' => false, 'message' => 'Invalid request'];
+        }
+        
+        $path = public_path("gallery_images/{$image}");
+
+        if (is_file($path)) {
+            @unlink($path);
+        }
+
+        $updated = DB::table('miniweb_gallery')
+            ->where('id', $id)
+            ->update(['gallery' => '']);
+
+        return [
+            'status'  => (bool) $updated,
+            'message' => $updated ? 'Image Removed successfully.' : 'No changes made.'
+        ];
+    }
+
+    // save gallery 
+    public function saveWebGallery(Request $request){
+        $galleries = collect($request->galleries)->sortKeys()->all();
+        $mini_website_id = $request->cardId;
+        $rowid = $request->rowid;
+        $inserted = false;
+        $anyChanges  = false; 
+        $messages    = [];
+
+        if(!$mini_website_id){
+            return [
+                'status'  => false,
+                'message' => 'No Gallery Insert!',
+            ];
+        }
+
+        foreach ($galleries as $index => $p) {
+            $newImagePath = '';
+            if (isset($p['image']) && $p['image'] instanceof \Illuminate\Http\UploadedFile) {
+
+                // Generate image name
+                $folderPath = public_path('gallery_images');
+                if (!file_exists($folderPath)) {
+                    mkdir($folderPath, 0777, true);
+                }
+
+                $dateTime  = now()->format('Ymd_His');
+                $ext       = $p['image']->getClientOriginalExtension();
+                $imageName = "{$mini_website_id}_"."la"."_{$dateTime}_" . uniqid() . ".{$ext}";
+
+                // Move new image
+                $p['image']->move($folderPath, $imageName);
+                $newImagePath = $imageName;
+            }
+
+            // Data to update
+            $data = [
+                'mini_website_id'  => $mini_website_id,
+            ];
+
+            // ============= UPDATE MODE =============
+            if (!empty($rowid) && isset($rowid[$index])) {
+
+                $galleryId = $rowid[$index];
+
+                // First get old product
+                $oldGallery = DB::table('miniweb_gallery')
+                    ->where('id', $galleryId)
+                    ->first();
+
+                // If new image uploaded → delete old image
+                if ($newImagePath) {
+
+                    if ($oldGallery && $oldGallery->gallery) {
+                        $oldFile = public_path('gallery_images/' . $oldGallery->gallery);
+                        if (file_exists($oldFile)) {
+                            unlink($oldFile);  // delete old image
+                        }
+                    }
+
+                    // Save new path
+                    $data['gallery'] = $newImagePath;
+                }
+
+                $data['m_date'] = now('Asia/Kolkata')->toDateTimeString();
+                $updated = DB::table('miniweb_gallery')
+                    ->where('id', $galleryId)
+                    ->update($data);
+
+                if ($updated) {
+                    $anyChanges = true;
+                    $messages[] = "Gallery ID {$galleryId} updated successfully.";
+                } else {
+                    $messages[] = "No changes for Gallery ID {$galleryId}.";
+                }
+            }
+            else { // insert
+                if ($newImagePath) {
+                    $data['gallery'] = $newImagePath;
+                }
+
+                $inserted = DB::table('miniweb_gallery')->insert($data);
+
+                if ($inserted) {
+                    $anyChanges = true;
+                    $messages[] = "New Gallery inserted successfully.";
+                } else {
+                    $messages[] = "Failed to Gallery.";
+                }
+            }
+
+        }
+
+        return [
+            'status'  => $anyChanges,
+            'message' => $anyChanges ? implode(" ", $messages) : "No changes made",
+        ];
+    }
+
+    // save payment details
+    public function save_miniweb_paymentDetails(Request $request){
+        $mini_website_id = $request->cardId;
+        $rowid  = $request->rowid;
+
+        if (!$mini_website_id) {
+            return ['status' => false, 'message' => 'Invalid Card ID'];
+        }
+
+        $folder = public_path('payment_Details_QrCode');
+
+        if (!File::exists($folder)) {
+            File::makeDirectory($folder, 0777, true);
+        }
+
+        $oldData = null;
+        if ($rowid) {
+            $oldData = DB::table('miniweb_payments_details')->where('id', $rowid)->first();
+        }
+
+        $uploadQr = function ($fileKey, $oldFile = null) use ($request, $folder, $mini_website_id) {
+            if (!$request->hasFile($fileKey)) {
+                return $oldFile; // keep old file
+            }
+
+            // Delete old file
+            if ($oldFile && File::exists($folder . '/' . $oldFile)) {
+                File::delete($folder . '/' . $oldFile);
+            }
+
+            $file = $request->file($fileKey);
+            $fileName = $mini_website_id . '_la_' . now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move($folder, $fileName);
+
+            return $fileName;
+        };
+
+        $data = [
+            'mini_website_id' => $mini_website_id,
+            'gpay_number'    => $request->gPay ?? 0,
+            'phonepe_number' => $request->phonePe ?? 0,
+            'paytm_number'   => $request->payTm ?? 0,
+        ];
+
+        // Handle QR uploads delete and replace
+        $data['gpay_qr_code'] = $uploadQr('gPayFile', $oldData->gpay_qr_code ?? null);
+        $data['phonepe_qr_code'] = $uploadQr('phonePeFile', $oldData->phonepe_qr_code ?? null);
+        $data['paytm_qr_code'] = $uploadQr('payTmFile', $oldData->paytm_qr_code ?? null);
+
+        // Update or Insert
+        if (!empty($rowid)) {
+            $data['m_date'] = Carbon::now('Asia/Kolkata')->toDateTimeString();
+
+            $updated = DB::table('miniweb_payments_details')->where('id', $rowid)->update($data);
+
+            return [
+                'status'  => (bool) $updated,
+                'message' => $updated ? 'Payment Details Updated Successfully' : 'No changes made'
+            ];
+        }
+        else{
+            $inserted = DB::table('miniweb_payments_details')->insert($data);
+        }
+        
+
+        return [
+            'status'  => (bool) $inserted,
+            'message' => $inserted ? 'Payment Details Inserted Successfully' : 'Insert Failed'
+        ];
+    }
+
+    // get website datas
+    public function getSelectedWebsite(Request $request){
+        $website_id = $request->website_id;
+        $data = DB::table('miniweb_company_details')
+            ->select(
+                'id as cd_ID',
+                'website_id',
+                'websiteTemp_id',
+                'company_name',
+                'purchased_id'
+            )
+            ->where('id', $website_id)
+            ->first();
+
+        return [
+            'status' => (bool) $data,
+            'data'   => $data ?? null
+        ];
+    }
+
+    // get QR Code Generate
+    public function qrCodeGenerate(Request $request)
+    {
+        $webID          = $request->cd_ID;
+        $website_id     = $request->website_id;
+        $websiteTemp_id = $request->websiteTemp_id;
+        $qrBase         = $request->qrBase;
+
+        if (!$webID || !$qrBase) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Invalid data'
+            ]);
+        }
+
+        $folder = public_path('qrcodes');
+        File::ensureDirectoryExists($folder);
+
+        // File name
+        $fileName = "{$webID}_{$website_id}_{$websiteTemp_id}.png";
+        $filePath = "{$folder}/{$fileName}";
+
+        $existing = DB::table('miniweb_qrcode')
+            ->where('mini_website_id', $webID)
+            ->first();
+
+        if ($existing && !empty($existing->qr_code)) {
+            $oldPath = "{$folder}/{$existing->qr_code}";
+            if (File::exists($oldPath)) {
+                File::delete($oldPath);
+            }
+        }
+
+        // -------------------------------
+        // Create Image Manager (v3)
+        // -------------------------------
+        $manager = new ImageManager(new Driver());
+
+        // Decode Base64 QR
+        $qrImageData = base64_decode(
+            preg_replace('/^data:image\/\w+;base64,/', '', $qrBase)
+        );
+
+        // Read QR image
+        $qrImage = $manager->read($qrImageData);
+
+        // -------------------------------
+        // Embed LOGO (Watermark)
+        // -------------------------------
+        $logoPath = public_path('images/linkAuraLogo300.png');
+
+        if (File::exists($logoPath)) {
+
+            $logo = $manager->read($logoPath);
+
+            // Logo = 20% of QR size
+            $logoSize = (int) ($qrImage->width() * 0.20);
+
+            $logo->resize($logoSize, $logoSize);
+
+            // Place logo center
+            $qrImage->place($logo, 'center');
+        }
+
+        // -------------------------------
+        // Save QR Image
+        // -------------------------------
+        $qrImage->save($filePath);
+
+        if ($existing) {
+            DB::table('miniweb_qrcode')
+                ->where('mini_website_id', $webID)
+                ->update([
+                    'qr_code' => $fileName,
+                    'm_date'  => Carbon::now('Asia/Kolkata'),
+                ]);
+
+            $message = 'QR Code updated successfully';
+
+        } else {
+
+            DB::table('miniweb_qrcode')->insert([
+                'mini_website_id' => $webID,
+                'qr_code'         => $fileName,
+                'created_at'      => Carbon::now('Asia/Kolkata'),
+            ]);
+
+            $message = 'QR Code generated successfully';
+        }
+
+        return response()->json([
+            'status'    => true,
+            'file_name' => $fileName,
+            'path'      => asset("qrcodes/{$fileName}"),
+            'message'   => $message,
+        ]);
+    }
+
+    // grcode backup 14-12-2025
+    public function qrCodeGenerate_old_working_fine(Request $request)
+    {
+        $webID          = $request->webID;
+        $website_id     = $request->website_id;
+        $websiteTemp_id = $request->websiteTemp_id;
+        $qrBase         = $request->qrBase;
+
+        if (!$webID || !$qrBase) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid data'
+            ]);
+        }
+
+        $folder = public_path('qrcodes');
+        File::ensureDirectoryExists($folder);
+
+        $fileName = "{$webID}_{$website_id}_{$websiteTemp_id}.png";
+        $filePath = "{$folder}/{$fileName}";
+
+        // Get existing QR record
+        $existing = DB::table('miniweb_qrcode')
+            ->where('mini_website_id', $webID)
+            ->first();
+
+        // Delete old QR image if exists
+        if ($existing && $existing->qr_code) {
+            $oldPath = "{$folder}/{$existing->qr_code}";
+            if (File::exists($oldPath)) {
+                File::delete($oldPath);
+            }
+        }
+
+        // Save new QR image
+        $imageData = base64_decode(
+            preg_replace('/^data:image\/\w+;base64,/', '', $qrBase)
+        );
+        file_put_contents($filePath, $imageData);
+
+        // Update or Insert DB record
+        if ($existing) {
+            DB::table('miniweb_qrcode')
+                ->where('mini_website_id', $webID)
+                ->update([
+                    'qr_code' => $fileName,
+                    'm_date'  => now('Asia/Kolkata')->toDateTimeString(),
+                ]);
+
+            $message = 'QR Code updated successfully';
+        } else {
+            DB::table('miniweb_qrcode')->insert([
+                'mini_website_id' => $webID,
+                'qr_code' => $fileName,
+            ]);
+
+            $message = 'QR Code generated successfully';
+        }
+
+        return response()->json([
+            'status'    => true,
+            'file_name' => $fileName,
+            'path'      => asset("qrcodes/{$fileName}"),
+            'message'   => $existing ? 'QR Code updated successfully' : 'QR Code generated successfully'
+        ]);
+    }
+
+    // collect the website datas
+    public function collectAllWebsiteDatas(Request $request){
+        $table_name = trim($request->table_name);
+        $cd_id = $request->cd_id;
+
+        if ($cd_id && $table_name) {
+            switch ($table_name) {
+                // company data
+                case 'miniweb_company_details':
+                    $getData = DB::table('miniweb_company_details')
+                        ->where("id", "=", $cd_id)
+                        ->get();
+                    break;
+                
+                // address
+                case 'miniweb_contact':
+                    $getData = DB::table('miniweb_contact')
+                        ->where("mini_website_id", "=", $cd_id)
+                        ->get();
+                    break;
+
+                // media links
+                case 'miniweb_social_links':
+                    $getData = DB::table('miniweb_social_links')
+                        ->where("mini_website_id", "=", $cd_id)
+                        ->get();
+                    break;
+                
+                // about us
+                case 'miniweb_aboutus':
+                    $getData = DB::table('miniweb_aboutus')
+                        ->where("mini_website_id", "=", $cd_id)
+                        ->get();
+                    break;
+                
+                
+                // Products
+                case 'miniweb_products':
+                    $getData = DB::table('miniweb_products')
+                        ->where("mini_website_id", "=", $cd_id)
+                        ->get();
+                    break;
+                
+                // Services
+                case 'miniweb_services':
+                    $getData = DB::table('miniweb_services')
+                        ->where("mini_website_id", "=", $cd_id)
+                        ->get();
+                    break;
+                
+                // Gallery
+                case 'miniweb_gallery':
+                    $getData = DB::table('miniweb_gallery')
+                        ->where("mini_website_id", "=", $cd_id)
+                        ->get();
+                    break;
+                
+                // Payment details
+                case 'miniweb_payments_details':
+                    $getData = DB::table('miniweb_payments_details')
+                        ->where("mini_website_id", "=", $cd_id)
+                        ->get();
+                    break;
+                
+                // QR Code
+                case 'miniweb_qrcode':
+                    $getData = DB::table('miniweb_qrcode')
+                        ->where("mini_website_id", "=", $cd_id)
+                        ->get();
+                    break;
+                
+                // Feedback verify daya
+                case 'miniweb_feedback':
+                    $getData = DB::table('miniweb_feedback')
+                        ->where("miniWebId", "=", $cd_id)
+                        // ->where("verify","=",1)
+                        ->get();
+                    break;
+                
+
+                default:
+                    return [
+                        'status' => false,
+                        'message' => 'No Website data found'
+                    ];
+            }
+        }
+
+        return [
+            'status' => !empty($getData) ? true:false,
+            'getData' => !empty($getData) ? $getData : [],
+        ];
+    }
+
+    // Feedback datas userbased
+    public function getFeedbackDetails(Request $request){
+        $user_id = $request->user_id;
+        $getData = DB::table("miniweb_feedback as fb")
+        ->select("fb.id","cd.company_name","cd.user_id","fb.name","fb.phone","fb.miniWebId", "fb.verify","fb.feedback_message","fb.reject_remarks",DB::raw("DATE_FORMAT(fb.created_at, '%d-%m-%Y %h:%i:%s %p') as fbCreatedAt"))
+        ->leftJoin( 'miniweb_company_details as cd', 'cd.id', '=', 'fb.miniWebId')
+        ->orderBy("fb.id","desc")
+        ->where("cd.user_id","=",$user_id)
+        ->get();
+        return response()->json([
+            'status' => true,
+            'getData' => $getData,
+            'message' => $getData->isNotEmpty() ? 'Feedback data found' : 'No feedback data found'
+        ]);
+    }
+
+    // update feedback verify and remarks
+    public function verifyMiniWebFeedback(Request $request) {
+        $rowId   = $request->id;
+        $verify  = (int) $request->verify; // 1 = verify, 2 = reject
+        $reason  = $request->reason ?? null;
+
+        if (!$rowId) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid Row ID'
+            ]);
+        }
+
+        $data = [
+            'verify' => $verify == 2 ? 2 : 1,
+        ];
+
+        if ($verify == 2) {
+            $data['reject_remarks'] = $reason;
+            $data['reject_at'] = Carbon::now('Asia/Kolkata');
+        } else {
+            $data['verify_at'] = Carbon::now('Asia/Kolkata');
+        }
+
+        $updated = DB::table('miniweb_feedback')
+            ->where('id', $rowId)
+            ->update($data);
+
+        return response()->json([
+            'status'  => (bool) $updated,
+            'message' => $updated
+                ? ($verify == 2 ? 'Feedback Rejected Successfully' : 'Feedback Verified Successfully')
+                : 'No changes made'
+        ]);
+    }
+
+    // website datas
+    public function getMiniWebsiteDetails(Request $request){
+        $user_id = $request->user_id;
+        $getData = DB::table("miniweb_company_details")
+            ->select("id","website_id","websiteTemp_id", "user_id", "company_name", "purchased_id", DB::raw("DATE_FORMAT(created_at, '%d-%m-%Y %h:%i:%s %p') as createdDate"), "created_at")
+            ->where("user_id","=",$user_id)->get();
+
+        $now = Carbon::now('Asia/Kolkata');
+        $getData = $getData->map(function ($item) use ($now) {
+
+            $created = Carbon::parse($item->created_at, 'Asia/Kolkata');
+            $days = (int) $created->diffInDays($now);
+            if ($now->format('H') >= 12) {
+                $days += 1;
+            }
+            $item->website_age_days = $days;
+
+            return $item;
+        });
+        
+        return response()->json([
+            'status' => $getData->isNotEmpty() ? true : false,
+             'getData' => $getData,
+            'message' => $getData->isNotEmpty() ? 'Mini Website data found' : 'No Mini Website data found'
+        ]);
+    }
+
+    // get enquiry
+    public function getMiniWebEnquiry(Request $request){
+        $user_id = $request->user_id;
+        $getData = DB::table("miniweb_enquiries as me")
+        ->select("me.id","cd.company_name","cd.user_id","me.miniWebId", "me.name as customername","me.phone_number","me.product_name","enquiry_message",DB::raw("DATE_FORMAT(me.created_at, '%d-%m-%Y %h:%i:%s %p') as meCreatedAt"))
+        ->leftJoin( 'miniweb_company_details as cd', 'cd.id', '=', 'me.miniWebId')
+        ->where("cd.user_id","=",$user_id)
+        ->orderBy("me.id","desc")
+        ->get();
+        return response()->json([
+            'status' => true,
+            'getData' => $getData,
+            'message' => $getData->isNotEmpty() ? 'Enquiry data found' : 'No Enquiry data found'
+        ]);
+    }
+
+    // create razorpay order
+    public function createRazorpayOrder(Request $request){
+        // return $request;
+        $request->validate([
+            'id' => 'required',
+            'txnAmt' => 'required|numeric',
+            'planName' => 'required|string'
+        ]);
+
+        $amount = $request->txn_amt;
+        $amountPaise = $amount * 100;
+        $receipt = 'rcpt_'.$request->id.'_'.uniqid();
+
+        $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+
+        try {
+            $order = $api->order->create([
+                'receipt' => $receipt,
+                'amount' => $amountPaise,
+                'currency' => 'INR',
+                'payment_capture' => 1
+            ]);
+
+            // Convert to array properly
+            $orderArray = [
+                'id' => $order['id'] ?? null,
+                'amount' => $order['amount'] ?? null,
+                'currency' => $order['currency'] ?? null,
+                'receipt' => $order['receipt'] ?? null,
+                'status' => $order['status'] ?? null
+            ];
+
+            return response()->json([
+                'status' => true,
+                'order' => $orderArray,
+                'key' => env('RAZORPAY_KEY')
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Could not create order: '.$e->getMessage()
+            ], 500);
+        }
+    }
+}
