@@ -1117,11 +1117,13 @@ class MiniWebsiteController extends Controller
                         ->get();
                     break;
                 
-                // Feedback verify daya
+                // Feedback verify data
                 case 'miniweb_feedback':
                     $getData = DB::table('miniweb_feedback')
                         ->where("miniWebId", "=", $cd_id)
                         // ->where("verify","=",1)
+                        ->orderBy('id', 'desc')
+                        ->limit(10)
                         ->get();
                     break;
                 

@@ -47,106 +47,108 @@
         <!-- heading image -->
 
         <!-- content area -->
-        <div class="grid grid-cols-1 md:grid-cols-2 w-full max-w-7xl mx-auto py-16 gap-10">
+        <div  class="w-full "  :style="{ backgroundImage: `url(${fBG})`, backgroundSize: '100%', }">
+            <div class="grid grid-cols-1 md:grid-cols-2 w-full max-w-7xl mx-auto py-16 gap-10">
 
-            <!-- LEFT CONTENT -->
-            <div class="flex flex-col justify-center w-full px-6 md:px-10">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-                    Everything You Need to Build a Mini Website
-                </h2>
+                <!-- LEFT CONTENT -->
+                <div class="flex flex-col justify-center w-full px-6 md:px-10">
+                    <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                        Everything You Need to Build a Mini Website
+                    </h2>
 
-                <p class="text-gray-600 leading-relaxed mb-6">
-                    No technical skills required. Build a professional mini website using
-                    simple forms, ready-made templates, and instant live preview.
-                </p>
+                    <p class="text-gray-600 leading-relaxed mb-6">
+                        No technical skills required. Build a professional mini website using
+                        simple forms, ready-made templates, and instant live preview.
+                    </p>
 
-                <ul class="space-y-3 text-gray-700">
-                    <li class="flex items-center gap-3">
-                        <DocumentTextIcon class="size-5 text-[#780e7a]" /> Easy form-based setup
-                    </li>
-                    <li class="flex items-center gap-3">
-                        <DevicePhoneMobileIcon class="size-5 text-[#780e7a]" /> Mobile-friendly design
-                    </li>
-                    <li class="flex items-center gap-3">
-                        <ShareIcon class="size-5 text-[#780e7a]" /> One smart shareable link
-                    </li>
-                </ul>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-center gap-3">
+                            <DocumentTextIcon class="size-5 text-[#780e7a]" /> Easy form-based setup
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <DevicePhoneMobileIcon class="size-5 text-[#780e7a]" /> Mobile-friendly design
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <ShareIcon class="size-5 text-[#780e7a]" /> One smart shareable link
+                        </li>
+                    </ul>
 
-                <button
-                    class="mt-8 w-fit bg-[#dc143c] text-white px-8 py-3
-                        rounded-xl shadow-lg hover:bg-[#780e7a] transition"
-                >
-                    Create Mini Website
-                </button>
-            </div>
-            <!-- LEFT /. -->
-
-            <!-- RIGHT FEATURE CARDS -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 px-6 md:px-10">
-
-                <!-- Feature Card -->
-                <div
-                    class="group bg-white border border-gray-200 rounded-2xl p-6
-                        shadow-sm hover:shadow-xl transition duration-300"
-                >
-                    <div
-                        class="w-12 h-12 flex items-center justify-center rounded-xl
-                            bg-indigo-50 text-[#681c6a]
-                            group-hover:bg-[#681c6a] group-hover:text-white transition"
+                    <button
+                        class="mt-8 w-fit bg-[#dc143c] text-white px-8 py-3
+                            rounded-xl shadow-lg hover:bg-[#780e7a] transition"
                     >
-                        📱
+                        Create Mini Website
+                    </button>
+                </div>
+                <!-- LEFT /. -->
+
+                <!-- RIGHT FEATURE CARDS -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 px-6 md:px-10">
+
+                    <!-- Feature Card -->
+                    <div
+                        class="group bg-white border border-gray-200 rounded-2xl p-6
+                            shadow-sm hover:shadow-xl transition duration-300"
+                    >
+                        <div
+                            class="w-12 h-12 flex items-center justify-center rounded-xl
+                                bg-indigo-50 text-[#681c6a]
+                                group-hover:bg-[#681c6a] group-hover:text-white transition"
+                        >
+                            📱
+                        </div>
+
+                        <h3 class="mt-4 text-lg font-semibold text-[#681c6a]">
+                            Mobile Friendly
+                        </h3>
+
+                        <p class="mt-2 text-[#681c6a] text-sm">
+                            Looks perfect on mobile, tablet, and desktop devices.
+                        </p>
                     </div>
 
-                    <h3 class="mt-4 text-lg font-semibold text-[#681c6a]">
-                        Mobile Friendly
-                    </h3>
-
-                    <p class="mt-2 text-[#681c6a] text-sm">
-                        Looks perfect on mobile, tablet, and desktop devices.
-                    </p>
-                </div>
-
-                <!-- Feature Card -->
-                <div class="group bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-xl transition">
-                    <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-indigo-50 text-[#681c6a] group-hover:bg-[#681c6a] group-hover:text-white transition">
-                        🎨
+                    <!-- Feature Card -->
+                    <div class="group bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-xl transition">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-indigo-50 text-[#681c6a] group-hover:bg-[#681c6a] group-hover:text-white transition">
+                            🎨
+                        </div>
+                        <h3 class="mt-4 text-lg font-semibold text-gray-900">
+                            Multiple Templates
+                        </h3>
+                        <p class="mt-2 text-gray-600 text-sm">
+                            Choose from modern, business-ready templates.
+                        </p>
                     </div>
-                    <h3 class="mt-4 text-lg font-semibold text-gray-900">
-                        Multiple Templates
-                    </h3>
-                    <p class="mt-2 text-gray-600 text-sm">
-                        Choose from modern, business-ready templates.
-                    </p>
-                </div>
 
-                <!-- Feature Card -->
-                <div class="group bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-xl transition">
-                    <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-indigo-50 text-[#681c6a] group-hover:bg-[#681c6a] group-hover:text-white transition">
-                        🔗
+                    <!-- Feature Card -->
+                    <div class="group bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-xl transition">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-indigo-50 text-[#681c6a] group-hover:bg-[#681c6a] group-hover:text-white transition">
+                            🔗
+                        </div>
+                        <h3 class="mt-4 text-lg font-semibold text-gray-900">
+                            One Smart Link
+                        </h3>
+                        <p class="mt-2 text-gray-600 text-sm">
+                            Share all your business details using one link.
+                        </p>
                     </div>
-                    <h3 class="mt-4 text-lg font-semibold text-gray-900">
-                        One Smart Link
-                    </h3>
-                    <p class="mt-2 text-gray-600 text-sm">
-                        Share all your business details using one link.
-                    </p>
-                </div>
 
-                <!-- Feature Card -->
-                <div class="group bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-xl transition">
-                    <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-indigo-50 text-[#681c6a] group-hover:bg-[#681c6a] group-hover:text-white transition">
-                        📨
+                    <!-- Feature Card -->
+                    <div class="group bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-xl transition">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-indigo-50 text-[#681c6a] group-hover:bg-[#681c6a] group-hover:text-white transition">
+                            📨
+                        </div>
+                        <h3 class="mt-4 text-lg font-semibold text-gray-900">
+                            Enquiry & Leads
+                        </h3>
+                        <p class="mt-2 text-gray-600 text-sm">
+                            Collect customer enquiries and feedback easily.
+                        </p>
                     </div>
-                    <h3 class="mt-4 text-lg font-semibold text-gray-900">
-                        Enquiry & Leads
-                    </h3>
-                    <p class="mt-2 text-gray-600 text-sm">
-                        Collect customer enquiries and feedback easily.
-                    </p>
-                </div>
 
+                </div>
+                <!-- RIGHT /. -->
             </div>
-            <!-- RIGHT /. -->
         </div>
         <!-- content area /. -->
         <!-- Features section /. -->
@@ -473,6 +475,7 @@
     import template2 from '@/assets/images/websiteImages/templates/website2_thumb1.png'
     import template3 from '@/assets/images/websiteImages/templates/website3_thumb1.png'
     import template4 from '@/assets/images/websiteImages/templates/website4_thumb1.png'
+    import fBG from '@/assets/images/mini_website/com_images/bg6.jpg'
     import { PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, ChevronLeftIcon, ChevronRightIcon, UserIcon, DocumentIcon ,ShareIcon, DocumentTextIcon, DevicePhoneMobileIcon } from '@heroicons/vue/24/solid'
 
     import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
@@ -534,6 +537,7 @@
             })
 
             return {
+                fBG,
                 homeImage,
                 aBG,
                 collectTemp,

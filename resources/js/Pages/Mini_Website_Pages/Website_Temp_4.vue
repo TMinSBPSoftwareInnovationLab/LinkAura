@@ -255,7 +255,7 @@
                 :class="{ 'bg-no-repeat': products.length == 4, 'bg-repeat': products.length > 4 }"
                 :style="{ backgroundImage: `url(${productBG})`, backgroundSize: 'contain'}">
                     <!-- column 1 -->
-                    <div class="items-center relative grid grid-cols-[96px_1fr] gap-4 p-2 mt-6 bg-white border border-gray-300 shadow-lg rounded-3xl max-w-md"
+                    <div class="items-center relative grid grid-cols-[96px_1fr] gap-4 p-2 mt-6 bg-white border border-gray-500 shadow-lg rounded-3xl max-w-md"
                         v-for="(item, index) in products" 
                         :key="index"
                     >
@@ -407,24 +407,27 @@
                 <div class="flex flex-col w-full bg-[#f1f1f1]">
                     <!-- Youtube area -->
                     <div class="flex flex-col w-full p-5 bg-[#1d1f21] mb-2 mt-2">
-                        <div v-if="youtube_link1 || youtube_link2" class="flex flex-col gap-4 p-5 bg-[#1d1f21] mt-2 mb-4 rounded-lg" >
-                        <iframe
-                            v-if="youtube_link1"
-                            :src="youtubeEmbed(youtube_link1)"
-                            class="w-full aspect-video rounded-lg"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen
-                        ></iframe>
-
-                        <iframe
-                            v-if="youtube_link2"
-                            :src="youtubeEmbed(youtube_link2)"
-                            class="w-full aspect-video rounded-lg"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen
-                        ></iframe>
+                        <div v-if="youtube_link1 || youtube_link2" class="flex flex-col gap-4 bg-[#1d1f21] mt-2 mb-4 rounded-lg" >
+                            <div class="flex flex-col w-full p-2 bg-gray-50 rounded-2xl">
+                                <iframe
+                                    v-if="youtube_link1"
+                                    :src="youtubeEmbed(youtube_link1)"
+                                    class="w-full aspect-video rounded-lg"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen
+                                ></iframe>
+                            </div>
+                            <div class="flex flex-col w-full p-2 bg-gray-50 rounded-2xl">
+                                <iframe
+                                    v-if="youtube_link2"
+                                    :src="youtubeEmbed(youtube_link2)"
+                                    class="w-full aspect-video rounded-lg"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen
+                                ></iframe>
+                            </div>
                         </div>
                     </div>
                     <!-- Youtube area /. -->
@@ -432,7 +435,7 @@
                     <!-- insta link area -->
                     <div v-if="instaReals_link1 || instaReals_link2" class="grid grid-cols-1 gap-4 p-5 bg-[#1d1f21] mb-2">
                         <div v-if="instaReals_link1" 
-                        class="border-1 border-gray-300 flex justify-center items-center shadow-lg overflow-hidden p-2 pt-5"
+                        class="border-1 border-gray-300 bg-gray-50 flex justify-center items-center rounded-2xl shadow-xl overflow-hidden p-2 pt-5"
                         >
                             <blockquote
                             class="instagram-media"
@@ -444,7 +447,7 @@
 
                         <div
                             v-if="instaReals_link2"
-                            class="border-1 border-gray-300 flex justify-center items-center shadow-lg overflow-hidden p-2 pt-5"
+                            class="border-1 border-gray-300 bg-gray-50 rounded-2xl flex justify-center items-center shadow-lg overflow-hidden p-2 pt-5"
                         >
                             <blockquote
                             class="instagram-media"
@@ -850,10 +853,21 @@
                     <!-- content area  -->
                     <div class="flex flex-col w-full p-5" v-if="is_purchased">
                         <!-- qrcode -->
-                        <div class="flex w-[150px] h-[150px] mx-auto bg-yellow-300">
+                        <div class="flex w-full h-full mx-auto bg-yellow-300">
                             <img :src="qrImage" class="w-full h-full object-contain">
                         </div>
                         <!-- qrcode /. -->
+
+                        <!-- download png -->
+                        <div class="flex flex-grow w-full font-semibold items-center justify-center">
+                            <button 
+                            @click="downloadQR"
+                            class="flex w-[100px] h-[30px] border border-[#524b4b] items-center justify-center gap-2 rounded-2xl">
+                            <ArrowDownTrayIcon class="size-4" :class="{ 'animate-download': isDownloading }" /> 
+                                <span>{{ isDownloading ? 'Saving...' : 'Save' }}</span>
+                            </button>
+                        </div>
+                        <!-- download png -->
 
                         <!-- share links -->
                         <div class="flex w-full py-2 font-semibold" >
@@ -916,6 +930,17 @@
                             </a>
                         </div>
                         <!-- Whatsapp share -->
+
+                        <!-- copy text -->
+                        <div class="flex flex-grow w-full font-semibold items-center justify-center mt-2 gap-1">
+                            <input v-model="cpyUrl" type="text" placeholder="Mini Website URL"
+                            class="w-[200px] text-gray-700 border rounded-lg px-4 py-2 focus:outline-none focus:ring focus:border-blue-300"
+                            />
+                            <button @click="copyToClipboard" class="bg-[#524b4b] p-2 text-white rounded">
+                                Copy
+                            </button>
+                        </div>
+                        <!-- copy text /. -->
 
                         <!-- share links /. -->
                     </div>
@@ -1238,7 +1263,7 @@
         import { useCardStore } from '@/stores/cardStore'
         import { toast } from 'vue3-toastify'
         import { useRoute,useRouter } from 'vue-router'
-        import { PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon } from '@heroicons/vue/24/solid'
+        import { PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, ShareIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/solid'
         import WebsiteFooterBar from '../Components/WebsiteFooterBar.vue';
 
         import defaultLogo from '@/assets/images/commonImages/linkAura_logo.png'
@@ -1249,7 +1274,7 @@
 
     export default {
         name: "Website_Temp_4",
-        components: {PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, WebsiteFooterBar},
+        components: {PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, ShareIcon, ArrowDownTrayIcon, WebsiteFooterBar},
         props: {
             // themeId: Number,
             // design: Number,
@@ -1592,6 +1617,31 @@
                 }
             };
 
+            // The Download Function
+            const isDownloading = ref(false);
+            const downloadQR = () => {
+                if (!qrImage.value) {
+                    // alert("QR Code image not loaded yet!");
+                    return;
+                }
+
+                // Start animation
+                isDownloading.value = true;
+
+                const link = document.createElement('a');
+                link.href = qrImage.value;
+                link.download = `QR_Code_${qrData.value.qr_code || 'download'}.png`;
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                // Stop animation after 1 second (to show the effect)
+                setTimeout(() => {
+                    isDownloading.value = false;
+                }, 1000);
+            };
+
 
             onMounted(async () => {
                 if (!cd_id) return;
@@ -1608,6 +1658,7 @@
                         loadPayments(),
                         loadFeedbackVerifyData(),
                         loadQrCode(),
+                        downloadQR(),
                     ]);
 
                     // -------------------------------
@@ -1805,8 +1856,51 @@
             })
             
             const encodedUrl = ref("")
+            const cpyUrl = ref("")
             const currentUrl = window.location.href
-            encodedUrl.value = currentUrl
+            encodedUrl.value = cpyUrl.value = currentUrl
+
+            const copyToClipboard = async () => {
+                const textToCopy = cpyUrl.value;
+
+                // 1. Try the modern Clipboard API
+                if (navigator.clipboard && window.isSecureContext) {
+                    try {
+                        await navigator.clipboard.writeText(textToCopy);
+                        alert("URL copied!");
+                        return;
+                    } catch (err) {
+                        console.error("Clipboard API failed", err);
+                    }
+                }
+
+                // 2. Fallback: Create a temporary textarea element
+                const textArea = document.createElement("textarea");
+                textArea.value = textToCopy;
+                
+                // Ensure the textarea is not visible but stays in the DOM
+                textArea.style.position = "fixed";
+                textArea.style.left = "-9999px";
+                textArea.style.top = "0";
+                document.body.appendChild(textArea);
+                
+                textArea.focus();
+                textArea.select();
+
+                try {
+                    const successful = document.execCommand('copy');
+                    if (successful) {
+                        alert("URL copied (fallback)!");
+                    } else {
+                        throw new Error('Copy command failed');
+                    }
+                } catch (err) {
+                    console.error("Fallback failed", err);
+                    alert("Unable to copy. Please copy manually.");
+                } finally {
+                    document.body.removeChild(textArea);
+                }
+            };
 
             return{
                 galleryData,
@@ -1893,6 +1987,11 @@
                 // Qr data
                 qrData,
                 qrImage,
+                downloadQR,
+                isDownloading,
+                encodedUrl,
+                cpyUrl,
+                copyToClipboard,
             }
         }
     }
@@ -1964,6 +2063,16 @@
         .bg-fixed {
             background-attachment: scroll !important;
         }
+    }
+
+    @keyframes download-arrow {
+        0% { transform: translateY(-5px); opacity: 0; }
+        50% { transform: translateY(0); opacity: 1; }
+        100% { transform: translateY(5px); opacity: 0; }
+    }
+
+    .animate-download {
+       animation: download-arrow 0.8s infinite linear;
     }
 
     /* @media (max-width: 768px) {

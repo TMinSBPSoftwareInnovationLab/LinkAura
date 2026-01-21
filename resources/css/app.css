@@ -1,1 +1,26 @@
 @import "tailwindcss";
+/* 12-01-2025 */
+@theme {
+  /* This automatically extends your theme */
+  --font-sans: "Figtree", ui-sans-serif, system-ui, sans-serif;
+
+  --animate-wave: wave 4s ease-in-out infinite;
+  --animate-fade-in: fade-in 1s ease-out forwards;
+  --animate-spinslow: spin-slow 8s linear infinite;
+
+  @keyframes wave {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(-25px); }
+    100% { transform: translateX(0); }
+  }
+  @keyframes fade-in {
+    0% { opacity: 0; }
+    25% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+    100% { opacity: 1; }
+  }
+  @keyframes spin-slow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+}

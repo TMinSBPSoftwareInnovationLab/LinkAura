@@ -46,9 +46,11 @@
             <!-- heading page /. -->
 
             <!-- theme page -->
-            <div class="grid grid-cols-1 md:grid-cols-5 mt-2">
+            <!-- <div class="grid grid-cols-1 md:grid-cols-5 mt-2"> -->
+            <div class="grid grid-cols-1 md:grid-cols-5 lg:grid-cols-5 mt-2 gap-4">
                 <!-- left -->
-                <div class="md:col-span-3 bg-white grid grid-cols-2 md:grid-cols-3 gap-4 pt-5 border-r-4 border-l-[#000b57] border-t-0 border-l-0 border-b-0">
+                <!-- <div class="md:col-span-3 bg-white grid grid-cols-2 md:grid-cols-3 gap-4 pt-5 border-r-4 border-l-[#000b57] border-t-0 border-l-0 border-b-0"> -->
+                <div class="lg:col-span-3 md:col-span-3 bg-white grid grid-cols-2 sm:grid-cols-3 gap-4 pt-5 px-2 border-r-0 lg:border-r-4 border-gray-100">
                     <div v-for="wsite in websiteDesigns"
                         :key="wsite.website_temp"
                         @click="selectWesiteDesign(wsite.id, wsite.design)"
@@ -66,8 +68,7 @@
                         ? 'border-gray-100 shadow-[0_0_15px_rgba(0,112,255,0.8)] scale-105' 
                         : 'border-transparent shadow-none'"
                     >
-                        <img :src="website_templates_images(wsite.website_image, wsite.id)" :alt="wsite.website_image"
-                            class="object-contain rounded-lg" />
+                     <img :src="website_templates_images(wsite.website_image, wsite.id)" :alt="wsite.website_image" class="object-contain rounded-lg" />
                     </div>
                 </div>
                 <!-- left /.-->
