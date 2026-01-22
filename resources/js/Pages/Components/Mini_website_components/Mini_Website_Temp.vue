@@ -45,84 +45,111 @@
             </div>
             <!-- heading page /. -->
 
-            <!-- theme page -->
-            <!-- <div class="grid grid-cols-1 md:grid-cols-5 mt-2"> -->
-            <div class="grid grid-cols-1 md:grid-cols-5 lg:grid-cols-5 mt-2 gap-4">
-                <!-- left -->
-                <!-- <div class="md:col-span-3 bg-white grid grid-cols-2 md:grid-cols-3 gap-4 pt-5 border-r-4 border-l-[#000b57] border-t-0 border-l-0 border-b-0"> -->
-                <div class="lg:col-span-3 md:col-span-3 bg-white grid grid-cols-2 sm:grid-cols-3 gap-4 pt-5 px-2 border-r-0 lg:border-r-4 border-gray-100">
-                    <div v-for="wsite in websiteDesigns"
-                        :key="wsite.website_temp"
-                        @click="selectWesiteDesign(wsite.id, wsite.design)"
-                        class="w-full items-center cursor-pointer rounded-lg" v-if="1==2">
-                        <img :src="website_templates_images(wsite.website_image, wsite.id)"
-                        :alt="wsite.website_image"
-                        class="object-contain" />
-                    </div>
+            <!-- THEME PAGE -->
+            <div class="grid grid-cols-1 lg:grid-cols-5 mt-2 gap-4">
 
-                    <div v-for="wsite in websiteDesigns"
+                <!-- LEFT SIDE : WEBSITE TEMPLATES -->
+                <div
+                    class="lg:col-span-3 bg-white
+                        grid grid-cols-2 sm:grid-cols-3
+                        auto-rows-[220px]
+                        gap-y-6 gap-x-6
+                        pt-5 px-2
+                        border-r-0 lg:border-r-4 border-gray-100"
+                >
+                    <div
+                        v-for="wsite in websiteDesigns"
                         :key="wsite.id"
                         @click="handleTemplateClick(wsite)"
-                        class="w-full justify-center text-center items-center cursor-pointer rounded-lg p-1 border-4 transition-all"
-                        :class="selectedId === wsite.id 
-                        ? 'border-gray-100 shadow-[0_0_15px_rgba(0,112,255,0.8)] scale-105' 
-                        : 'border-transparent shadow-none'"
+                        class="relative cursor-pointer rounded-xl
+                            transition-all duration-300 ease-out
+                            flex items-center justify-center
+                            bg-white"
+                        :class="selectedId === wsite.id
+                            ? 'scale-105 shadow-[0_10px_25px_rgba(0,0,0,0.25)] ring-2 ring-blue-400'
+                            : 'scale-100 shadow-md hover:shadow-xl hover:scale-102'"
                     >
-                     <img :src="website_templates_images(wsite.website_image, wsite.id)" :alt="wsite.website_image" class="object-contain rounded-lg" />
+                        <!-- IMAGE HOLDER (FIXED SIZE) -->
+                        <div class="w-full h-full p-3 flex items-center justify-center">
+                            <img
+                                :src="website_templates_images(wsite.website_image, wsite.id)"
+                                :alt="wsite.website_image"
+                                class="max-w-full max-h-full object-contain rounded-lg"
+                            />
+                        </div>
                     </div>
                 </div>
-                <!-- left /.-->
+                <!-- LEFT /. -->
 
-                <!-- right -->
-                <div class="hidden md:flex md:col-span-2 justify-center bg-white pt-5" ref="rightPanel">
-                     <div class="relative mx-auto border-[#ebe6e7] bg-base border-[14px] rounded-[2.5rem] h-[520px] w-[360px] md:w-[320px]">
-                            
-                        <div class="h-[32px] w-[3px] bg-base absolute -start-[17px] top-[72px] rounded-s-lg"></div>
-                        <div class="h-[46px] w-[3px] bg-base absolute -start-[17px] top-[124px] rounded-s-lg"></div>
-                        <div class="h-[46px] w-[3px] bg-base absolute -start-[17px] top-[178px] rounded-s-lg"></div>
-                        <div class="h-[64px] w-[3px] bg-base absolute -end-[17px] top-[142px] rounded-e-lg"></div>
 
-                        <!-- SCROLLABLE PHONE SCREEN -->
-                        <div class="rounded-[2rem] w-[292px] h-[488px] bg-neutral-primary 
-                                    overflow-y-auto overflow-x-hidden scroll-smooth scrollbar-hide">
-                            <!-- <Website_Temp_1 /> -->
-                            <Website_Temp_1 
-                                v-if="selectedWebsiteId == 1" 
+                <!-- RIGHT SIDE : MOBILE PREVIEW (DESKTOP ONLY) -->
+                <div
+                    class="hidden lg:flex lg:col-span-2 justify-center bg-white pt-5"
+                    ref="rightPanel"
+                >
+                    <!-- PHONE FRAME -->
+                    <div
+                        class="relative mx-auto
+                            border-[#ebe6e7] bg-base
+                            border-[12px]
+                            rounded-[2.5rem]
+                            h-[520px]
+                            w-[300px]
+                            xl:w-[340px]"
+                    >
+
+                        <!-- SIDE BUTTONS -->
+                        <div class="h-[32px] w-[3px] bg-base absolute -start-[14px] top-[72px] rounded-s-lg"></div>
+                        <div class="h-[46px] w-[3px] bg-base absolute -start-[14px] top-[124px] rounded-s-lg"></div>
+                        <div class="h-[46px] w-[3px] bg-base absolute -start-[14px] top-[178px] rounded-s-lg"></div>
+                        <div class="h-[64px] w-[3px] bg-base absolute -end-[14px] top-[142px] rounded-e-lg"></div>
+
+                        <!-- PHONE SCREEN -->
+                        <div
+                            class="rounded-[2rem]
+                                w-full h-full
+                                bg-neutral-primary
+                                overflow-y-auto overflow-x-hidden
+                                scroll-smooth scrollbar-hide"
+                        >
+                            <Website_Temp_1
+                                v-if="selectedWebsiteId == 1"
                                 :key="'website1-' + selectedWebsiteId"
-                                :website-id="selectedWebsiteId" 
+                                :website-id="selectedWebsiteId"
                                 :webTemp="selectedWebsiteId_with_webTemp_id"
                                 :isFooter="false"
                             />
 
-                            <Website_Temp_2 
-                                v-if="selectedWebsiteId == 2" 
+                            <Website_Temp_2
+                                v-if="selectedWebsiteId == 2"
                                 :key="'website2-' + selectedWebsiteId"
-                                :website-id="selectedWebsiteId" 
+                                :website-id="selectedWebsiteId"
                                 :webTemp="selectedWebsiteId_with_webTemp_id"
                                 :isFooter="false"
                             />
-                            
-                            <Website_Temp_3 
-                                v-if="selectedWebsiteId == 3" 
+
+                            <Website_Temp_3
+                                v-if="selectedWebsiteId == 3"
                                 :key="'website3-' + selectedWebsiteId"
-                                :website-id="selectedWebsiteId" 
+                                :website-id="selectedWebsiteId"
                                 :webTemp="selectedWebsiteId_with_webTemp_id"
                                 :isFooter="false"
                             />
-                            
-                            <Website_Temp_4 
-                                v-if="selectedWebsiteId == 4" 
+
+                            <Website_Temp_4
+                                v-if="selectedWebsiteId == 4"
                                 :key="'website4-' + selectedWebsiteId"
-                                :website-id="selectedWebsiteId" 
+                                :website-id="selectedWebsiteId"
                                 :webTemp="selectedWebsiteId_with_webTemp_id"
                                 :isFooter="false"
                             />
                         </div>
                     </div>
                 </div>
-                <!-- right /.-->
+                <!-- RIGHT /. -->
+
             </div>
-            <!-- theme page /. -->
+            <!-- THEME PAGE /. -->
 
             <!-- main content area /.-->
         </div>
@@ -131,7 +158,7 @@
 
 
     <!-- MOBILE POPUP -->
-    <div v-if="showMobilePopup" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 md:hidden">
+    <div v-if="showMobilePopup" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50"> <!-- md:hidden -->
         <div class="bg-white rounded-xl p-4 w-11/12 max-w-sm shadow-xl relative 
                     overflow-y-auto overflow-x-hidden scroll-smooth scrollbar-hide 
                     max-h-[90vh]">
@@ -256,8 +283,9 @@
                 selectedId.value = wsite.id
                 selectedImage.value = website_templates_images(wsite.website_image, wsite.id)
 
+                
                 // Mobile → open popup
-                if (window.innerWidth < 768) {
+                if (window.innerWidth < 1024) {
                     showMobilePopup.value = true
                     selectWesiteDesign(wsite.id, wsite.website_temp)
                 } else {
