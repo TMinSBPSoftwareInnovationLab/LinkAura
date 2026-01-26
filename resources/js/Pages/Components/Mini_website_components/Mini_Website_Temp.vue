@@ -143,6 +143,14 @@
                                 :webTemp="selectedWebsiteId_with_webTemp_id"
                                 :isFooter="false"
                             />
+                            
+                            <Website_Temp_5
+                                v-if="selectedWebsiteId == 5"
+                                :key="'website5-' + selectedWebsiteId"
+                                :website-id="selectedWebsiteId"
+                                :webTemp="selectedWebsiteId_with_webTemp_id"
+                                :isFooter="false"
+                            />
                         </div>
                     </div>
                 </div>
@@ -201,6 +209,14 @@
                     :webTemp="selectedWebsiteId_with_webTemp_id"
                     :isFooter="false"
                 />
+               
+                <Website_Temp_5
+                    v-if="selectedWebsiteId == 5"
+                    :key="'website5-' + selectedWebsiteId"
+                    :website-id="selectedWebsiteId"
+                    :webTemp="selectedWebsiteId_with_webTemp_id"
+                    :isFooter="false"
+                />
             </div>
 
             <!-- Save & Next Button -->
@@ -222,6 +238,7 @@
     import Website_Temp_2 from '@/Pages/Mini_Website_Pages/Website_Temp_2.vue';
     import Website_Temp_3 from '@/Pages/Mini_Website_Pages/Website_Temp_3.vue';
     import Website_Temp_4 from '@/Pages/Mini_Website_Pages/Website_Temp_4.vue';
+    import Website_Temp_5 from '@/Pages/Mini_Website_Pages/Website_Temp_5.vue';
     import { ref, watch, computed, onMounted, nextTick } from 'vue';
     import { useCardStore } from '@/stores/cardStore'
     import { toast } from 'vue3-toastify'
@@ -229,7 +246,7 @@
 
     export default {
         name: "Website_temp",
-        components: {SideNavBar, Website_Temp_1, Website_Temp_2, Website_Temp_3,Website_Temp_4, Header_tab},
+        components: {SideNavBar, Website_Temp_1, Website_Temp_2, Website_Temp_3,Website_Temp_4,Website_Temp_5, Header_tab},
         setup() {
             const router = useRouter();
             // collect the website templates
@@ -238,6 +255,7 @@
                 {id: 2, name:"website 2", website_temp: 6, website_image: "website2_thumb1.png"},
                 {id: 3, name:"website 3", website_temp: 11, website_image: "website3_thumb1.png"},
                 {id: 4, name:"website 4", website_temp: 16, website_image: "website4_thumb1.png"},
+                {id: 5, name:"website 5", website_temp: 21, website_image: "website5_thumb1.jpeg"},
             ]);
 
             const website_templates_images = (websiteImage, websiteId) => {
@@ -252,6 +270,9 @@
                 }
                 if(websiteId == 4){
                     return new URL(`/public/images/website/website4/thumbnail/${websiteImage}`, import.meta.url).href;
+                }
+                if(websiteId == 5){
+                    return new URL(`/public/images/website/website5/thumbnail/${websiteImage}`, import.meta.url).href;
                 }
             }
             // desktop views

@@ -415,7 +415,7 @@
 
                         <div class="flex-1 px-2 py-5">
                             <div class="flex flex-col w-full text-center p-5">
-                                <h3 class="text-3xl font-semibold text-gray-700 mb-6">Standard</h3>
+                                <h3 class="text-3xl font-semibold text-gray-700 mb-6">Premium</h3>
                             </div>
                             <div class="flex flex-col w-full px-2 pt-0">
                                 <ul class="text-[15px] font-semibold leading-loose">
