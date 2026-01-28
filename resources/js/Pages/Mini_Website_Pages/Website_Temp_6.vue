@@ -1,8 +1,8 @@
 <template>
-    <main class="p-2 px-0 m-2 bg-gray-300">
+    <main class="p-2 px-0 m-2">
         <div class="max-w-[430px] pb-0 mx-auto grid grid-cols-1  bg-center bg-cover bg-no-repeat ">
             <!-- purchase message -->
-             <div class="border-1 border-b-gray-400 border-t-0 border-l-0 border-r-0 justify-center items-center flex flex-col w-full bg-white p-2" v-if="!is_purchased">
+                <div class="border-1 border-b-gray-400 border-t-0 border-l-0 border-r-0 justify-center items-center flex flex-col w-full bg-white p-2" v-if="!is_purchased">
                 <p class="font-semibold text-[14px] text-geay-500">
                     After purchasing a paid plan, you can share this card with others.
                 </p>
@@ -10,259 +10,191 @@
                 class="mt-2 w-[150px] text-gray bg-transparent border-1 border-[#2A7B9B] text-[#3d023a] py-2 rounded-xl transition hover:bg-[#2A7B9B] hover:text-white" >
                     Buy Paid Plan
                 </button>
-             </div>
+                </div>
             <!-- purchase message /. -->
 
             <!-- front page -->
-            <div class="relative flex flex-col w-full h-screen bg-[#15004e] justify-center items-center overflow-hidden">
-                <!-- SVG background -->
+            <div class="relative flex flex-col w-full h-screen bg-[#138d95] justify-center items-center overflow-hidden">
                 <div class="absolute inset-0 z-0 pointer-events-none">
-                <svg
-                    viewBox="0 0 800 800"
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-full h-full"
-                >
-                    <defs>
-                        <filter id="glow">
-                            <feGaussianBlur stdDeviation="6" result="blur" />
-                            <feMerge>
-                            <feMergeNode in="blur" />
-                            <feMergeNode in="SourceGraphic" />
-                            </feMerge>
-                        </filter>
-
-                        <!-- original square -->
-                        <rect
-                            id="some-square"
-                            x="350"
-                            y="350"
-                            rx="20"
-                            fill="hsl(256, 80%, 65%)"
-                            stroke="hsl(256, 80%, 45%)"
+                    <svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+                        <g
+                            fill="#22bdc9"
+                            stroke="#00FFFF"
                             stroke-width="11"
-                            width="200"
-                            height="200"
-                            filter="url(#glow)"
-                        />
-                    </defs>
-
-                    <!-- ORIGINAL POSITIONS (unchanged) -->
-                    <use x="-100" y="-100" href="#some-square" class="box box-1" />
-                    <use x="100" y="100" href="#some-square" class="box box-2" />
-                    <use x="-200" y="-200" href="#some-square" class="box box-3" />
-                    <use x="200" y="200" href="#some-square" class="box box-4" />
-                </svg>
+                            transform="scale(1)"
+                            transform-origin="400"
+                        >
+                            <circle r="20" cx="710" cy="70" />
+                            <circle fill="#22bdc9" stroke="#00FFFF" r="33" cx="300" cy="255" />
+                            <circle stroke-width="44" r="125" cx="175" cy="455" />
+                            <circle r="75" cx="500" cy="315" />
+                            <circle r="90" cx="600" cy="615" />
+                        </g>
+                    </svg>
                 </div>
 
                 <!-- content -->
-                <div class="relative z-10 flex flex-col items-center">
-                    <div class="p-3 bg-white rounded-2xl shadow-2xl">
-                        <img
-                        :src="logoImage || defaultLogo"
-                        class="w-[150px] h-[150px] object-contain"
-                        />
+                <div class="relative  flex flex-col items-center">
+                    <div class="relative flex h-[166px] w-[166px] items-center justify-center overflow-hidden rounded-2xl bg-slate-200">
+                        
+                        <div class="animate-rotate absolute inset-[-100%] bg-[conic-gradient(from_0deg,#14abab_0deg,#14abab_90deg,transparent_90deg,transparent_180deg,#14abab_180deg,#14abab_270deg,transparent_270deg)]"></div>
+                        
+                        <div class="relative  flex h-[160px] w-[160px] items-center justify-center bg-white rounded-[14px]">
+                            <img
+                                :src="logoImage || defaultLogo"
+                                class="w-[150px] h-[150px] object-contain"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- front page /. -->
+            <!-- front page /.-->
 
             <!-- company details with contact details -->
-            <div id="home" class="relative flex flex-col w-full bg-white mt-1">
-                <div class="relative w-full h-[180px] bg-[#15004e] rounded-b-[150px] overflow-hidden"></div>
-
-                <div class="flex flex-col items-center -mt-24 px-4">
-                    
-                    <div class="relative flex items-center justify-center w-full h-[220px] md:h-[250px]">
-                        <div class="absolute w-[200px] h-[200px] md:w-[245px] md:h-[245px] rounded-full border-[25px] md:border-[35px] border-t-[#E91E63] border-r-transparent border-b-transparent border-l-transparent rotate-[25deg]"></div>
-
-                        <div class="absolute w-[200px] h-[200px] md:w-[245px] md:h-[245px] rounded-full border-[25px] md:border-[35px] border-b-[#FF5722] border-r-transparent border-t-transparent border-l-transparent rotate-[70deg]"></div>
-
-                        <div class="absolute w-[165px] h-[165px] md:w-[205px] md:h-[205px] rounded-full border-[10px] md:border-[14px] border-[#DCE8ED] bg-transparent"></div>
-
-                        <div class="relative z-10 w-[145px] h-[145px] md:w-[180px] md:h-[180px] bg-[#F7F7F2] rounded-full flex items-center justify-center shadow-xl">
-                            <div v-if="logoImage" class="p-3 md:p-4">
-                                <img :src="logoImage" alt="logo" class="w-[110px] h-[110px] md:w-[150px] md:h-[150px] object-contain rounded-full" />
-                            </div>
-                            <div v-else class="p-3 md:p-4">
-                                <img :src="defaultLogo" alt="default" class="w-[110px] h-[110px] md:w-[150px] md:h-[150px] object-contain rounded-full" />
-                            </div>
+            <div id="home" class="relative flex flex-col w-full bg-[#1F2734] mt-1">
+                <!-- logo -->
+                <div class="flex flex-col w-full items-center">
+                    <span v-if="logoImage">
+                        <!-- <img :src="logo_path" alt="deafultLogo" class="w-[120px] h-[120px]"></img> -->
+                            <div class="flex p-5 items-center justify-center text-center">
+                            <img :src="logoImage" alt="defaultLogo" class="w-[150px] h-[150px] object-contain" />
                         </div>
-                    </div>
-
-                    <div class="mt-2 text-center">
-                        <h1 class="text-xl font-bold text-black tracking-tight uppercase">{{  ownerName || "Balamurugan S" }}</h1>
-                        <p class="text-[16px] font-semibold text-gray-800">{{ designation || "Managing Director" }}</p>
-                        <p class="text-[16px] font-semibold text-gray-800">{{ companyName || "Thirumurugan Educational Academy" }}</p>
-                    </div>
-
+                    </span>
+                    <span v-else>
+                            <img  :src="defaultLogo" class="w-[150px] h-[150px] object-contain bg-white m-10 p-2 rounded-full" />
+                    </span>                        
                 </div>
+                <!-- logo /. -->
+
+                <!-- bottom row -->
+                <div class="flex flex-col w-full">
+                    <div class="grid grid-cols-3">
+                        <div class="bg-[#138d95] p-3 text-white text-center"></div>
+                        <div class="bg-[#22bdc9] p-3 text-white text-center"></div>
+                        <div class="bg-[#138d95] p-3 text-white text-center"></div>
+                    </div>
+                </div>
+                <!-- bottom row /. -->
 
                 <!-- content area -->
-                <div class="flex flex-col w-full px-10 mt-10">
-                    <!-- phone number -->
-                    <div class="flex items-center gap-4">
-                        <div class="relative flex items-center justify-center w-12 h-12 shrink-0">    
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 30 30" class="w-10 h-10">
-                                    <path fill="#BF0040" d="M1 2.5c0 .8.5 2.6 1.2 4 .9 2.1.9 3.1 0 4.6-1.5 2.4-1.5 6.2 0 7.7.9.9.8 2.1-.2 5.2-.7 2.2-1 4.3-.6 4.7.3.4 2.3.1 4.2-.6 3-1.1 4.1-1.1 6 0 1.9 1 3.1 1 6.2 0 2.9-1 4.4-1 6-.2 4.9 2.6 6.4.7 3.7-4.5-1.3-2.5-1.3-3.1.1-5.3 1.4-2 1.4-2.9.3-6.3-1-3.1-1-4.4-.1-5.9 2.7-4.2.6-6.2-4-3.8-1.6.8-3.1.8-6-.2-3.1-1-4.4-1-5.9-.1-2.3 1.5-5.6 1.6-6.4.2C4.5.5 1 .8 1 2.5"/>
-                                </svg>
+                <div class="flex flex-col w-full">
+                    <div class="max-w-md bg-white px-4 p-8 font-sans">
+                        <!-- owner info -->
+                        <div class="flex flex-col w-full mb-10">
+                            <div class="mt-2 text-center">
+                                <h1 class="text-xl font-bold text-black tracking-tight uppercase">{{  ownerName || "Balamurugan S" }}</h1>
+                                <p class="text-[16px] font-semibold text-gray-800">{{ designation || "Managing Director" }}</p>
+                                <p class="text-[16px] font-semibold text-gray-800">{{ companyName || "Thirumurugan Educational Academy" }}</p>
                             </div>
-
-                            <div class="relative z-10 flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 fill-white" viewBox="0 0 28.314 28.323" xml:space="preserve">
+                        </div>
+                        <!-- owner info /. -->
+                        <div class="relative ml-16">
+                            
+                            <div class="absolute left-0 top-0 bottom-0 w-[1px] bg-slate-200"></div>
+                            <!-- phone number -->
+                            <div class="relative flex items-center pl-8 pb-10">
+                                <div class="absolute -left-12 flex items-center justify-center w-8 h-8 text-slate-800">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 fill-[#22bdc9]" viewBox="0 0 28.314 28.323" xml:space="preserve">
                                     <path d="m27.728 20.384-4.242-4.242a1.982 1.982 0 0 0-1.413-.586h-.002c-.534 0-1.036.209-1.413.586L17.83 18.97l-8.485-8.485 2.828-2.828c.78-.78.78-2.05-.001-2.83L7.929.585A1.986 1.986 0 0 0 6.516 0h-.001C5.98 0 5.478.209 5.101.587L.858 4.83C.729 4.958-.389 6.168.142 8.827c.626 3.129 3.246 7.019 7.787 11.56 6.499 6.499 10.598 7.937 12.953 7.937 1.63 0 2.426-.689 2.604-.867l4.242-4.242c.378-.378.587-.881.586-1.416 0-.534-.208-1.037-.586-1.415zm-5.656 5.658c-.028.028-3.409 2.249-12.729-7.07C-.178 9.452 2.276 6.243 2.272 6.244L6.515 2l4.243 4.244-3.535 3.535a.999.999 0 0 0 0 1.414l9.899 9.899a.999.999 0 0 0 1.414 0l3.535-3.536 4.243 4.244-4.242 4.242z"/>
                                 </svg>
+                                </div>
+                                <!-- <span class="absolute -left-[7px] -top-1 flex h-3.5 w-3.5 items-center justify-center bg-white text-teal-400 font-bold z-10 text-[10px]">+</span> -->
+                                
+                                <div>
+                                    <a :href="`tel:+91${phoneNo}`" class="hover:underline">
+                                        <p class="text-sm font-semibold text-slate-600 space-y-1"> +91 {{ phoneNo || "9876543210" }}</p>
+                                    </a>
+                                </div>
                             </div>
+                            <!-- phone number /.-->
 
-                        </div>
-
-                        <div class="flex flex-col">
-                            <span class="text-[12px] font-bold uppercase tracking-wider text-black/50">Call Us</span>
-                            <a :href="`tel:+91${phoneNo}`" class="hover:underline">
-                                <p class="font-bold text-[16px] text-gray-800"> +91 {{ phoneNo || "9876543210" }}</p>
-                            </a>
-                        </div>
-                    </div>
-                    <!-- phone number /. -->
-
-                    <!-- whatsapp number -->
-                    <div class="flex items-center gap-4 mt-5">
-                        <div class="relative flex items-center justify-center w-12 h-12 shrink-0">    
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 30 30" class="w-10 h-10">
-                                    <path fill="#BF0040" d="M1 2.5c0 .8.5 2.6 1.2 4 .9 2.1.9 3.1 0 4.6-1.5 2.4-1.5 6.2 0 7.7.9.9.8 2.1-.2 5.2-.7 2.2-1 4.3-.6 4.7.3.4 2.3.1 4.2-.6 3-1.1 4.1-1.1 6 0 1.9 1 3.1 1 6.2 0 2.9-1 4.4-1 6-.2 4.9 2.6 6.4.7 3.7-4.5-1.3-2.5-1.3-3.1.1-5.3 1.4-2 1.4-2.9.3-6.3-1-3.1-1-4.4-.1-5.9 2.7-4.2.6-6.2-4-3.8-1.6.8-3.1.8-6-.2-3.1-1-4.4-1-5.9-.1-2.3 1.5-5.6 1.6-6.4.2C4.5.5 1 .8 1 2.5"/>
-                                </svg>
-                            </div>
-
-                            <div class="relative z-10 flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6 fill-white">
+                            <!-- whatsapp number -->
+                            <div class="relative border-t border-slate-200 py-8">
+                                <div class="absolute -left-16 top-[-1px] w-16 border-t border-slate-200"></div>
+                                <div class="flex items-start pl-8">
+                                    <div class="absolute -left-12 top-7 flex items-center justify-center w-8 h-8 text-teal-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6 fill-[#22bdc9]">
                                     <path d="M19.05 4.91A9.816 9.816 0 0 0 12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.264 8.264 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 0 1 2.41 5.83c.02 4.54-3.68 8.23-8.22 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43s.17-.25.25-.41c.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18s-.22-.16-.47-.28z"/>
                                 </svg>
+                                    </div>
+                                    <span class="absolute -left-[7px] -top-2 flex h-3.5 w-3.5 items-center justify-center bg-white text-teal-400 font-bold z-10 text-[10px]">+</span>
+                                    
+                                    <a :href="`https://wa.me/${whatsappNo}`" target="_blank" class="hover:underline">
+                                        <p class="text-sm font-semibold text-slate-600 space-y-1"> +91 {{ whatsappNo || "9876543210" }}</p>
+                                    </a>
+                                </div>
                             </div>
+                            <!-- whatsapp number /.-->
 
-                        </div>
-
-                        <div class="flex flex-col">
-                            <span class="text-[12px] font-bold uppercase tracking-wider text-black/50">WhatsApp</span>
-                            <a :href="`https://wa.me/${whatsappNo}`" target="_blank" class="hover:underline">
-                                <p class="font-bold text-[16px] text-gray-800"> +91 {{ whatsappNo || "9876543210" }}</p>
-                            </a>
-                        </div>
-                    </div>
-                    <!-- whatsapp number /. -->
-
-                    <!-- email -->
-                    <div class="flex items-center gap-4 mt-5">
-                        <div class="relative flex items-center justify-center w-12 h-12 shrink-0">    
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 30 30" class="w-10 h-10">
-                                    <path fill="#BF0040" d="M1 2.5c0 .8.5 2.6 1.2 4 .9 2.1.9 3.1 0 4.6-1.5 2.4-1.5 6.2 0 7.7.9.9.8 2.1-.2 5.2-.7 2.2-1 4.3-.6 4.7.3.4 2.3.1 4.2-.6 3-1.1 4.1-1.1 6 0 1.9 1 3.1 1 6.2 0 2.9-1 4.4-1 6-.2 4.9 2.6 6.4.7 3.7-4.5-1.3-2.5-1.3-3.1.1-5.3 1.4-2 1.4-2.9.3-6.3-1-3.1-1-4.4-.1-5.9 2.7-4.2.6-6.2-4-3.8-1.6.8-3.1.8-6-.2-3.1-1-4.4-1-5.9-.1-2.3 1.5-5.6 1.6-6.4.2C4.5.5 1 .8 1 2.5"/>
-                                </svg>
-                            </div>
-
-                            <div class="relative z-10 flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 stroke-white">
+                            <!-- email -->
+                            <div class="relative border-t border-slate-200 py-8">
+                                <div class="absolute -left-16 top-[-1px] w-16 border-t border-slate-200"></div>
+                            
+                                <div class="flex items-start pl-8">
+                                    <div class="absolute -left-12 top-7 flex items-center justify-center w-8 h-8 text-teal-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 stroke-[#22bdc9]">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-                                </svg>
+                                    </svg>
+                                    </div>
+                                    <span class="absolute -left-[7px] -top-2 flex h-3.5 w-3.5 items-center justify-center bg-white text-teal-400 font-bold z-10 text-[10px]">+</span>
+                                    
+                                    <div class="text-sm font-semibold text-slate-600 space-y-1">
+                                        <a :href="`mailto:${emailID}`" class="hover:underline">
+                                            <p class="">{{ emailID || "info@linkaura.com" }}</p>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-
-                        </div>
-
-                        <div class="flex flex-col">
-                            <span class="text-[12px] font-bold uppercase tracking-wider text-black/50">Email</span>
-                            <a :href="`mailto:${emailID}`" class="hover:underline">
-                                <p class="font-bold text-[16px] text-gray-800">{{ emailID || "info@linkaura.com" }}</p>
-                            </a>
-                        </div>
-                    </div>
-                    <!-- email /. -->
-
-                    <!-- Address -->
-                    <div class="flex items-center gap-4 mt-5">
-                        <div class="relative flex items-center justify-center w-12 h-12 shrink-0">    
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 30 30" class="w-10 h-10">
-                                    <path fill="#BF0040" d="M1 2.5c0 .8.5 2.6 1.2 4 .9 2.1.9 3.1 0 4.6-1.5 2.4-1.5 6.2 0 7.7.9.9.8 2.1-.2 5.2-.7 2.2-1 4.3-.6 4.7.3.4 2.3.1 4.2-.6 3-1.1 4.1-1.1 6 0 1.9 1 3.1 1 6.2 0 2.9-1 4.4-1 6-.2 4.9 2.6 6.4.7 3.7-4.5-1.3-2.5-1.3-3.1.1-5.3 1.4-2 1.4-2.9.3-6.3-1-3.1-1-4.4-.1-5.9 2.7-4.2.6-6.2-4-3.8-1.6.8-3.1.8-6-.2-3.1-1-4.4-1-5.9-.1-2.3 1.5-5.6 1.6-6.4.2C4.5.5 1 .8 1 2.5"/>
-                                </svg>
-                            </div>
-
-                            <div class="relative z-10 flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-white" viewBox="0 0 24 24">
+                            <!-- email /.-->
+                            
+                            
+                            <!-- Address -->
+                            <div class="relative border-t border-slate-200 py-8">
+                                <div class="absolute -left-16 top-[-1px] w-16 border-t border-slate-200"></div>
+                            
+                                <div class="flex items-start pl-8">
+                                    <div class="absolute -left-12 top-7 flex items-center justify-center w-8 h-8 text-teal-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-[#22bdc9]" viewBox="0 0 24 24">
                                         <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                                 </svg>
+                                    </div>
+                                    <span class="absolute -left-[7px] -top-2 flex h-3.5 w-3.5 items-center justify-center bg-white text-teal-400 font-bold z-10 text-[10px]">+</span>
+                                    
+                                    <div class="text-sm font-semibold text-slate-600 space-y-1">
+                                        <p class=""> 
+                                            {{ currentAddress || "12-B, Sriniwas Eagle garden, Bangalore, Karnataka 638107" }}
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
+                            <!-- Address /.-->
 
-                        </div>
-
-                        <div class="flex flex-col">
-                            <span class="text-[12px] font-bold uppercase tracking-wider text-black/50">Address</span>
-                            <p class="font-bold text-[15px] text-gray-800"> 
-                                {{ currentAddress || "12-B, Sriniwas Eagle garden, Bangalore, Karnataka 638107" }}
-                            </p>
                         </div>
                     </div>
-                    <!-- Address /. -->
                 </div>
-                <!-- content area /. -->
-
-                <!-- footer -->
-                <div class="grid grid-cols-3 w-full mt-10">
-                    <!-- column1 -->
-                     <div class="flex flex-col h-[40px] w-full">
-                        <div class="h-1/2 bg-white"></div>
-                        <div class="h-1/2 bg-[#DF1968] border-7 border-t-0 border-l-0 border-r-0 border-b-gray-800 " style="clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 0% 100%);"></div>
-                    </div>
-                    <!-- column1 /.-->
-
-                    <!-- column2 -->
-                    <div class="filter drop-shadow-[5px_0_0_#1F2937] -ml-[11%]"> 
-                        <div class="h-[40px] bg-[#DF1968] w-full border-7 border-t-gray-800 border-l-0 border-r-0" 
-                            style="clip-path: polygon(20% 0%, 100% 0%, 80% 100%, 0% 100%);">
-                        </div>
-                    </div>
-                    <!-- column2 /. -->
-
-                    <!-- column3 -->
-                    <div class="filter drop-shadow-[5px_0_0_#1F2937] -ml-[21%]"> 
-                        <div class="h-[40px] bg-white w-full border-7 border-t-gray-800 border-l-0 border-r-0" 
-                            style="clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%);">
-                        </div>
-                    </div>
-                    <!-- column3 /. -->
-                </div>
-                <!-- footer /. -->
+                <!-- content area /.-->
             </div>
             <!-- company details with contact details /.-->
 
             <!-- about us -->
-            <div id="aboutus" class="flex flex-col w-full mt-2 bg-white pt-2">
-                <!-- about header -->
-                <div class="flex flex-col w-full">
-                     <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 320 56">
-                        <path fill="#DF1968" d="M20 11.2c0 13.3 1 17.4 4.9 21.2 2.9 2.8 4.1 3 69.3 13l66.3 10.1 65.8-10.2c64.5-9.9 66-10.2 68.8-12.9 3.9-3.8 4.9-7.9 4.9-21.2V0H20z"/>
-                        <path fill="#DF1968" d="M17.7 4.9C15.5 8.6 15.6 9 18 9c1.6 0 2-.7 2-3.5 0-1.9-.1-3.5-.3-3.5-.1 0-1 1.3-2 2.9m282.3.3c0 3.1.4 3.8 2 3.8 2.5 0 2.5-.2 0-4.2l-2-3.3z"/>
-                        <path d="M0 15v6h20V9H0zm300 0v6h20V9h-20z"/>
-                        <path fill="#BF0040" fill-opacity=".1" d="M23.5 33c1 1.1 2 2 2.3 2s-.3-.9-1.3-2-2-2-2.3-2 .3.9 1.3 2m272.4-.3c-1.3 1.6-1.2 1.7.4.4.9-.7 1.7-1.5 1.7-1.7 0-.8-.8-.3-2.1 1.3"/>
+            <div id="aboutus" class="relative flex flex-col w-full mt-1 shadow-2xl">
+                <!-- header -->
+                <div class="relative flex flex-col w-full max-w-4xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 798 153" class="w-full h-auto">
+                        <path fill="#BFBFBF" d="M0 1c0 .7 133.7 1 399 1s399-.3 399-1-133.7-1-399-1S0 .3 0 1m399.7 4.7c-.8 1.3-6.7 20.9-6.7 22.2 0 .8 51.7 1.1 202.5 1.1H798V5H599.1c-109.5 0-199.2.3-199.4.7m-12.2 39.5c-.3 1-24.3 80.7-27.1 90-.5 1.7-9.9 1.8-180 1.8H1v16h797V44H593c-163.2 0-205.2.3-205.5 1.2m220.4 44.2c1.8 2.2 1 21.6-.9 22.8-1.1.8-4.1-.5-11.3-4.7-5.3-3.1-9.7-6-9.7-6.3.1-1.7 2.1-3.4 10-8 9.4-5.6 10.2-5.8 11.9-3.8m29.9 10.9c.2 9.5 0 11.8-1.2 12.3-2.3.9-20.1-9.8-20.1-12.1 0-1.3 2.7-3.5 9-7.2 5-2.9 9.7-5.1 10.5-5 1.2.2 1.6 2.4 1.8 12m29.7.2c0 9.8-.3 12-1.5 12.3-.8.1-5.6-2.1-10.5-5.1-6.4-3.7-9-5.8-9-7.2s2.6-3.4 9-7.2c5-2.9 9.7-5.2 10.5-5 1.2.2 1.5 2.3 1.5 12.2m31.3-.2c.2 9.6 0 11.8-1.2 12.3-2.3.9-20.8-10.4-20.4-12.4.4-1.9 17.6-12.2 19.8-11.9 1.2.2 1.6 2.4 1.8 12m30 0c.2 9.8 0 11.8-1.3 12.3-2.4.9-20-9.7-20-12.1 0-1.4 2.6-3.4 9-7.2 5-2.9 9.7-5.2 10.5-5 1.2.2 1.6 2.5 1.8 12m29-11.1c1.4 1.4 1.7 20.5.3 22.6-1.1 1.9-2.2 1.5-12.3-4.3-8.8-5-10.2-6.3-9-8.2.7-1 18.2-11.3 19.3-11.3.3 0 1 .5 1.7 1.2"/><path fill="#0080BF" d="M199.3 2.7c109.8.2 289.6.2 399.5 0 109.8-.1 19.9-.2-199.8-.2s-309.6.1-199.7.2M.5 78.5c0 41.2.1 58.3.2 37.8.2-20.4.2-54.2 0-75C.6 20.5.5 37.2.5 78.5"/><path fill="#0080FF" d="M199.3 3.7c109.8.2 289.6.2 399.5 0 109.8-.1 19.9-.2-199.8-.2s-309.6.1-199.7.2"/><path fill="#004080" d="M100.3 4.7c54.8.2 144.6.2 199.5 0 54.8-.1 9.9-.2-99.8-.2s-154.6.1-99.7.2"/><path fill="#80BFBF" d="M399.7 4.7c-.5.7 135.1.7 326.8 0 39.6-.1-17.6-.3-127.2-.5-109.5-.1-199.4.1-199.6.5"/><path d="M1 70.5V136h358.5l10.3-34.3c5.6-18.8 11.8-39.3 13.6-45.5l3.4-11.2h-19.3l-11 34.3-11.1 34.2-162.7.3L20 114V29h371.7l2.2-7.3c1.2-3.9 2.8-9.3 3.6-12l1.4-4.7H1zm595 23.4c-5.4 3.1-8.5 5.5-8.5 6.5 0 2 17.2 12.6 19.2 11.9 1-.4 1.3-3.6 1.3-11.9 0-13.7.3-13.5-12-6.5m30.1-.4c-4 2.4-8 4.9-8.8 5.7-1.8 1.8-1.1 2.5 10 8.9 10.6 6.2 10.9 5.9 10.5-8-.4-12.9-.7-13.1-11.7-6.6m28.7.6c-4.9 2.8-8.8 5.7-8.8 6.4 0 1.5 16.8 11.5 19.3 11.5 2.2 0 2.7-2.2 2.7-11.5 0-13.6-.4-13.8-13.2-6.4m31.7-.2c-5.5 3.2-8 5.3-8 6.6 0 2.2 17 12.6 19.2 11.8 1-.4 1.3-3.3 1.3-11.9 0-11.2 0-11.4-2.2-11.3-1.3 0-5.9 2.2-10.3 4.8m29.3.3c-4.9 2.7-8.8 5.6-8.8 6.3 0 1.7 17.5 11.7 19.8 11.3 1.5-.3 1.7-1.7 1.7-11.3 0-13.5-.2-13.6-12.7-6.3m30.2-.3c-5.3 3-8.5 5.5-8.5 6.5 0 1.9 17.3 12.5 19.3 11.8.9-.3 1.2-3.6 1.2-11.8 0-13.7.3-13.5-12-6.5"/><path fill="#004040" d="M20.5 71.5c0 23.6.1 33.2.2 21.2.2-12 .2-31.4 0-43-.1-11.7-.2-1.9-.2 21.8m351.3-26.8c2.8.2 7.6.2 10.5 0 2.8-.2.5-.3-5.3-.3s-8.1.1-5.2.3"/><path fill="#22bdc9" d="M758.4 100.5c0 5.5.1 7.6.3 4.7s.2-7.4 0-10-.3-.2-.3 5.3"/><path fill="gray" d="M608.4 100.5c0 6 .1 8.4.3 5.2s.2-8.1 0-11-.3-.3-.3 5.8M90.8 136.7c49.7.2 130.7.2 180 0 49.3-.1 8.7-.2-90.3-.2s-139.4.1-89.7.2"/><path fill="#00BFBF" d="M214.7 29.7c106.8.2 281.8.2 389 0 107.1-.1 19.8-.2-194.2-.2s-301.6.1-194.8.2m-113 84c44.7.2 117.9.2 162.5 0 44.7-.1 8.2-.2-81.2-.2s-125.9.1-81.3.2"/><path fill="#0FF" d="M21 71.5V113h323.6l11-34.2 11.1-34.3 215.6-.3L798 44V30H21z"/></svg>
 
-                        <text 
-                            x="50%" 
-                            y="25" 
-                            fill="white" 
-                            font-family="Arial, sans-serif" 
-                            font-size="14" 
-                            font-weight="bold" 
-                            text-anchor="middle" 
-                            dominant-baseline="middle">
-                            About us
-                        </text>
-                    </svg>
+                        <div class="absolute top-[25%] left-[4%] w-[38%] h-[50%] flex items-center justify-center">
+                            <span class="text-black font-bold uppercase tracking-widest text-[14px]">
+                            About Us
+                            </span>
+                        </div>
                 </div>
-                <!-- about header /. -->
+                <!-- header /. -->
 
                 <!-- about para -->
                 <div class="flex flex-col w-full">
-                    <div class="flex flex-col w-full mt-5 p-5 pt-0 pb-5 pl-4">
-                    <p class="custom-fade-in text-justify text-[14px] leading-loose font-semibold">
+                    <div class="flex flex-col w-full mt-5 px-3 pt-0 pb-5">
+                    <p class="text-justify text-[14px] leading-loose font-semibold">
                         {{ aboutTxt || "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc."}}
                     </p>
                     </div>
@@ -270,59 +202,28 @@
                 <!-- about para /.-->
 
                 <!-- footer -->
-                <div class="grid grid-cols-3 w-full">
-                    <!-- column1 -->
-                     <div class="flex flex-col h-[40px] w-full">
-                        <div class="h-1/2 bg-white"></div>
-                        <div class="h-1/2 bg-[#DF1968] border-7 border-t-0 border-l-0 border-r-0 border-b-gray-800 " style="clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 0% 100%);"></div>
-                    </div>
-                    <!-- column1 /.-->
-
-                    <!-- column2 -->
-                    <div class="filter drop-shadow-[5px_0_0_#1F2937] -ml-[11%]"> 
-                        <div class="h-[40px] bg-[#DF1968] w-full border-7 border-t-gray-800 border-l-0 border-r-0" 
-                            style="clip-path: polygon(20% 0%, 100% 0%, 80% 100%, 0% 100%);">
-                        </div>
-                    </div>
-                    <!-- column2 /. -->
-
-                    <!-- column3 -->
-                    <div class="filter drop-shadow-[5px_0_0_#1F2937] -ml-[21%]"> 
-                        <div class="h-[40px] bg-white w-full border-7 border-t-gray-800 border-l-0 border-r-0" 
-                            style="clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%);">
-                        </div>
-                    </div>
-                    <!-- column3 /. -->
+                <div class="flex flex-col w-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 798 87"><path d="M0 43.5V87h236.8c254.1 0 241.8.2 249-4.9 1.7-1.2 11.2-13.7 21.3-27.9 10.1-14.1 22.7-31.9 28.1-39.5C540.6 7.2 545 .8 545 .5S422.4 0 272.5 0H0z"/><path fill="#ffffff" d="M546.5 1c.3.6.2 1-.3 1-.4 0-1.9 1.4-3.1 3.1-1.3 1.8-1.7 2.9-1 2.5.8-.4.4.1-.8 1-1.3.9-2.3 2-2.3 2.5s55.6.9 129 .9h129V0H671.5c-82.2 0-125.4.4-125 1M488 81.1c-2.5 2.6-4.8 4.5-5.2 4.2-.5-.2-.8.1-.8.6 0 .8 47.3 1.1 157.5 1.1H797V77l-152.3-.2-152.2-.3z"/><path fill="#BFBFBF" fill-opacity=".9" d="M797.3 6c0 3.6.2 5 .4 3.2.2-1.7.2-4.7 0-6.5-.2-1.7-.4-.3-.4 3.3m0 76c0 3 .2 4.3.4 2.8.2-1.6.2-4 0-5.5-.2-1.6-.4-.3-.4 2.7"/><path fill="gray" d="m487.9 80.7-2.4 2.8 2.8-2.4c2.5-2.3 3.2-3.1 2.4-3.1-.2 0-1.4 1.2-2.8 2.7"/><path fill="#40BFBF" d="M604.3 12.7c35.7.2 93.7.2 129 0 35.3-.1 6.2-.2-64.8-.2-70.9 0-99.8.1-64.2.2"/><path fill="#00BFBF" d="M533 19c-1.2 1.6-1.9 3-1.6 3 .2 0 1.4-1.4 2.6-3 1.2-1.7 1.9-3 1.6-3-.2 0-1.4 1.3-2.6 3m-5 7c-1.2 1.6-1.9 3-1.6 3 .2 0 1.4-1.4 2.6-3 1.2-1.7 1.9-3 1.6-3-.2 0-1.4 1.3-2.6 3m-14.1 19.7c-6.2 8.7-12.8 18-14.8 20.8-2 2.7-3.1 4.6-2.4 4.2 1-.6 9.2-11.8 18.8-25.7 2.1-3 5.3-7.6 7.2-10.3 1.9-2.6 3.2-4.7 2.9-4.7s-5.6 7.1-11.7 15.7"/><path fill="#0FF" d="M526.8 29c-6.2 8.8-15 21.3-19.6 27.8-4.6 6.4-9.1 12.6-10.1 13.7s-2.1 2.6-2.5 3.2c-.6 1 29.9 1.3 150.8 1.3H797V13H538.2z"/><path fill="#0FF" fill-opacity=".9" d="M797.4 44c0 17.3.2 24.4.3 15.7.2-8.6.2-22.8 0-31.5-.1-8.6-.3-1.5-.3 15.8"/><path fill="#80BFBF" d="M568.8 75.7c41.9.2 110.5.2 152.5 0 41.9-.1 7.6-.2-76.3-.2s-118.2.1-76.2.2"/><path fill="#FFBFBF" d="M568.8 76.7c41.9.2 110.5.2 152.5 0 41.9-.1 7.6-.2-76.3-.2s-118.2.1-76.2.2"/></svg>
                 </div>
                 <!-- footer /. -->
 
             </div>
-            <!-- about us /. -->
+            <!-- about us /.-->
 
             <!-- products -->
-            <div id="products" class="flex flex-col w-full mt-2 bg-white pt-2">
-                <!-- product header -->
-                <div class="flex flex-col w-full">
-                     <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 320 56">
-                        <path fill="#DF1968" d="M20 11.2c0 13.3 1 17.4 4.9 21.2 2.9 2.8 4.1 3 69.3 13l66.3 10.1 65.8-10.2c64.5-9.9 66-10.2 68.8-12.9 3.9-3.8 4.9-7.9 4.9-21.2V0H20z"/>
-                        <path fill="#DF1968" d="M17.7 4.9C15.5 8.6 15.6 9 18 9c1.6 0 2-.7 2-3.5 0-1.9-.1-3.5-.3-3.5-.1 0-1 1.3-2 2.9m282.3.3c0 3.1.4 3.8 2 3.8 2.5 0 2.5-.2 0-4.2l-2-3.3z"/>
-                        <path d="M0 15v6h20V9H0zm300 0v6h20V9h-20z"/>
-                        <path fill="#BF0040" fill-opacity=".1" d="M23.5 33c1 1.1 2 2 2.3 2s-.3-.9-1.3-2-2-2-2.3-2 .3.9 1.3 2m272.4-.3c-1.3 1.6-1.2 1.7.4.4.9-.7 1.7-1.5 1.7-1.7 0-.8-.8-.3-2.1 1.3"/>
+            <div id="products" class="relative flex flex-col w-full mt-5 shadow-2xl">
+                <!-- header -->
+                <div class="relative flex flex-col w-full max-w-4xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 798 153" class="w-full h-auto">
+                        <path fill="#BFBFBF" d="M0 1c0 .7 133.7 1 399 1s399-.3 399-1-133.7-1-399-1S0 .3 0 1m399.7 4.7c-.8 1.3-6.7 20.9-6.7 22.2 0 .8 51.7 1.1 202.5 1.1H798V5H599.1c-109.5 0-199.2.3-199.4.7m-12.2 39.5c-.3 1-24.3 80.7-27.1 90-.5 1.7-9.9 1.8-180 1.8H1v16h797V44H593c-163.2 0-205.2.3-205.5 1.2m220.4 44.2c1.8 2.2 1 21.6-.9 22.8-1.1.8-4.1-.5-11.3-4.7-5.3-3.1-9.7-6-9.7-6.3.1-1.7 2.1-3.4 10-8 9.4-5.6 10.2-5.8 11.9-3.8m29.9 10.9c.2 9.5 0 11.8-1.2 12.3-2.3.9-20.1-9.8-20.1-12.1 0-1.3 2.7-3.5 9-7.2 5-2.9 9.7-5.1 10.5-5 1.2.2 1.6 2.4 1.8 12m29.7.2c0 9.8-.3 12-1.5 12.3-.8.1-5.6-2.1-10.5-5.1-6.4-3.7-9-5.8-9-7.2s2.6-3.4 9-7.2c5-2.9 9.7-5.2 10.5-5 1.2.2 1.5 2.3 1.5 12.2m31.3-.2c.2 9.6 0 11.8-1.2 12.3-2.3.9-20.8-10.4-20.4-12.4.4-1.9 17.6-12.2 19.8-11.9 1.2.2 1.6 2.4 1.8 12m30 0c.2 9.8 0 11.8-1.3 12.3-2.4.9-20-9.7-20-12.1 0-1.4 2.6-3.4 9-7.2 5-2.9 9.7-5.2 10.5-5 1.2.2 1.6 2.5 1.8 12m29-11.1c1.4 1.4 1.7 20.5.3 22.6-1.1 1.9-2.2 1.5-12.3-4.3-8.8-5-10.2-6.3-9-8.2.7-1 18.2-11.3 19.3-11.3.3 0 1 .5 1.7 1.2"/><path fill="#0080BF" d="M199.3 2.7c109.8.2 289.6.2 399.5 0 109.8-.1 19.9-.2-199.8-.2s-309.6.1-199.7.2M.5 78.5c0 41.2.1 58.3.2 37.8.2-20.4.2-54.2 0-75C.6 20.5.5 37.2.5 78.5"/><path fill="#0080FF" d="M199.3 3.7c109.8.2 289.6.2 399.5 0 109.8-.1 19.9-.2-199.8-.2s-309.6.1-199.7.2"/><path fill="#004080" d="M100.3 4.7c54.8.2 144.6.2 199.5 0 54.8-.1 9.9-.2-99.8-.2s-154.6.1-99.7.2"/><path fill="#80BFBF" d="M399.7 4.7c-.5.7 135.1.7 326.8 0 39.6-.1-17.6-.3-127.2-.5-109.5-.1-199.4.1-199.6.5"/><path d="M1 70.5V136h358.5l10.3-34.3c5.6-18.8 11.8-39.3 13.6-45.5l3.4-11.2h-19.3l-11 34.3-11.1 34.2-162.7.3L20 114V29h371.7l2.2-7.3c1.2-3.9 2.8-9.3 3.6-12l1.4-4.7H1zm595 23.4c-5.4 3.1-8.5 5.5-8.5 6.5 0 2 17.2 12.6 19.2 11.9 1-.4 1.3-3.6 1.3-11.9 0-13.7.3-13.5-12-6.5m30.1-.4c-4 2.4-8 4.9-8.8 5.7-1.8 1.8-1.1 2.5 10 8.9 10.6 6.2 10.9 5.9 10.5-8-.4-12.9-.7-13.1-11.7-6.6m28.7.6c-4.9 2.8-8.8 5.7-8.8 6.4 0 1.5 16.8 11.5 19.3 11.5 2.2 0 2.7-2.2 2.7-11.5 0-13.6-.4-13.8-13.2-6.4m31.7-.2c-5.5 3.2-8 5.3-8 6.6 0 2.2 17 12.6 19.2 11.8 1-.4 1.3-3.3 1.3-11.9 0-11.2 0-11.4-2.2-11.3-1.3 0-5.9 2.2-10.3 4.8m29.3.3c-4.9 2.7-8.8 5.6-8.8 6.3 0 1.7 17.5 11.7 19.8 11.3 1.5-.3 1.7-1.7 1.7-11.3 0-13.5-.2-13.6-12.7-6.3m30.2-.3c-5.3 3-8.5 5.5-8.5 6.5 0 1.9 17.3 12.5 19.3 11.8.9-.3 1.2-3.6 1.2-11.8 0-13.7.3-13.5-12-6.5"/><path fill="#004040" d="M20.5 71.5c0 23.6.1 33.2.2 21.2.2-12 .2-31.4 0-43-.1-11.7-.2-1.9-.2 21.8m351.3-26.8c2.8.2 7.6.2 10.5 0 2.8-.2.5-.3-5.3-.3s-8.1.1-5.2.3"/><path fill="#22bdc9" d="M758.4 100.5c0 5.5.1 7.6.3 4.7s.2-7.4 0-10-.3-.2-.3 5.3"/><path fill="gray" d="M608.4 100.5c0 6 .1 8.4.3 5.2s.2-8.1 0-11-.3-.3-.3 5.8M90.8 136.7c49.7.2 130.7.2 180 0 49.3-.1 8.7-.2-90.3-.2s-139.4.1-89.7.2"/><path fill="#00BFBF" d="M214.7 29.7c106.8.2 281.8.2 389 0 107.1-.1 19.8-.2-194.2-.2s-301.6.1-194.8.2m-113 84c44.7.2 117.9.2 162.5 0 44.7-.1 8.2-.2-81.2-.2s-125.9.1-81.3.2"/><path fill="#0FF" d="M21 71.5V113h323.6l11-34.2 11.1-34.3 215.6-.3L798 44V30H21z"/></svg>
 
-                        <text 
-                            x="50%" 
-                            y="25" 
-                            fill="white" 
-                            font-family="Arial, sans-serif" 
-                            font-size="14" 
-                            font-weight="bold" 
-                            text-anchor="middle" 
-                            dominant-baseline="middle">
+                        <div class="absolute top-[25%] left-[4%] w-[38%] h-[50%] flex items-center justify-center">
+                            <span class="text-black font-bold uppercase tracking-widest text-[14px]">
                             Products
-                        </text>
-                    </svg>
+                            </span>
+                        </div>
                 </div>
-                <!-- products header /. -->
+                <!-- header /. -->
 
                 <!-- PRODUCT AREA -->
                 <div class="grid grid-cols-2 gap-4 items-stretch px-1">
@@ -364,7 +265,7 @@
 
                         <!-- enquiry button -->
                         <button
-                            class="w-[110px] bg-[#DF1968] p-[8px] text-white text-[12px]
+                            class="w-[110px] bg-[#00FFFF] p-[8px] text-gray--800 text-[12px]
                             font-semibold rounded-lg uppercase mt-3"
                             @click="selectProduct(item.product_name)"
                         >
@@ -377,62 +278,28 @@
                 </div>
                 <!-- PRODUCT AREA /. -->
 
-
                 <!-- footer -->
-                <div class="grid grid-cols-3 w-full mt-10">
-                    <!-- column1 -->
-                     <div class="flex flex-col h-[40px] w-full">
-                        <div class="h-1/2 bg-white"></div>
-                        <div class="h-1/2 bg-[#DF1968] border-7 border-t-0 border-l-0 border-r-0 border-b-gray-800 " style="clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 0% 100%);"></div>
-                    </div>
-                    <!-- column1 /.-->
-
-                    <!-- column2 -->
-                    <div class="filter drop-shadow-[5px_0_0_#1F2937] -ml-[11%]"> 
-                        <div class="h-[40px] bg-[#DF1968] w-full border-7 border-t-gray-800 border-l-0 border-r-0" 
-                            style="clip-path: polygon(20% 0%, 100% 0%, 80% 100%, 0% 100%);">
-                        </div>
-                    </div>
-                    <!-- column2 /. -->
-
-                    <!-- column3 -->
-                    <div class="filter drop-shadow-[5px_0_0_#1F2937] -ml-[21%]"> 
-                        <div class="h-[40px] bg-white w-full border-7 border-t-gray-800 border-l-0 border-r-0" 
-                            style="clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%);">
-                        </div>
-                    </div>
-                    <!-- column3 /. -->
+                <div class="flex flex-col w-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 798 87"><path d="M0 43.5V87h236.8c254.1 0 241.8.2 249-4.9 1.7-1.2 11.2-13.7 21.3-27.9 10.1-14.1 22.7-31.9 28.1-39.5C540.6 7.2 545 .8 545 .5S422.4 0 272.5 0H0z"/><path fill="#ffffff" d="M546.5 1c.3.6.2 1-.3 1-.4 0-1.9 1.4-3.1 3.1-1.3 1.8-1.7 2.9-1 2.5.8-.4.4.1-.8 1-1.3.9-2.3 2-2.3 2.5s55.6.9 129 .9h129V0H671.5c-82.2 0-125.4.4-125 1M488 81.1c-2.5 2.6-4.8 4.5-5.2 4.2-.5-.2-.8.1-.8.6 0 .8 47.3 1.1 157.5 1.1H797V77l-152.3-.2-152.2-.3z"/><path fill="#BFBFBF" fill-opacity=".9" d="M797.3 6c0 3.6.2 5 .4 3.2.2-1.7.2-4.7 0-6.5-.2-1.7-.4-.3-.4 3.3m0 76c0 3 .2 4.3.4 2.8.2-1.6.2-4 0-5.5-.2-1.6-.4-.3-.4 2.7"/><path fill="gray" d="m487.9 80.7-2.4 2.8 2.8-2.4c2.5-2.3 3.2-3.1 2.4-3.1-.2 0-1.4 1.2-2.8 2.7"/><path fill="#40BFBF" d="M604.3 12.7c35.7.2 93.7.2 129 0 35.3-.1 6.2-.2-64.8-.2-70.9 0-99.8.1-64.2.2"/><path fill="#00BFBF" d="M533 19c-1.2 1.6-1.9 3-1.6 3 .2 0 1.4-1.4 2.6-3 1.2-1.7 1.9-3 1.6-3-.2 0-1.4 1.3-2.6 3m-5 7c-1.2 1.6-1.9 3-1.6 3 .2 0 1.4-1.4 2.6-3 1.2-1.7 1.9-3 1.6-3-.2 0-1.4 1.3-2.6 3m-14.1 19.7c-6.2 8.7-12.8 18-14.8 20.8-2 2.7-3.1 4.6-2.4 4.2 1-.6 9.2-11.8 18.8-25.7 2.1-3 5.3-7.6 7.2-10.3 1.9-2.6 3.2-4.7 2.9-4.7s-5.6 7.1-11.7 15.7"/><path fill="#0FF" d="M526.8 29c-6.2 8.8-15 21.3-19.6 27.8-4.6 6.4-9.1 12.6-10.1 13.7s-2.1 2.6-2.5 3.2c-.6 1 29.9 1.3 150.8 1.3H797V13H538.2z"/><path fill="#0FF" fill-opacity=".9" d="M797.4 44c0 17.3.2 24.4.3 15.7.2-8.6.2-22.8 0-31.5-.1-8.6-.3-1.5-.3 15.8"/><path fill="#80BFBF" d="M568.8 75.7c41.9.2 110.5.2 152.5 0 41.9-.1 7.6-.2-76.3-.2s-118.2.1-76.2.2"/><path fill="#FFBFBF" d="M568.8 76.7c41.9.2 110.5.2 152.5 0 41.9-.1 7.6-.2-76.3-.2s-118.2.1-76.2.2"/></svg>
                 </div>
                 <!-- footer /. -->
-
             </div>
-            <!-- products /. -->
-
+            <!-- products /.-->
 
             <!-- service -->
-            <div id="services" class="flex flex-col w-full mt-2 bg-white pt-2">
-                <!-- service header -->
-                <div class="flex flex-col w-full">
-                     <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 320 56">
-                        <path fill="#DF1968" d="M20 11.2c0 13.3 1 17.4 4.9 21.2 2.9 2.8 4.1 3 69.3 13l66.3 10.1 65.8-10.2c64.5-9.9 66-10.2 68.8-12.9 3.9-3.8 4.9-7.9 4.9-21.2V0H20z"/>
-                        <path fill="#DF1968" d="M17.7 4.9C15.5 8.6 15.6 9 18 9c1.6 0 2-.7 2-3.5 0-1.9-.1-3.5-.3-3.5-.1 0-1 1.3-2 2.9m282.3.3c0 3.1.4 3.8 2 3.8 2.5 0 2.5-.2 0-4.2l-2-3.3z"/>
-                        <path d="M0 15v6h20V9H0zm300 0v6h20V9h-20z"/>
-                        <path fill="#BF0040" fill-opacity=".1" d="M23.5 33c1 1.1 2 2 2.3 2s-.3-.9-1.3-2-2-2-2.3-2 .3.9 1.3 2m272.4-.3c-1.3 1.6-1.2 1.7.4.4.9-.7 1.7-1.5 1.7-1.7 0-.8-.8-.3-2.1 1.3"/>
+            <div id="services" class="relative flex flex-col w-full mt-5 shadow-2xl">
+                <!-- header -->
+                <div class="relative flex flex-col w-full max-w-4xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 798 153" class="w-full h-auto">
+                        <path fill="#BFBFBF" d="M0 1c0 .7 133.7 1 399 1s399-.3 399-1-133.7-1-399-1S0 .3 0 1m399.7 4.7c-.8 1.3-6.7 20.9-6.7 22.2 0 .8 51.7 1.1 202.5 1.1H798V5H599.1c-109.5 0-199.2.3-199.4.7m-12.2 39.5c-.3 1-24.3 80.7-27.1 90-.5 1.7-9.9 1.8-180 1.8H1v16h797V44H593c-163.2 0-205.2.3-205.5 1.2m220.4 44.2c1.8 2.2 1 21.6-.9 22.8-1.1.8-4.1-.5-11.3-4.7-5.3-3.1-9.7-6-9.7-6.3.1-1.7 2.1-3.4 10-8 9.4-5.6 10.2-5.8 11.9-3.8m29.9 10.9c.2 9.5 0 11.8-1.2 12.3-2.3.9-20.1-9.8-20.1-12.1 0-1.3 2.7-3.5 9-7.2 5-2.9 9.7-5.1 10.5-5 1.2.2 1.6 2.4 1.8 12m29.7.2c0 9.8-.3 12-1.5 12.3-.8.1-5.6-2.1-10.5-5.1-6.4-3.7-9-5.8-9-7.2s2.6-3.4 9-7.2c5-2.9 9.7-5.2 10.5-5 1.2.2 1.5 2.3 1.5 12.2m31.3-.2c.2 9.6 0 11.8-1.2 12.3-2.3.9-20.8-10.4-20.4-12.4.4-1.9 17.6-12.2 19.8-11.9 1.2.2 1.6 2.4 1.8 12m30 0c.2 9.8 0 11.8-1.3 12.3-2.4.9-20-9.7-20-12.1 0-1.4 2.6-3.4 9-7.2 5-2.9 9.7-5.2 10.5-5 1.2.2 1.6 2.5 1.8 12m29-11.1c1.4 1.4 1.7 20.5.3 22.6-1.1 1.9-2.2 1.5-12.3-4.3-8.8-5-10.2-6.3-9-8.2.7-1 18.2-11.3 19.3-11.3.3 0 1 .5 1.7 1.2"/><path fill="#0080BF" d="M199.3 2.7c109.8.2 289.6.2 399.5 0 109.8-.1 19.9-.2-199.8-.2s-309.6.1-199.7.2M.5 78.5c0 41.2.1 58.3.2 37.8.2-20.4.2-54.2 0-75C.6 20.5.5 37.2.5 78.5"/><path fill="#0080FF" d="M199.3 3.7c109.8.2 289.6.2 399.5 0 109.8-.1 19.9-.2-199.8-.2s-309.6.1-199.7.2"/><path fill="#004080" d="M100.3 4.7c54.8.2 144.6.2 199.5 0 54.8-.1 9.9-.2-99.8-.2s-154.6.1-99.7.2"/><path fill="#80BFBF" d="M399.7 4.7c-.5.7 135.1.7 326.8 0 39.6-.1-17.6-.3-127.2-.5-109.5-.1-199.4.1-199.6.5"/><path d="M1 70.5V136h358.5l10.3-34.3c5.6-18.8 11.8-39.3 13.6-45.5l3.4-11.2h-19.3l-11 34.3-11.1 34.2-162.7.3L20 114V29h371.7l2.2-7.3c1.2-3.9 2.8-9.3 3.6-12l1.4-4.7H1zm595 23.4c-5.4 3.1-8.5 5.5-8.5 6.5 0 2 17.2 12.6 19.2 11.9 1-.4 1.3-3.6 1.3-11.9 0-13.7.3-13.5-12-6.5m30.1-.4c-4 2.4-8 4.9-8.8 5.7-1.8 1.8-1.1 2.5 10 8.9 10.6 6.2 10.9 5.9 10.5-8-.4-12.9-.7-13.1-11.7-6.6m28.7.6c-4.9 2.8-8.8 5.7-8.8 6.4 0 1.5 16.8 11.5 19.3 11.5 2.2 0 2.7-2.2 2.7-11.5 0-13.6-.4-13.8-13.2-6.4m31.7-.2c-5.5 3.2-8 5.3-8 6.6 0 2.2 17 12.6 19.2 11.8 1-.4 1.3-3.3 1.3-11.9 0-11.2 0-11.4-2.2-11.3-1.3 0-5.9 2.2-10.3 4.8m29.3.3c-4.9 2.7-8.8 5.6-8.8 6.3 0 1.7 17.5 11.7 19.8 11.3 1.5-.3 1.7-1.7 1.7-11.3 0-13.5-.2-13.6-12.7-6.3m30.2-.3c-5.3 3-8.5 5.5-8.5 6.5 0 1.9 17.3 12.5 19.3 11.8.9-.3 1.2-3.6 1.2-11.8 0-13.7.3-13.5-12-6.5"/><path fill="#004040" d="M20.5 71.5c0 23.6.1 33.2.2 21.2.2-12 .2-31.4 0-43-.1-11.7-.2-1.9-.2 21.8m351.3-26.8c2.8.2 7.6.2 10.5 0 2.8-.2.5-.3-5.3-.3s-8.1.1-5.2.3"/><path fill="#22bdc9" d="M758.4 100.5c0 5.5.1 7.6.3 4.7s.2-7.4 0-10-.3-.2-.3 5.3"/><path fill="gray" d="M608.4 100.5c0 6 .1 8.4.3 5.2s.2-8.1 0-11-.3-.3-.3 5.8M90.8 136.7c49.7.2 130.7.2 180 0 49.3-.1 8.7-.2-90.3-.2s-139.4.1-89.7.2"/><path fill="#00BFBF" d="M214.7 29.7c106.8.2 281.8.2 389 0 107.1-.1 19.8-.2-194.2-.2s-301.6.1-194.8.2m-113 84c44.7.2 117.9.2 162.5 0 44.7-.1 8.2-.2-81.2-.2s-125.9.1-81.3.2"/><path fill="#0FF" d="M21 71.5V113h323.6l11-34.2 11.1-34.3 215.6-.3L798 44V30H21z"/></svg>
 
-                        <text 
-                            x="50%" 
-                            y="25" 
-                            fill="white" 
-                            font-family="Arial, sans-serif" 
-                            font-size="14" 
-                            font-weight="bold" 
-                            text-anchor="middle" 
-                            dominant-baseline="middle">
+                        <div class="absolute top-[25%] left-[4%] w-[38%] h-[50%] flex items-center justify-center">
+                            <span class="text-black font-bold uppercase tracking-widest text-[14px]">
                             Service
-                        </text>
-                    </svg>
+                            </span>
+                        </div>
                 </div>
-                <!-- service header /. -->
+                <!-- header /. -->
 
                 <!-- service content -->
                 <div class="flex flex-col w-full">
@@ -462,60 +329,29 @@
                 </div>
                 <!-- service content /. -->
 
-
                 <!-- footer -->
-                <div class="grid grid-cols-3 w-full mt-10">
-                    <!-- column1 -->
-                     <div class="flex flex-col h-[40px] w-full">
-                        <div class="h-1/2 bg-white"></div>
-                        <div class="h-1/2 bg-[#DF1968] border-7 border-t-0 border-l-0 border-r-0 border-b-gray-800 " style="clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 0% 100%);"></div>
-                    </div>
-                    <!-- column1 /.-->
-
-                    <!-- column2 -->
-                    <div class="filter drop-shadow-[5px_0_0_#1F2937] -ml-[11%]"> 
-                        <div class="h-[40px] bg-[#DF1968] w-full border-7 border-t-gray-800 border-l-0 border-r-0" 
-                            style="clip-path: polygon(20% 0%, 100% 0%, 80% 100%, 0% 100%);">
-                        </div>
-                    </div>
-                    <!-- column2 /. -->
-
-                    <!-- column3 -->
-                    <div class="filter drop-shadow-[5px_0_0_#1F2937] -ml-[21%]"> 
-                        <div class="h-[40px] bg-white w-full border-7 border-t-gray-800 border-l-0 border-r-0" 
-                            style="clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%);">
-                        </div>
-                    </div>
-                    <!-- column3 /. -->
+                <div class="flex flex-col w-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 798 87"><path d="M0 43.5V87h236.8c254.1 0 241.8.2 249-4.9 1.7-1.2 11.2-13.7 21.3-27.9 10.1-14.1 22.7-31.9 28.1-39.5C540.6 7.2 545 .8 545 .5S422.4 0 272.5 0H0z"/><path fill="#ffffff" d="M546.5 1c.3.6.2 1-.3 1-.4 0-1.9 1.4-3.1 3.1-1.3 1.8-1.7 2.9-1 2.5.8-.4.4.1-.8 1-1.3.9-2.3 2-2.3 2.5s55.6.9 129 .9h129V0H671.5c-82.2 0-125.4.4-125 1M488 81.1c-2.5 2.6-4.8 4.5-5.2 4.2-.5-.2-.8.1-.8.6 0 .8 47.3 1.1 157.5 1.1H797V77l-152.3-.2-152.2-.3z"/><path fill="#BFBFBF" fill-opacity=".9" d="M797.3 6c0 3.6.2 5 .4 3.2.2-1.7.2-4.7 0-6.5-.2-1.7-.4-.3-.4 3.3m0 76c0 3 .2 4.3.4 2.8.2-1.6.2-4 0-5.5-.2-1.6-.4-.3-.4 2.7"/><path fill="gray" d="m487.9 80.7-2.4 2.8 2.8-2.4c2.5-2.3 3.2-3.1 2.4-3.1-.2 0-1.4 1.2-2.8 2.7"/><path fill="#40BFBF" d="M604.3 12.7c35.7.2 93.7.2 129 0 35.3-.1 6.2-.2-64.8-.2-70.9 0-99.8.1-64.2.2"/><path fill="#00BFBF" d="M533 19c-1.2 1.6-1.9 3-1.6 3 .2 0 1.4-1.4 2.6-3 1.2-1.7 1.9-3 1.6-3-.2 0-1.4 1.3-2.6 3m-5 7c-1.2 1.6-1.9 3-1.6 3 .2 0 1.4-1.4 2.6-3 1.2-1.7 1.9-3 1.6-3-.2 0-1.4 1.3-2.6 3m-14.1 19.7c-6.2 8.7-12.8 18-14.8 20.8-2 2.7-3.1 4.6-2.4 4.2 1-.6 9.2-11.8 18.8-25.7 2.1-3 5.3-7.6 7.2-10.3 1.9-2.6 3.2-4.7 2.9-4.7s-5.6 7.1-11.7 15.7"/><path fill="#0FF" d="M526.8 29c-6.2 8.8-15 21.3-19.6 27.8-4.6 6.4-9.1 12.6-10.1 13.7s-2.1 2.6-2.5 3.2c-.6 1 29.9 1.3 150.8 1.3H797V13H538.2z"/><path fill="#0FF" fill-opacity=".9" d="M797.4 44c0 17.3.2 24.4.3 15.7.2-8.6.2-22.8 0-31.5-.1-8.6-.3-1.5-.3 15.8"/><path fill="#80BFBF" d="M568.8 75.7c41.9.2 110.5.2 152.5 0 41.9-.1 7.6-.2-76.3-.2s-118.2.1-76.2.2"/><path fill="#FFBFBF" d="M568.8 76.7c41.9.2 110.5.2 152.5 0 41.9-.1 7.6-.2-76.3-.2s-118.2.1-76.2.2"/></svg>
                 </div>
                 <!-- footer /. -->
             </div>
-            <!-- service /. -->
+            <!-- service /.-->
+
 
             <!-- videos -->
-            <div id="Videos" class="flex flex-col w-full mt-2 bg-white pt-2">
-                <!-- videos header -->
-                <div class="flex flex-col w-full">
-                     <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 320 56">
-                        <path fill="#DF1968" d="M20 11.2c0 13.3 1 17.4 4.9 21.2 2.9 2.8 4.1 3 69.3 13l66.3 10.1 65.8-10.2c64.5-9.9 66-10.2 68.8-12.9 3.9-3.8 4.9-7.9 4.9-21.2V0H20z"/>
-                        <path fill="#DF1968" d="M17.7 4.9C15.5 8.6 15.6 9 18 9c1.6 0 2-.7 2-3.5 0-1.9-.1-3.5-.3-3.5-.1 0-1 1.3-2 2.9m282.3.3c0 3.1.4 3.8 2 3.8 2.5 0 2.5-.2 0-4.2l-2-3.3z"/>
-                        <path d="M0 15v6h20V9H0zm300 0v6h20V9h-20z"/>
-                        <path fill="#BF0040" fill-opacity=".1" d="M23.5 33c1 1.1 2 2 2.3 2s-.3-.9-1.3-2-2-2-2.3-2 .3.9 1.3 2m272.4-.3c-1.3 1.6-1.2 1.7.4.4.9-.7 1.7-1.5 1.7-1.7 0-.8-.8-.3-2.1 1.3"/>
+            <div id="Videos" class="relative flex flex-col w-full mt-5 shadow-2xl">
+                <!-- header -->
+                <div class="relative flex flex-col w-full max-w-4xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 798 153" class="w-full h-auto">
+                        <path fill="#BFBFBF" d="M0 1c0 .7 133.7 1 399 1s399-.3 399-1-133.7-1-399-1S0 .3 0 1m399.7 4.7c-.8 1.3-6.7 20.9-6.7 22.2 0 .8 51.7 1.1 202.5 1.1H798V5H599.1c-109.5 0-199.2.3-199.4.7m-12.2 39.5c-.3 1-24.3 80.7-27.1 90-.5 1.7-9.9 1.8-180 1.8H1v16h797V44H593c-163.2 0-205.2.3-205.5 1.2m220.4 44.2c1.8 2.2 1 21.6-.9 22.8-1.1.8-4.1-.5-11.3-4.7-5.3-3.1-9.7-6-9.7-6.3.1-1.7 2.1-3.4 10-8 9.4-5.6 10.2-5.8 11.9-3.8m29.9 10.9c.2 9.5 0 11.8-1.2 12.3-2.3.9-20.1-9.8-20.1-12.1 0-1.3 2.7-3.5 9-7.2 5-2.9 9.7-5.1 10.5-5 1.2.2 1.6 2.4 1.8 12m29.7.2c0 9.8-.3 12-1.5 12.3-.8.1-5.6-2.1-10.5-5.1-6.4-3.7-9-5.8-9-7.2s2.6-3.4 9-7.2c5-2.9 9.7-5.2 10.5-5 1.2.2 1.5 2.3 1.5 12.2m31.3-.2c.2 9.6 0 11.8-1.2 12.3-2.3.9-20.8-10.4-20.4-12.4.4-1.9 17.6-12.2 19.8-11.9 1.2.2 1.6 2.4 1.8 12m30 0c.2 9.8 0 11.8-1.3 12.3-2.4.9-20-9.7-20-12.1 0-1.4 2.6-3.4 9-7.2 5-2.9 9.7-5.2 10.5-5 1.2.2 1.6 2.5 1.8 12m29-11.1c1.4 1.4 1.7 20.5.3 22.6-1.1 1.9-2.2 1.5-12.3-4.3-8.8-5-10.2-6.3-9-8.2.7-1 18.2-11.3 19.3-11.3.3 0 1 .5 1.7 1.2"/><path fill="#0080BF" d="M199.3 2.7c109.8.2 289.6.2 399.5 0 109.8-.1 19.9-.2-199.8-.2s-309.6.1-199.7.2M.5 78.5c0 41.2.1 58.3.2 37.8.2-20.4.2-54.2 0-75C.6 20.5.5 37.2.5 78.5"/><path fill="#0080FF" d="M199.3 3.7c109.8.2 289.6.2 399.5 0 109.8-.1 19.9-.2-199.8-.2s-309.6.1-199.7.2"/><path fill="#004080" d="M100.3 4.7c54.8.2 144.6.2 199.5 0 54.8-.1 9.9-.2-99.8-.2s-154.6.1-99.7.2"/><path fill="#80BFBF" d="M399.7 4.7c-.5.7 135.1.7 326.8 0 39.6-.1-17.6-.3-127.2-.5-109.5-.1-199.4.1-199.6.5"/><path d="M1 70.5V136h358.5l10.3-34.3c5.6-18.8 11.8-39.3 13.6-45.5l3.4-11.2h-19.3l-11 34.3-11.1 34.2-162.7.3L20 114V29h371.7l2.2-7.3c1.2-3.9 2.8-9.3 3.6-12l1.4-4.7H1zm595 23.4c-5.4 3.1-8.5 5.5-8.5 6.5 0 2 17.2 12.6 19.2 11.9 1-.4 1.3-3.6 1.3-11.9 0-13.7.3-13.5-12-6.5m30.1-.4c-4 2.4-8 4.9-8.8 5.7-1.8 1.8-1.1 2.5 10 8.9 10.6 6.2 10.9 5.9 10.5-8-.4-12.9-.7-13.1-11.7-6.6m28.7.6c-4.9 2.8-8.8 5.7-8.8 6.4 0 1.5 16.8 11.5 19.3 11.5 2.2 0 2.7-2.2 2.7-11.5 0-13.6-.4-13.8-13.2-6.4m31.7-.2c-5.5 3.2-8 5.3-8 6.6 0 2.2 17 12.6 19.2 11.8 1-.4 1.3-3.3 1.3-11.9 0-11.2 0-11.4-2.2-11.3-1.3 0-5.9 2.2-10.3 4.8m29.3.3c-4.9 2.7-8.8 5.6-8.8 6.3 0 1.7 17.5 11.7 19.8 11.3 1.5-.3 1.7-1.7 1.7-11.3 0-13.5-.2-13.6-12.7-6.3m30.2-.3c-5.3 3-8.5 5.5-8.5 6.5 0 1.9 17.3 12.5 19.3 11.8.9-.3 1.2-3.6 1.2-11.8 0-13.7.3-13.5-12-6.5"/><path fill="#004040" d="M20.5 71.5c0 23.6.1 33.2.2 21.2.2-12 .2-31.4 0-43-.1-11.7-.2-1.9-.2 21.8m351.3-26.8c2.8.2 7.6.2 10.5 0 2.8-.2.5-.3-5.3-.3s-8.1.1-5.2.3"/><path fill="#22bdc9" d="M758.4 100.5c0 5.5.1 7.6.3 4.7s.2-7.4 0-10-.3-.2-.3 5.3"/><path fill="gray" d="M608.4 100.5c0 6 .1 8.4.3 5.2s.2-8.1 0-11-.3-.3-.3 5.8M90.8 136.7c49.7.2 130.7.2 180 0 49.3-.1 8.7-.2-90.3-.2s-139.4.1-89.7.2"/><path fill="#00BFBF" d="M214.7 29.7c106.8.2 281.8.2 389 0 107.1-.1 19.8-.2-194.2-.2s-301.6.1-194.8.2m-113 84c44.7.2 117.9.2 162.5 0 44.7-.1 8.2-.2-81.2-.2s-125.9.1-81.3.2"/><path fill="#0FF" d="M21 71.5V113h323.6l11-34.2 11.1-34.3 215.6-.3L798 44V30H21z"/></svg>
 
-                        <text 
-                            x="50%" 
-                            y="25" 
-                            fill="white" 
-                            font-family="Arial, sans-serif" 
-                            font-size="14" 
-                            font-weight="bold" 
-                            text-anchor="middle" 
-                            dominant-baseline="middle">
-                            videos
-                        </text>
-                    </svg>
+                        <div class="absolute top-[25%] left-[4%] w-[38%] h-[50%] flex items-center justify-center">
+                            <span class="text-black font-bold uppercase tracking-widest text-[14px]">
+                            Videos
+                            </span>
+                        </div>
                 </div>
-                <!-- videos header /. -->
+                <!-- header /. -->
 
                 <!-- Video content -->
                 <div class="flex flex-col w-full bg-[#f1f1f1]">
@@ -575,60 +411,28 @@
                 </div>
                 <!-- Video content /.-->
 
-
                 <!-- footer -->
-                <div class="grid grid-cols-3 w-full mt-10">
-                    <!-- column1 -->
-                     <div class="flex flex-col h-[40px] w-full">
-                        <div class="h-1/2 bg-white"></div>
-                        <div class="h-1/2 bg-[#DF1968] border-7 border-t-0 border-l-0 border-r-0 border-b-gray-800 " style="clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 0% 100%);"></div>
-                    </div>
-                    <!-- column1 /.-->
-
-                    <!-- column2 -->
-                    <div class="filter drop-shadow-[5px_0_0_#1F2937] -ml-[11%]"> 
-                        <div class="h-[40px] bg-[#DF1968] w-full border-7 border-t-gray-800 border-l-0 border-r-0" 
-                            style="clip-path: polygon(20% 0%, 100% 0%, 80% 100%, 0% 100%);">
-                        </div>
-                    </div>
-                    <!-- column2 /. -->
-
-                    <!-- column3 -->
-                    <div class="filter drop-shadow-[5px_0_0_#1F2937] -ml-[21%]"> 
-                        <div class="h-[40px] bg-white w-full border-7 border-t-gray-800 border-l-0 border-r-0" 
-                            style="clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%);">
-                        </div>
-                    </div>
-                    <!-- column3 /. -->
+                <div class="flex flex-col w-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 798 87"><path d="M0 43.5V87h236.8c254.1 0 241.8.2 249-4.9 1.7-1.2 11.2-13.7 21.3-27.9 10.1-14.1 22.7-31.9 28.1-39.5C540.6 7.2 545 .8 545 .5S422.4 0 272.5 0H0z"/><path fill="#ffffff" d="M546.5 1c.3.6.2 1-.3 1-.4 0-1.9 1.4-3.1 3.1-1.3 1.8-1.7 2.9-1 2.5.8-.4.4.1-.8 1-1.3.9-2.3 2-2.3 2.5s55.6.9 129 .9h129V0H671.5c-82.2 0-125.4.4-125 1M488 81.1c-2.5 2.6-4.8 4.5-5.2 4.2-.5-.2-.8.1-.8.6 0 .8 47.3 1.1 157.5 1.1H797V77l-152.3-.2-152.2-.3z"/><path fill="#BFBFBF" fill-opacity=".9" d="M797.3 6c0 3.6.2 5 .4 3.2.2-1.7.2-4.7 0-6.5-.2-1.7-.4-.3-.4 3.3m0 76c0 3 .2 4.3.4 2.8.2-1.6.2-4 0-5.5-.2-1.6-.4-.3-.4 2.7"/><path fill="gray" d="m487.9 80.7-2.4 2.8 2.8-2.4c2.5-2.3 3.2-3.1 2.4-3.1-.2 0-1.4 1.2-2.8 2.7"/><path fill="#40BFBF" d="M604.3 12.7c35.7.2 93.7.2 129 0 35.3-.1 6.2-.2-64.8-.2-70.9 0-99.8.1-64.2.2"/><path fill="#00BFBF" d="M533 19c-1.2 1.6-1.9 3-1.6 3 .2 0 1.4-1.4 2.6-3 1.2-1.7 1.9-3 1.6-3-.2 0-1.4 1.3-2.6 3m-5 7c-1.2 1.6-1.9 3-1.6 3 .2 0 1.4-1.4 2.6-3 1.2-1.7 1.9-3 1.6-3-.2 0-1.4 1.3-2.6 3m-14.1 19.7c-6.2 8.7-12.8 18-14.8 20.8-2 2.7-3.1 4.6-2.4 4.2 1-.6 9.2-11.8 18.8-25.7 2.1-3 5.3-7.6 7.2-10.3 1.9-2.6 3.2-4.7 2.9-4.7s-5.6 7.1-11.7 15.7"/><path fill="#0FF" d="M526.8 29c-6.2 8.8-15 21.3-19.6 27.8-4.6 6.4-9.1 12.6-10.1 13.7s-2.1 2.6-2.5 3.2c-.6 1 29.9 1.3 150.8 1.3H797V13H538.2z"/><path fill="#0FF" fill-opacity=".9" d="M797.4 44c0 17.3.2 24.4.3 15.7.2-8.6.2-22.8 0-31.5-.1-8.6-.3-1.5-.3 15.8"/><path fill="#80BFBF" d="M568.8 75.7c41.9.2 110.5.2 152.5 0 41.9-.1 7.6-.2-76.3-.2s-118.2.1-76.2.2"/><path fill="#FFBFBF" d="M568.8 76.7c41.9.2 110.5.2 152.5 0 41.9-.1 7.6-.2-76.3-.2s-118.2.1-76.2.2"/></svg>
                 </div>
                 <!-- footer /. -->
             </div>
             <!-- videos /.-->
 
             <!-- gallery -->
-            <div id="gallery" class="flex flex-col w-full mt-2 bg-white pt-2">
-                <!-- gallery header -->
-                <div class="flex flex-col w-full">
-                     <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 320 56">
-                        <path fill="#DF1968" d="M20 11.2c0 13.3 1 17.4 4.9 21.2 2.9 2.8 4.1 3 69.3 13l66.3 10.1 65.8-10.2c64.5-9.9 66-10.2 68.8-12.9 3.9-3.8 4.9-7.9 4.9-21.2V0H20z"/>
-                        <path fill="#DF1968" d="M17.7 4.9C15.5 8.6 15.6 9 18 9c1.6 0 2-.7 2-3.5 0-1.9-.1-3.5-.3-3.5-.1 0-1 1.3-2 2.9m282.3.3c0 3.1.4 3.8 2 3.8 2.5 0 2.5-.2 0-4.2l-2-3.3z"/>
-                        <path d="M0 15v6h20V9H0zm300 0v6h20V9h-20z"/>
-                        <path fill="#BF0040" fill-opacity=".1" d="M23.5 33c1 1.1 2 2 2.3 2s-.3-.9-1.3-2-2-2-2.3-2 .3.9 1.3 2m272.4-.3c-1.3 1.6-1.2 1.7.4.4.9-.7 1.7-1.5 1.7-1.7 0-.8-.8-.3-2.1 1.3"/>
+            <div id="gallery" class="relative flex flex-col w-full mt-5 shadow-2xl">
+                <!-- header -->
+                <div class="relative flex flex-col w-full max-w-4xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 798 153" class="w-full h-auto">
+                        <path fill="#BFBFBF" d="M0 1c0 .7 133.7 1 399 1s399-.3 399-1-133.7-1-399-1S0 .3 0 1m399.7 4.7c-.8 1.3-6.7 20.9-6.7 22.2 0 .8 51.7 1.1 202.5 1.1H798V5H599.1c-109.5 0-199.2.3-199.4.7m-12.2 39.5c-.3 1-24.3 80.7-27.1 90-.5 1.7-9.9 1.8-180 1.8H1v16h797V44H593c-163.2 0-205.2.3-205.5 1.2m220.4 44.2c1.8 2.2 1 21.6-.9 22.8-1.1.8-4.1-.5-11.3-4.7-5.3-3.1-9.7-6-9.7-6.3.1-1.7 2.1-3.4 10-8 9.4-5.6 10.2-5.8 11.9-3.8m29.9 10.9c.2 9.5 0 11.8-1.2 12.3-2.3.9-20.1-9.8-20.1-12.1 0-1.3 2.7-3.5 9-7.2 5-2.9 9.7-5.1 10.5-5 1.2.2 1.6 2.4 1.8 12m29.7.2c0 9.8-.3 12-1.5 12.3-.8.1-5.6-2.1-10.5-5.1-6.4-3.7-9-5.8-9-7.2s2.6-3.4 9-7.2c5-2.9 9.7-5.2 10.5-5 1.2.2 1.5 2.3 1.5 12.2m31.3-.2c.2 9.6 0 11.8-1.2 12.3-2.3.9-20.8-10.4-20.4-12.4.4-1.9 17.6-12.2 19.8-11.9 1.2.2 1.6 2.4 1.8 12m30 0c.2 9.8 0 11.8-1.3 12.3-2.4.9-20-9.7-20-12.1 0-1.4 2.6-3.4 9-7.2 5-2.9 9.7-5.2 10.5-5 1.2.2 1.6 2.5 1.8 12m29-11.1c1.4 1.4 1.7 20.5.3 22.6-1.1 1.9-2.2 1.5-12.3-4.3-8.8-5-10.2-6.3-9-8.2.7-1 18.2-11.3 19.3-11.3.3 0 1 .5 1.7 1.2"/><path fill="#0080BF" d="M199.3 2.7c109.8.2 289.6.2 399.5 0 109.8-.1 19.9-.2-199.8-.2s-309.6.1-199.7.2M.5 78.5c0 41.2.1 58.3.2 37.8.2-20.4.2-54.2 0-75C.6 20.5.5 37.2.5 78.5"/><path fill="#0080FF" d="M199.3 3.7c109.8.2 289.6.2 399.5 0 109.8-.1 19.9-.2-199.8-.2s-309.6.1-199.7.2"/><path fill="#004080" d="M100.3 4.7c54.8.2 144.6.2 199.5 0 54.8-.1 9.9-.2-99.8-.2s-154.6.1-99.7.2"/><path fill="#80BFBF" d="M399.7 4.7c-.5.7 135.1.7 326.8 0 39.6-.1-17.6-.3-127.2-.5-109.5-.1-199.4.1-199.6.5"/><path d="M1 70.5V136h358.5l10.3-34.3c5.6-18.8 11.8-39.3 13.6-45.5l3.4-11.2h-19.3l-11 34.3-11.1 34.2-162.7.3L20 114V29h371.7l2.2-7.3c1.2-3.9 2.8-9.3 3.6-12l1.4-4.7H1zm595 23.4c-5.4 3.1-8.5 5.5-8.5 6.5 0 2 17.2 12.6 19.2 11.9 1-.4 1.3-3.6 1.3-11.9 0-13.7.3-13.5-12-6.5m30.1-.4c-4 2.4-8 4.9-8.8 5.7-1.8 1.8-1.1 2.5 10 8.9 10.6 6.2 10.9 5.9 10.5-8-.4-12.9-.7-13.1-11.7-6.6m28.7.6c-4.9 2.8-8.8 5.7-8.8 6.4 0 1.5 16.8 11.5 19.3 11.5 2.2 0 2.7-2.2 2.7-11.5 0-13.6-.4-13.8-13.2-6.4m31.7-.2c-5.5 3.2-8 5.3-8 6.6 0 2.2 17 12.6 19.2 11.8 1-.4 1.3-3.3 1.3-11.9 0-11.2 0-11.4-2.2-11.3-1.3 0-5.9 2.2-10.3 4.8m29.3.3c-4.9 2.7-8.8 5.6-8.8 6.3 0 1.7 17.5 11.7 19.8 11.3 1.5-.3 1.7-1.7 1.7-11.3 0-13.5-.2-13.6-12.7-6.3m30.2-.3c-5.3 3-8.5 5.5-8.5 6.5 0 1.9 17.3 12.5 19.3 11.8.9-.3 1.2-3.6 1.2-11.8 0-13.7.3-13.5-12-6.5"/><path fill="#004040" d="M20.5 71.5c0 23.6.1 33.2.2 21.2.2-12 .2-31.4 0-43-.1-11.7-.2-1.9-.2 21.8m351.3-26.8c2.8.2 7.6.2 10.5 0 2.8-.2.5-.3-5.3-.3s-8.1.1-5.2.3"/><path fill="#22bdc9" d="M758.4 100.5c0 5.5.1 7.6.3 4.7s.2-7.4 0-10-.3-.2-.3 5.3"/><path fill="gray" d="M608.4 100.5c0 6 .1 8.4.3 5.2s.2-8.1 0-11-.3-.3-.3 5.8M90.8 136.7c49.7.2 130.7.2 180 0 49.3-.1 8.7-.2-90.3-.2s-139.4.1-89.7.2"/><path fill="#00BFBF" d="M214.7 29.7c106.8.2 281.8.2 389 0 107.1-.1 19.8-.2-194.2-.2s-301.6.1-194.8.2m-113 84c44.7.2 117.9.2 162.5 0 44.7-.1 8.2-.2-81.2-.2s-125.9.1-81.3.2"/><path fill="#0FF" d="M21 71.5V113h323.6l11-34.2 11.1-34.3 215.6-.3L798 44V30H21z"/></svg>
 
-                        <text 
-                            x="50%" 
-                            y="25" 
-                            fill="white" 
-                            font-family="Arial, sans-serif" 
-                            font-size="14" 
-                            font-weight="bold" 
-                            text-anchor="middle" 
-                            dominant-baseline="middle">
-                            gallery
-                        </text>
-                    </svg>
+                        <div class="absolute top-[25%] left-[4%] w-[38%] h-[50%] flex items-center justify-center">
+                            <span class="text-black font-bold uppercase tracking-widest text-[14px]">
+                            Gallery
+                            </span>
+                        </div>
                 </div>
-                <!-- gallery header /. -->
+                <!-- header /. -->
 
                 <!-- gallery content -->
                 <div class="flex flex-col w-full">
@@ -652,60 +456,29 @@
                 </div>
                 <!-- gallery content /. -->
 
-
                 <!-- footer -->
-                <div class="grid grid-cols-3 w-full mt-10">
-                    <!-- column1 -->
-                     <div class="flex flex-col h-[40px] w-full">
-                        <div class="h-1/2 bg-white"></div>
-                        <div class="h-1/2 bg-[#DF1968] border-7 border-t-0 border-l-0 border-r-0 border-b-gray-800 " style="clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 0% 100%);"></div>
-                    </div>
-                    <!-- column1 /.-->
-
-                    <!-- column2 -->
-                    <div class="filter drop-shadow-[5px_0_0_#1F2937] -ml-[11%]"> 
-                        <div class="h-[40px] bg-[#DF1968] w-full border-7 border-t-gray-800 border-l-0 border-r-0" 
-                            style="clip-path: polygon(20% 0%, 100% 0%, 80% 100%, 0% 100%);">
-                        </div>
-                    </div>
-                    <!-- column2 /. -->
-
-                    <!-- column3 -->
-                    <div class="filter drop-shadow-[5px_0_0_#1F2937] -ml-[21%]"> 
-                        <div class="h-[40px] bg-white w-full border-7 border-t-gray-800 border-l-0 border-r-0" 
-                            style="clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%);">
-                        </div>
-                    </div>
-                    <!-- column3 /. -->
+                <div class="flex flex-col w-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 798 87"><path d="M0 43.5V87h236.8c254.1 0 241.8.2 249-4.9 1.7-1.2 11.2-13.7 21.3-27.9 10.1-14.1 22.7-31.9 28.1-39.5C540.6 7.2 545 .8 545 .5S422.4 0 272.5 0H0z"/><path fill="#ffffff" d="M546.5 1c.3.6.2 1-.3 1-.4 0-1.9 1.4-3.1 3.1-1.3 1.8-1.7 2.9-1 2.5.8-.4.4.1-.8 1-1.3.9-2.3 2-2.3 2.5s55.6.9 129 .9h129V0H671.5c-82.2 0-125.4.4-125 1M488 81.1c-2.5 2.6-4.8 4.5-5.2 4.2-.5-.2-.8.1-.8.6 0 .8 47.3 1.1 157.5 1.1H797V77l-152.3-.2-152.2-.3z"/><path fill="#BFBFBF" fill-opacity=".9" d="M797.3 6c0 3.6.2 5 .4 3.2.2-1.7.2-4.7 0-6.5-.2-1.7-.4-.3-.4 3.3m0 76c0 3 .2 4.3.4 2.8.2-1.6.2-4 0-5.5-.2-1.6-.4-.3-.4 2.7"/><path fill="gray" d="m487.9 80.7-2.4 2.8 2.8-2.4c2.5-2.3 3.2-3.1 2.4-3.1-.2 0-1.4 1.2-2.8 2.7"/><path fill="#40BFBF" d="M604.3 12.7c35.7.2 93.7.2 129 0 35.3-.1 6.2-.2-64.8-.2-70.9 0-99.8.1-64.2.2"/><path fill="#00BFBF" d="M533 19c-1.2 1.6-1.9 3-1.6 3 .2 0 1.4-1.4 2.6-3 1.2-1.7 1.9-3 1.6-3-.2 0-1.4 1.3-2.6 3m-5 7c-1.2 1.6-1.9 3-1.6 3 .2 0 1.4-1.4 2.6-3 1.2-1.7 1.9-3 1.6-3-.2 0-1.4 1.3-2.6 3m-14.1 19.7c-6.2 8.7-12.8 18-14.8 20.8-2 2.7-3.1 4.6-2.4 4.2 1-.6 9.2-11.8 18.8-25.7 2.1-3 5.3-7.6 7.2-10.3 1.9-2.6 3.2-4.7 2.9-4.7s-5.6 7.1-11.7 15.7"/><path fill="#0FF" d="M526.8 29c-6.2 8.8-15 21.3-19.6 27.8-4.6 6.4-9.1 12.6-10.1 13.7s-2.1 2.6-2.5 3.2c-.6 1 29.9 1.3 150.8 1.3H797V13H538.2z"/><path fill="#0FF" fill-opacity=".9" d="M797.4 44c0 17.3.2 24.4.3 15.7.2-8.6.2-22.8 0-31.5-.1-8.6-.3-1.5-.3 15.8"/><path fill="#80BFBF" d="M568.8 75.7c41.9.2 110.5.2 152.5 0 41.9-.1 7.6-.2-76.3-.2s-118.2.1-76.2.2"/><path fill="#FFBFBF" d="M568.8 76.7c41.9.2 110.5.2 152.5 0 41.9-.1 7.6-.2-76.3-.2s-118.2.1-76.2.2"/></svg>
                 </div>
                 <!-- footer /. -->
             </div>
             <!-- gallery /.-->
 
-            <!-- payments -->
-            <div id="payments" class="flex flex-col w-full mt-2 bg-white pt-2">
-                <!-- payments header -->
-                <div class="flex flex-col w-full">
-                     <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 320 56">
-                        <path fill="#DF1968" d="M20 11.2c0 13.3 1 17.4 4.9 21.2 2.9 2.8 4.1 3 69.3 13l66.3 10.1 65.8-10.2c64.5-9.9 66-10.2 68.8-12.9 3.9-3.8 4.9-7.9 4.9-21.2V0H20z"/>
-                        <path fill="#DF1968" d="M17.7 4.9C15.5 8.6 15.6 9 18 9c1.6 0 2-.7 2-3.5 0-1.9-.1-3.5-.3-3.5-.1 0-1 1.3-2 2.9m282.3.3c0 3.1.4 3.8 2 3.8 2.5 0 2.5-.2 0-4.2l-2-3.3z"/>
-                        <path d="M0 15v6h20V9H0zm300 0v6h20V9h-20z"/>
-                        <path fill="#BF0040" fill-opacity=".1" d="M23.5 33c1 1.1 2 2 2.3 2s-.3-.9-1.3-2-2-2-2.3-2 .3.9 1.3 2m272.4-.3c-1.3 1.6-1.2 1.7.4.4.9-.7 1.7-1.5 1.7-1.7 0-.8-.8-.3-2.1 1.3"/>
 
-                        <text 
-                            x="50%" 
-                            y="25" 
-                            fill="white" 
-                            font-family="Arial, sans-serif" 
-                            font-size="14" 
-                            font-weight="bold" 
-                            text-anchor="middle" 
-                            dominant-baseline="middle">
+            <!-- payments -->
+             <div id="payments" class="relative flex flex-col w-full mt-5 shadow-2xl">
+                <!-- header -->
+                <div class="relative flex flex-col w-full max-w-4xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 798 153" class="w-full h-auto">
+                        <path fill="#BFBFBF" d="M0 1c0 .7 133.7 1 399 1s399-.3 399-1-133.7-1-399-1S0 .3 0 1m399.7 4.7c-.8 1.3-6.7 20.9-6.7 22.2 0 .8 51.7 1.1 202.5 1.1H798V5H599.1c-109.5 0-199.2.3-199.4.7m-12.2 39.5c-.3 1-24.3 80.7-27.1 90-.5 1.7-9.9 1.8-180 1.8H1v16h797V44H593c-163.2 0-205.2.3-205.5 1.2m220.4 44.2c1.8 2.2 1 21.6-.9 22.8-1.1.8-4.1-.5-11.3-4.7-5.3-3.1-9.7-6-9.7-6.3.1-1.7 2.1-3.4 10-8 9.4-5.6 10.2-5.8 11.9-3.8m29.9 10.9c.2 9.5 0 11.8-1.2 12.3-2.3.9-20.1-9.8-20.1-12.1 0-1.3 2.7-3.5 9-7.2 5-2.9 9.7-5.1 10.5-5 1.2.2 1.6 2.4 1.8 12m29.7.2c0 9.8-.3 12-1.5 12.3-.8.1-5.6-2.1-10.5-5.1-6.4-3.7-9-5.8-9-7.2s2.6-3.4 9-7.2c5-2.9 9.7-5.2 10.5-5 1.2.2 1.5 2.3 1.5 12.2m31.3-.2c.2 9.6 0 11.8-1.2 12.3-2.3.9-20.8-10.4-20.4-12.4.4-1.9 17.6-12.2 19.8-11.9 1.2.2 1.6 2.4 1.8 12m30 0c.2 9.8 0 11.8-1.3 12.3-2.4.9-20-9.7-20-12.1 0-1.4 2.6-3.4 9-7.2 5-2.9 9.7-5.2 10.5-5 1.2.2 1.6 2.5 1.8 12m29-11.1c1.4 1.4 1.7 20.5.3 22.6-1.1 1.9-2.2 1.5-12.3-4.3-8.8-5-10.2-6.3-9-8.2.7-1 18.2-11.3 19.3-11.3.3 0 1 .5 1.7 1.2"/><path fill="#0080BF" d="M199.3 2.7c109.8.2 289.6.2 399.5 0 109.8-.1 19.9-.2-199.8-.2s-309.6.1-199.7.2M.5 78.5c0 41.2.1 58.3.2 37.8.2-20.4.2-54.2 0-75C.6 20.5.5 37.2.5 78.5"/><path fill="#0080FF" d="M199.3 3.7c109.8.2 289.6.2 399.5 0 109.8-.1 19.9-.2-199.8-.2s-309.6.1-199.7.2"/><path fill="#004080" d="M100.3 4.7c54.8.2 144.6.2 199.5 0 54.8-.1 9.9-.2-99.8-.2s-154.6.1-99.7.2"/><path fill="#80BFBF" d="M399.7 4.7c-.5.7 135.1.7 326.8 0 39.6-.1-17.6-.3-127.2-.5-109.5-.1-199.4.1-199.6.5"/><path d="M1 70.5V136h358.5l10.3-34.3c5.6-18.8 11.8-39.3 13.6-45.5l3.4-11.2h-19.3l-11 34.3-11.1 34.2-162.7.3L20 114V29h371.7l2.2-7.3c1.2-3.9 2.8-9.3 3.6-12l1.4-4.7H1zm595 23.4c-5.4 3.1-8.5 5.5-8.5 6.5 0 2 17.2 12.6 19.2 11.9 1-.4 1.3-3.6 1.3-11.9 0-13.7.3-13.5-12-6.5m30.1-.4c-4 2.4-8 4.9-8.8 5.7-1.8 1.8-1.1 2.5 10 8.9 10.6 6.2 10.9 5.9 10.5-8-.4-12.9-.7-13.1-11.7-6.6m28.7.6c-4.9 2.8-8.8 5.7-8.8 6.4 0 1.5 16.8 11.5 19.3 11.5 2.2 0 2.7-2.2 2.7-11.5 0-13.6-.4-13.8-13.2-6.4m31.7-.2c-5.5 3.2-8 5.3-8 6.6 0 2.2 17 12.6 19.2 11.8 1-.4 1.3-3.3 1.3-11.9 0-11.2 0-11.4-2.2-11.3-1.3 0-5.9 2.2-10.3 4.8m29.3.3c-4.9 2.7-8.8 5.6-8.8 6.3 0 1.7 17.5 11.7 19.8 11.3 1.5-.3 1.7-1.7 1.7-11.3 0-13.5-.2-13.6-12.7-6.3m30.2-.3c-5.3 3-8.5 5.5-8.5 6.5 0 1.9 17.3 12.5 19.3 11.8.9-.3 1.2-3.6 1.2-11.8 0-13.7.3-13.5-12-6.5"/><path fill="#004040" d="M20.5 71.5c0 23.6.1 33.2.2 21.2.2-12 .2-31.4 0-43-.1-11.7-.2-1.9-.2 21.8m351.3-26.8c2.8.2 7.6.2 10.5 0 2.8-.2.5-.3-5.3-.3s-8.1.1-5.2.3"/><path fill="#22bdc9" d="M758.4 100.5c0 5.5.1 7.6.3 4.7s.2-7.4 0-10-.3-.2-.3 5.3"/><path fill="gray" d="M608.4 100.5c0 6 .1 8.4.3 5.2s.2-8.1 0-11-.3-.3-.3 5.8M90.8 136.7c49.7.2 130.7.2 180 0 49.3-.1 8.7-.2-90.3-.2s-139.4.1-89.7.2"/><path fill="#00BFBF" d="M214.7 29.7c106.8.2 281.8.2 389 0 107.1-.1 19.8-.2-194.2-.2s-301.6.1-194.8.2m-113 84c44.7.2 117.9.2 162.5 0 44.7-.1 8.2-.2-81.2-.2s-125.9.1-81.3.2"/><path fill="#0FF" d="M21 71.5V113h323.6l11-34.2 11.1-34.3 215.6-.3L798 44V30H21z"/></svg>
+
+                        <div class="absolute top-[25%] left-[4%] w-[38%] h-[50%] flex items-center justify-center">
+                            <span class="text-black font-bold uppercase tracking-widest text-[14px]">
                             Payments
-                        </text>
-                    </svg>
+                            </span>
+                        </div>
                 </div>
-                <!-- payments header /. -->
+                <!-- header /. -->
 
                 <!-- payment qr -->
                 <div v-if="paymentQrs.length" class="flex flex-col w-full bg-white">
@@ -756,59 +529,27 @@
                 <!-- payment qr /. -->
 
                 <!-- footer -->
-                <div class="grid grid-cols-3 w-full mt-10">
-                    <!-- column1 -->
-                     <div class="flex flex-col h-[40px] w-full">
-                        <div class="h-1/2 bg-white"></div>
-                        <div class="h-1/2 bg-[#DF1968] border-7 border-t-0 border-l-0 border-r-0 border-b-gray-800 " style="clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 0% 100%);"></div>
-                    </div>
-                    <!-- column1 /.-->
-
-                    <!-- column2 -->
-                    <div class="filter drop-shadow-[5px_0_0_#1F2937] -ml-[11%]"> 
-                        <div class="h-[40px] bg-[#DF1968] w-full border-7 border-t-gray-800 border-l-0 border-r-0" 
-                            style="clip-path: polygon(20% 0%, 100% 0%, 80% 100%, 0% 100%);">
-                        </div>
-                    </div>
-                    <!-- column2 /. -->
-
-                    <!-- column3 -->
-                    <div class="filter drop-shadow-[5px_0_0_#1F2937] -ml-[21%]"> 
-                        <div class="h-[40px] bg-white w-full border-7 border-t-gray-800 border-l-0 border-r-0" 
-                            style="clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%);">
-                        </div>
-                    </div>
-                    <!-- column3 /. -->
+                <div class="flex flex-col w-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 798 87"><path d="M0 43.5V87h236.8c254.1 0 241.8.2 249-4.9 1.7-1.2 11.2-13.7 21.3-27.9 10.1-14.1 22.7-31.9 28.1-39.5C540.6 7.2 545 .8 545 .5S422.4 0 272.5 0H0z"/><path fill="#ffffff" d="M546.5 1c.3.6.2 1-.3 1-.4 0-1.9 1.4-3.1 3.1-1.3 1.8-1.7 2.9-1 2.5.8-.4.4.1-.8 1-1.3.9-2.3 2-2.3 2.5s55.6.9 129 .9h129V0H671.5c-82.2 0-125.4.4-125 1M488 81.1c-2.5 2.6-4.8 4.5-5.2 4.2-.5-.2-.8.1-.8.6 0 .8 47.3 1.1 157.5 1.1H797V77l-152.3-.2-152.2-.3z"/><path fill="#BFBFBF" fill-opacity=".9" d="M797.3 6c0 3.6.2 5 .4 3.2.2-1.7.2-4.7 0-6.5-.2-1.7-.4-.3-.4 3.3m0 76c0 3 .2 4.3.4 2.8.2-1.6.2-4 0-5.5-.2-1.6-.4-.3-.4 2.7"/><path fill="gray" d="m487.9 80.7-2.4 2.8 2.8-2.4c2.5-2.3 3.2-3.1 2.4-3.1-.2 0-1.4 1.2-2.8 2.7"/><path fill="#40BFBF" d="M604.3 12.7c35.7.2 93.7.2 129 0 35.3-.1 6.2-.2-64.8-.2-70.9 0-99.8.1-64.2.2"/><path fill="#00BFBF" d="M533 19c-1.2 1.6-1.9 3-1.6 3 .2 0 1.4-1.4 2.6-3 1.2-1.7 1.9-3 1.6-3-.2 0-1.4 1.3-2.6 3m-5 7c-1.2 1.6-1.9 3-1.6 3 .2 0 1.4-1.4 2.6-3 1.2-1.7 1.9-3 1.6-3-.2 0-1.4 1.3-2.6 3m-14.1 19.7c-6.2 8.7-12.8 18-14.8 20.8-2 2.7-3.1 4.6-2.4 4.2 1-.6 9.2-11.8 18.8-25.7 2.1-3 5.3-7.6 7.2-10.3 1.9-2.6 3.2-4.7 2.9-4.7s-5.6 7.1-11.7 15.7"/><path fill="#0FF" d="M526.8 29c-6.2 8.8-15 21.3-19.6 27.8-4.6 6.4-9.1 12.6-10.1 13.7s-2.1 2.6-2.5 3.2c-.6 1 29.9 1.3 150.8 1.3H797V13H538.2z"/><path fill="#0FF" fill-opacity=".9" d="M797.4 44c0 17.3.2 24.4.3 15.7.2-8.6.2-22.8 0-31.5-.1-8.6-.3-1.5-.3 15.8"/><path fill="#80BFBF" d="M568.8 75.7c41.9.2 110.5.2 152.5 0 41.9-.1 7.6-.2-76.3-.2s-118.2.1-76.2.2"/><path fill="#FFBFBF" d="M568.8 76.7c41.9.2 110.5.2 152.5 0 41.9-.1 7.6-.2-76.3-.2s-118.2.1-76.2.2"/></svg>
                 </div>
                 <!-- footer /. -->
-            </div>
+             </div>
             <!-- payments /.-->
 
             <!-- enquiry -->
-            <div id="enquiry" class="flex flex-col w-full mt-2 bg-white pt-2">
-                <!-- enquiry header -->
-                <div class="flex flex-col w-full">
-                     <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 320 56">
-                        <path fill="#DF1968" d="M20 11.2c0 13.3 1 17.4 4.9 21.2 2.9 2.8 4.1 3 69.3 13l66.3 10.1 65.8-10.2c64.5-9.9 66-10.2 68.8-12.9 3.9-3.8 4.9-7.9 4.9-21.2V0H20z"/>
-                        <path fill="#DF1968" d="M17.7 4.9C15.5 8.6 15.6 9 18 9c1.6 0 2-.7 2-3.5 0-1.9-.1-3.5-.3-3.5-.1 0-1 1.3-2 2.9m282.3.3c0 3.1.4 3.8 2 3.8 2.5 0 2.5-.2 0-4.2l-2-3.3z"/>
-                        <path d="M0 15v6h20V9H0zm300 0v6h20V9h-20z"/>
-                        <path fill="#BF0040" fill-opacity=".1" d="M23.5 33c1 1.1 2 2 2.3 2s-.3-.9-1.3-2-2-2-2.3-2 .3.9 1.3 2m272.4-.3c-1.3 1.6-1.2 1.7.4.4.9-.7 1.7-1.5 1.7-1.7 0-.8-.8-.3-2.1 1.3"/>
+            <div id="enquiry" class="relative flex flex-col w-full mt-5 shadow-2xl">
+                <!-- header -->
+                <div class="relative flex flex-col w-full max-w-4xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 798 153" class="w-full h-auto">
+                        <path fill="#BFBFBF" d="M0 1c0 .7 133.7 1 399 1s399-.3 399-1-133.7-1-399-1S0 .3 0 1m399.7 4.7c-.8 1.3-6.7 20.9-6.7 22.2 0 .8 51.7 1.1 202.5 1.1H798V5H599.1c-109.5 0-199.2.3-199.4.7m-12.2 39.5c-.3 1-24.3 80.7-27.1 90-.5 1.7-9.9 1.8-180 1.8H1v16h797V44H593c-163.2 0-205.2.3-205.5 1.2m220.4 44.2c1.8 2.2 1 21.6-.9 22.8-1.1.8-4.1-.5-11.3-4.7-5.3-3.1-9.7-6-9.7-6.3.1-1.7 2.1-3.4 10-8 9.4-5.6 10.2-5.8 11.9-3.8m29.9 10.9c.2 9.5 0 11.8-1.2 12.3-2.3.9-20.1-9.8-20.1-12.1 0-1.3 2.7-3.5 9-7.2 5-2.9 9.7-5.1 10.5-5 1.2.2 1.6 2.4 1.8 12m29.7.2c0 9.8-.3 12-1.5 12.3-.8.1-5.6-2.1-10.5-5.1-6.4-3.7-9-5.8-9-7.2s2.6-3.4 9-7.2c5-2.9 9.7-5.2 10.5-5 1.2.2 1.5 2.3 1.5 12.2m31.3-.2c.2 9.6 0 11.8-1.2 12.3-2.3.9-20.8-10.4-20.4-12.4.4-1.9 17.6-12.2 19.8-11.9 1.2.2 1.6 2.4 1.8 12m30 0c.2 9.8 0 11.8-1.3 12.3-2.4.9-20-9.7-20-12.1 0-1.4 2.6-3.4 9-7.2 5-2.9 9.7-5.2 10.5-5 1.2.2 1.6 2.5 1.8 12m29-11.1c1.4 1.4 1.7 20.5.3 22.6-1.1 1.9-2.2 1.5-12.3-4.3-8.8-5-10.2-6.3-9-8.2.7-1 18.2-11.3 19.3-11.3.3 0 1 .5 1.7 1.2"/><path fill="#0080BF" d="M199.3 2.7c109.8.2 289.6.2 399.5 0 109.8-.1 19.9-.2-199.8-.2s-309.6.1-199.7.2M.5 78.5c0 41.2.1 58.3.2 37.8.2-20.4.2-54.2 0-75C.6 20.5.5 37.2.5 78.5"/><path fill="#0080FF" d="M199.3 3.7c109.8.2 289.6.2 399.5 0 109.8-.1 19.9-.2-199.8-.2s-309.6.1-199.7.2"/><path fill="#004080" d="M100.3 4.7c54.8.2 144.6.2 199.5 0 54.8-.1 9.9-.2-99.8-.2s-154.6.1-99.7.2"/><path fill="#80BFBF" d="M399.7 4.7c-.5.7 135.1.7 326.8 0 39.6-.1-17.6-.3-127.2-.5-109.5-.1-199.4.1-199.6.5"/><path d="M1 70.5V136h358.5l10.3-34.3c5.6-18.8 11.8-39.3 13.6-45.5l3.4-11.2h-19.3l-11 34.3-11.1 34.2-162.7.3L20 114V29h371.7l2.2-7.3c1.2-3.9 2.8-9.3 3.6-12l1.4-4.7H1zm595 23.4c-5.4 3.1-8.5 5.5-8.5 6.5 0 2 17.2 12.6 19.2 11.9 1-.4 1.3-3.6 1.3-11.9 0-13.7.3-13.5-12-6.5m30.1-.4c-4 2.4-8 4.9-8.8 5.7-1.8 1.8-1.1 2.5 10 8.9 10.6 6.2 10.9 5.9 10.5-8-.4-12.9-.7-13.1-11.7-6.6m28.7.6c-4.9 2.8-8.8 5.7-8.8 6.4 0 1.5 16.8 11.5 19.3 11.5 2.2 0 2.7-2.2 2.7-11.5 0-13.6-.4-13.8-13.2-6.4m31.7-.2c-5.5 3.2-8 5.3-8 6.6 0 2.2 17 12.6 19.2 11.8 1-.4 1.3-3.3 1.3-11.9 0-11.2 0-11.4-2.2-11.3-1.3 0-5.9 2.2-10.3 4.8m29.3.3c-4.9 2.7-8.8 5.6-8.8 6.3 0 1.7 17.5 11.7 19.8 11.3 1.5-.3 1.7-1.7 1.7-11.3 0-13.5-.2-13.6-12.7-6.3m30.2-.3c-5.3 3-8.5 5.5-8.5 6.5 0 1.9 17.3 12.5 19.3 11.8.9-.3 1.2-3.6 1.2-11.8 0-13.7.3-13.5-12-6.5"/><path fill="#004040" d="M20.5 71.5c0 23.6.1 33.2.2 21.2.2-12 .2-31.4 0-43-.1-11.7-.2-1.9-.2 21.8m351.3-26.8c2.8.2 7.6.2 10.5 0 2.8-.2.5-.3-5.3-.3s-8.1.1-5.2.3"/><path fill="#22bdc9" d="M758.4 100.5c0 5.5.1 7.6.3 4.7s.2-7.4 0-10-.3-.2-.3 5.3"/><path fill="gray" d="M608.4 100.5c0 6 .1 8.4.3 5.2s.2-8.1 0-11-.3-.3-.3 5.8M90.8 136.7c49.7.2 130.7.2 180 0 49.3-.1 8.7-.2-90.3-.2s-139.4.1-89.7.2"/><path fill="#00BFBF" d="M214.7 29.7c106.8.2 281.8.2 389 0 107.1-.1 19.8-.2-194.2-.2s-301.6.1-194.8.2m-113 84c44.7.2 117.9.2 162.5 0 44.7-.1 8.2-.2-81.2-.2s-125.9.1-81.3.2"/><path fill="#0FF" d="M21 71.5V113h323.6l11-34.2 11.1-34.3 215.6-.3L798 44V30H21z"/></svg>
 
-                        <text 
-                            x="50%" 
-                            y="25" 
-                            fill="white" 
-                            font-family="Arial, sans-serif" 
-                            font-size="14" 
-                            font-weight="bold" 
-                            text-anchor="middle" 
-                            dominant-baseline="middle">
+                        <div class="absolute top-[25%] left-[4%] w-[38%] h-[50%] flex items-center justify-center">
+                            <span class="text-black font-bold uppercase tracking-widest text-[14px]">
                             Enquiry
-                        </text>
-                    </svg>
+                            </span>
+                        </div>
                 </div>
-                <!-- enquiry header /. -->
-
+                <!-- header /. -->
 
                 <!-- enquiry form -->
                 <div class="flex flex-col p-5">
@@ -861,7 +602,7 @@
                             </div>
                         </div>
                         <div class="items-center justify-center text-center">
-                            <button type="submit" class="w-[150px] text-gray border-2 bg-[#DF1968] text-white py-2 rounded-xl " >
+                            <button type="submit" class="w-[150px] border-2 bg-[#00FFFF] text-gray-800 py-2 rounded-xl " >
                             Send
                             </button>
                         </div>  
@@ -869,61 +610,28 @@
                  </div>
                 <!-- enquiry form /.-->
 
-
                 <!-- footer -->
-                <div class="grid grid-cols-3 w-full mt-10">
-                    <!-- column1 -->
-                     <div class="flex flex-col h-[40px] w-full">
-                        <div class="h-1/2 bg-white"></div>
-                        <div class="h-1/2 bg-[#DF1968] border-7 border-t-0 border-l-0 border-r-0 border-b-gray-800 " style="clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 0% 100%);"></div>
-                    </div>
-                    <!-- column1 /.-->
-
-                    <!-- column2 -->
-                    <div class="filter drop-shadow-[5px_0_0_#1F2937] -ml-[11%]"> 
-                        <div class="h-[40px] bg-[#DF1968] w-full border-7 border-t-gray-800 border-l-0 border-r-0" 
-                            style="clip-path: polygon(20% 0%, 100% 0%, 80% 100%, 0% 100%);">
-                        </div>
-                    </div>
-                    <!-- column2 /. -->
-
-                    <!-- column3 -->
-                    <div class="filter drop-shadow-[5px_0_0_#1F2937] -ml-[21%]"> 
-                        <div class="h-[40px] bg-white w-full border-7 border-t-gray-800 border-l-0 border-r-0" 
-                            style="clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%);">
-                        </div>
-                    </div>
-                    <!-- column3 /. -->
+                <div class="flex flex-col w-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 798 87"><path d="M0 43.5V87h236.8c254.1 0 241.8.2 249-4.9 1.7-1.2 11.2-13.7 21.3-27.9 10.1-14.1 22.7-31.9 28.1-39.5C540.6 7.2 545 .8 545 .5S422.4 0 272.5 0H0z"/><path fill="#ffffff" d="M546.5 1c.3.6.2 1-.3 1-.4 0-1.9 1.4-3.1 3.1-1.3 1.8-1.7 2.9-1 2.5.8-.4.4.1-.8 1-1.3.9-2.3 2-2.3 2.5s55.6.9 129 .9h129V0H671.5c-82.2 0-125.4.4-125 1M488 81.1c-2.5 2.6-4.8 4.5-5.2 4.2-.5-.2-.8.1-.8.6 0 .8 47.3 1.1 157.5 1.1H797V77l-152.3-.2-152.2-.3z"/><path fill="#BFBFBF" fill-opacity=".9" d="M797.3 6c0 3.6.2 5 .4 3.2.2-1.7.2-4.7 0-6.5-.2-1.7-.4-.3-.4 3.3m0 76c0 3 .2 4.3.4 2.8.2-1.6.2-4 0-5.5-.2-1.6-.4-.3-.4 2.7"/><path fill="gray" d="m487.9 80.7-2.4 2.8 2.8-2.4c2.5-2.3 3.2-3.1 2.4-3.1-.2 0-1.4 1.2-2.8 2.7"/><path fill="#40BFBF" d="M604.3 12.7c35.7.2 93.7.2 129 0 35.3-.1 6.2-.2-64.8-.2-70.9 0-99.8.1-64.2.2"/><path fill="#00BFBF" d="M533 19c-1.2 1.6-1.9 3-1.6 3 .2 0 1.4-1.4 2.6-3 1.2-1.7 1.9-3 1.6-3-.2 0-1.4 1.3-2.6 3m-5 7c-1.2 1.6-1.9 3-1.6 3 .2 0 1.4-1.4 2.6-3 1.2-1.7 1.9-3 1.6-3-.2 0-1.4 1.3-2.6 3m-14.1 19.7c-6.2 8.7-12.8 18-14.8 20.8-2 2.7-3.1 4.6-2.4 4.2 1-.6 9.2-11.8 18.8-25.7 2.1-3 5.3-7.6 7.2-10.3 1.9-2.6 3.2-4.7 2.9-4.7s-5.6 7.1-11.7 15.7"/><path fill="#0FF" d="M526.8 29c-6.2 8.8-15 21.3-19.6 27.8-4.6 6.4-9.1 12.6-10.1 13.7s-2.1 2.6-2.5 3.2c-.6 1 29.9 1.3 150.8 1.3H797V13H538.2z"/><path fill="#0FF" fill-opacity=".9" d="M797.4 44c0 17.3.2 24.4.3 15.7.2-8.6.2-22.8 0-31.5-.1-8.6-.3-1.5-.3 15.8"/><path fill="#80BFBF" d="M568.8 75.7c41.9.2 110.5.2 152.5 0 41.9-.1 7.6-.2-76.3-.2s-118.2.1-76.2.2"/><path fill="#FFBFBF" d="M568.8 76.7c41.9.2 110.5.2 152.5 0 41.9-.1 7.6-.2-76.3-.2s-118.2.1-76.2.2"/></svg>
                 </div>
                 <!-- footer /. -->
             </div>
             <!-- enquiry /.-->
 
             <!-- feedback -->
-            <div id="feedback" class="flex flex-col w-full mt-2 bg-white pt-2">
-                <!-- feedback header -->
-                <div class="flex flex-col w-full">
-                     <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 320 56">
-                        <path fill="#DF1968" d="M20 11.2c0 13.3 1 17.4 4.9 21.2 2.9 2.8 4.1 3 69.3 13l66.3 10.1 65.8-10.2c64.5-9.9 66-10.2 68.8-12.9 3.9-3.8 4.9-7.9 4.9-21.2V0H20z"/>
-                        <path fill="#DF1968" d="M17.7 4.9C15.5 8.6 15.6 9 18 9c1.6 0 2-.7 2-3.5 0-1.9-.1-3.5-.3-3.5-.1 0-1 1.3-2 2.9m282.3.3c0 3.1.4 3.8 2 3.8 2.5 0 2.5-.2 0-4.2l-2-3.3z"/>
-                        <path d="M0 15v6h20V9H0zm300 0v6h20V9h-20z"/>
-                        <path fill="#BF0040" fill-opacity=".1" d="M23.5 33c1 1.1 2 2 2.3 2s-.3-.9-1.3-2-2-2-2.3-2 .3.9 1.3 2m272.4-.3c-1.3 1.6-1.2 1.7.4.4.9-.7 1.7-1.5 1.7-1.7 0-.8-.8-.3-2.1 1.3"/>
+            <div id="feedback" class="relative flex flex-col w-full mt-5 shadow-2xl">
+                <!-- header -->
+                <div class="relative flex flex-col w-full max-w-4xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 798 153" class="w-full h-auto">
+                        <path fill="#BFBFBF" d="M0 1c0 .7 133.7 1 399 1s399-.3 399-1-133.7-1-399-1S0 .3 0 1m399.7 4.7c-.8 1.3-6.7 20.9-6.7 22.2 0 .8 51.7 1.1 202.5 1.1H798V5H599.1c-109.5 0-199.2.3-199.4.7m-12.2 39.5c-.3 1-24.3 80.7-27.1 90-.5 1.7-9.9 1.8-180 1.8H1v16h797V44H593c-163.2 0-205.2.3-205.5 1.2m220.4 44.2c1.8 2.2 1 21.6-.9 22.8-1.1.8-4.1-.5-11.3-4.7-5.3-3.1-9.7-6-9.7-6.3.1-1.7 2.1-3.4 10-8 9.4-5.6 10.2-5.8 11.9-3.8m29.9 10.9c.2 9.5 0 11.8-1.2 12.3-2.3.9-20.1-9.8-20.1-12.1 0-1.3 2.7-3.5 9-7.2 5-2.9 9.7-5.1 10.5-5 1.2.2 1.6 2.4 1.8 12m29.7.2c0 9.8-.3 12-1.5 12.3-.8.1-5.6-2.1-10.5-5.1-6.4-3.7-9-5.8-9-7.2s2.6-3.4 9-7.2c5-2.9 9.7-5.2 10.5-5 1.2.2 1.5 2.3 1.5 12.2m31.3-.2c.2 9.6 0 11.8-1.2 12.3-2.3.9-20.8-10.4-20.4-12.4.4-1.9 17.6-12.2 19.8-11.9 1.2.2 1.6 2.4 1.8 12m30 0c.2 9.8 0 11.8-1.3 12.3-2.4.9-20-9.7-20-12.1 0-1.4 2.6-3.4 9-7.2 5-2.9 9.7-5.2 10.5-5 1.2.2 1.6 2.5 1.8 12m29-11.1c1.4 1.4 1.7 20.5.3 22.6-1.1 1.9-2.2 1.5-12.3-4.3-8.8-5-10.2-6.3-9-8.2.7-1 18.2-11.3 19.3-11.3.3 0 1 .5 1.7 1.2"/><path fill="#0080BF" d="M199.3 2.7c109.8.2 289.6.2 399.5 0 109.8-.1 19.9-.2-199.8-.2s-309.6.1-199.7.2M.5 78.5c0 41.2.1 58.3.2 37.8.2-20.4.2-54.2 0-75C.6 20.5.5 37.2.5 78.5"/><path fill="#0080FF" d="M199.3 3.7c109.8.2 289.6.2 399.5 0 109.8-.1 19.9-.2-199.8-.2s-309.6.1-199.7.2"/><path fill="#004080" d="M100.3 4.7c54.8.2 144.6.2 199.5 0 54.8-.1 9.9-.2-99.8-.2s-154.6.1-99.7.2"/><path fill="#80BFBF" d="M399.7 4.7c-.5.7 135.1.7 326.8 0 39.6-.1-17.6-.3-127.2-.5-109.5-.1-199.4.1-199.6.5"/><path d="M1 70.5V136h358.5l10.3-34.3c5.6-18.8 11.8-39.3 13.6-45.5l3.4-11.2h-19.3l-11 34.3-11.1 34.2-162.7.3L20 114V29h371.7l2.2-7.3c1.2-3.9 2.8-9.3 3.6-12l1.4-4.7H1zm595 23.4c-5.4 3.1-8.5 5.5-8.5 6.5 0 2 17.2 12.6 19.2 11.9 1-.4 1.3-3.6 1.3-11.9 0-13.7.3-13.5-12-6.5m30.1-.4c-4 2.4-8 4.9-8.8 5.7-1.8 1.8-1.1 2.5 10 8.9 10.6 6.2 10.9 5.9 10.5-8-.4-12.9-.7-13.1-11.7-6.6m28.7.6c-4.9 2.8-8.8 5.7-8.8 6.4 0 1.5 16.8 11.5 19.3 11.5 2.2 0 2.7-2.2 2.7-11.5 0-13.6-.4-13.8-13.2-6.4m31.7-.2c-5.5 3.2-8 5.3-8 6.6 0 2.2 17 12.6 19.2 11.8 1-.4 1.3-3.3 1.3-11.9 0-11.2 0-11.4-2.2-11.3-1.3 0-5.9 2.2-10.3 4.8m29.3.3c-4.9 2.7-8.8 5.6-8.8 6.3 0 1.7 17.5 11.7 19.8 11.3 1.5-.3 1.7-1.7 1.7-11.3 0-13.5-.2-13.6-12.7-6.3m30.2-.3c-5.3 3-8.5 5.5-8.5 6.5 0 1.9 17.3 12.5 19.3 11.8.9-.3 1.2-3.6 1.2-11.8 0-13.7.3-13.5-12-6.5"/><path fill="#004040" d="M20.5 71.5c0 23.6.1 33.2.2 21.2.2-12 .2-31.4 0-43-.1-11.7-.2-1.9-.2 21.8m351.3-26.8c2.8.2 7.6.2 10.5 0 2.8-.2.5-.3-5.3-.3s-8.1.1-5.2.3"/><path fill="#22bdc9" d="M758.4 100.5c0 5.5.1 7.6.3 4.7s.2-7.4 0-10-.3-.2-.3 5.3"/><path fill="gray" d="M608.4 100.5c0 6 .1 8.4.3 5.2s.2-8.1 0-11-.3-.3-.3 5.8M90.8 136.7c49.7.2 130.7.2 180 0 49.3-.1 8.7-.2-90.3-.2s-139.4.1-89.7.2"/><path fill="#00BFBF" d="M214.7 29.7c106.8.2 281.8.2 389 0 107.1-.1 19.8-.2-194.2-.2s-301.6.1-194.8.2m-113 84c44.7.2 117.9.2 162.5 0 44.7-.1 8.2-.2-81.2-.2s-125.9.1-81.3.2"/><path fill="#0FF" d="M21 71.5V113h323.6l11-34.2 11.1-34.3 215.6-.3L798 44V30H21z"/></svg>
 
-                        <text 
-                            x="50%" 
-                            y="25" 
-                            fill="white" 
-                            font-family="Arial, sans-serif" 
-                            font-size="14" 
-                            font-weight="bold" 
-                            text-anchor="middle" 
-                            dominant-baseline="middle">
+                        <div class="absolute top-[25%] left-[4%] w-[38%] h-[50%] flex items-center justify-center">
+                            <span class="text-black font-bold uppercase tracking-widest text-[14px]">
                             Feedback
-                        </text>
-                    </svg>
+                            </span>
+                        </div>
                 </div>
-                <!-- feedback header /. -->
-
+                <!-- header /. -->
 
                 <!-- Feedback form area -->
                  <div class="flex flex-col p-5">
@@ -968,7 +676,7 @@
                             </div>
                         </div>  
                         <div class="items-center justify-center text-center">
-                            <button type="submit" class="w-[150px] text-gray bg-[#DF1968] text-white py-2 rounded-xl" >
+                            <button type="submit" class="w-[150px] bg-[#00FFFF] text-gray-800 py-2 rounded-xl" >
                             Send
                             </button>
                         </div>  
@@ -980,7 +688,7 @@
                 <div class="flex flex-col w-full bg-[#07254b] mb-3">
                     <!-- heading -->
                     <div class="flex flex-col w-full p-3">
-                        <p class="font-semibold text-[#ffffff] text-[14px] p-1 text-center uppercase border-4 border-l-[#DF1968] border-r-[#DF1968] border-t-0 border-b-0">
+                        <p class="font-semibold text-[#ffffff] text-[14px] p-1 text-center uppercase border-4 border-l-[#00FFFF] border-r-[#00FFFF] border-t-0 border-b-0">
                             Customer FeedBacks
                         </p>
                     </div>
@@ -1007,60 +715,28 @@
                 </div>
                 <!-- Feedback review /. -->
 
-
                 <!-- footer -->
-                <div class="grid grid-cols-3 w-full mt-10">
-                    <!-- column1 -->
-                     <div class="flex flex-col h-[40px] w-full">
-                        <div class="h-1/2 bg-white"></div>
-                        <div class="h-1/2 bg-[#DF1968] border-7 border-t-0 border-l-0 border-r-0 border-b-gray-800 " style="clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 0% 100%);"></div>
-                    </div>
-                    <!-- column1 /.-->
-
-                    <!-- column2 -->
-                    <div class="filter drop-shadow-[5px_0_0_#1F2937] -ml-[11%]"> 
-                        <div class="h-[40px] bg-[#DF1968] w-full border-7 border-t-gray-800 border-l-0 border-r-0" 
-                            style="clip-path: polygon(20% 0%, 100% 0%, 80% 100%, 0% 100%);">
-                        </div>
-                    </div>
-                    <!-- column2 /. -->
-
-                    <!-- column3 -->
-                    <div class="filter drop-shadow-[5px_0_0_#1F2937] -ml-[21%]"> 
-                        <div class="h-[40px] bg-white w-full border-7 border-t-gray-800 border-l-0 border-r-0" 
-                            style="clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%);">
-                        </div>
-                    </div>
-                    <!-- column3 /. -->
+                <div class="flex flex-col w-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 798 87"><path d="M0 43.5V87h236.8c254.1 0 241.8.2 249-4.9 1.7-1.2 11.2-13.7 21.3-27.9 10.1-14.1 22.7-31.9 28.1-39.5C540.6 7.2 545 .8 545 .5S422.4 0 272.5 0H0z"/><path fill="#ffffff" d="M546.5 1c.3.6.2 1-.3 1-.4 0-1.9 1.4-3.1 3.1-1.3 1.8-1.7 2.9-1 2.5.8-.4.4.1-.8 1-1.3.9-2.3 2-2.3 2.5s55.6.9 129 .9h129V0H671.5c-82.2 0-125.4.4-125 1M488 81.1c-2.5 2.6-4.8 4.5-5.2 4.2-.5-.2-.8.1-.8.6 0 .8 47.3 1.1 157.5 1.1H797V77l-152.3-.2-152.2-.3z"/><path fill="#BFBFBF" fill-opacity=".9" d="M797.3 6c0 3.6.2 5 .4 3.2.2-1.7.2-4.7 0-6.5-.2-1.7-.4-.3-.4 3.3m0 76c0 3 .2 4.3.4 2.8.2-1.6.2-4 0-5.5-.2-1.6-.4-.3-.4 2.7"/><path fill="gray" d="m487.9 80.7-2.4 2.8 2.8-2.4c2.5-2.3 3.2-3.1 2.4-3.1-.2 0-1.4 1.2-2.8 2.7"/><path fill="#40BFBF" d="M604.3 12.7c35.7.2 93.7.2 129 0 35.3-.1 6.2-.2-64.8-.2-70.9 0-99.8.1-64.2.2"/><path fill="#00BFBF" d="M533 19c-1.2 1.6-1.9 3-1.6 3 .2 0 1.4-1.4 2.6-3 1.2-1.7 1.9-3 1.6-3-.2 0-1.4 1.3-2.6 3m-5 7c-1.2 1.6-1.9 3-1.6 3 .2 0 1.4-1.4 2.6-3 1.2-1.7 1.9-3 1.6-3-.2 0-1.4 1.3-2.6 3m-14.1 19.7c-6.2 8.7-12.8 18-14.8 20.8-2 2.7-3.1 4.6-2.4 4.2 1-.6 9.2-11.8 18.8-25.7 2.1-3 5.3-7.6 7.2-10.3 1.9-2.6 3.2-4.7 2.9-4.7s-5.6 7.1-11.7 15.7"/><path fill="#0FF" d="M526.8 29c-6.2 8.8-15 21.3-19.6 27.8-4.6 6.4-9.1 12.6-10.1 13.7s-2.1 2.6-2.5 3.2c-.6 1 29.9 1.3 150.8 1.3H797V13H538.2z"/><path fill="#0FF" fill-opacity=".9" d="M797.4 44c0 17.3.2 24.4.3 15.7.2-8.6.2-22.8 0-31.5-.1-8.6-.3-1.5-.3 15.8"/><path fill="#80BFBF" d="M568.8 75.7c41.9.2 110.5.2 152.5 0 41.9-.1 7.6-.2-76.3-.2s-118.2.1-76.2.2"/><path fill="#FFBFBF" d="M568.8 76.7c41.9.2 110.5.2 152.5 0 41.9-.1 7.6-.2-76.3-.2s-118.2.1-76.2.2"/></svg>
                 </div>
                 <!-- footer /. -->
             </div>
             <!-- feedback /.-->
 
             <!-- share my details -->
-            <div id="shareMyDetails" class="flex flex-col w-full mt-2 bg-white pt-2">
-                <!-- share header -->
-                <div class="flex flex-col w-full">
-                     <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 320 56">
-                        <path fill="#DF1968" d="M20 11.2c0 13.3 1 17.4 4.9 21.2 2.9 2.8 4.1 3 69.3 13l66.3 10.1 65.8-10.2c64.5-9.9 66-10.2 68.8-12.9 3.9-3.8 4.9-7.9 4.9-21.2V0H20z"/>
-                        <path fill="#DF1968" d="M17.7 4.9C15.5 8.6 15.6 9 18 9c1.6 0 2-.7 2-3.5 0-1.9-.1-3.5-.3-3.5-.1 0-1 1.3-2 2.9m282.3.3c0 3.1.4 3.8 2 3.8 2.5 0 2.5-.2 0-4.2l-2-3.3z"/>
-                        <path d="M0 15v6h20V9H0zm300 0v6h20V9h-20z"/>
-                        <path fill="#BF0040" fill-opacity=".1" d="M23.5 33c1 1.1 2 2 2.3 2s-.3-.9-1.3-2-2-2-2.3-2 .3.9 1.3 2m272.4-.3c-1.3 1.6-1.2 1.7.4.4.9-.7 1.7-1.5 1.7-1.7 0-.8-.8-.3-2.1 1.3"/>
+            <div id="shareMyDetails" class="relative flex flex-col w-full mt-5 shadow-2xl">
+                <!-- header -->
+                <div class="relative flex flex-col w-full max-w-4xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 798 153" class="w-full h-auto">
+                        <path fill="#BFBFBF" d="M0 1c0 .7 133.7 1 399 1s399-.3 399-1-133.7-1-399-1S0 .3 0 1m399.7 4.7c-.8 1.3-6.7 20.9-6.7 22.2 0 .8 51.7 1.1 202.5 1.1H798V5H599.1c-109.5 0-199.2.3-199.4.7m-12.2 39.5c-.3 1-24.3 80.7-27.1 90-.5 1.7-9.9 1.8-180 1.8H1v16h797V44H593c-163.2 0-205.2.3-205.5 1.2m220.4 44.2c1.8 2.2 1 21.6-.9 22.8-1.1.8-4.1-.5-11.3-4.7-5.3-3.1-9.7-6-9.7-6.3.1-1.7 2.1-3.4 10-8 9.4-5.6 10.2-5.8 11.9-3.8m29.9 10.9c.2 9.5 0 11.8-1.2 12.3-2.3.9-20.1-9.8-20.1-12.1 0-1.3 2.7-3.5 9-7.2 5-2.9 9.7-5.1 10.5-5 1.2.2 1.6 2.4 1.8 12m29.7.2c0 9.8-.3 12-1.5 12.3-.8.1-5.6-2.1-10.5-5.1-6.4-3.7-9-5.8-9-7.2s2.6-3.4 9-7.2c5-2.9 9.7-5.2 10.5-5 1.2.2 1.5 2.3 1.5 12.2m31.3-.2c.2 9.6 0 11.8-1.2 12.3-2.3.9-20.8-10.4-20.4-12.4.4-1.9 17.6-12.2 19.8-11.9 1.2.2 1.6 2.4 1.8 12m30 0c.2 9.8 0 11.8-1.3 12.3-2.4.9-20-9.7-20-12.1 0-1.4 2.6-3.4 9-7.2 5-2.9 9.7-5.2 10.5-5 1.2.2 1.6 2.5 1.8 12m29-11.1c1.4 1.4 1.7 20.5.3 22.6-1.1 1.9-2.2 1.5-12.3-4.3-8.8-5-10.2-6.3-9-8.2.7-1 18.2-11.3 19.3-11.3.3 0 1 .5 1.7 1.2"/><path fill="#0080BF" d="M199.3 2.7c109.8.2 289.6.2 399.5 0 109.8-.1 19.9-.2-199.8-.2s-309.6.1-199.7.2M.5 78.5c0 41.2.1 58.3.2 37.8.2-20.4.2-54.2 0-75C.6 20.5.5 37.2.5 78.5"/><path fill="#0080FF" d="M199.3 3.7c109.8.2 289.6.2 399.5 0 109.8-.1 19.9-.2-199.8-.2s-309.6.1-199.7.2"/><path fill="#004080" d="M100.3 4.7c54.8.2 144.6.2 199.5 0 54.8-.1 9.9-.2-99.8-.2s-154.6.1-99.7.2"/><path fill="#80BFBF" d="M399.7 4.7c-.5.7 135.1.7 326.8 0 39.6-.1-17.6-.3-127.2-.5-109.5-.1-199.4.1-199.6.5"/><path d="M1 70.5V136h358.5l10.3-34.3c5.6-18.8 11.8-39.3 13.6-45.5l3.4-11.2h-19.3l-11 34.3-11.1 34.2-162.7.3L20 114V29h371.7l2.2-7.3c1.2-3.9 2.8-9.3 3.6-12l1.4-4.7H1zm595 23.4c-5.4 3.1-8.5 5.5-8.5 6.5 0 2 17.2 12.6 19.2 11.9 1-.4 1.3-3.6 1.3-11.9 0-13.7.3-13.5-12-6.5m30.1-.4c-4 2.4-8 4.9-8.8 5.7-1.8 1.8-1.1 2.5 10 8.9 10.6 6.2 10.9 5.9 10.5-8-.4-12.9-.7-13.1-11.7-6.6m28.7.6c-4.9 2.8-8.8 5.7-8.8 6.4 0 1.5 16.8 11.5 19.3 11.5 2.2 0 2.7-2.2 2.7-11.5 0-13.6-.4-13.8-13.2-6.4m31.7-.2c-5.5 3.2-8 5.3-8 6.6 0 2.2 17 12.6 19.2 11.8 1-.4 1.3-3.3 1.3-11.9 0-11.2 0-11.4-2.2-11.3-1.3 0-5.9 2.2-10.3 4.8m29.3.3c-4.9 2.7-8.8 5.6-8.8 6.3 0 1.7 17.5 11.7 19.8 11.3 1.5-.3 1.7-1.7 1.7-11.3 0-13.5-.2-13.6-12.7-6.3m30.2-.3c-5.3 3-8.5 5.5-8.5 6.5 0 1.9 17.3 12.5 19.3 11.8.9-.3 1.2-3.6 1.2-11.8 0-13.7.3-13.5-12-6.5"/><path fill="#004040" d="M20.5 71.5c0 23.6.1 33.2.2 21.2.2-12 .2-31.4 0-43-.1-11.7-.2-1.9-.2 21.8m351.3-26.8c2.8.2 7.6.2 10.5 0 2.8-.2.5-.3-5.3-.3s-8.1.1-5.2.3"/><path fill="#22bdc9" d="M758.4 100.5c0 5.5.1 7.6.3 4.7s.2-7.4 0-10-.3-.2-.3 5.3"/><path fill="gray" d="M608.4 100.5c0 6 .1 8.4.3 5.2s.2-8.1 0-11-.3-.3-.3 5.8M90.8 136.7c49.7.2 130.7.2 180 0 49.3-.1 8.7-.2-90.3-.2s-139.4.1-89.7.2"/><path fill="#00BFBF" d="M214.7 29.7c106.8.2 281.8.2 389 0 107.1-.1 19.8-.2-194.2-.2s-301.6.1-194.8.2m-113 84c44.7.2 117.9.2 162.5 0 44.7-.1 8.2-.2-81.2-.2s-125.9.1-81.3.2"/><path fill="#0FF" d="M21 71.5V113h323.6l11-34.2 11.1-34.3 215.6-.3L798 44V30H21z"/></svg>
 
-                        <text 
-                            x="50%" 
-                            y="25" 
-                            fill="white" 
-                            font-family="Arial, sans-serif" 
-                            font-size="14" 
-                            font-weight="bold" 
-                            text-anchor="middle" 
-                            dominant-baseline="middle">
+                        <div class="absolute top-[25%] left-[4%] w-[38%] h-[50%] flex items-center justify-center">
+                            <span class="text-black font-bold uppercase tracking-widest text-[14px]">
                             Share Me
-                        </text>
-                    </svg>
+                            </span>
+                        </div>
                 </div>
-                <!-- share header /. -->
+                <!-- header /. -->
 
                 <!-- share my detail content -->
                 <div class="flex flex-col w-full bg-white">
@@ -1177,34 +853,12 @@
                 <!-- share my detail content /. -->
 
                 <!-- footer -->
-                <div class="grid grid-cols-3 w-full mt-10">
-                    <!-- column1 -->
-                     <div class="flex flex-col h-[40px] w-full">
-                        <div class="h-1/2 bg-white"></div>
-                        <div class="h-1/2 bg-[#DF1968] border-7 border-t-0 border-l-0 border-r-0 border-b-gray-800 " style="clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 0% 100%);"></div>
-                    </div>
-                    <!-- column1 /.-->
-
-                    <!-- column2 -->
-                    <div class="filter drop-shadow-[5px_0_0_#1F2937] -ml-[11%]"> 
-                        <div class="h-[40px] bg-[#DF1968] w-full border-7 border-t-gray-800 border-l-0 border-r-0" 
-                            style="clip-path: polygon(20% 0%, 100% 0%, 80% 100%, 0% 100%);">
-                        </div>
-                    </div>
-                    <!-- column2 /. -->
-
-                    <!-- column3 -->
-                    <div class="filter drop-shadow-[5px_0_0_#1F2937] -ml-[21%]"> 
-                        <div class="h-[40px] bg-white w-full border-7 border-t-gray-800 border-l-0 border-r-0" 
-                            style="clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%);">
-                        </div>
-                    </div>
-                    <!-- column3 /. -->
+                <div class="flex flex-col w-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 798 87"><path d="M0 43.5V87h236.8c254.1 0 241.8.2 249-4.9 1.7-1.2 11.2-13.7 21.3-27.9 10.1-14.1 22.7-31.9 28.1-39.5C540.6 7.2 545 .8 545 .5S422.4 0 272.5 0H0z"/><path fill="#ffffff" d="M546.5 1c.3.6.2 1-.3 1-.4 0-1.9 1.4-3.1 3.1-1.3 1.8-1.7 2.9-1 2.5.8-.4.4.1-.8 1-1.3.9-2.3 2-2.3 2.5s55.6.9 129 .9h129V0H671.5c-82.2 0-125.4.4-125 1M488 81.1c-2.5 2.6-4.8 4.5-5.2 4.2-.5-.2-.8.1-.8.6 0 .8 47.3 1.1 157.5 1.1H797V77l-152.3-.2-152.2-.3z"/><path fill="#BFBFBF" fill-opacity=".9" d="M797.3 6c0 3.6.2 5 .4 3.2.2-1.7.2-4.7 0-6.5-.2-1.7-.4-.3-.4 3.3m0 76c0 3 .2 4.3.4 2.8.2-1.6.2-4 0-5.5-.2-1.6-.4-.3-.4 2.7"/><path fill="gray" d="m487.9 80.7-2.4 2.8 2.8-2.4c2.5-2.3 3.2-3.1 2.4-3.1-.2 0-1.4 1.2-2.8 2.7"/><path fill="#40BFBF" d="M604.3 12.7c35.7.2 93.7.2 129 0 35.3-.1 6.2-.2-64.8-.2-70.9 0-99.8.1-64.2.2"/><path fill="#00BFBF" d="M533 19c-1.2 1.6-1.9 3-1.6 3 .2 0 1.4-1.4 2.6-3 1.2-1.7 1.9-3 1.6-3-.2 0-1.4 1.3-2.6 3m-5 7c-1.2 1.6-1.9 3-1.6 3 .2 0 1.4-1.4 2.6-3 1.2-1.7 1.9-3 1.6-3-.2 0-1.4 1.3-2.6 3m-14.1 19.7c-6.2 8.7-12.8 18-14.8 20.8-2 2.7-3.1 4.6-2.4 4.2 1-.6 9.2-11.8 18.8-25.7 2.1-3 5.3-7.6 7.2-10.3 1.9-2.6 3.2-4.7 2.9-4.7s-5.6 7.1-11.7 15.7"/><path fill="#0FF" d="M526.8 29c-6.2 8.8-15 21.3-19.6 27.8-4.6 6.4-9.1 12.6-10.1 13.7s-2.1 2.6-2.5 3.2c-.6 1 29.9 1.3 150.8 1.3H797V13H538.2z"/><path fill="#0FF" fill-opacity=".9" d="M797.4 44c0 17.3.2 24.4.3 15.7.2-8.6.2-22.8 0-31.5-.1-8.6-.3-1.5-.3 15.8"/><path fill="#80BFBF" d="M568.8 75.7c41.9.2 110.5.2 152.5 0 41.9-.1 7.6-.2-76.3-.2s-118.2.1-76.2.2"/><path fill="#FFBFBF" d="M568.8 76.7c41.9.2 110.5.2 152.5 0 41.9-.1 7.6-.2-76.3-.2s-118.2.1-76.2.2"/></svg>
                 </div>
                 <!-- footer /. -->
             </div>
             <!-- share my details /.-->
-            
 
         </div>
 
@@ -1488,7 +1142,7 @@
     import WebsiteFooterBar from '../Components/WebsiteFooterBar.vue';
 
     export default{
-        name: "Website_Temp_5",
+        name: "Website_Temp_6",
         components: {PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, WebsiteFooterBar, ChevronLeftIcon, ChevronRightIcon, ArrowDownTrayIcon},
         props: {
             // themeId: Number,
@@ -1498,7 +1152,6 @@
                 default: true
             }
         },
-
         setup(props){
             // getting data from selected website 
             const route = useRoute();
@@ -1919,7 +1572,7 @@
             }
 
             function closeModal() {
-               showModal.value = false;
+                showModal.value = false;
             }
 
             // plan popup show
@@ -2217,44 +1870,13 @@
     }
 </script>
 
-<style scoped>
-    @keyframes subtleFloat {
-    0% {
-        transform: translate(0, 0) rotate(0deg) scale(1);
-        opacity: 0.9;
-    }
-    25% {
-        transform: translate(12px, -10px) rotate(3deg) scale(1.03);
-    }
-    50% {
-        transform: translate(-10px, 12px) rotate(-3deg) scale(0.97);
-    }
-    75% {
-        transform: translate(8px, 6px) rotate(4deg) scale(1.04);
-    }
-    100% {
-        transform: translate(0, 0) rotate(0deg) scale(1);
-        opacity: 0.9;
-    }
+<style scope>
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
     }
 
-    .box {
-        animation: subtleFloat 12s ease-in-out infinite;
-        transform-origin: center;
-        will-change: transform;
-    }
-
-    /* stagger only – NO position change */
-    .box-1 {
-        animation-delay: 0s;
-    }
-    .box-2 {
-        animation-delay: 2.5s;
-    }
-    .box-3 {
-        animation-delay: 5s;
-    }
-    .box-4 {
-        animation-delay: 7.5s;
+    .animate-rotate {
+        animation: rotate 4s linear infinite;
     }
 </style>

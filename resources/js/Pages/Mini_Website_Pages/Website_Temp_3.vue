@@ -111,7 +111,7 @@
                                     <a :href="`tel:+91${phoneNo}`" class="hover:underline">
                                         <p class="font-bold text-[14px]"> +91 {{ phoneNo || "9876543210" }}</p>
                                     </a>
-                                    <a :href="`tel:+91${whatsappNo}`" class="hover:underline">
+                                    <a :href="`https://wa.me/${whatsappNo}`" target="_blank" class="hover:underline">
                                         <p class="font-bold text-[14px]">+91 {{  whatsappNo || "9876543210" }}</p>
                                     </a>
                                 </div>
