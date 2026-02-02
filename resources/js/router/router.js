@@ -9,6 +9,7 @@ import Website_Temp_1 from '@/Pages/Mini_Website_Pages/Website_Temp_1.vue';
 import Website_Temp_3 from '@/Pages/Mini_Website_Pages/Website_Temp_3.vue';
 import Website_Temp_4 from '@/Pages/Mini_Website_Pages/Website_Temp_4.vue';
 import Website_Temp_5 from '@/Pages/Mini_Website_Pages/Website_Temp_5.vue';
+import Website_Temp_6 from '@/Pages/Mini_Website_Pages/Website_Temp_6.vue';
 import Mini_Website_Temp from '@/Pages/Components/Mini_website_components/Mini_Website_Temp.vue';
 import Address from '@/Pages/Components/Mini_website_components/Address.vue';
 import Aboutus from '@/Pages/Components/Mini_website_components/Aboutus.vue';
@@ -37,7 +38,7 @@ const routes = [
     { path: '/FeedbackVerify', component: FeedbackVerify,meta: { title: 'Feedback Verify | LinkAura' } },
     { path: '/MiniWebEnquiry', component: MiniWeb_enquiry,meta: { title: 'Feedback Verify | LinkAura' } },
 
-    // { path: '/Website_Temp_5', component: Website_Temp_5,meta: { title: 'Website3 | LinkAura' } }, // for testing purpose
+    { path: '/Website_Temp_6', component: Website_Temp_6,meta: { title: 'Website6 | LinkAura' } }, // for testing purpose
     // { path: '/Website_Temp_1', component: Website_Temp_1,meta: { title: 'Website1 | LinkAura' } },
     // { path: '/Website_Temp_2', component: Website_Temp_2,meta: { title: 'Website2 | LinkAura' } },
     // { path: '/:company/Website_Temp_1', component: Website_Temp_1,meta: { title: 'Theme 1 | Digital Card', public: true} },
@@ -57,6 +58,7 @@ const routes = [
                     3: Website_Temp_3,
                     4: Website_Temp_4,
                     5: Website_Temp_5,
+                    6: Website_Temp_6,
                 }
 
                 if (!map[decodedId]) return next('/')
