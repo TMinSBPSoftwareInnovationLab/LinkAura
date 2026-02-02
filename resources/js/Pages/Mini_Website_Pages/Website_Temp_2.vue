@@ -1266,9 +1266,15 @@
     import { useRoute,useRouter } from 'vue-router'
     import defaultLogo from '@/assets/images/commonImages/linkAura_logo.png'
     import pro6 from '@/assets/images/commonImages/default_product_images/pro6.jpg'
-    import pro7 from '@/assets/images/commonImages/default_product_images/pro7.webp'
-    import pro8 from '@/assets/images/commonImages/default_product_images/pro8.webp'
-    import pro9 from '@/assets/images/commonImages/default_product_images/pro9.png'
+    // import pro7 from '@/assets/images/commonImages/default_product_images/pro7.webp'
+    // import pro8 from '@/assets/images/commonImages/default_product_images/pro8.webp'
+    // import pro9 from '@/assets/images/commonImages/default_product_images/pro9.png'
+    import defaultPro1 from '@/assets/images/commonImages/default_product_images/pro1.webp'
+    import defaultPro2 from '@/assets/images/commonImages/default_product_images/pro2.png'
+    import defaultPro3 from '@/assets/images/commonImages/default_product_images/pro3.png'
+    import defaultPro4 from '@/assets/images/commonImages/default_product_images/pro4.jpg'
+    import defaultPro5 from '@/assets/images/commonImages/default_product_images/pro5.png'
+    import productImage from '@/assets/images/commonImages/default_product_images/pro5.png'
     import gPay from '@/assets/images/commonImages/default_qrCode_images/gpay.jpeg'
     import paytm from '@/assets/images/commonImages/default_qrCode_images/paytm.jpeg'
     import { toast } from 'vue3-toastify'
@@ -1406,35 +1412,35 @@
             const products = ref([
                 {
                     id: 1,
-                    product_name: "Tooth Extractions",
-                    product_img: pro6,
-                    orginal_price: 5500,
+                    product_name: "Maroon T-shirt For Women",
+                    product_img: defaultPro1,
+                    orginal_price: 1500,
                     discount_price: 500,
-                    final_price: 5000
+                    final_price: 1000
                 },
                 {
                     id: 2,
-                    product_name: "Root Fillings",
-                    product_img: pro7,
-                    orginal_price: 5500,
+                    product_name: "Gray Hoodie For Men",
+                    product_img: defaultPro3,
+                    orginal_price: 3500,
                     discount_price: 500,
-                    final_price: 5000
+                    final_price: 3000
                 },
                 {
                     id: 3,
                     product_name: "Dental Crowns",
-                    product_img: pro8,
-                    orginal_price: 5500,
-                    discount_price: 500,
-                    final_price: 5000
+                    product_img: defaultPro4,
+                    orginal_price: 400,
+                    discount_price: 50,
+                    final_price: 350
                 },
                 {
                     id: 4,
-                    product_name: "Dental Implants",
-                    product_img: pro9,
-                    orginal_price: 5500,
-                    discount_price: 500,
-                    final_price: 5000
+                    product_name: "White Cotton Shirt",
+                    product_img: defaultPro5,
+                    orginal_price: 800,
+                    discount_price: 250,
+                    final_price: 75
                 }
             ]);
 
@@ -1471,20 +1477,14 @@
             // ---------------- Service ----------------
             const serviceData = ref([
                 {
-                    service_name: "Wisdom tooth extraction",
-                    service_img: pro6
+                    id: 1,
+                    service_name: "Online Retailers Clothing",
+                    service_img: service1
                 },
                 {
-                    service_name: "Dental implants",
-                    service_img: pro7
-                },
-                {
-                    service_name: "Periodontal care",
-                    service_img: pro8
-                },
-                {
-                    service_name: "Braces",
-                    service_img: pro8
+                    id: 2,
+                    service_name: "Women’s Fashion Boutique",
+                    service_img: service2
                 },
             ]);
 
@@ -1515,31 +1515,16 @@
             // ---------------- Gallery ----------------
             const galleryData = ref([
                 {
-                    gallery: pro6,
+                    gallery: productImage,
                 },
                 {
-                    gallery: pro7,
+                    gallery: defaultPro2,
                 },
                 {
-                    gallery: pro8,
+                    gallery: defaultPro1,
                 },
                 {
-                    gallery: pro9,
-                },
-                {
-                    gallery: pro6,
-                },
-                {
-                    gallery: pro7,
-                },
-                {
-                    gallery: pro8,
-                },
-                {
-                    gallery: pro9,
-                },
-                {
-                    gallery: pro6,
+                    gallery: defaultPro4,
                 },
             ]);
 
@@ -1727,7 +1712,8 @@
             // plan popup show
             const showPlan = ref(false)
             function gotoPlanPopup(){
-                showPlan.value = true
+                // showPlan.value = true
+                router.push('/dashboard')
             }
             // plan popup close
             function gotoPlanPopupClose(){

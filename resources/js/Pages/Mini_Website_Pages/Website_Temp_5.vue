@@ -1925,7 +1925,8 @@
             // plan popup show
             const showPlan = ref(false)
             function gotoPlanPopup(){
-                showPlan.value = true
+                // showPlan.value = true
+                router.push('/dashboard')
             }
             // plan popup close
             function gotoPlanPopupClose(){

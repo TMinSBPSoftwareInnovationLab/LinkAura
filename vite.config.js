@@ -30,7 +30,7 @@ export default defineConfig({
         strictPort: true, // Fail if port already in use
         cors: true,       // Allow cross-origin requests
         hmr: {
-            host: '192.168.29.24',
+            host: '192.168.1.117',
         },
     },
 });
