@@ -12,14 +12,14 @@
 
             <!-- main content area -->
              <div class="flex w-full py-5 px-5 bg-white mt-2 justify-end">
-                <router-link to="/Company_details">
-                    <button
+                <!-- <router-link to="/Company_details"> -->
+                    <button @click="gotoCompany_details"
                         class="bg-[#000b57] text-white py-2 px-4 rounded-xl 
                                 transition-all duration-500 
                                 hover:-translate-y-2 hover:shadow-xl">
                             Create Mini Website
                     </button>
-                </router-link>
+                <!-- </router-link> -->
 
              </div>
              <div class="flex flex-col w-full bg-white p-5">
@@ -115,8 +115,8 @@
                 
                 <!-- Price area -->
                 <div class="flex flex-col w-full px-5 pt-5 pb-5 bg-[#2A7B9B]">
-                    <p class="uppercase font-semibold text-[20px] text-white">
-                        Price: &#8377; 500
+                    <p class="uppercase font-semibold text-[20px] text-[#2A7B9B] bg-white p-4 rounded-2xl">
+                        Price: ₹1,239 <br> <span class="text-[12px] font-bold text-gray-800">(₹1,050 + ₹189 GST)</span>
                     </p>
                     <p class="uppercase text-[20px] text-white font-semibold">
                         Validity: 3 Months
@@ -135,9 +135,9 @@
                 <!-- Features area -->
                 <div class="flex flex-col w-full px-5 pt-2">
                     <ul class="text-[15px] font-semibold leading-loose">
-                        <li>🛍️ Add up to 20 Products </li>
-                        <li>🛠️ Add up to 10 Services</li>
-                        <li>🖼️ Upload 10 Gallery Images</li>
+                        <li>🛍️ Add up to 5 Products </li>
+                        <li>🛠️ Add up to 5 Services</li>
+                        <li>🖼️ Upload 5 Gallery Images</li>
                         <li>🔄 Unlimited Updates</li>
                         <li>✍ Customer Enquiry Section</li>
                         <li>⭐ Customer Feedback Section</li>
@@ -190,8 +190,8 @@
                 
                 <!-- Price area -->
                 <div class="flex flex-col w-full px-5 pt-5 pb-5 bg-[#066856]">
-                    <p class="uppercase font-semibold text-[20px] text-white">
-                        Price: &#8377; 1000
+                    <p class="uppercase font-semibold text-[20px] text-[#066856] bg-white p-4 rounded-2xl">
+                        Price: ₹2,124 <br> <span class="text-[12px] font-bold text-gray-800">(₹1,800 + ₹324 GST)</span>
                     </p>
                     <p class="uppercase text-[20px] text-white font-semibold">
                         Validity: 6 Months
@@ -210,9 +210,9 @@
                 <!-- Features area -->
                 <div class="flex flex-col w-full px-5 pt-2">
                     <ul class="text-[15px] font-semibold leading-loose">
-                        <li>🛍️ Add up to 20 Products </li>
-                        <li>🛠️ Add up to 10 Services</li>
-                        <li>🖼️ Upload 10 Gallery Images</li>
+                        <li>🛍️ Add up to 15 Products </li>
+                        <li>🛠️ Add up to 15 Services</li>
+                        <li>🖼️ Upload 15 Gallery Images</li>
                         <li>🔄 Unlimited Updates</li>
                         <li>✍ Customer Enquiry Section</li>
                         <li>⭐ Customer Feedback Section</li>
@@ -265,8 +265,8 @@
                 
                 <!-- Price area -->
                 <div class="flex flex-col w-full px-5 pt-5 pb-5 bg-[#6c075b]">
-                    <p class="uppercase font-semibold text-[20px] text-white">
-                        Price: &#8377; 1500
+                    <p class="uppercase font-semibold text-[20px] text-[#6c075b] bg-white p-4 rounded-2xl">
+                        Price: ₹3,540 <br> <span class="text-[12px] font-bold text-gray-800">(₹3,000 + ₹540 GST)</span>
                     </p>
                     <p class="uppercase text-[20px] text-white font-semibold">
                         Validity: 12 Months
@@ -285,9 +285,9 @@
                 <!-- Features area -->
                 <div class="flex flex-col w-full px-5 pt-2">
                     <ul class="text-[15px] font-semibold leading-loose">
-                        <li>🛍️ Add up to 20 Products </li>
-                        <li>🛠️ Add up to 10 Services</li>
-                        <li>🖼️ Upload 10 Gallery Images</li>
+                        <li>🛍️ Add up to 30 Products </li>
+                        <li>🛠️ Add up to 30 Services</li>
+                        <li>🖼️ Upload 30 Gallery Images</li>
                         <li>🔄 Unlimited Updates</li>
                         <li>✍ Customer Enquiry Section</li>
                         <li>⭐ Customer Feedback Section</li>
@@ -562,8 +562,14 @@ export default {
             }
         })
 
+        const gotoCompany_details = async() => {
+            localStorage.removeItem('cardId');
+            router.push('/Company_details')
+        }
+
 
         return { 
+            gotoCompany_details,
             rowData, 
             colDefs,
             shareModal, // share model popup
