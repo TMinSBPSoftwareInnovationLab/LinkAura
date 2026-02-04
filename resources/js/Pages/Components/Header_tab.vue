@@ -1,9 +1,18 @@
 <template>
-    <div class="grid">
+    <div class="flex justify-between items-center pr-8 bg-white">
         <div class="p-1 md:p-3 bg-white border border-l-4 border-l-[#000b57] border-t-0 border-r-0 border-b-0">
             <p class="font-bold">Hi, {{ greeting }}</p>
             <p class="font-mono text-[12px] md:text-[14px] lg:text-[16px]">{{ slogan }}</p>
         </div>
+
+        <router-link to="/dashboard">
+            <button
+                class="outline outline-1 bg-gray-800 text-white font-semibold
+                    text-[12px] p-1 px-2
+                    rounded-xl ">
+                Go To Dashboard
+            </button>
+        </router-link>
     </div>
 </template>
 
