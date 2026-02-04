@@ -1275,6 +1275,8 @@
     import defaultPro4 from '@/assets/images/commonImages/default_product_images/pro4.jpg'
     import defaultPro5 from '@/assets/images/commonImages/default_product_images/pro5.png'
     import productImage from '@/assets/images/commonImages/default_product_images/pro5.png'
+    import service1 from '@/assets/images/commonImages/default_service_images/service1.jpg'
+    import service2 from '@/assets/images/commonImages/default_service_images/service2.webp'
     import gPay from '@/assets/images/commonImages/default_qrCode_images/gpay.jpeg'
     import paytm from '@/assets/images/commonImages/default_qrCode_images/paytm.jpeg'
     import { toast } from 'vue3-toastify'
@@ -1993,9 +1995,9 @@
                 galleryData,
                 defaultLogo,
                 pro6,
-                pro7,
-                pro8,
-                pro9,
+                // pro7,
+                // pro8,
+                // pro9,
             }
         }
     }
