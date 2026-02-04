@@ -851,6 +851,7 @@ class MiniWebsiteController extends Controller
             ];
         }
         else{
+            $data['all_step_completed'] = 1;
             $inserted = DB::table('miniweb_payments_details')->insert($data);
         }
         
@@ -930,11 +931,17 @@ class MiniWebsiteController extends Controller
         // -------------------------------
         // Embed LOGO (Watermark)
         // -------------------------------
-        $logoPath = public_path('images/linkAuraLogo300.png');
+        $defaultPath = public_path('images/linkAuraLogo300.png'); // default logo
 
-        if (File::exists($logoPath)) {
+        // get logo 
+        $companyLogo = DB::table("miniweb_company_details")->select("id","logo_path")->where("id", $webID)->first();
 
-            $logo = $manager->read($logoPath);
+        $finalLogoPath = (!empty($companyLogo) && !empty($companyLogo->logo_path))  ? public_path('company_logos/' . $companyLogo->logo_path)  : $defaultPath;
+
+
+        if (File::exists($finalLogoPath)) {
+
+            $logo = $manager->read($finalLogoPath);
 
             // Logo = 20% of QR size
             $logoSize = (int) ($qrImage->width() * 0.20);
@@ -944,7 +951,7 @@ class MiniWebsiteController extends Controller
             // Place logo center
             $qrImage->place($logo, 'center');
         }
-
+        // return $qrImage;
         // -------------------------------
         // Save QR Image
         // -------------------------------
