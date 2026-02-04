@@ -356,8 +356,8 @@
                 <!-- Video content -->
                 <div class="flex flex-col w-full bg-[#f1f1f1]">
                     <!-- Youtube area -->
-                    <div class="flex flex-col w-full p-5 bg-[#DF1968] mb-2 mt-2">
-                        <div v-if="youtube_link1 || youtube_link2" class="flex flex-col gap-4 bg-[#DF1968] mt-2 mb-4 rounded-lg" >
+                    <div class="flex flex-col w-full p-5 bg-[#22bdc9] mb-2 mt-2">
+                        <div v-if="youtube_link1 || youtube_link2" class="flex flex-col gap-4 bg-[#22bdc9] mt-2 mb-4 rounded-lg" >
                             <div class="flex flex-col w-full p-2 bg-gray-50 rounded-2xl">
                                 <iframe
                                     v-if="youtube_link1"
@@ -383,7 +383,7 @@
                     <!-- Youtube area /. -->
 
                     <!-- insta link area -->
-                    <div v-if="instaReals_link1 || instaReals_link2" class="grid grid-cols-1 gap-4 p-5 bg-[#DF1968] mb-2">
+                    <div v-if="instaReals_link1 || instaReals_link2" class="grid grid-cols-1 gap-4 p-5 bg-[#22bdc9] mb-2">
                         <div v-if="instaReals_link1" 
                         class="border-1 border-gray-300 bg-gray-50 flex justify-center items-center rounded-2xl shadow-xl overflow-hidden p-2 pt-5"
                         >

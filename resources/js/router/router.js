@@ -38,7 +38,7 @@ const routes = [
     { path: '/FeedbackVerify', component: FeedbackVerify,meta: { title: 'Feedback Verify | LinkAura' } },
     { path: '/MiniWebEnquiry', component: MiniWeb_enquiry,meta: { title: 'Feedback Verify | LinkAura' } },
 
-    { path: '/Website_Temp_6', component: Website_Temp_6,meta: { title: 'Website6 | LinkAura' } }, // for testing purpose
+    // { path: '/Website_Temp_6', component: Website_Temp_6,meta: { title: 'Website6 | LinkAura' } }, // for testing purpose
     // { path: '/Website_Temp_1', component: Website_Temp_1,meta: { title: 'Website1 | LinkAura' } },
     // { path: '/Website_Temp_2', component: Website_Temp_2,meta: { title: 'Website2 | LinkAura' } },
     // { path: '/:company/Website_Temp_1', component: Website_Temp_1,meta: { title: 'Theme 1 | Digital Card', public: true} },
