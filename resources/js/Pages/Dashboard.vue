@@ -163,7 +163,7 @@
 
                 <!-- purchase button -->
                 <div class="flex flex-col w-full px-5 pt-2 pb-2 justify-center items-center mt-5 mb-10 bg-[#2A7B9B]">
-                    <button @click="basicPlanPurchase"
+                    <button @click="purchasePlan(94, 1, 'Basic Plan')"
                     class="w-[150px] text-gray bg-transparent border-1 border-[#ffffff] text-[#ffffff] py-2 rounded-xl transition hover:bg-[#2A7B9B] hover:text-white" >
                     Buy Now
                     </button>
@@ -238,7 +238,7 @@
 
                 <!-- purchase button -->
                 <div class="flex flex-col w-full px-5 pt-2 pb-2 justify-center items-center mt-5 mb-10 bg-[#066856]">
-                    <button
+                    <button @click="purchasePlan(95, 1, 'Standard Plan')"
                     class="w-[150px] text-gray bg-transparent border-1 border-[#ffffff] text-[#ffffff] py-2 rounded-xl transition hover:bg-[#066856] hover:text-white" >
                     Buy Now
                     </button>
@@ -313,7 +313,7 @@
 
                 <!-- purchase button -->
                 <div class="flex flex-col w-full px-5 pt-2 pb-2 justify-center items-center mt-5 mb-10 bg-[#6c075b]">
-                    <button
+                    <button @click="purchasePlan(96, 1, 'Premium Plan')"
                     class="w-[150px] text-gray bg-transparent border-1 border-[#ffffff] text-[#ffffff] py-2 rounded-xl transition hover:bg-[#6c075b] hover:text-white" >
                     Buy Now
                     </button>
@@ -504,31 +504,136 @@ export default {
             console.log("selectedRow.value : ",selectedRow.value)
         };
 
-        const basicPlanPurchase = async() => {
-            console.log("websiteRowID : ",websiteRowID.value)
-            // confirmed
+        async function loadRazorpayScript() { // Load Razorpay script dynamically
+            return new Promise((resolve, reject) => {
+                if (document.querySelector('script[src="https://checkout.razorpay.com/v1/checkout.js"]')) {
+                return resolve(true);
+                }
+                const script = document.createElement('script');
+                script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+                script.onload = () => resolve(true);
+                script.onerror = () => reject(false);
+                document.body.appendChild(script);
+            });
+        }
+
+        const purchasePlan = async (planId, amount, planName) => {
+
             const confirmed = await Swal.fire({
                 title: "Confirm",
-                text: "Are You Sure Want To Purchase Basic Plan?",
+                text: `Are you sure want to purchase ${planName}?`,
                 icon: "question",
                 showCancelButton: true,
                 confirmButtonText: "OK",
                 cancelButtonText: "Cancel",
             });
+
             if (!confirmed.isConfirmed) return;
 
             try {
-                // create order ID for razorpay
+                // Create order
                 const resData = await axios.post('/createRazorpayOrder', {
                     id: websiteRowID.value,
-                    txnAmt: 1,
-                    planName: 'Basic Plan'
+                    plan_id: planId,
+                    txnAmt: amount,
+                    planName: planName
                 });
-                
+
+                if (!resData.data.status) {
+                    return Swal.fire('Warning', resData.data.message, 'warning');
+                }
+
+                const { order, key } = resData.data;
+
+                await loadRazorpayScript();
+
+                const options = {
+                    key,
+                    amount: order.amount,
+                    currency: 'INR',
+                    description: `Plan Name: ${planName}`,
+                    order_id: order.id,
+
+                    /* SUCCESS */
+                    handler: async function (response) {
+                        try {
+                            const payload = {
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_signature: response.razorpay_signature,
+                                id: websiteRowID.value,
+                                plan_id: planId,
+                                txn_amt: amount,
+                                plan_name: planName
+                            };
+
+                            const { data } = await axios.post('/verifyPayment', payload);
+
+                            Swal.fire(
+                                data.status ? 'Success' : 'Error',
+                                data.message,
+                                data.status ? 'success' : 'error'
+                            );
+
+                        } catch {
+                            Swal.fire('Error', 'Verification failed', 'error');
+                        }
+                    },
+
+                    /* POPUP CLOSED (X / ESC only) */
+                    modal: {
+                        escape: true,
+                        backdropclose: true,
+                        ondismiss: function () {
+                            axios.post('/paymentFailureTracking', {
+                                website_id: websiteRowID.value,
+                                plan_id: planId,
+                                plan_name: planName,
+                                txn_amt: amount,
+                                reason: 'Transaction cancelled by user'
+                            });
+
+                            Swal.fire(
+                                'Cancelled',
+                                'Transaction cancelled by user',
+                                'warning'
+                            );
+                        }
+                    },
+
+                    prefill: {
+                        email: "",
+                        contact: ""
+                    },
+
+                    theme: { color: '#3d023a' }
+                };
+
+                const rzp = new window.Razorpay(options);
+
+                /* REAL PAYMENT FAILURE */
+                rzp.on('payment.failed', function (response) {
+                    axios.post('/paymentFailureTracking', {
+                        website_id: websiteRowID.value,
+                        plan_id: planId,
+                        plan_name: planName,
+                        txn_amt: amount,
+                        reason: response.error.description || 'Payment failed'
+                    });
+
+                    Swal.fire(
+                        'Payment Failed',
+                        response.error.description || 'Something went wrong',
+                        'error'
+                    );
+                });
+
+                rzp.open();
+
             } catch (error) {
-                toast.error("Something went wrong: " + error);
+                Swal.fire('Error', 'Something went wrong', 'error');
             }
-        }
+        };
         
 
 
@@ -582,7 +687,7 @@ export default {
             encodedUrl,
             paymentModel, // payment popup model
             websiteRowID,
-            basicPlanPurchase,
+            purchasePlan,
         };
     }
 };

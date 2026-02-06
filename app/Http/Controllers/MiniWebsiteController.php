@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Razorpay\Api\Api;
+use Exception;
 
 class MiniWebsiteController extends Controller
 {
@@ -1249,11 +1251,12 @@ class MiniWebsiteController extends Controller
         // return $request;
         $request->validate([
             'id' => 'required',
+            'plan_id' => 'required|numeric',
             'txnAmt' => 'required|numeric',
             'planName' => 'required|string'
         ]);
 
-        $amount = $request->txn_amt;
+        $amount = $request->txnAmt;
         $amountPaise = $amount * 100;
         $receipt = 'rcpt_'.$request->id.'_'.uniqid();
 
@@ -1287,5 +1290,97 @@ class MiniWebsiteController extends Controller
                 'message' => 'Could not create order: '.$e->getMessage()
             ], 500);
         }
+    }
+
+    // verify Payment
+    public function verifyPayment(Request $request){
+        $data = $request->only(
+            'razorpay_payment_id',
+            'razorpay_order_id',
+            'razorpay_signature',
+            'id', // website row id
+            'plan_id',
+            'plan_name',
+            'txn_amt'
+        );
+
+        $razorpay_payment_id = $data['razorpay_payment_id'] ?? null;
+        $razorpay_order_id = $data['razorpay_order_id'] ?? null;
+        $razorpay_signature = $data['razorpay_signature'] ?? null;
+
+        if (!$razorpay_order_id || !$razorpay_payment_id || !$razorpay_signature) {
+            return response()->json(['status' => false, 'message' => 'Payment details missing'], 400);
+        }
+
+        $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+
+        try {
+            $attributes = [
+                'razorpay_order_id' => $razorpay_order_id,
+                'razorpay_payment_id' => $razorpay_payment_id,
+                'razorpay_signature' => $razorpay_signature
+            ];
+
+            $api->utility->verifyPaymentSignature($attributes); // Verify signature
+
+            $currentDate = Carbon::now('Asia/Kolkata');
+
+            // Insert payment
+            $insertData = [
+                "mini_website_id" => $data['id'],
+                "plan_id" => $data['plan_id'],
+                "plan_name" => $data['plan_name'],
+                "txn_amt" => $data['txn_amt'],
+                "txn_status" => "TXN_SUCCESS",
+                'transaction_id' => $razorpay_payment_id,
+                "txn_date" => $currentDate->toDateTimeString(),
+                "created_at" => $currentDate->toDateTimeString(),
+                "plan_expiry_status" => 0
+            ];
+
+            DB::table("miniweb_plan_purchase")->insertOrIgnore($insertData);
+            // get last insert id
+            $insertedId = DB::table("miniweb_plan_purchase")
+                ->where(['mini_website_id' => $data['id'], 'plan_id' => $data['plan_id']])
+                ->latest('id')
+                ->value("id");
+
+            // update mini website
+            DB::table('miniweb_company_details')->where('id', $data['id'])->update([
+                "purchased_id" => $insertedId,
+                'is_live' => 1,
+                'transaction_id' => $razorpay_payment_id,
+                'plan_id' => $data['plan_id'],
+                'plan_name' => $data['plan_name'],
+                'txn_amt' => $data['txn_amt'],
+                "live_date" => $currentDate->toDateTimeString() // miniwebsite live data
+            ]);
+            return response()->json([
+                'status' => true, 
+                'message' => "You have successfully purchased the {$data['plan_name']} plan, and your miniwebsite is live now!"
+            ]);
+
+        }
+        catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => 'Signature verification failed: '.$e->getMessage()], 400);
+        }
+    }
+
+    // payment failure tracking
+    public function paymentFailureTracking(Request $request)
+    {
+        $ins = [
+            'mini_website_id' => $request->website_id, 
+            'plan_id' => $request->plan_id, 
+            'plan_name' => $request->plan_name,
+            'txn_amt' => $request->txn_amt, 
+            'reason' => $request->reason, 
+            'status' => "TXN_FAILURE",
+            'created_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+        ];
+        
+        DB::table('payment_failure_tracking')->insert($ins);
+
+        return response()->json(['status' => true, 'message' => 'Payment Failure']);
     }
 }
