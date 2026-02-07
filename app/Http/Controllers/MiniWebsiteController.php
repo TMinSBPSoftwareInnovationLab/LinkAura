@@ -6,12 +6,15 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Razorpay\Api\Api;
-use Exception;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Config;
 
 class MiniWebsiteController extends Controller
 {
@@ -1325,6 +1328,84 @@ class MiniWebsiteController extends Controller
 
             $currentDate = Carbon::now('Asia/Kolkata');
 
+            // billing pdf update
+            // Dynamic Financial Year Calculation
+            $month = $currentDate->month;
+            $year = $currentDate->year;
+            $finYear = ($month < 4) ? ($year - 1) . "-" . substr($year, -2) : $year . "-" . substr($year + 1, -2);
+
+            // Generate Unique Invoice Number ex: INV/2025-26/0001
+            $lastId = DB::table("miniweb_plan_purchase")->latest('id')->value('id') ?? 0;
+            $invoiceNo = "INV/" . $finYear . "/" . (0000 + $lastId + 1);
+
+            // Plan Description Mapping
+            $descriptions = [
+                94 => "Basic Plan - Entry level features for mini website",
+                95 => "Standard Plan - Advanced features with better reach",
+                96 => "Premium Plan - Full suite of features & priority support"
+            ];
+            $planDesc = $descriptions[$data['plan_id']] ?? "Subscription Plan";
+
+            // get user company name
+            $userCompanyDetails = DB::table("miniweb_company_details")
+            ->select("company_name","owner_name")
+                ->where(['id' => $data['id']])
+                ->first();
+            
+            
+                // get user address
+            $userAddress = DB::table("miniweb_contact")
+                ->where(['mini_website_id' => $data['id']])
+                ->latest('id')
+                ->value("address");
+
+            // Data for PDF
+            $pdfData = [
+                'logo' => public_path('images/linkAuraLogo300.png'),
+                'invoice_no' => $invoiceNo,
+                'date' => $currentDate->format('d-m-Y'),
+                'plan_name' => $data['plan_name'],
+                'description' => $planDesc,
+                'amount' => $data['txn_amt'],
+                'from_address' => "LinkAura,\nNo 288, Royalone Medical Centre Near, Anangur Corner,\nB.Komarapalayam(TK), Namakkal(DT),\nTamil Nadu - 600001",
+                'to_address' => $userCompanyDetails->company_name."\n". $userAddress,
+            ];
+
+            // Generate PDF
+            $pdf = Pdf::loadView('emails.invoice', $pdfData);
+            $fileName = 'invoice_' . time() . '.pdf';
+            $filePath = 'invoices/' . $fileName;
+
+            // Save to Storage (Public disk) Storage::disk('public')->put($filePath, $pdf->output());
+
+            // Dynamic S3 Bucket Switch & Upload  Inga namma billing bucket-a select panrom
+            Config::set('filesystems.disks.s3.bucket', env('AWS_BUCKET_BILLING'));
+            
+            // File-a S3-kku anuprom
+            $result = Storage::disk('s3')->put(
+                $filePath,
+                $pdf->output(),
+                [
+                    'visibility' => 'public',
+                    'ContentType' => 'application/pdf'
+                ]
+            );
+
+            dd(
+                Storage::disk('s3')->put(
+                    'invoices/test.pdf',
+                    'hello world',
+                    ['visibility' => 'public']
+                )
+            );
+            exit;
+
+
+            
+            // Upload aanathum full URL-a edukrom
+            $s3Url = Storage::disk('s3')->url($filePath);
+            // echo $s3Url;die();
+
             // Insert payment
             $insertData = [
                 "mini_website_id" => $data['id'],
@@ -1335,7 +1416,8 @@ class MiniWebsiteController extends Controller
                 'transaction_id' => $razorpay_payment_id,
                 "txn_date" => $currentDate->toDateTimeString(),
                 "created_at" => $currentDate->toDateTimeString(),
-                "plan_expiry_status" => 0
+                "plan_expiry_status" => 0,
+                "billing_pdf" => $s3Url
             ];
 
             DB::table("miniweb_plan_purchase")->insertOrIgnore($insertData);
@@ -1357,7 +1439,8 @@ class MiniWebsiteController extends Controller
             ]);
             return response()->json([
                 'status' => true, 
-                'message' => "You have successfully purchased the {$data['plan_name']} plan, and your miniwebsite is live now!"
+                'message' => "You have successfully purchased the {$data['plan_name']} plan, and your miniwebsite is live now!",
+                'pdf_url' => $s3Url
             ]);
 
         }
@@ -1367,8 +1450,7 @@ class MiniWebsiteController extends Controller
     }
 
     // payment failure tracking
-    public function paymentFailureTracking(Request $request)
-    {
+    public function paymentFailureTracking(Request $request){
         $ins = [
             'mini_website_id' => $request->website_id, 
             'plan_id' => $request->plan_id, 
