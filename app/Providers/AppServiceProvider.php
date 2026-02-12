@@ -18,8 +18,15 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
+    // public function boot(): void 12-02-2025
+    // {
+    //     Vite::prefetch(concurrency: 3);
+    // }
+
     public function boot(): void
     {
-        Vite::prefetch(concurrency: 3);
+        if (app()->environment('production')) {
+            URL::forceScheme('https');
+        }
     }
 }
