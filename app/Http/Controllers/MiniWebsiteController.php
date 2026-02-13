@@ -1382,7 +1382,7 @@ class MiniWebsiteController extends Controller
             Config::set('filesystems.disks.s3.bucket', env('AWS_BUCKET_BILLING'));
             
             // File-a S3-kku anuprom
-            $result = Storage::disk('s3')->put(
+            $result = Storage::disk('s3_billing')->put(
                 $filePath,
                 $pdf->output(),
                 [
@@ -1391,14 +1391,14 @@ class MiniWebsiteController extends Controller
                 ]
             );
 
-            dd(
-                Storage::disk('s3')->put(
-                    'invoices/test.pdf',
-                    'hello world',
-                    ['visibility' => 'public']
-                )
-            );
-            exit;
+            // dd(
+            //     Storage::disk('s3_billing')->put(
+            //         'invoices/test.pdf',
+            //         'hello world',
+            //         ['visibility' => 'public']
+            //     )
+            // );
+            // exit;
 
 
             

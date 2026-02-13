@@ -150,6 +150,8 @@
             const mini_web_id = ref('')
             const user_id = ref('')
             const cardStore = useCardStore() // store card id
+            cardStore.$reset()
+
             const isSubmitting = ref(false);
 
             const schema = yup.object({
@@ -283,6 +285,10 @@
             // const designation = ref('')
 
             const getCurrentData = async() => {
+                if (!cardStore.cardId) {
+                    console.log("No cardId found, starting fresh.");
+                    return;
+                }
                 const res = await axios.post('/getWebsiteDetails', {'table': 'miniweb_company_details', 'cardId' : Number(cardStore.cardId)})
                 console.log("res.data")
                 if(res.data.status==true){
