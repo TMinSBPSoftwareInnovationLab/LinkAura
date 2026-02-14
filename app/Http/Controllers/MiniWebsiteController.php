@@ -1367,7 +1367,7 @@ class MiniWebsiteController extends Controller
                 'plan_name' => $data['plan_name'],
                 'description' => $planDesc,
                 'amount' => $data['txn_amt'],
-                'from_address' => "LinkAura,\nNo 288, Royalone Medical Centre Near, Anangur Corner,\nB.Komarapalayam(TK), Namakkal(DT),\nTamil Nadu - 600001",
+                'from_address' => "TMinSBP Software innovation Lab \n A Product of LinkAura,\nNo 288, Royalone Medical Centre Near, Anangur Corner,\nB.Komarapalayam(TK), Namakkal(DT),\nTamil Nadu - 600001",
                 'to_address' => $userCompanyDetails->company_name."\n". $userAddress,
             ];
 
@@ -1392,7 +1392,7 @@ class MiniWebsiteController extends Controller
             );
 
             // dd(
-            //     Storage::disk('s3_billing')->put(
+            //     Storage::disk('s3')->put(
             //         'invoices/test.pdf',
             //         'hello world',
             //         ['visibility' => 'public']

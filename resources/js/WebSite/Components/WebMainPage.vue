@@ -13,7 +13,7 @@
                 </div>
                 <div class="flex flex-col md:flex-col">
                     <p class="p-5 pt-0 pb-0 text-gray-4500">
-                        Packages start at just ₹500.
+                        Packages start at just ₹999.
                     </p>
                 </div>
                 <div class="flex flex-col md:flex-col p-5">
@@ -72,13 +72,11 @@
                             <ShareIcon class="size-5 text-[#780e7a]" /> One smart shareable link
                         </li>
                     </ul>
-
-                    <button
-                        class="mt-8 w-fit bg-[#dc143c] text-white px-8 py-3
-                            rounded-xl shadow-lg hover:bg-[#780e7a] transition"
-                    >
-                        Create Mini Website
-                    </button>
+                    <router-link to="/login" target="_blank">
+                        <button class="mt-8 w-fit bg-[#dc143c] text-white px-8 py-3 rounded-xl shadow-lg hover:bg-[#780e7a]  transition" >
+                            Create Mini Website
+                        </button>
+                    </router-link>
                 </div>
                 <!-- LEFT /. -->
 
@@ -311,7 +309,8 @@
                     <!-- Price bar -->
                     <div class="w-14 bg-red-600 flex items-center justify-center rounded-l-xl">
                         <span class="text-white text-sm font-semibold rotate-[-90deg] whitespace-nowrap">
-                        &#8377; 500 / 3 Months
+                        <!-- ₹1,239 <br> (₹1,050 + ₹189 GST) / 3 Months -->
+                         ₹999 / 3 Months
                         </span>
                     </div>
 
@@ -321,9 +320,9 @@
                         </div>
                         <div class="flex flex-col w-full px-2 pt-0">
                             <ul class="text-[15px] font-semibold leading-loose">
-                                <li>🛍️ Add up to 20 Products </li>
-                                <li>🛠️ Add up to 10 Services</li>
-                                <li>🖼️ Upload 10 Gallery Images</li>
+                                <li>🛍️ Add up to 5 Products </li>
+                                <li>🛠️ Add up to 5 Services</li>
+                                <li>🖼️ Upload 5 Gallery Images</li>
                                 <li>🔄 Unlimited Updates</li>
                                 <li>✍ Customer Enquiry Section</li>
                                 <li>⭐ Customer Feedback Section</li>
@@ -342,7 +341,8 @@
                                         <li>Direct Email Contact</li>
                                     </ul>
                                 </li>
-                                
+                                <li>🔓 Access: Dashboard active for 30 days post-expiry</li>
+                                <li>📩 Enquiries: Leads collected & saved; renew to unlock</li>
                             </ul>
                         </div>
                         <div class="flex flex-col text-center p-5">
@@ -360,7 +360,8 @@
                         <!-- Price bar -->
                         <div class="w-14 bg-[#681c6a] flex items-center justify-center rounded-l-xl">
                             <span class="text-white text-sm font-semibold rotate-[-90deg] whitespace-nowrap">
-                            &#8377; 1000 / 6 Months
+                            <!-- ₹2,124 <br>(₹1,800 + ₹324 GST) / 6 Months -->
+                             ₹1499 / 6 Months
                             </span>
                         </div>
 
@@ -370,9 +371,9 @@
                             </div>
                             <div class="flex flex-col w-full px-2 pt-0">
                                 <ul class="text-[15px] font-semibold leading-loose">
-                                    <li>🛍️ Add up to 20 Products </li>
-                                    <li>🛠️ Add up to 10 Services</li>
-                                    <li>🖼️ Upload 10 Gallery Images</li>
+                                    <li>🛍️ Add up to 15 Products </li>
+                                    <li>🛠️ Add up to 15 Services</li>
+                                    <li>🖼️ Upload 15 Gallery Images</li>
                                     <li>🔄 Unlimited Updates</li>
                                     <li>✍ Customer Enquiry Section</li>
                                     <li>⭐ Customer Feedback Section</li>
@@ -391,7 +392,8 @@
                                             <li>Direct Email Contact</li>
                                         </ul>
                                     </li>
-                                    
+                                    <li>🔓 Access: Dashboard active for 60 days post-expiry</li>
+                                    <li>📩 Enquiries: Leads collected & saved; renew to unlock</li>
                                 </ul>
                             </div>
                             <div class="flex flex-col text-center p-5">
@@ -409,7 +411,8 @@
                         <!-- Price bar -->
                         <div class="w-14 bg-green-600 flex items-center justify-center rounded-l-xl">
                             <span class="text-white text-sm font-semibold rotate-[-90deg] whitespace-nowrap">
-                            &#8377; 1500 / 12 Months
+                            <!-- ₹3,540 <br>(₹3,000 + ₹540 GST) / 12 Months -->
+                             ₹2,999 / 12 Months
                             </span>
                         </div>
 
@@ -419,9 +422,9 @@
                             </div>
                             <div class="flex flex-col w-full px-2 pt-0">
                                 <ul class="text-[15px] font-semibold leading-loose">
-                                    <li>🛍️ Add up to 20 Products </li>
-                                    <li>🛠️ Add up to 10 Services</li>
-                                    <li>🖼️ Upload 10 Gallery Images</li>
+                                    <li>🛍️ Add up to 30 Products </li>
+                                    <li>🛠️ Add up to 30 Services</li>
+                                    <li>🖼️ Upload 30 Gallery Images</li>
                                     <li>🔄 Unlimited Updates</li>
                                     <li>✍ Customer Enquiry Section</li>
                                     <li>⭐ Customer Feedback Section</li>
@@ -440,7 +443,8 @@
                                             <li>Direct Email Contact</li>
                                         </ul>
                                     </li>
-                                    
+                                    <li>🔓 Access: Dashboard active for 90 days post-expiry</li>
+                                    <li>📩 Enquiries: Leads collected & saved; renew to unlock</li>
                                 </ul>
                             </div>
                             <div class="flex flex-col text-center p-5">
