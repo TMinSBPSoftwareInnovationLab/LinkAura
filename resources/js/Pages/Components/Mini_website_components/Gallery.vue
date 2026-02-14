@@ -136,9 +136,9 @@
 
                 const data = res.data.getData;
 
-                // If no galleries → load default 20 empty rows
+                // If no galleries → load default 30 empty rows
                 if (!data || data.length === 0) {
-                    galleries.value = Array.from({ length: 10 }, () => ({
+                    galleries.value = Array.from({ length: 30 }, () => ({
                         preview: null,
                         file: null,
                     }));

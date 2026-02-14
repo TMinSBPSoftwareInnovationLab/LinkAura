@@ -141,9 +141,9 @@
 
                 const data = res.data.getData;
 
-                // If no service → load default 20 empty rows
+                // If no service → load default 30 empty rows
                 if (!data || data.length === 0) {
-                    services.value = Array.from({ length: 10 }, () => ({
+                    services.value = Array.from({ length: 30 }, () => ({
                         preview: null,
                         file: null,
                         service_name: "",

@@ -189,9 +189,9 @@
 
                 const data = res.data.getData;
 
-                // If no products → load default 20 empty rows
+                // If no products → load default 30 empty rows
                 if (!data || data.length === 0) {
-                    products.value = Array.from({ length: 20 }, () => ({
+                    products.value = Array.from({ length: 30 }, () => ({
                         preview: null,
                         file: null,
                         name: '',
