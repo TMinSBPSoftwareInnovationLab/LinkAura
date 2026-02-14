@@ -269,6 +269,7 @@
                 <!-- header  area /. -->
 
                 <!-- product areas -->
+                <span v-if="products.length > 0">
                 <div class="grid grid-cols-2 gap-2 mt-5 pt-5 pb-5 px-2 ">
                     <div 
                         v-for="(item, index) in products" 
@@ -325,6 +326,12 @@
                         </div>
                     </div>
                 </div>
+                </span>
+                <span v-else class="bg-white shadow-2xl">
+                    <p class="p-5 font-semibold text-[#e52228]">
+                        Current products are out of stock. We will update them shortly.
+                    </p>
+                </span>
                 <!-- product areas /. -->
                 
                 <!-- footer -->
@@ -352,6 +359,7 @@
 
                 <!-- service content -->
                 <div class="flex flex-col w-full">
+                    <span v-if="serviceData.length > 0">
                     <div class="grid grid-cols-2 gap-2">
                         <div 
                             v-for="(item, index) in serviceData" 
@@ -375,6 +383,12 @@
                             </div>
                         </div>
                     </div>
+                    </span>
+                    <span v-else class="bg-white shadow-2xl">
+                        <p class="p-5 font-semibold text-[#e52228]">
+                            Currently, our services are being updated. We'll be back shortly!
+                        </p>
+                    </span>
                 </div>
                 <!-- service content /. -->
 
@@ -1374,6 +1388,9 @@
                             }));
 
                     } 
+                    else {
+                        products.value = [];
+                    }
 
                 } catch (error) {
                     console.error("Load products error:", error);

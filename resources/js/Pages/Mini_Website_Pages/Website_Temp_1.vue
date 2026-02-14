@@ -229,6 +229,7 @@
                 <!-- header name /. -->
 
                 <!-- product areas -->
+                <span v-if="products.length > 0">
                 <div class="grid grid-cols-2 gap-2 mt-5 px-2">
                     <div 
                         v-for="(item, index) in products" 
@@ -285,6 +286,12 @@
                         </div>
                     </div>
                 </div>
+                </span>
+                <span v-else>
+                    <p class="p-5 font-semibold text-[#6b3f69]">
+                        Current products are out of stock. We will update them shortly.
+                    </p>
+                </span>
                 <!-- product areas /. -->
 
                 <!-- footer designing Corner -->
@@ -313,7 +320,7 @@
                     </div>
                 </div>
                 <!-- header name /. -->
-
+                <span v-if="serviceData.length > 0">
                 <div class="flex flex-col w-full mt-2">
                     <!-- service area -->
                     <div class="grid grid-cols-2 gap-2">
@@ -342,6 +349,12 @@
                     </div>
                     <!-- service area /. -->
                 </div>
+                </span>
+                <span v-else>
+                    <p class="p-5 font-semibold text-[#6b3f69]">
+                        Currently, our services are being updated. We'll be back shortly!
+                    </p>
+                </span>
                 </div>
             <!-- heade rebbon /. -->
                 <!-- footer designing Corner -->
@@ -490,7 +503,7 @@
                 <div v-if="paymentQrs.length" class="flex flex-col w-full bg-white">
 
                     <!-- qr section -->
-                    <div class="grid grid-cols-2 md:grid-cols-2 gap-4 px-3 py-5">
+                    <div class="grid grid-cols-1 md:grid-cols-1 gap-4 px-3 py-5">
 
                         <div
                             v-for="(item, index) in paymentQrs"
@@ -517,7 +530,7 @@
                 <div v-else class="text-center text-gray-500 py-10">
                     <div class="flex flex-col w-full bg-white">
                         <!-- qr section -->
-                        <div class="grid grid-cols-2 gap-4 items-center justify-center text-center px-3 py-5">
+                        <div class="grid grid-cols-1 gap-4 items-center justify-center text-center px-3 py-5">
                             <!-- cols1 -->
                             <div class="flex flex-col w-full h-[250px] border-1 border-[#414143] shadow-2xl rounded-xl">
                                 <img :src="gPay" alt="gpay number" class="w-full h-full object-contain" @click="openImage(gPay)">
@@ -1346,6 +1359,9 @@
                             }));
 
                     } 
+                    else {
+                        products.value = [];
+                    }
 
                 } catch (error) {
                     console.error("Load products error:", error);

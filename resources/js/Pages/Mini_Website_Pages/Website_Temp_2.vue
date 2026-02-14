@@ -273,7 +273,8 @@
                 <!-- product areas -->
                 <div class="flex flex-col w-full bg-white p-2">
                     <!-- main grid -->
-                    <div class="grid grid-cols-2 px-2 gap-2 p-2 mb-5">
+                    <span v-if="products.length > 0">
+                    <div class="grid grid-cols-2 px-2 gap-2 p-2 mb-5">                        
                         <div 
                             v-for="(item, index) in products" 
                             :key="index"
@@ -305,6 +306,12 @@
                             </div>
                         </div>
                     </div>
+                    </span>
+                    <span v-else>
+                        <p class="p-5 font-semibold bg-gradient-to-br from-[#2A7B9B] via-[#57C785] to-[#52b84a] bg-clip-text text-transparent">
+                            Current products are out of stock. We will update them shortly.
+                        </p>
+                    </span>
                     <!-- main grid -->
                 </div>
                 <!-- product areas /. -->
@@ -344,6 +351,7 @@
                 <!-- service areas -->
                 <div class="flex flex-col w-full bg-white">
                     <!-- main grid -->
+                    <span v-if="serviceData.length > 0">
                     <div class="grid grid-cols-2 px-2 gap-2 p-2 mb-5">
                         <div 
                             v-for="(item, index) in serviceData" 
@@ -377,6 +385,12 @@
                             </div>
                         </div>
                     </div>
+                    </span>
+                    <span v-else>
+                        <p class="p-5 font-semibold bg-gradient-to-br from-[#2A7B9B] via-[#57C785] to-[#52b84a] bg-clip-text text-transparent">
+                            Currently, our services are being updated. We'll be back shortly!
+                        </p>
+                    </span>
                     <!-- main grid -->
                 </div>
                 <!-- service areas /. -->
@@ -618,10 +632,10 @@
                 </div>
 
                 <!-- default -->
-                <div v-else class="text-center text-gray-500 py-10">
+                <div v-else class="text-center text-gray-500 py-0">
                     <div class="flex flex-col w-full bg-white">
                         <!-- qr section -->
-                        <div class="grid grid-cols-2 gap-4 items-center justify-center text-center px-3 py-5">
+                        <div class="grid grid-cols-1 gap-4 items-center justify-center text-center px-3 py-5">
                             <!-- cols1 -->
                             <div class="flex flex-col w-full h-[250px] border-1 border-[#414143] shadow-2xl rounded-xl">
                                 <img :src="gPay" alt="gpay number" class="w-full h-full object-contain" @click="openImage(gPay)">
@@ -1469,7 +1483,10 @@
                                 final_price: Number(item.final_price),
                             }));
 
-                    } 
+                    }
+                    else {
+                        products.value = [];
+                    }
 
                 } catch (error) {
                     console.error("Load products error:", error);
