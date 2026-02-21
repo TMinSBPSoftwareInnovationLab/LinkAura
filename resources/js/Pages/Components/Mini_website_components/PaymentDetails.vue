@@ -16,9 +16,9 @@
                     <router-link to="/Gallery">
                         <button
                             class="outline outline-1 outline-pink-500 text-pink-500 font-semibold
-                                py-1.5 px-3 text-sm 
+                                py-1.5 px-3 text-sm
                                 md:py-2 md:px-4 md:text-base
-                                rounded-xl transition-all duration-500 
+                                rounded-xl transition-all duration-500
                                 hover:-translate-y-2 hover:shadow-xl">
                             Gallery
                         </button>
@@ -28,10 +28,10 @@
                     <button
                         @click="saveAndNext"
                         :disabled="isSubmitting"
-                        class="bg-[#000b57] text-white 
-                            py-1.5 px-3 text-sm 
+                        class="bg-[#000b57] text-white
+                            py-1.5 px-3 text-sm
                             md:py-2 md:px-4 md:text-base
-                            rounded-xl transition-all duration-500 
+                            rounded-xl transition-all duration-500
                             hover:-translate-y-2 hover:shadow-xl">
                         {{ isSubmitting ? "Saving..." : "Save & Preview" }}
                     </button>
@@ -56,7 +56,7 @@
                     <!-- center -->
                     <div class="bg-white p-5 w-full border border-1 border-gray-300 rounded-2xl shadow-2xl pt-5">
                         <!-- form area  -->
-                        <form @submit.prevent="onSubmit" class="space-y-4 w-full">                            
+                        <form @submit.prevent="onSubmit" class="space-y-4 w-full">
                             <!-- GPay -->
                             <div>
                                 <label class="font-semibold text-gray-700">GPay Number</label>
@@ -155,10 +155,10 @@
                                     type="button"
                                     @click="saveAndNext"
                                     :disabled="isSubmitting"
-                                    class="bg-[#000b57] text-white 
-                                        py-1.5 px-3 text-sm 
+                                    class="bg-[#000b57] text-white
+                                        py-1.5 px-3 text-sm
                                         md:py-2 md:px-4 md:text-base
-                                        rounded-xl transition-all duration-500 
+                                        rounded-xl transition-all duration-500
                                         hover:-translate-y-2 hover:shadow-xl">
                                     {{ isSubmitting ? "Saving..." : "Save & Preview" }}
                                 </button>
@@ -190,7 +190,8 @@
     import { toast } from 'vue3-toastify'
     import axios from 'axios';
     import QRCode from "qrcode"
-    
+    const s3PaymentUrl = import.meta.env.VITE_AWS_URL_PAYMENT_DETAILS;
+
     export default {
         name: "PaymentDetails",
         components: { SideNavBar, Header_tab },
@@ -204,7 +205,7 @@
             const cardID = ref('')
             const rowid = ref('')
             const currData = ref({})
-            userID.value = JSON.parse(localStorage.getItem('user')).id 
+            userID.value = JSON.parse(localStorage.getItem('user')).id
             cardID.value = JSON.parse(localStorage.getItem('cardId'))
 
             const gPay = ref()
@@ -251,7 +252,7 @@
                 currData.value = data
 
                 const numOrEmpty = v => v && v != 0 ? v : ''
-                const qrPath = v => v ? `/payment_Details_QrCode/${v}` : ''
+                const qrPath = v => v ? `${s3PaymentUrl}/payment_Details_QrCode/${v}` : ''
 
                 gPay.value     = numOrEmpty(data.gpay_number)
                 phonePe.value  = numOrEmpty(data.phonepe_number)
@@ -316,11 +317,11 @@
                         const encrypt_website_id = btoa(website_id)
                         // console.log(encrypt_website_id)
                         const websitefinalUrl = `/${safecompanyName}/Website_Temp_${encrypt_website_id}`
-                        const baseURL = window.location.origin; 
+                        const baseURL = window.location.origin;
                         const qrBase = await QRCode.toDataURL(`${baseURL}${websitefinalUrl}?ilp88LAsBvm=${encoded}`, { width: 300 })
                         qrCodeUrl.value = qrBase
                         console.log(qrBase)
-                        
+
                         try {
                             const qr_res = await axios.post('/qrCodeGenerate', {
                                 cd_ID: cd_ID, website_id: website_id, websiteTemp_id: websiteTemp_id, qrBase: qrBase
@@ -331,7 +332,7 @@
                         } catch (error) {
                             toast.warning("Qrcode error: "+ error)
                         }
-                        
+
                     }
 
                 } catch (error) {
@@ -355,6 +356,7 @@
                 form,
                 preview,
                 onImageSelected,
+                s3PaymentUrl
             }
         }
     }
