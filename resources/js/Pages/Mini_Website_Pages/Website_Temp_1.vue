@@ -1198,7 +1198,15 @@
             const cd_id   = Number(params.get('cd_id') || 0)
             const templateId  = Number(params.get('template_id') || 0)
             const purchaseID  = Number(params.get('purchased_id') || 0)
-            const is_purchased = ref("")            
+            const is_purchased = ref("")
+
+            // implement .env
+            const s3ProductsUrl = import.meta.env.VITE_AWS_URL_PRODUCT_IMAGES;
+            const s3ServiceUrl = import.meta.env.VITE_AWS_URL_SERVICE_IMAGES;
+            const s3GalleryUrl = import.meta.env.VITE_AWS_URL_GALLERY;
+            const s3PaymenyUrl = import.meta.env.VITE_AWS_URL_PAYMENT_DETAILS;
+            const s3QrCodeUrl = import.meta.env.VITE_AWS_URL_QRCODE;
+            const s3LogoUrl = import.meta.env.VITE_AWS_URL_LOGO;
 
             // ---------------- Company Details ----------------
             const companyData = ref({})
@@ -1216,7 +1224,7 @@
                 companyName.value = data.company_name || '';
                 ownerName.value = data.owner_name || '';
                 designation.value = data.designation || '';
-                logoImage.value = data.logo_path ? `/company_logos/${data.logo_path}` : '';
+                logoImage.value = data.logo_path ? `${s3LogoUrl}/company_logos/${data.logo_path}` : '';
                 is_purchased.value = data.purchased_id
 
                 // Guard check
@@ -1335,39 +1343,6 @@
                 }
             ]);
 
-            const loadProducts = async () => {
-                try {
-                    const res = await axios.post("/collectAllWebsiteDatas", {
-                        table_name: "miniweb_products",
-                        cd_id: cd_id
-                    });
-
-                    const data = res?.data?.getData;
-                    // IF DB DATA EXISTS → REPLACE DEFAULT
-                    if (Array.isArray(data) && data.length > 0) {
-
-                        products.value = data
-                            .filter(item => item.product_name && item.final_price > 0)
-                            .map(item => ({
-                                product_name: item.product_name,
-                                product_img: item.product_img
-                                    ? `/product_images/${item.product_img}`
-                                    : pro6,
-                                orginal_price: Number(item.orginal_price),
-                                discount_price: Number(item.discount_price),
-                                final_price: Number(item.final_price),
-                            }));
-
-                    } 
-                    else {
-                        products.value = [];
-                    }
-
-                } catch (error) {
-                    console.error("Load products error:", error);
-                }
-            };
-
             // ---------------- Service ----------------
             const serviceData = ref([
                 {
@@ -1381,31 +1356,6 @@
                     service_img: service2
                 },
             ]);
-
-
-            const loadService = async () => {
-                try {
-                    const res = await axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_services", cd_id: cd_id });
-
-                    const data = res?.data?.getData;
-                    // IF DB DATA EXISTS → REPLACE DEFAULT
-                    if (Array.isArray(data) && data.length > 0) {
-
-                        serviceData.value = data
-                            .filter(item => item.service_name && item.service_img)
-                            .map(item => ({
-                                service_name: item.service_name,
-                                service_img: item.service_img
-                                    ? `/service_images/${item.service_img}`
-                                    : pro6,
-                            }));
-
-                    } 
-
-                } catch (error) {
-                    console.error("Load service error:", error);
-                }
-            };
 
             // ---------------- Gallery ----------------
             const galleryData = ref([
@@ -1422,27 +1372,104 @@
                     gallery: defaultPro4,
                 },
             ]);
-
-            const loadGallery = async () => {
+            
+            // products, serive and gallery
+            const initWebsiteData = async () => {
                 try {
-                    const res = await axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_gallery", cd_id: cd_id });
+                    // Execute Plan check ONCE
+                    const allowedCount = await getAllowedCount(cd_id);
 
-                    const data = res?.data?.getData;
-                    // IF DB DATA EXISTS → REPLACE DEFAULT
-                    if (Array.isArray(data) && data.length > 0) {
+                    // Run both data fetches in parallel for better performance
+                    const [prodRes, servRes, gallRes] = await Promise.all([
+                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_products", cd_id: cd_id }),
+                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_services", cd_id: cd_id }),
+                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_gallery", cd_id: cd_id })
+                    ]);
 
-                        galleryData.value = data
+                    // get all response data
+                    const prodData = prodRes?.data?.getData;
+                    const servData = servRes?.data?.getData;
+                    const gallData = gallRes?.data?.getData;
+
+                    // Map Products using allowedCount
+                    if (Array.isArray(prodData) && prodData.length > 0) {
+                        const formatted = prodData
+                            .filter(item => item.product_name && item.final_price > 0)
+                            .map(item => ({
+                                product_name: item.product_name,
+                                product_img: item.product_img ? `${s3ProductsUrl}/product_images/${item.product_img}` : "",
+                                orginal_price: Number(item.orginal_price),
+                                discount_price: Number(item.discount_price),
+                                final_price: Number(item.final_price),
+                            }));
+
+                        products.value = allowedCount > 0 ? formatted.slice(0, allowedCount) : formatted;
+                    } else {
+                        products.value = [];
+                    }
+
+                    // Map Services using allowedCount
+                    if (Array.isArray(servData) && servData.length > 0) {
+                        const formatted = servData
+                            .filter(item => item.service_name && item.service_img)
+                            .map(item => ({
+                                service_name: item.service_name,
+                                service_img: item.service_img ? `${s3ServiceUrl}/service_images/${item.service_img}` : pro6,
+                            }));
+
+                        serviceData.value = allowedCount > 0 ? formatted.slice(0, allowedCount) : formatted;
+                    }
+
+                    // --- Step 5: Map Gallery (NEW) ---
+                    if (Array.isArray(gallData) && gallData.length > 0) {
+                        const formatted = gallData
                             .filter(item => item.gallery)
                             .map(item => ({
                                 gallery: item.gallery
-                                    ? `/gallery_images/${item.gallery}`
+                                    ? `${s3GalleryUrl}/gallery_images/${item.gallery}`
                                     : pro6,
                             }));
-
-                    } 
+                        // Apply the same plan-based limit to the gallery
+                        galleryData.value = allowedCount > 0 ? formatted.slice(0, allowedCount) : formatted;
+                    } else {
+                        galleryData.value = [];
+                    }
 
                 } catch (error) {
-                    console.error("Load Gallery error:", error);
+                    console.error("Initialization Error:", error);
+                }
+            };
+
+            // Helper to get plan limits
+            const getAllowedCount = async (cd_id) => {
+                // Safety check: if cd_id is missing, don't even call the API
+                if (!cd_id) {
+                    console.warn("getAllowedCount called without cd_id");
+                    return 0;
+                }
+
+                try {
+                    const planRes = await axios.post("/collectAllWebsiteDatas", {
+                        table_name: "miniweb_company_details",
+                        cd_id: cd_id
+                    });
+
+                    // Use optional chaining to prevent "cannot read property [0] of undefined"
+                    const companyData = planRes.data?.getData?.[0];
+                    
+                    console.log("Plan Data Received: ", companyData);
+
+                    if (companyData && Number(companyData.purchased_id) > 0) {
+                        const planId = Number(companyData.plan_id);
+                        if (planId === 94) return 5;
+                        if (planId === 95) return 15;
+                        if (planId === 96) return 30;
+                    }
+                    
+                    return 0; // Default if no valid plan
+                } catch (err) {
+                    console.error("Plan API Error:", err);
+                    return 0;
                 }
             };
 
@@ -1462,15 +1489,15 @@
                     paymentQrs.value = [
                         {
                             name: "Google Pay",
-                            img: data.gpay_qr_code ? `/payment_Details_QrCode/${data.gpay_qr_code}` :  (!data.id ? gPay : null)
+                            img: data.gpay_qr_code ? `${s3PaymenyUrl}/payment_Details_QrCode/${data.gpay_qr_code}` :  (!data.id ? gPay : null)
                         },
                         {
                             name: "PhonePe",
-                            img: data.phonepe_qr_code ? `/payment_Details_QrCode/${data.phonepe_qr_code}` : (!data.id ? gPay : null)
+                            img: data.phonepe_qr_code ? `${s3PaymenyUrl}/payment_Details_QrCode/${data.phonepe_qr_code}` : (!data.id ? gPay : null)
                         },
                         {
                             name: "Paytm",
-                            img: data.paytm_qr_code ? `/payment_Details_QrCode/${data.paytm_qr_code}` : (!data.id ? gPay : null)
+                            img: data.paytm_qr_code ? `${s3PaymenyUrl}/payment_Details_QrCode/${data.paytm_qr_code}` : (!data.id ? gPay : null)
                         }
                     ].filter(item => item.img);
 
@@ -1512,7 +1539,7 @@
                     if(!data) return;
 
                     qrData.value = data
-                    qrImage.value = `/qrcodes/${qrData.value.qr_code}`
+                    qrImage.value = `${s3QrCodeUrl}/qrcodes/${qrData.value.qr_code}`
                     
                 }
                 catch (error){
@@ -1554,9 +1581,11 @@
                         loadAddressDetails(),
                         loadSocialMediaLinks(),
                         loadAboutUs(),
-                        loadProducts(),
-                        loadService(),
-                        loadGallery(),
+                        // loadProducts(),
+                        // loadService(),
+                        // loadGallery(),
+                        getAllowedCount(),
+                        initWebsiteData(),
                         loadPayments(),
                         loadFeedbackVerifyData(),
                         loadQrCode(),
@@ -1897,6 +1926,13 @@
                 gPay,
                 paytm,
                 selectProduct,
+                // .env from
+                s3ProductsUrl,
+                s3ServiceUrl,
+                s3GalleryUrl,
+                s3PaymenyUrl,
+                s3QrCodeUrl,
+                s3LogoUrl
             }
         }
     }

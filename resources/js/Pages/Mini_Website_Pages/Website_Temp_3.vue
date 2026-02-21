@@ -16,21 +16,21 @@
             <!-- company details -->
             <div id="home" class="flex flex-col w-full">
                 <!-- logo  with some details -->
-                <div class="bg-white mx-auto w-full bg-no-repeat bg-center h-auto" 
+                <div class="bg-white mx-auto w-full bg-no-repeat bg-center h-auto"
                 :style="{ backgroundImage: `url(${defaultwebsitebg3})`, backgroundSize: 'cover', backgroundPosition: 'top center' }">
                     <!-- logo area -->
                     <div class="flex flex-col items-start">
                         <!-- inner logo area -->
                         <div class="flex flex-col w-full items-center justify-center p-5 mt-10">
-                            <span class="relative inline-block 
-                                w-[140px] h-[160px] 
+                            <span class="relative inline-block
+                                w-[140px] h-[160px]
                                 xs:w-[150px] xs:h-[170px]
                                 sm:w-[160px] sm:h-[180px]
                                 md:w-[180px] md:h-[200px]
-                                lg:w-[200px] lg:h-[220px]"> 
-                                
+                                lg:w-[200px] lg:h-[220px]">
+
                                 <!-- Border -->
-                                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+                                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
                                             bg-gradient-to-r from-[#f0172a] to-[#07254b] rounded-[4px]
                                             w-[150px] h-[170px]
                                             xs:w-[160px] xs:h-[180px]
@@ -39,22 +39,22 @@
                                             lg:w-[180px] lg:h-[200px]"
                                     style="clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">
                                 </div>
-                                
+
                                 <!-- Main content -->
-                                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
-                                            bg-white overflow-hidden 
+                                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+                                            bg-white overflow-hidden
                                             w-[140px] h-[160px]
                                             xs:w-[150px] xs:h-[170px]
                                             sm:w-[160px] sm:h-[180px]
                                             md:w-[160px] md:h-[180px]
                                             lg:w-[170px] lg:h-[190px]"
                                     style="clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">
-                                    <img :src="logoImage ? logoImage : defaultLogo" alt="logo" 
-                                        @click="openImage(logoImage ? logoImage : defaultLogo)" 
+                                    <img :src="logoImage ? logoImage : defaultLogo" alt="logo"
+                                        @click="openImage(logoImage ? logoImage : defaultLogo)"
                                         class="w-full h-full object-contain"
                                         style="clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);"
                                     />
-                                </div> 
+                                </div>
                             </span>
                         </div>
                     <!-- inner logo area /.-->
@@ -81,7 +81,7 @@
                         </p>
                     </div>
                     <!-- owner Name /. -->
-                    
+
                     <!-- designation Name -->
                     <div class="flex flex-col w-full justify-center items-center">
                         <p class="text-center text-[14px] text-[#6a6c70]">
@@ -107,7 +107,7 @@
                                 </div>
 
                                 <!-- right (85%) -->
-                                <div class="w-[80%] flex flex-col bg-white justify-center px-5 py-3"> 
+                                <div class="w-[80%] flex flex-col bg-white justify-center px-5 py-3">
                                     <a :href="`tel:+91${phoneNo}`" class="hover:underline">
                                         <p class="font-bold text-[14px]"> +91 {{ phoneNo || "9876543210" }}</p>
                                     </a>
@@ -128,7 +128,7 @@
                                 </div>
 
                                 <!-- right (85%) -->
-                                <div class="w-[80%] flex flex-col bg-white justify-center px-5 py-1"> 
+                                <div class="w-[80%] flex flex-col bg-white justify-center px-5 py-1">
                                     <a href="tel:+917548853487" class="hover:underline">
                                         <a :href="`mailto:${emailID}`" class="hover:underline">
                                             <p class="font-bold text-[14px]">{{ emailID || "info@linkaura.com" }}</p>
@@ -146,7 +146,7 @@
                                 </div>
 
                                 <!-- right (85%) -->
-                                <div class="w-[80%] flex flex-col bg-white justify-center px-0 py-3"> 
+                                <div class="w-[80%] flex flex-col bg-white justify-center px-0 py-3">
                                     <p class="font-bold text-[14px] text-[#414143]">
                                         {{ currentAddress || "12-B, Sriniwas Eagle garden, Bangalore, Karnataka 638107" }}
                                     </p>
@@ -171,9 +171,9 @@
                             <!-- Facebook -->
                             <a :href="`${fb_link}`" target="_blank"
                             class="w-10 h-10 rounded-lg bg-[#1873eb] flex justify-center items-center hover:bg-[#1877F2] transition">
-                                <svg xmlns="http://www.w3.org/2000/svg" 
+                                <svg xmlns="http://www.w3.org/2000/svg"
                                     fill="white" viewBox="0 0 24 24" class="w-6 h-6">
-                                    <path d="M22 12a10 10 0 1 0-11.5 9.9v-7h-2v-3h2v-2.3c0-2 1.2-3.1 3-3.1 
+                                    <path d="M22 12a10 10 0 1 0-11.5 9.9v-7h-2v-3h2v-2.3c0-2 1.2-3.1 3-3.1
                                     .9 0 1.8.1 1.8.1v2h-1c-1 0-1.3.6-1.3 1.2V12h2.3l-.4 3h-1.9v7A10 10 0 0 0 22 12"/>
                                 </svg>
                             </a>
@@ -181,13 +181,13 @@
                             <!-- Instagram -->
                             <a :href="`${inst_link}`" target="_blank"
                             class="w-10 h-10 rounded-lg bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] flex justify-center items-center transition">
-                                <svg xmlns="http://www.w3.org/2000/svg" 
+                                <svg xmlns="http://www.w3.org/2000/svg"
                                     fill="white" viewBox="0 0 24 24" class="w-6 h-6">
-                                    <path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 
-                                    5-5V7c0-2.8-2.2-5-5-5H7zm10 2c1.7 0 3 1.3 3 3v10c0 
-                                    1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3h10zm-5 
-                                    3.5A4.5 4.5 0 1 0 16.5 12 4.5 4.5 0 0 0 12 
-                                    7.5zm0 7.3A2.8 2.8 0 1 1 14.8 12 2.8 2.8 0 0 1 12 14.8zm4-8.9a1.1 1.1 0 
+                                    <path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2
+                                    5-5V7c0-2.8-2.2-5-5-5H7zm10 2c1.7 0 3 1.3 3 3v10c0
+                                    1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3h10zm-5
+                                    3.5A4.5 4.5 0 1 0 16.5 12 4.5 4.5 0 0 0 12
+                                    7.5zm0 7.3A2.8 2.8 0 1 1 14.8 12 2.8 2.8 0 0 1 12 14.8zm4-8.9a1.1 1.1 0
                                     1 1-1.1-1.1 1.1 1.1 0 0 1 1.1 1.1z"/>
                                 </svg>
                             </a>
@@ -195,14 +195,14 @@
                             <!-- WhatsApp -->
                             <a :href="`https://wa.me/${whatsappNo}`" target="_blank"
                             class="w-10 h-10 bg-[#25d366] rounded-lg flex justify-center items-center transition">
-                                <!-- <svg xmlns="http://www.w3.org/2000/svg" 
+                                <!-- <svg xmlns="http://www.w3.org/2000/svg"
                                     fill="white" viewBox="0 0 24 24" class="w-6 h-6">
-                                    <path d="M20 3.5A10.5 10.5 0 1 0 4.2 17.9L3 22l4.3-1.1A10.5 10.5 
-                                    0 1 0 20 3.5zm-8.6 15.1a8.3 8.3 0 0 1-4.2-1.2l-.3-.2-2.5.6.7-2.4-.2-.3A8.2 
-                                    8.2 0 1 1 11.4 18.6zm4.4-6.2c-.2-.1-1.3-.6-1.5-.7s-.4-.1-.6.1-.6.7-.7.8-.3.1-.6 
-                                    0a6.7 6.7 0 0 1-3.3-3 3.6 3.6 0 0 1-.4-.8c0-.2 0-.4.2-.6l.7-.8c.1-.2.1-.3 
-                                    0-.5L9.2 6c-.1-.2-.3-.4-.5-.4h-.5c-.2 0-.5.1-.7.3-.8.7-1.1 1.8-.7 
-                                    3a8.8 8.8 0 0 0 4.3 4.7c.6.3 1.2.5 1.6.6a3.8 3.8 0 0 0 1.7.1c.5-.1 1.3-.6 
+                                    <path d="M20 3.5A10.5 10.5 0 1 0 4.2 17.9L3 22l4.3-1.1A10.5 10.5
+                                    0 1 0 20 3.5zm-8.6 15.1a8.3 8.3 0 0 1-4.2-1.2l-.3-.2-2.5.6.7-2.4-.2-.3A8.2
+                                    8.2 0 1 1 11.4 18.6zm4.4-6.2c-.2-.1-1.3-.6-1.5-.7s-.4-.1-.6.1-.6.7-.7.8-.3.1-.6
+                                    0a6.7 6.7 0 0 1-3.3-3 3.6 3.6 0 0 1-.4-.8c0-.2 0-.4.2-.6l.7-.8c.1-.2.1-.3
+                                    0-.5L9.2 6c-.1-.2-.3-.4-.5-.4h-.5c-.2 0-.5.1-.7.3-.8.7-1.1 1.8-.7
+                                    3a8.8 8.8 0 0 0 4.3 4.7c.6.3 1.2.5 1.6.6a3.8 3.8 0 0 0 1.7.1c.5-.1 1.3-.6
                                     1.5-1.1s.2-.9.1-1.1-.2-.2-.4-.3z"/>
                                 </svg> -->
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6 fill-white">
@@ -222,13 +222,13 @@
             <div id="aboutus" class="mt-1 flex flex-col max-w-[430px] mx-auto w-full bg-no-repeat bg-center border-1 border-b-[#07254b]  border-b-0 border-l-0 border-r-0" :style="{ backgroundImage: `url(${aboutBG})`, backgroundSize: 'cover'}">
                 <!-- bg-[linear-gradient(5deg,#07254b,#f0172a)]  -->
                 <!-- bg-gradient-to-r from-[#07254b] via-[#07254b] to-[#07254b] -->
-                
+
                 <!-- header  area -->
                 <div class="flex w-full pt-5">
                     <div class="flex w-[50%] bg-no-repeat h-[50px] " :style="{ backgroundImage: `url(${defaultHeaderBg})`, backgroundSize: 'contain'}">
                         <!-- <img :src="defaultHeaderBg" alt=""> -->
                          <p class="text-white font-semibold px-7 pt-4">
-                            About Us 
+                            About Us
                          </p>
                     </div>
                     <div class="flex w-[50%]">
@@ -271,8 +271,8 @@
                 <!-- product areas -->
                 <span v-if="products.length > 0">
                 <div class="grid grid-cols-2 gap-2 mt-5 pt-5 pb-5 px-2 ">
-                    <div 
-                        v-for="(item, index) in products" 
+                    <div
+                        v-for="(item, index) in products"
                         :key="index"
                         class="flex flex-col w-full gap-2">
                         <!-- product image area -->
@@ -299,7 +299,7 @@
                                         <span class="ml-1">{{ item.orginal_price }}</span>
                                     </p>
                                 </div>
-                                
+
                                 <!-- discount price -->
                                 <div class="flex flex-row w-full text-center pt-1 pb-1 p-2 items-center">
                                     <p class="font-semibold text-[14px] text-white flex justify-center items-center">
@@ -307,7 +307,7 @@
                                         <span class="ml-1">{{ item.discount_price }}</span>
                                     </p>
                                 </div>
-                                
+
                                 <!-- Final price -->
                                 <div class="flex flex-row w-full text-center pt-1 pb-1 p-2 items-center">
                                     <p class="font-semibold text-[14px] text-white flex justify-center items-center">
@@ -333,7 +333,7 @@
                     </p>
                 </span>
                 <!-- product areas /. -->
-                
+
                 <!-- footer -->
                 <div class="border-1 border-b-[#07254b]  border-t-0 border-l-0 border-r-0 flex flex-col w-full h-[80px] bg-no-repeat " :style="{ backgroundImage: `url(${defaultFooter})`, backgroundSize: 'contain',backgroundPosition: 'right', aspectRatio: '3 / 4' }">
                 </div>
@@ -361,14 +361,14 @@
                 <div class="flex flex-col w-full">
                     <span v-if="serviceData.length > 0">
                     <div class="grid grid-cols-2 gap-2">
-                        <div 
-                            v-for="(item, index) in serviceData" 
+                        <div
+                            v-for="(item, index) in serviceData"
                             :key="index"
                             class="flex flex-col w-full items-center shadow-2xl mt-5">
                             <!-- service image -->
                             <div class="flex flex-col w-full h-[250px] p-2 items-center overflow-hidden">
-                                <img 
-                                    :src="item.service_img" 
+                                <img
+                                    :src="item.service_img"
                                     :alt="item.service_img"
                                     @click="openImage(item.service_img)"
                                     class="w-full h-full object-cover rounded-md"
@@ -376,7 +376,7 @@
                             </div>
 
                             <!-- service name -->
-                            <div class="flex flex-col w-full text-center p-2"> 
+                            <div class="flex flex-col w-full text-center p-2">
                                 <p class="text-[14px] font-semibold">
                                     {{ item.service_name }}
                                 </p>
@@ -406,7 +406,7 @@
                     <div class="flex w-[50%] bg-no-repeat h-[50px] " :style="{ backgroundImage: `url(${defaultHeaderBg})`, backgroundSize: 'contain'}">
                         <!-- <img :src="defaultHeaderBg" alt=""> -->
                          <p class="text-white font-semibold px-7 pt-4">
-                            Videos 
+                            Videos
                          </p>
                     </div>
                     <div class="flex w-[50%]">
@@ -446,7 +446,7 @@
 
                     <!-- insta link area -->
                     <div v-if="instaReals_link1 || instaReals_link2" class="grid grid-cols-1 gap-4 p-5 bg-[#07254b] mb-2">
-                        <div v-if="instaReals_link1" 
+                        <div v-if="instaReals_link1"
                         class="border-1 border-gray-300 bg-gray-50 flex justify-center items-center rounded-2xl shadow-xl overflow-hidden p-2 pt-5"
                         >
                             <blockquote
@@ -499,15 +499,15 @@
                 <!-- gallery content -->
                 <div class="flex flex-col w-full">
                     <div class="grid grid-cols-2 gap-4 px-3">
-                        <div 
-                            v-for="(item, index) in galleryData" 
+                        <div
+                            v-for="(item, index) in galleryData"
                             :key="index"
                             class="flex flex-col bg-white rounded-lg w-full items-center shadow-2xl mt-2 p-2">
                             <!-- service image -->
                             <div class="flex flex-col w-full h-[225px] p-0 items-center overflow-hidden">
                                 <!-- border-1 border-[#84a7d5] -->
-                                <img 
-                                    :src="item.gallery" 
+                                <img
+                                    :src="item.gallery"
                                     alt="item.gallery"
                                     @click="openImage(item.gallery)"
                                     class="w-full h-full object-cover rounded-md"
@@ -652,9 +652,9 @@
                             </div>
                         </div>
                         <div>
-                            <textarea 
-                            v-model="enquiryMessage" 
-                            rows="5" 
+                            <textarea
+                            v-model="enquiryMessage"
+                            rows="5"
                             placeholder="Enter Message"
                             class="text-gray-700 w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring focus:border-blue-300"
                             ></textarea>
@@ -666,7 +666,7 @@
                             <button type="submit" class="w-[150px] text-gray bg-transparent border-2 border-[#3d023a] text-[#3d023a] py-2 rounded-xl transition hover:bg-[#3d023a] hover:text-white" >
                             Send
                             </button>
-                        </div>  
+                        </div>
                     </form>
                  </div>
                 <!-- enquiry form /.-->
@@ -723,9 +723,9 @@
                             </div>
                         </div>
                         <div>
-                            <textarea 
-                            v-model="fbmessage" 
-                            rows="5" 
+                            <textarea
+                            v-model="fbmessage"
+                            rows="5"
                             placeholder="Enter Message"
                             class="text-gray-800 w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring focus:border-blue-300"
                             ></textarea>
@@ -735,12 +735,12 @@
                                 </span>
                                 <span class="text-red-500 font-bold text-xs" v-if="fbmessage"> {{ fbmessage.length }}/125 </span>
                             </div>
-                        </div>  
+                        </div>
                         <div class="items-center justify-center text-center">
                             <button type="submit" class="w-[150px] text-gray bg-transparent border-2 border-[#3d023a] text-[#3d023a] py-2 rounded-xl transition hover:bg-[#3d023a] hover:text-white" >
                             Send
                             </button>
-                        </div>  
+                        </div>
                     </form>
                  </div>
                 <!-- Feedback form area /. -->
@@ -811,10 +811,10 @@
 
                         <!-- download png -->
                         <div class="flex flex-grow w-full font-semibold items-center justify-center">
-                            <button 
+                            <button
                             @click="downloadQR"
                             class="flex w-[100px] h-[30px] border border-[#524b4b] items-center justify-center gap-2 rounded-2xl">
-                            <ArrowDownTrayIcon class="size-4" :class="{ 'animate-download': isDownloading }" /> 
+                            <ArrowDownTrayIcon class="size-4" :class="{ 'animate-download': isDownloading }" />
                                 <span>{{ isDownloading ? 'Saving...' : 'Save' }}</span>
                             </button>
                         </div>
@@ -832,7 +832,7 @@
                             <a :href="`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`" target="_blank" class="flex items-center px-4 hover:bg-gray-100 hover:text-gray-800" >
                                 <button class="w-60 flex items-center gap-3  bg-transparent border border-[#2A7B9B]  rounded-xs p-2 justify-center" >
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="#2A7B9B" viewBox="0 0 24 24" class="w-6 h-6" >
-                                        <path d="M22 12a10 10 0 1 0-11.5 9.9v-7h-2v-3h2v-2.3c0-2 1.2-3.1 3-3.1 
+                                        <path d="M22 12a10 10 0 1 0-11.5 9.9v-7h-2v-3h2v-2.3c0-2 1.2-3.1 3-3.1
                                         .9 0 1.8.1 1.8.1v2h-1c-1 0-1.3.6-1.3 1.2V12h2.3l-.4 3h-1.9v7A10 10 0 0 0 22 12"/>
                                     </svg>
 
@@ -843,18 +843,18 @@
                             </a>
                         </div>
                         <!-- facebook share -->
-                        
+
                         <!-- insta share -->
                         <div class="flex flex-grow w-full font-semibold items-center justify-center">
                             <a :href="`https://www.instagram.com/`" target="_blank" class="flex items-center px-4 py-1 hover:text-gray-800 hover:bg-gray-100">
                                 <button class="w-60 flex items-center gap-3  bg-transparent border border-[#cf3b9c]  rounded-xs p-2 justify-center" >
-                                    <svg xmlns="http://www.w3.org/2000/svg" 
+                                    <svg xmlns="http://www.w3.org/2000/svg"
                                         fill="#cf3b9c" viewBox="0 0 24 24" class="w-6 h-6">
-                                        <path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 
-                                        5-5V7c0-2.8-2.2-5-5-5H7zm10 2c1.7 0 3 1.3 3 3v10c0 
-                                        1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3h10zm-5 
-                                        3.5A4.5 4.5 0 1 0 16.5 12 4.5 4.5 0 0 0 12 
-                                        7.5zm0 7.3A2.8 2.8 0 1 1 14.8 12 2.8 2.8 0 0 1 12 14.8zm4-8.9a1.1 1.1 0 
+                                        <path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2
+                                        5-5V7c0-2.8-2.2-5-5-5H7zm10 2c1.7 0 3 1.3 3 3v10c0
+                                        1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3h10zm-5
+                                        3.5A4.5 4.5 0 1 0 16.5 12 4.5 4.5 0 0 0 12
+                                        7.5zm0 7.3A2.8 2.8 0 1 1 14.8 12 2.8 2.8 0 0 1 12 14.8zm4-8.9a1.1 1.1 0
                                         1 1-1.1-1.1 1.1 1.1 0 0 1 1.1 1.1z"/>
                                     </svg>
 
@@ -902,7 +902,7 @@
                             </p>
                         </div>
                         <div class="flex flex-col w-full items-center mb-3">
-                            <button 
+                            <button
                             @click="gotoPlanPopup()"
                             class="w-[150px] text-gray bg-transparent border-1 border-[#6b3f69] text-[#6b3f69] py-2 rounded-xl transition hover:bg-[#6b3f69] hover:text-white" >
                             Buy Paid Plan
@@ -915,12 +915,12 @@
             </div>
             <!-- share my details /. -->
 
-            
+
             <!-- website footer  -->
             <WebsiteFooterBar v-if="isFooter"/>
             <!-- website footer  -->
         </div>
-        
+
 
         <!-- Image Popup Modal -->
         <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
@@ -958,7 +958,7 @@
                 </p>
              </div>
             <!-- Heading area /. -->
-            
+
             <!-- Price area -->
             <div class="flex flex-col w-full px-5 pt-5 pb-5 bg-[#2A7B9B]">
                 <p class="uppercase font-semibold text-[20px] text-white">
@@ -1002,7 +1002,7 @@
                             <li>Direct Email Contact</li>
                         </ul>
                     </li>
-                    
+
                 </ul>
              </div>
             <!-- Features area /. -->
@@ -1033,7 +1033,7 @@
                 </p>
              </div>
             <!-- Heading area /. -->
-            
+
             <!-- Price area -->
             <div class="flex flex-col w-full px-5 pt-5 pb-5 bg-[#066856]">
                 <p class="uppercase font-semibold text-[20px] text-white">
@@ -1077,7 +1077,7 @@
                             <li>Direct Email Contact</li>
                         </ul>
                     </li>
-                    
+
                 </ul>
              </div>
             <!-- Features area /. -->
@@ -1108,7 +1108,7 @@
                 </p>
              </div>
             <!-- Heading area /. -->
-            
+
             <!-- Price area -->
             <div class="flex flex-col w-full px-5 pt-5 pb-5 bg-[#6c075b]">
                 <p class="uppercase font-semibold text-[20px] text-white">
@@ -1152,7 +1152,7 @@
                             <li>Direct Email Contact</li>
                         </ul>
                     </li>
-                    
+
                 </ul>
              </div>
             <!-- Features area /. -->
@@ -1201,7 +1201,7 @@
     import aboutBG from '@/assets/images/mini_website/website3/bg/about_bg3.jpg'
     import productBG from '@/assets/images/mini_website/website3/bg/about_bg7.jpg'
     import galleryBG from '@/assets/images/mini_website/website3/bg/about_bg1.jpg'
-
+    
     export default {
         name: "Website_Temp_3",
         components: {PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, WebsiteFooterBar, ArrowDownTrayIcon},
@@ -1214,7 +1214,7 @@
             }
         },
         setup(props) {
-            // getting data from selected website 
+            // getting data from selected website
             const route = useRoute();
             const router = useRouter();
             const cardStore = useCardStore()
@@ -1226,6 +1226,14 @@
             const templateId  = Number(params.get('template_id') || 0)
             const purchaseID  = Number(params.get('purchased_id') || 0)
             const is_purchased = ref("")
+
+            // implement .env
+            const s3ProductsUrl = import.meta.env.VITE_AWS_URL_PRODUCT_IMAGES;
+            const s3ServiceUrl = import.meta.env.VITE_AWS_URL_SERVICE_IMAGES;
+            const s3GalleryUrl = import.meta.env.VITE_AWS_URL_GALLERY;
+            const s3PaymenyUrl = import.meta.env.VITE_AWS_URL_PAYMENT_DETAILS;
+            const s3QrCodeUrl = import.meta.env.VITE_AWS_URL_QRCODE;
+            const s3LogoUrl = import.meta.env.VITE_AWS_URL_LOGO;
 
             // ---------------- Company Details ----------------
             const companyData = ref({})
@@ -1243,7 +1251,7 @@
                 companyName.value = data.company_name || '';
                 ownerName.value = data.owner_name || '';
                 designation.value = data.designation || '';
-                logoImage.value = data.logo_path ? `/company_logos/${data.logo_path}` : '';
+                logoImage.value = data.logo_path ? `${s3LogoUrl}/company_logos/${data.logo_path}` : '';
                 is_purchased.value = data.purchased_id
 
                 // Guard check
@@ -1364,39 +1372,6 @@
                 }
             ]);
 
-            const loadProducts = async () => {
-                try {
-                    const res = await axios.post("/collectAllWebsiteDatas", {
-                        table_name: "miniweb_products",
-                        cd_id: cd_id
-                    });
-
-                    const data = res?.data?.getData;
-                    // IF DB DATA EXISTS → REPLACE DEFAULT
-                    if (Array.isArray(data) && data.length > 0) {
-
-                        products.value = data
-                            .filter(item => item.product_name && item.final_price > 0)
-                            .map(item => ({
-                                product_name: item.product_name,
-                                product_img: item.product_img
-                                    ? `/product_images/${item.product_img}`
-                                    : pro6,
-                                orginal_price: Number(item.orginal_price),
-                                discount_price: Number(item.discount_price),
-                                final_price: Number(item.final_price),
-                            }));
-
-                    } 
-                    else {
-                        products.value = [];
-                    }
-
-                } catch (error) {
-                    console.error("Load products error:", error);
-                }
-            };
-
             // ---------------- Service ----------------
             const serviceData = ref([
                 {
@@ -1410,31 +1385,6 @@
                     service_img: service2
                 },
             ]);
-
-
-            const loadService = async () => {
-                try {
-                    const res = await axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_services", cd_id: cd_id });
-
-                    const data = res?.data?.getData;
-                    // IF DB DATA EXISTS → REPLACE DEFAULT
-                    if (Array.isArray(data) && data.length > 0) {
-
-                        serviceData.value = data
-                            .filter(item => item.service_name && item.service_img)
-                            .map(item => ({
-                                service_name: item.service_name,
-                                service_img: item.service_img
-                                    ? `/service_images/${item.service_img}`
-                                    : pro6,
-                            }));
-
-                    } 
-
-                } catch (error) {
-                    console.error("Load service error:", error);
-                }
-            };
 
             // ---------------- Gallery ----------------
             const galleryData = ref([
@@ -1452,26 +1402,103 @@
                 },
             ]);
 
-            const loadGallery = async () => {
+            // products, serive and gallery
+            const initWebsiteData = async () => {
                 try {
-                    const res = await axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_gallery", cd_id: cd_id });
+                    // Execute Plan check ONCE
+                    const allowedCount = await getAllowedCount(cd_id);
 
-                    const data = res?.data?.getData;
-                    // IF DB DATA EXISTS → REPLACE DEFAULT
-                    if (Array.isArray(data) && data.length > 0) {
+                    // Run both data fetches in parallel for better performance
+                    const [prodRes, servRes, gallRes] = await Promise.all([
+                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_products", cd_id: cd_id }),
+                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_services", cd_id: cd_id }),
+                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_gallery", cd_id: cd_id })
+                    ]);
 
-                        galleryData.value = data
+                    // get all response data
+                    const prodData = prodRes?.data?.getData;
+                    const servData = servRes?.data?.getData;
+                    const gallData = gallRes?.data?.getData;
+
+                    // Map Products using allowedCount
+                    if (Array.isArray(prodData) && prodData.length > 0) {
+                        const formatted = prodData
+                            .filter(item => item.product_name && item.final_price > 0)
+                            .map(item => ({
+                                product_name: item.product_name,
+                                product_img: item.product_img ? `${s3ProductsUrl}/product_images/${item.product_img}` : "",
+                                orginal_price: Number(item.orginal_price),
+                                discount_price: Number(item.discount_price),
+                                final_price: Number(item.final_price),
+                            }));
+
+                        products.value = allowedCount > 0 ? formatted.slice(0, allowedCount) : formatted;
+                    } else {
+                        products.value = [];
+                    }
+
+                    // Map Services using allowedCount
+                    if (Array.isArray(servData) && servData.length > 0) {
+                        const formatted = servData
+                            .filter(item => item.service_name && item.service_img)
+                            .map(item => ({
+                                service_name: item.service_name,
+                                service_img: item.service_img ? `${s3ServiceUrl}/service_images/${item.service_img}` : pro6,
+                            }));
+
+                        serviceData.value = allowedCount > 0 ? formatted.slice(0, allowedCount) : formatted;
+                    }
+
+                    // --- Step 5: Map Gallery (NEW) ---
+                    if (Array.isArray(gallData) && gallData.length > 0) {
+                        const formatted = gallData
                             .filter(item => item.gallery)
                             .map(item => ({
                                 gallery: item.gallery
-                                    ? `/gallery_images/${item.gallery}`
+                                    ? `${s3GalleryUrl}/gallery_images/${item.gallery}`
                                     : pro6,
                             }));
-
-                    } 
+                        // Apply the same plan-based limit to the gallery
+                        galleryData.value = allowedCount > 0 ? formatted.slice(0, allowedCount) : formatted;
+                    } else {
+                        galleryData.value = [];
+                    }
 
                 } catch (error) {
-                    console.error("Load Gallery error:", error);
+                    console.error("Initialization Error:", error);
+                }
+            };
+
+            // Helper to get plan limits
+            const getAllowedCount = async (cd_id) => {
+                // Safety check: if cd_id is missing, don't even call the API
+                if (!cd_id) {
+                    console.warn("getAllowedCount called without cd_id");
+                    return 0;
+                }
+
+                try {
+                    const planRes = await axios.post("/collectAllWebsiteDatas", {
+                        table_name: "miniweb_company_details",
+                        cd_id: cd_id
+                    });
+
+                    // Use optional chaining to prevent "cannot read property [0] of undefined"
+                    const companyData = planRes.data?.getData?.[0];
+                    
+                    console.log("Plan Data Received: ", companyData);
+
+                    if (companyData && Number(companyData.purchased_id) > 0) {
+                        const planId = Number(companyData.plan_id);
+                        if (planId === 94) return 5;
+                        if (planId === 95) return 15;
+                        if (planId === 96) return 30;
+                    }
+                    
+                    return 0; // Default if no valid plan
+                } catch (err) {
+                    console.error("Plan API Error:", err);
+                    return 0;
                 }
             };
 
@@ -1491,15 +1518,15 @@
                     paymentQrs.value = [
                         {
                             name: "Google Pay",
-                            img: data.gpay_qr_code ? `/payment_Details_QrCode/${data.gpay_qr_code}` :  (!data.id ? gPay : null)
+                            img: data.gpay_qr_code ? `${s3PaymenyUrl}/payment_Details_QrCode/${data.gpay_qr_code}` :  (!data.id ? gPay : null)
                         },
                         {
                             name: "PhonePe",
-                            img: data.phonepe_qr_code ? `/payment_Details_QrCode/${data.phonepe_qr_code}` : (!data.id ? gPay : null)
+                            img: data.phonepe_qr_code ? `${s3PaymenyUrl}/payment_Details_QrCode/${data.phonepe_qr_code}` : (!data.id ? gPay : null)
                         },
                         {
                             name: "Paytm",
-                            img: data.paytm_qr_code ? `/payment_Details_QrCode/${data.paytm_qr_code}` : (!data.id ? gPay : null)
+                            img: data.paytm_qr_code ? `${s3PaymenyUrl}/payment_Details_QrCode/${data.paytm_qr_code}` : (!data.id ? gPay : null)
                         }
                     ].filter(item => item.img);
 
@@ -1541,8 +1568,8 @@
                     if(!data) return;
 
                     qrData.value = data
-                    qrImage.value = `/qrcodes/${qrData.value.qr_code}`
-                    
+                    qrImage.value = `${s3QrCodeUrl}/qrcodes/${qrData.value.qr_code}`
+
                 }
                 catch (error){
                     console.error("Load Qrcode error:", error);
@@ -1563,7 +1590,7 @@
                 const link = document.createElement('a');
                 link.href = qrImage.value;
                 link.download = `QR_Code_${qrData.value.qr_code || 'download'}.png`;
-                
+
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -1583,9 +1610,11 @@
                         loadAddressDetails(),
                         loadSocialMediaLinks(),
                         loadAboutUs(),
-                        loadProducts(),
-                        loadService(),
-                        loadGallery(),
+                        // loadProducts(),
+                        // loadService(),
+                        initWebsiteData(),
+                        getAllowedCount(),
+                        // loadGallery(),
                         loadPayments(),
                         loadFeedbackVerifyData(),
                         loadQrCode(),
@@ -1599,7 +1628,7 @@
                         script.async = true
                         script.id = "instagram-embed"
                         document.body.appendChild(script)
-                        
+
                         script.onload = async () => {
                             // Wait for DOM updates
                             await nextTick()
@@ -1707,7 +1736,7 @@
                             icon: 'success',
                             confirmButtonText: 'OK'
                         });
-                        console.log(resData.data.getDatas)    
+                        console.log(resData.data.getDatas)
                     }
                     else{
                         Swal.fire({
@@ -1715,7 +1744,7 @@
                             text: resData.data.message,
                             icon: 'danger',
                             confirmButtonText: 'OK'
-                        });   
+                        });
                     }
                 } catch (error) {
                     Swal.fire({
@@ -1755,7 +1784,7 @@
                         miniWebId: Number(cardStore.cardId),
                     })
 
-                    
+
                     if(res.data.status == true){
                         fbUserName.value = ''
                         fbphone.value = ''
@@ -1784,7 +1813,7 @@
                     });
                 }
             })
-            
+
             const encodedUrl = ref("")
             const cpyUrl = ref("")
             const currentUrl = window.location.href
@@ -1807,13 +1836,13 @@
                 // 2. Fallback: Create a temporary textarea element
                 const textArea = document.createElement("textarea");
                 textArea.value = textToCopy;
-                
+
                 // Ensure the textarea is not visible but stays in the DOM
                 textArea.style.position = "fixed";
                 textArea.style.left = "-9999px";
                 textArea.style.top = "0";
                 document.body.appendChild(textArea);
-                
+
                 textArea.focus();
                 textArea.select();
 
@@ -1920,9 +1949,16 @@
                 isDownloading,
                 cpyUrl,
                 copyToClipboard,
+                // .env from
+                s3ProductsUrl,
+                s3ServiceUrl,
+                s3GalleryUrl,
+                s3PaymenyUrl,
+                s3QrCodeUrl,
+                s3LogoUrl
             }
         }
-        
+
     }
 </script>
 

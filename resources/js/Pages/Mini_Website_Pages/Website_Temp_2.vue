@@ -3,7 +3,7 @@
         <div  class="max-w-[430px] pb-0 mx-auto grid grid-cols-1  bg-center bg-cover bg-no-repeat ">
             <!-- company details -->
             <!-- purchase message -->
-             <div class="border-1 border-b-gray-400 border-t-0 border-l-0 border-r-0 justify-center items-center flex flex-col w-full bg-white p-2" v-if="!is_purchased">
+            <div class="border-1 border-b-gray-400 border-t-0 border-l-0 border-r-0 justify-center items-center flex flex-col w-full bg-white p-2" v-if="!is_purchased">
                 <p class="font-semibold text-[14px] text-geay-500">
                     After purchasing a paid plan, you can share this card with others.
                 </p>
@@ -11,7 +11,7 @@
                 class="mt-2 w-[150px] text-gray bg-transparent border-1 border-[#2A7B9B] text-[#3d023a] py-2 rounded-xl transition hover:bg-[#2A7B9B] hover:text-white" >
                     Buy Paid Plan
                 </button>
-             </div>
+            </div>
             <!-- purchase message /. -->
             <div id="home" class="flex flex-col">
                 <div class="flex flex-col w-full border-1 border-b-[#52b84a] border-r-0 border-l-0 border-t-0">
@@ -608,12 +608,12 @@
                 <div v-if="paymentQrs.length" class="flex flex-col w-full bg-white">
 
                     <!-- qr section -->
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 px-3 py-5">
+                    <div class="grid grid-cols-1 md:grid-cols-1 gap-4 px-3 py-5">
 
                         <div
                             v-for="(item, index) in paymentQrs"
                             :key="index"
-                            class="flex flex-col w-full h-[250px] border border-[#414143] shadow-2xl rounded-xl p-2"
+                            class="flex flex-col w-full h-[250px] border border-[#414143] shadow-2xl rounded-xl p-2 mb-10"
                         >
                             <img
                                 :src="item.img"
@@ -621,7 +621,7 @@
                                 class="w-full h-full object-contain"
                                 @click="openImage(item.img)"
                             />
-                            <p class="text-center text-sm font-semibold mt-2">
+                            <p class="text-center text-sm font-semibold mt-2 p-5">
                                 {{ item.name }}
                             </p>
                         </div>
@@ -1324,6 +1324,13 @@
             const purchaseID  = Number(params.get('purchased_id') || 0)
             const is_purchased = ref("")
             
+            // implement .env
+            const s3ProductsUrl = import.meta.env.VITE_AWS_URL_PRODUCT_IMAGES;
+            const s3ServiceUrl = import.meta.env.VITE_AWS_URL_SERVICE_IMAGES;
+            const s3GalleryUrl = import.meta.env.VITE_AWS_URL_GALLERY;
+            const s3PaymenyUrl = import.meta.env.VITE_AWS_URL_PAYMENT_DETAILS;
+            const s3QrCodeUrl = import.meta.env.VITE_AWS_URL_QRCODE;
+            const s3LogoUrl = import.meta.env.VITE_AWS_URL_LOGO;
             
             // ---------------- Company Details ----------------
             const companyData = ref({})
@@ -1341,7 +1348,7 @@
                 companyName.value = data.company_name || '';
                 ownerName.value = data.owner_name || '';
                 designation.value = data.designation || '';
-                logoImage.value = data.logo_path ? `/company_logos/${data.logo_path}` : '';
+                logoImage.value = data.logo_path ? `${s3LogoUrl}/company_logos/${data.logo_path}` : '';
                 is_purchased.value = data.purchased_id
 
                 // Guard check
@@ -1460,39 +1467,6 @@
                 }
             ]);
 
-            const loadProducts = async () => {
-                try {
-                    const res = await axios.post("/collectAllWebsiteDatas", {
-                        table_name: "miniweb_products",
-                        cd_id: cd_id
-                    });
-
-                    const data = res?.data?.getData;
-                    // IF DB DATA EXISTS → REPLACE DEFAULT
-                    if (Array.isArray(data) && data.length > 0) {
-
-                        products.value = data
-                            .filter(item => item.product_name && item.final_price > 0)
-                            .map(item => ({
-                                product_name: item.product_name,
-                                product_img: item.product_img
-                                    ? `/product_images/${item.product_img}`
-                                    : pro6,
-                                orginal_price: Number(item.orginal_price),
-                                discount_price: Number(item.discount_price),
-                                final_price: Number(item.final_price),
-                            }));
-
-                    }
-                    else {
-                        products.value = [];
-                    }
-
-                } catch (error) {
-                    console.error("Load products error:", error);
-                }
-            };
-
             // ---------------- Service ----------------
             const serviceData = ref([
                 {
@@ -1507,31 +1481,6 @@
                 },
             ]);
 
-            const loadService = async () => {
-                try {
-                    const res = await axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_services", cd_id: cd_id });
-
-                    const data = res?.data?.getData;
-                    // IF DB DATA EXISTS → REPLACE DEFAULT
-                    if (Array.isArray(data) && data.length > 0) {
-
-                        serviceData.value = data
-                            .filter(item => item.service_name && item.service_img)
-                            .map(item => ({
-                                service_name: item.service_name,
-                                service_img: item.service_img
-                                    ? `/service_images/${item.service_img}`
-                                    : pro6,
-                            }));
-
-                    } 
-
-                } catch (error) {
-                    console.error("Load service error:", error);
-                }
-            };
-
-            
             // ---------------- Gallery ----------------
             const galleryData = ref([
                 {
@@ -1548,29 +1497,105 @@
                 },
             ]);
 
-            const loadGallery = async () => {
+            // products, serive and gallery
+            const initWebsiteData = async () => {
                 try {
-                    const res = await axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_gallery", cd_id: cd_id });
+                    // Execute Plan check ONCE
+                    const allowedCount = await getAllowedCount(cd_id);
 
-                    const data = res?.data?.getData;
-                    // IF DB DATA EXISTS → REPLACE DEFAULT
-                    if (Array.isArray(data) && data.length > 0) {
+                    // Run both data fetches in parallel for better performance
+                    const [prodRes, servRes, gallRes] = await Promise.all([
+                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_products", cd_id: cd_id }),
+                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_services", cd_id: cd_id }),
+                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_gallery", cd_id: cd_id })
+                    ]);
 
-                        galleryData.value = data
+                    // get all response data
+                    const prodData = prodRes?.data?.getData;
+                    const servData = servRes?.data?.getData;
+                    const gallData = gallRes?.data?.getData;
+
+                    // Map Products using allowedCount
+                    if (Array.isArray(prodData) && prodData.length > 0) {
+                        const formatted = prodData
+                            .filter(item => item.product_name && item.final_price > 0)
+                            .map(item => ({
+                                product_name: item.product_name,
+                                product_img: item.product_img ? `${s3ProductsUrl}/product_images/${item.product_img}` : "",
+                                orginal_price: Number(item.orginal_price),
+                                discount_price: Number(item.discount_price),
+                                final_price: Number(item.final_price),
+                            }));
+
+                        products.value = allowedCount > 0 ? formatted.slice(0, allowedCount) : formatted;
+                    } else {
+                        products.value = [];
+                    }
+
+                    // Map Services using allowedCount
+                    if (Array.isArray(servData) && servData.length > 0) {
+                        const formatted = servData
+                            .filter(item => item.service_name && item.service_img)
+                            .map(item => ({
+                                service_name: item.service_name,
+                                service_img: item.service_img ? `${s3ServiceUrl}/service_images/${item.service_img}` : pro6,
+                            }));
+
+                        serviceData.value = allowedCount > 0 ? formatted.slice(0, allowedCount) : formatted;
+                    }
+
+                    // --- Step 5: Map Gallery (NEW) ---
+                    if (Array.isArray(gallData) && gallData.length > 0) {
+                        const formatted = gallData
                             .filter(item => item.gallery)
                             .map(item => ({
                                 gallery: item.gallery
-                                    ? `/gallery_images/${item.gallery}`
+                                    ? `${s3GalleryUrl}/gallery_images/${item.gallery}`
                                     : pro6,
                             }));
-
-                    } 
+                        // Apply the same plan-based limit to the gallery
+                        galleryData.value = allowedCount > 0 ? formatted.slice(0, allowedCount) : formatted;
+                    } else {
+                        galleryData.value = [];
+                    }
 
                 } catch (error) {
-                    console.error("Load Gallery error:", error);
+                    console.error("Initialization Error:", error);
                 }
             };
 
+            // Helper to get plan limits
+            const getAllowedCount = async (cd_id) => {
+                // Safety check: if cd_id is missing, don't even call the API
+                if (!cd_id) {
+                    console.warn("getAllowedCount called without cd_id");
+                    return 0;
+                }
+
+                try {
+                    const planRes = await axios.post("/collectAllWebsiteDatas", {
+                        table_name: "miniweb_company_details",
+                        cd_id: cd_id
+                    });
+
+                    // Use optional chaining to prevent "cannot read property [0] of undefined"
+                    const companyData = planRes.data?.getData?.[0];
+                    
+                    console.log("Plan Data Received: ", companyData);
+
+                    if (companyData && Number(companyData.purchased_id) > 0) {
+                        const planId = Number(companyData.plan_id);
+                        if (planId === 94) return 5;
+                        if (planId === 95) return 15;
+                        if (planId === 96) return 30;
+                    }
+                    
+                    return 0; // Default if no valid plan
+                } catch (err) {
+                    console.error("Plan API Error:", err);
+                    return 0;
+                }
+            };
             // ---------------- Payment ----------------
             const paymentQrs = ref([]);
 
@@ -1587,15 +1612,15 @@
                     paymentQrs.value = [
                         {
                             name: "Google Pay",
-                            img: data.gpay_qr_code ? `/payment_Details_QrCode/${data.gpay_qr_code}` :  (!data.id ? gPay : null)
+                            img: data.gpay_qr_code ? `${s3PaymenyUrl}/payment_Details_QrCode/${data.gpay_qr_code}` :  (!data.id ? gPay : null)
                         },
                         {
                             name: "PhonePe",
-                            img: data.phonepe_qr_code ? `/payment_Details_QrCode/${data.phonepe_qr_code}` : (!data.id ? gPay : null)
+                            img: data.phonepe_qr_code ? `${s3PaymenyUrl}/payment_Details_QrCode/${data.phonepe_qr_code}` : (!data.id ? gPay : null)
                         },
                         {
                             name: "Paytm",
-                            img: data.paytm_qr_code ? `/payment_Details_QrCode/${data.paytm_qr_code}` : (!data.id ? gPay : null)
+                            img: data.paytm_qr_code ? `${s3PaymenyUrl}/payment_Details_QrCode/${data.paytm_qr_code}` : (!data.id ? gPay : null)
                         }
                     ].filter(item => item.img);
 
@@ -1614,7 +1639,7 @@
                     if(!data) return;
 
                     qrData.value = data
-                    qrImage.value = `/qrcodes/${qrData.value.qr_code}`
+                    qrImage.value = `${s3QrCodeUrl}/qrcodes/${qrData.value.qr_code}`
                     
                 }
                 catch (error){
@@ -1679,9 +1704,11 @@
                         loadAddressDetails(),
                         loadSocialMediaLinks(),
                         loadAboutUs(),
-                        loadProducts(),
-                        loadService(),
-                        loadGallery(),
+                        // loadProducts(),
+                        // loadService(),
+                        // loadGallery(),
+                        getAllowedCount(),
+                        initWebsiteData(),
                         loadPayments(),
                         loadQrCode(),
                         loadFeedbackVerifyData(),
@@ -2015,6 +2042,13 @@
                 // pro7,
                 // pro8,
                 // pro9,
+                // .env from
+                s3ProductsUrl,
+                s3ServiceUrl,
+                s3GalleryUrl,
+                s3PaymenyUrl,
+                s3QrCodeUrl,
+                s3LogoUrl
             }
         }
     }
