@@ -16,9 +16,9 @@
                     <router-link to="/Service">
                         <button
                             class="outline outline-1 outline-pink-500 text-pink-500 font-semibold
-                                py-1.5 px-3 text-sm 
+                                py-1.5 px-3 text-sm
                                 md:py-2 md:px-4 md:text-base
-                                rounded-xl transition-all duration-500 
+                                rounded-xl transition-all duration-500
                                 hover:-translate-y-2 hover:shadow-xl">
                             Service
                         </button>
@@ -28,15 +28,15 @@
                     <button
                         @click="saveAndNext"
                         :disabled="isSubmitting"
-                        class="bg-[#000b57] text-white 
-                            py-1.5 px-3 text-sm 
+                        class="bg-[#000b57] text-white
+                            py-1.5 px-3 text-sm
                             md:py-2 md:px-4 md:text-base
-                            rounded-xl transition-all duration-500 
+                            rounded-xl transition-all duration-500
                             hover:-translate-y-2 hover:shadow-xl">
                         {{ isSubmitting ? "Saving..." : "Save & Next Payment" }}
                     </button>
                     <!-- Right Side Button /.-->
-                    
+
                 </div>
                 <!-- top header /. -->
 
@@ -78,7 +78,7 @@
                                         <div class="w-full h-32 flex items-center justify-center border border-gray-200 rounded-lg overflow-hidden">
                                         <img v-if="gallery.preview" :src="gallery.preview" class="object-cover w-full h-full" />
                                         <span v-else class="text-gray-400 text-center">Upload Gallery</span>
-                                        
+
                                         </div>
                                     </label>
                                     <!-- file upload  area /. -->
@@ -123,14 +123,15 @@
             const rowid = ref()
             const cardStore = useCardStore()
             const isSubmitting = ref(false);
+            const s3GalleryUrl = import.meta.env.VITE_AWS_URL_GALLERY;
 
-            
+
             // get data
             const currData = ref({})
             const galleries = ref();
             onMounted(async () => {
-                const res = await axios.post('/getWebsiteDetails', { 
-                    table: 'miniweb_gallery', 
+                const res = await axios.post('/getWebsiteDetails', {
+                    table: 'miniweb_gallery',
                     cardId: Number(cardStore.cardId)
                 });
 
@@ -150,7 +151,7 @@
                 currData.value = data;
                 galleries.value = data.map(item => ({
                     file: null,
-                    preview: item.gallery ? `/gallery_images/${item.gallery}` : '',
+                    preview: item.gallery ? `${s3GalleryUrl}/gallery_images/${item.gallery}` : '',
                 }));
 
                 rowid.value = data.map(item => item.id);
@@ -201,7 +202,11 @@
                 if (!result.isConfirmed) return;
 
                 try {
-                    const res = await axios.post("/removeGalleryImage", { id: rowid.value[index], image: gallery.preview.replace("/gallery_images/", ""), });
+                    const fileNameOnly = gallery.preview.split('/').pop();
+                    const res = await axios.post("/removeGalleryImage", {
+                        id: rowid.value[index],
+                        image: fileNameOnly, // Now sending just the filename
+                    });
 
                     if (res.data.status) {
                     galleries.value[index].file = null;
@@ -244,11 +249,11 @@
                 rowid.value.forEach((id, idx) => {
                     formData.append(`rowid[${idx}]`, id);
                 });
-                
+
                 try {
                     const res = await axios.post('/saveWebGallery', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' }
-                });                
+                });
                 if(res.data.status == true){
                         document.querySelectorAll('input[type="file"]').forEach(input => {
                             input.value = '';
@@ -263,7 +268,7 @@
                 } catch (error) {
                     toast.error("Something went wrong: " + error);
                 }
-                
+
             }
 
             return {
@@ -276,6 +281,7 @@
                 removeTempImage,
                 removeProductImage,
                 isSubmitting,
+                s3GalleryUrl
             }
         }
     }
