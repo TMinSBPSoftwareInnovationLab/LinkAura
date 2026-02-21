@@ -16,9 +16,9 @@
                     <router-link to="/Products">
                         <button
                             class="outline outline-1 outline-pink-500 text-pink-500 font-semibold
-                                py-1.5 px-3 text-sm 
+                                py-1.5 px-3 text-sm
                                 md:py-2 md:px-4 md:text-base
-                                rounded-xl transition-all duration-500 
+                                rounded-xl transition-all duration-500
                                 hover:-translate-y-2 hover:shadow-xl">
                             Products
                         </button>
@@ -28,15 +28,15 @@
                     <button
                         @click="saveAndNext"
                         :disabled="isSubmitting"
-                        class="bg-[#000b57] text-white 
-                            py-1.5 px-3 text-sm 
+                        class="bg-[#000b57] text-white
+                            py-1.5 px-3 text-sm
                             md:py-2 md:px-4 md:text-base
-                            rounded-xl transition-all duration-500 
+                            rounded-xl transition-all duration-500
                             hover:-translate-y-2 hover:shadow-xl">
                         {{ isSubmitting ? "Saving..." : "Save & Next Gallery" }}
                     </button>
                     <!-- Right Side Button /.-->
-                    
+
                 </div>
                 <!-- top header /. -->
 
@@ -78,7 +78,7 @@
                                         <div class="w-full h-32 flex items-center justify-center border border-gray-200 rounded-lg overflow-hidden">
                                         <img v-if="service.preview" :src="service.preview" class="object-cover w-full h-full" />
                                         <span v-else class="text-gray-400 text-center">Upload Service</span>
-                                        
+
                                         </div>
                                     </label>
                                     <!-- file upload  area /. -->
@@ -119,6 +119,7 @@
     import axios from 'axios';
     import { TrashIcon } from '@heroicons/vue/24/solid'
     import Swal from 'sweetalert2';
+    const s3ServiceUrl = import.meta.env.VITE_AWS_URL_SERVICE_IMAGES;
 
     export default{
         name: "Service",
@@ -129,13 +130,13 @@
             const cardStore = useCardStore()
             const isSubmitting = ref(false);
 
-            
+
             // get data
             const currData = ref({})
             const services = ref();
             onMounted(async () => {
-                const res = await axios.post('/getWebsiteDetails', { 
-                    table: 'miniweb_services', 
+                const res = await axios.post('/getWebsiteDetails', {
+                    table: 'miniweb_services',
                     cardId: Number(cardStore.cardId)
                 });
 
@@ -157,7 +158,7 @@
                 services.value = data.map(item => ({
                     service_name: item.service_name || '',
                     file: null,
-                    preview: item.service_img ? `/service_images/${item.service_img}` : '',
+                    preview: item.service_img ? `${s3ServiceUrl}/service_images/${item.service_img}` : '',
                 }));
 
                 rowid.value = data.map(item => item.id);
@@ -208,7 +209,8 @@
                 if (!result.isConfirmed) return;
 
                 try {
-                    const res = await axios.post("/removeServiceImage", { id: rowid.value[index], image: service.preview.replace("/service_images/", ""), });
+                    const fileNameOnly = service.preview.split('/').pop();
+                    const res = await axios.post("/removeServiceImage", { id: rowid.value[index], image: fileNameOnly, });
 
                     if (res.data.status) {
                     services.value[index].file = null;
@@ -252,11 +254,11 @@
                 rowid.value.forEach((id, idx) => {
                     formData.append(`rowid[${idx}]`, id);
                 });
-                
+
                 try {
                     const res = await axios.post('/saveWebServices', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' }
-                });                
+                });
                 if(res.data.status == true){
                         document.querySelectorAll('input[type="file"]').forEach(input => {
                             input.value = '';
@@ -272,7 +274,7 @@
                 } catch (error) {
                     toast.error("Something went wrong: " + error);
                 }
-                
+
             }
 
             return {
@@ -285,6 +287,7 @@
                 removeTempImage,
                 removeProductImage,
                 isSubmitting,
+                s3ServiceUrl,
             }
         }
     }
