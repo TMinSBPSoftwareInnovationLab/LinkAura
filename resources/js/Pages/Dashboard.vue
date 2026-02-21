@@ -116,7 +116,7 @@
                 <!-- Price area -->
                 <div class="flex flex-col w-full px-5 pt-5 pb-5 bg-[#2A7B9B]">
                     <p class="uppercase font-semibold text-[20px] text-[#2A7B9B] bg-white p-4 rounded-2xl">
-                        Price: ₹1,239 <br> <span class="text-[12px] font-bold text-gray-800">(₹1,050 + ₹189 GST)</span>
+                        Price: ₹999
                     </p>
                     <p class="uppercase text-[20px] text-white font-semibold">
                         Validity: 3 Months
@@ -156,7 +156,8 @@
                                 <li>Direct Email Contact</li>
                             </ul>
                         </li>
-                        
+                        <li>🔓 Access: Dashboard active for 30 days post-expiry</li>
+                        <li>📩 Enquiries: Leads collected & saved; renew to unlock</li>
                     </ul>
                 </div>
                 <!-- Features area /. -->
@@ -191,7 +192,7 @@
                 <!-- Price area -->
                 <div class="flex flex-col w-full px-5 pt-5 pb-5 bg-[#066856]">
                     <p class="uppercase font-semibold text-[20px] text-[#066856] bg-white p-4 rounded-2xl">
-                        Price: ₹2,124 <br> <span class="text-[12px] font-bold text-gray-800">(₹1,800 + ₹324 GST)</span>
+                        Price: ₹1499
                     </p>
                     <p class="uppercase text-[20px] text-white font-semibold">
                         Validity: 6 Months
@@ -231,7 +232,8 @@
                                 <li>Direct Email Contact</li>
                             </ul>
                         </li>
-                        
+                        <li>🔓 Access: Dashboard active for 60 days post-expiry</li>
+                        <li>📩 Enquiries: Leads collected & saved; renew to unlock</li>
                     </ul>
                 </div>
                 <!-- Features area /. -->
@@ -266,7 +268,7 @@
                 <!-- Price area -->
                 <div class="flex flex-col w-full px-5 pt-5 pb-5 bg-[#6c075b]">
                     <p class="uppercase font-semibold text-[20px] text-[#6c075b] bg-white p-4 rounded-2xl">
-                        Price: ₹3,540 <br> <span class="text-[12px] font-bold text-gray-800">(₹3,000 + ₹540 GST)</span>
+                        Price: ₹2999
                     </p>
                     <p class="uppercase text-[20px] text-white font-semibold">
                         Validity: 12 Months
@@ -306,7 +308,8 @@
                                 <li>Direct Email Contact</li>
                             </ul>
                         </li>
-                        
+                        <li>🔓 Access: Dashboard active for 90 days post-expiry</li>
+                        <li>📩 Enquiries: Leads collected & saved; renew to unlock</li>
                     </ul>
                 </div>
                 <!-- Features area /. -->
