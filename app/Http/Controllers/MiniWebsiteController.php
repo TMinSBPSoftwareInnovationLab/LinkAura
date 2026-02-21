@@ -19,73 +19,54 @@ use Illuminate\Support\Facades\Config;
 class MiniWebsiteController extends Controller
 {
     // save company details
-    public function save_company_details(Request $request){
-        // return $request;
+    public function save_company_details(Request $request) {
         $request->validate([
             "company_name" => 'required',
             "owner_name" => 'required',
             'designation' => 'required'
         ]);
 
-        $now = Carbon::now();
-        $formattedDate = $now->toDateTimeString(); 
-        $currDate = Carbon::today();
         $companyName = trim($request->company_name);
         $owner_name = trim($request->owner_name);
         $designation = trim($request->designation);
         $user_id = $request->user_id;
-        $path = ''; 
         $rowid = $request->rowid;
-
-        if ($request->hasFile('logo') && 1==2) {
-            $businessName = preg_replace('/[^A-Za-z0-9\-]/', '_', $request->company_name);
-            $dateTime = now()->format('Ymd_His');
-            $extension = $request->file('logo')->getClientOriginalExtension();
-
-            $fileName = "{$user_id}_{$businessName}_{$dateTime}.{$extension}";
-            $destinationPath = public_path('company_logos');
-
-            if (!file_exists($destinationPath)) {
-                mkdir($destinationPath, 0777, true);
-            }
-            $request->file('logo')->move($destinationPath, $fileName);
-            $path = $fileName;
-        }
+        $path = '';
 
         if ($request->hasFile('logo')) {
-
-            // New file name pattern
+            // 1. Prepare File Name
             $businessName = preg_replace('/[^A-Za-z0-9\-]/', '_', $companyName);
             $dateTime = now()->format('Ymd_His');
             $extension = $request->file('logo')->getClientOriginalExtension();
-
             $fileName = "{$user_id}_{$businessName}_{$dateTime}.{$extension}";
-            $destinationPath = public_path('company_logos');
 
-            if (!file_exists($destinationPath)) {
-                mkdir($destinationPath, 0777, true);
-            }
+            // Target folder in S3 bucket
+            $s3Folder = "company_logos/";
+            $fullS3Path = $s3Folder . $fileName;
 
-            // If update & new file uploaded → delete old file
+            // 2. Handle Old File Deletion (If updating)
             if ($rowid) {
                 $existing = DB::table('miniweb_company_details')
                     ->where('id', $rowid)
                     ->first();
 
                 if ($existing && $existing->logo_path) {
-                    $oldFile = $destinationPath . '/' . $existing->logo_path;
+                    $oldS3Path = $s3Folder . $existing->logo_path;
 
-                    if (file_exists($oldFile)) {
-                        unlink($oldFile);
+                    // Check if old file exists on S3 and delete it
+                    if (Storage::disk('s3_company_logos')->exists($oldS3Path)) {
+                        Storage::disk('s3_company_logos')->delete($oldS3Path);
                     }
+
                 }
             }
 
-            // Upload new file
-            $request->file('logo')->move($destinationPath, $fileName);
+            // 3. Upload New File to S3
+            // 'public' visibility makes it viewable via URL
+            Storage::disk('s3_company_logos')->putFileAs($s3Folder, $request->file('logo'), $fileName, 'public');
+
             $path = $fileName;
         }
-
 
         $addData = [
             'user_id' => $user_id,
@@ -93,29 +74,29 @@ class MiniWebsiteController extends Controller
             'owner_name' => $owner_name,
             'designation' => $designation
         ];
+
         if ($path) {
             $addData['logo_path'] = $path;
         }
-        // return $addData;
-        if($rowid){ // update 
+
+        if ($rowid) { // Update
             $addData['m_date'] = Carbon::now('Asia/Kolkata');
             $update = DB::table('miniweb_company_details')
                 ->where('id', $rowid)
                 ->update($addData);
 
             return [
-                'status'  => $update ? true : false,
-                'message' => $update ? 'Company Details Updated Successfully' : 'No Changes Made',
+                'status'  => true, // Return true if DB updated or if only image changed
+                'message' => 'Company Details Updated Successfully',
                 'cardId'  => $rowid
             ];
-        }
-        else
-        { //  new mini website insert
-            $insert = DB::table('miniweb_company_details')->insertOrIgnore($addData);
+        } else { // New Insert
+            $insert = DB::table('miniweb_company_details')->insert($addData);
             $last_Id = DB::getPdo()->lastInsertId();
+
             return [
                 'status' => $insert ? true : false,
-                'message' => $insert ? 'Company Details Created Successfully' : 'Company Details Not Created',
+                'message' => $insert ? 'Company Details Created Successfully' : 'Creation Failed',
                 'cardId' => $last_Id
             ];
         }
@@ -697,13 +678,12 @@ class MiniWebsiteController extends Controller
     }
 
     // save gallery 
-    public function saveWebGallery(Request $request){
+    public function saveWebGallery(Request $request) {
         $galleries = collect($request->galleries)->sortKeys()->all();
         $mini_website_id = $request->cardId;
         $rowid = $request->rowid;
-        $inserted = false;
-        $anyChanges  = false; 
-        $messages    = [];
+        $anyChanges = false; 
+        $messages = [];
 
         if(!$mini_website_id){
             return [
@@ -711,82 +691,83 @@ class MiniWebsiteController extends Controller
                 'message' => 'No Gallery Insert!',
             ];
         }
+        try {
+            $result = Storage::disk('s3_gallery')->put(
+                'gallery_images/test.txt',
+                'hello world'
+            );
+            
+            dd($result);
 
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+
+        exit;
         foreach ($galleries as $index => $p) {
             $newImagePath = '';
+            
+            // 1. S3-க்கு இமேஜை அப்லோட் செய்யும் பகுதி
             if (isset($p['image']) && $p['image'] instanceof \Illuminate\Http\UploadedFile) {
-
-                // Generate image name
-                $folderPath = public_path('gallery_images');
-                if (!file_exists($folderPath)) {
-                    mkdir($folderPath, 0777, true);
-                }
-
                 $dateTime  = now()->format('Ymd_His');
                 $ext       = $p['image']->getClientOriginalExtension();
-                $imageName = "{$mini_website_id}_"."la"."_{$dateTime}_" . uniqid() . ".{$ext}";
+                $imageName = "{$mini_website_id}_la_{$dateTime}_" . uniqid() . ".{$ext}";
 
-                // Move new image
-                $p['image']->move($folderPath, $imageName);
+                // S3-ல் 'gallery_images' எனும் ஃபோல்டரில் அப்லோட் செய்கிறோம்
+                // 'public' என குறிப்பிடுவது அவசியம் (Visibility)
+                // $path = Storage::disk('s3_gallery')->putFileAs('gallery_images', $p['image'], $imageName, 'public');
+                $path = Storage::disk('s3_gallery')->putFileAs(
+                    'gallery_images',
+                    $p['image'],
+                    $imageName,
+                    ['visibility' => 'public']
+                );
+
+                
+                // Database-ல் சேமிக்க வெறும் ஃபைல் பெயரை மட்டும் எடுக்கிறோம்
                 $newImagePath = $imageName;
             }
 
-            // Data to update
             $data = [
-                'mini_website_id'  => $mini_website_id,
+                'mini_website_id' => $mini_website_id,
             ];
 
             // ============= UPDATE MODE =============
             if (!empty($rowid) && isset($rowid[$index])) {
-
                 $galleryId = $rowid[$index];
+                $oldGallery = DB::table('miniweb_gallery')->where('id', $galleryId)->first();
 
-                // First get old product
-                $oldGallery = DB::table('miniweb_gallery')
-                    ->where('id', $galleryId)
-                    ->first();
-
-                // If new image uploaded → delete old image
                 if ($newImagePath) {
-
+                    // பழைய இமேஜை S3-லிருந்து டெலீட் செய்கிறோம்
                     if ($oldGallery && $oldGallery->gallery) {
-                        $oldFile = public_path('gallery_images/' . $oldGallery->gallery);
-                        if (file_exists($oldFile)) {
-                            unlink($oldFile);  // delete old image
+                        $oldFilePath = 'gallery_images/' . $oldGallery->gallery;
+                        if (Storage::disk('s3_gallery')->exists($oldFilePath)) {
+                            Storage::disk('s3_gallery')->delete($oldFilePath);
                         }
                     }
-
-                    // Save new path
                     $data['gallery'] = $newImagePath;
                 }
 
                 $data['m_date'] = now('Asia/Kolkata')->toDateTimeString();
-                $updated = DB::table('miniweb_gallery')
-                    ->where('id', $galleryId)
-                    ->update($data);
+                $updated = DB::table('miniweb_gallery')->where('id', $galleryId)->update($data);
 
-                if ($updated) {
+                if ($updated || $newImagePath) {
                     $anyChanges = true;
-                    $messages[] = "Gallery ID {$galleryId} updated successfully.";
-                } else {
-                    $messages[] = "No changes for Gallery ID {$galleryId}.";
+                    $messages[] = "Gallery ID {$galleryId} updated.";
                 }
-            }
-            else { // insert
+            } 
+            // ============= INSERT MODE =============
+            else {
                 if ($newImagePath) {
                     $data['gallery'] = $newImagePath;
-                }
+                    $inserted = DB::table('miniweb_gallery')->insert($data);
 
-                $inserted = DB::table('miniweb_gallery')->insert($data);
-
-                if ($inserted) {
-                    $anyChanges = true;
-                    $messages[] = "New Gallery inserted successfully.";
-                } else {
-                    $messages[] = "Failed to Gallery.";
+                    if ($inserted) {
+                        $anyChanges = true;
+                        $messages[] = "New Gallery inserted.";
+                    }
                 }
             }
-
         }
 
         return [
@@ -794,6 +775,106 @@ class MiniWebsiteController extends Controller
             'message' => $anyChanges ? implode(" ", $messages) : "No changes made",
         ];
     }
+
+
+
+    // public function saveWebGallery(Request $request){
+    //     $galleries = collect($request->galleries)->sortKeys()->all();
+    //     $mini_website_id = $request->cardId;
+    //     $rowid = $request->rowid;
+    //     $inserted = false;
+    //     $anyChanges  = false; 
+    //     $messages    = [];
+
+    //     if(!$mini_website_id){
+    //         return [
+    //             'status'  => false,
+    //             'message' => 'No Gallery Insert!',
+    //         ];
+    //     }
+
+    //     foreach ($galleries as $index => $p) {
+    //         $newImagePath = '';
+    //         if (isset($p['image']) && $p['image'] instanceof \Illuminate\Http\UploadedFile) {
+
+    //             // Generate image name
+    //             $folderPath = public_path('gallery_images');
+    //             if (!file_exists($folderPath)) {
+    //                 mkdir($folderPath, 0777, true);
+    //             }
+
+    //             $dateTime  = now()->format('Ymd_His');
+    //             $ext       = $p['image']->getClientOriginalExtension();
+    //             $imageName = "{$mini_website_id}_"."la"."_{$dateTime}_" . uniqid() . ".{$ext}";
+
+    //             // Move new image
+    //             $p['image']->move($folderPath, $imageName);
+    //             $newImagePath = $imageName;
+    //         }
+
+    //         // Data to update
+    //         $data = [
+    //             'mini_website_id'  => $mini_website_id,
+    //         ];
+
+    //         // ============= UPDATE MODE =============
+    //         if (!empty($rowid) && isset($rowid[$index])) {
+
+    //             $galleryId = $rowid[$index];
+
+    //             // First get old product
+    //             $oldGallery = DB::table('miniweb_gallery')
+    //                 ->where('id', $galleryId)
+    //                 ->first();
+
+    //             // If new image uploaded → delete old image
+    //             if ($newImagePath) {
+
+    //                 if ($oldGallery && $oldGallery->gallery) {
+    //                     $oldFile = public_path('gallery_images/' . $oldGallery->gallery);
+    //                     if (file_exists($oldFile)) {
+    //                         unlink($oldFile);  // delete old image
+    //                     }
+    //                 }
+
+    //                 // Save new path
+    //                 $data['gallery'] = $newImagePath;
+    //             }
+
+    //             $data['m_date'] = now('Asia/Kolkata')->toDateTimeString();
+    //             $updated = DB::table('miniweb_gallery')
+    //                 ->where('id', $galleryId)
+    //                 ->update($data);
+
+    //             if ($updated) {
+    //                 $anyChanges = true;
+    //                 $messages[] = "Gallery ID {$galleryId} updated successfully.";
+    //             } else {
+    //                 $messages[] = "No changes for Gallery ID {$galleryId}.";
+    //             }
+    //         }
+    //         else { // insert
+    //             if ($newImagePath) {
+    //                 $data['gallery'] = $newImagePath;
+    //             }
+
+    //             $inserted = DB::table('miniweb_gallery')->insert($data);
+
+    //             if ($inserted) {
+    //                 $anyChanges = true;
+    //                 $messages[] = "New Gallery inserted successfully.";
+    //             } else {
+    //                 $messages[] = "Failed to Gallery.";
+    //             }
+    //         }
+
+    //     }
+
+    //     return [
+    //         'status'  => $anyChanges,
+    //         'message' => $anyChanges ? implode(" ", $messages) : "No changes made",
+    //     ];
+    // }
 
     // save payment details
     public function save_miniweb_paymentDetails(Request $request){
