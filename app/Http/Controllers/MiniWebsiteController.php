@@ -396,91 +396,72 @@ class MiniWebsiteController extends Controller
     }
 
     // save product
-    public function saveWebProducts(Request $request){
+    public function saveWebProducts(Request $request) {
         $products = $request->products;
         $mini_website_id = $request->cardId;
         $rowid = $request->rowid;
-        $inserted = false;
-        $anyChanges  = false; 
-        $messages    = [];
+        $anyChanges = false;
+        $messages = [];
 
-        if(!$mini_website_id){
-            return [
-                'status'  => false,
-                'message' => 'No Products Insert!',
-            ];
+        if (!$mini_website_id) {
+            return ['status' => false, 'message' => 'No Products Insert!'];
         }
 
         foreach ($products as $index => $p) {
             $newImagePath = '';
+            $s3Folder = "product_images/"; // Folder inside S3 bucket
+
+            // 1. Handle New Image Upload
             if (isset($p['image']) && $p['image'] instanceof \Illuminate\Http\UploadedFile) {
+                $dateTime = now()->format('Ymd_His');
+                $ext = $p['image']->getClientOriginalExtension();
+                $imageName = "{$mini_website_id}_la_{$dateTime}_" . uniqid() . ".{$ext}";
 
-                // Generate image name
-                $folderPath = public_path('product_images');
-                if (!file_exists($folderPath)) {
-                    mkdir($folderPath, 0777, true);
-                }
-
-                $dateTime  = now()->format('Ymd_His');
-                $ext       = $p['image']->getClientOriginalExtension();
-                $imageName = "{$mini_website_id}_"."la"."_{$dateTime}_" . uniqid() . ".{$ext}";
-
-                // Move new image
-                $p['image']->move($folderPath, $imageName);
+                // Upload to S3
+                Storage::disk('s3_products')->putFileAs($s3Folder, $p['image'], $imageName, 'public');
                 $newImagePath = $imageName;
             }
 
-            // prices
             $original = floatval($p['original_price'] ?? 0);
             $discount = floatval($p['discount_price'] ?? 0);
-            $final    = floatval($p['final_price'] ?? 0);
+            $final = floatval($p['final_price'] ?? 0);
 
-            // Data to update
             $data = [
-                'mini_website_id'  => $mini_website_id,
-                'product_name'   => ($p['name'] && $p['name'] !='undefined') ? $p['name'] : '',
-                'orginal_price'  => $original,
+                'mini_website_id' => $mini_website_id,
+                'product_name' => ($p['name'] && $p['name'] != 'undefined') ? $p['name'] : '',
+                'orginal_price' => $original,
                 'discount_price' => $discount,
-                'final_price'    => $final,
+                'final_price' => $final,
             ];
 
-            // ============= UPDATE MODE =============
+            // 2. UPDATE MODE
             if (!empty($rowid) && isset($rowid[$index])) {
-
                 $productId = $rowid[$index];
 
-                // First get old product
-                $oldProduct = DB::table('miniweb_products')
-                    ->where('id', $productId)
-                    ->first();
-
-                // If new image uploaded → delete old image
+                // If a new image was uploaded, delete the old one from S3 first
                 if ($newImagePath) {
+                    $oldProduct = DB::table('miniweb_products')->where('id', $productId)->first();
 
                     if ($oldProduct && $oldProduct->product_img) {
-                        $oldFile = public_path('product_images/' . $oldProduct->product_img);
-                        if (file_exists($oldFile)) {
-                            unlink($oldFile);  // delete old image
+                        $oldS3Path = $s3Folder . $oldProduct->product_img;
+
+                        if (Storage::disk('s3_products')->exists($oldS3Path)) {
+                            Storage::disk('s3_products')->delete($oldS3Path);
                         }
                     }
-
-                    // Save new path
                     $data['product_img'] = $newImagePath;
                 }
 
                 $data['m_date'] = now('Asia/Kolkata')->toDateTimeString();
-                $updated = DB::table('miniweb_products')
-                    ->where('id', $productId)
-                    ->update($data);
+                $updated = DB::table('miniweb_products')->where('id', $productId)->update($data);
 
-                if ($updated) {
+                if ($updated || $newImagePath) {
                     $anyChanges = true;
-                    $messages[] = "Product ID {$productId} updated successfully.";
-                } else {
-                    $messages[] = "No changes for Product ID {$productId}.";
+                    $messages[] = "Product updated successfully.";
                 }
             }
-            else { // insert
+            // 3. INSERT MODE
+            else {
                 if ($newImagePath) {
                     $data['product_img'] = $newImagePath;
                 }
@@ -490,147 +471,163 @@ class MiniWebsiteController extends Controller
                 if ($inserted) {
                     $anyChanges = true;
                     $messages[] = "New product inserted successfully.";
-                } else {
-                    $messages[] = "Failed to insert product.";
                 }
             }
-
         }
 
         return [
-            'status'  => $anyChanges,
-            'message' => $anyChanges ? implode(" ", $messages) : "No changes made",
+            'status' => $anyChanges,
+            'message' => $anyChanges ? "Changes saved successfully" : "No changes made",
         ];
     }
 
     // remove product image
-    public function removeProductImage(Request $request){
+    public function removeProductImage(Request $request) {
         $id    = $request->id;
-        $image = $request->image;
+        $image = $request->image; // This might be a full URL or just a filename
+
         if (!$id || !$image) {
             return ['status' => false, 'message' => 'Invalid request'];
         }
-        
-        $path = public_path("product_images/{$image}");
 
-        
-        if (is_file($path)) {
-            @unlink($path);
+        // 1. Extract the filename only (in case a full URL was sent from Vue)
+        $fileNameOnly = basename($image);
+
+        // 2. Define the path inside your 'linkaura-product-images' bucket
+        $s3Path = "product_images/" . $fileNameOnly;
+        // return $s3Path;
+        try {
+            $disk = Storage::disk('s3_products');
+
+            // 3. Delete from S3
+            if ($disk->exists($s3Path)) { // return "if";
+                $disk->delete($s3Path);
+            }
+            // return "else";
+
+            // 4. Update the Database
+            $updated = DB::table('miniweb_products')
+                ->where('id', $id)
+                ->update(['product_img' => '']);
+
+            return [
+                'status'  => true,
+                'message' => 'Product image removed successfully.'
+            ];
+
+        } catch (\Exception $e) {
+            return [
+                'status'  => false,
+                'message' => 'S3 Error: ' . $e->getMessage()
+            ];
         }
-
-        $updated = DB::table('miniweb_products')
-            ->where('id', $id)
-            ->update(['product_img' => '']);
-
-        return [
-            'status'  => (bool) $updated,
-            'message' => $updated ? 'Image Removed successfully.' : 'No changes made.'
-        ];
     }
 
     // remove service image 
-    public function removeServiceImage(Request $request){
+    public function removeServiceImage(Request $request) {
         $id    = $request->id;
-        $image = $request->image;
+        $image = $request->image; // This could be the full URL or just the filename
+
         if (!$id || !$image) {
             return ['status' => false, 'message' => 'Invalid request'];
         }
-        
-        $path = public_path("service_images/{$image}");
 
-        
-        if (is_file($path)) {
-            @unlink($path);
+        // 1. Extract only the filename (e.g., image.jpg) to avoid URL issues
+        $fileNameOnly = basename($image);
+
+        // 2. Define the path inside your 'linkaura-service-images' bucket
+        $s3Path = "service_images/" . $fileNameOnly;
+
+        try {
+            $disk = Storage::disk('s3_services');
+
+            // 3. Permanently delete from S3 bucket
+            if ($disk->exists($s3Path)) {
+                $disk->delete($s3Path);
+            }
+
+            // 4. Update the Database to clear the image reference
+            $updated = DB::table('miniweb_services')
+                ->where('id', $id)
+                ->update(['service_img' => '']);
+
+            return [
+                'status'  => true,
+                'message' => 'Service image removed successfully from S3.'
+            ];
+
+        } catch (\Exception $e) {
+            // Return the error message if something goes wrong with the AWS connection
+            return [
+                'status'  => false,
+                'message' => 'S3 Error: ' . $e->getMessage()
+            ];
         }
-
-        $updated = DB::table('miniweb_services')
-            ->where('id', $id)
-            ->update(['service_img' => '']);
-
-        return [
-            'status'  => (bool) $updated,
-            'message' => $updated ? 'Image Removed successfully.' : 'No changes made.'
-        ];
     }
 
     // save service
-    public function saveWebServices(Request $request){
+    public function saveWebServices(Request $request) {
         $services = $request->services;
         $mini_website_id = $request->cardId;
         $rowid = $request->rowid;
-        $inserted = false;
-        $anyChanges  = false; 
-        $messages    = [];
+        $anyChanges = false;
+        $messages = [];
 
-        if(!$mini_website_id){
+        if (!$mini_website_id) {
             return [
                 'status'  => false,
-                'message' => 'No Services Insert!',
+                'message' => 'No Services Inserted!',
             ];
         }
 
-        foreach ($services as $index => $p) {
+        foreach ($services as $index => $s) {
             $newImagePath = '';
-            if (isset($p['image']) && $p['image'] instanceof \Illuminate\Http\UploadedFile) {
+            $s3Folder = "service_images/"; // Folder structure inside S3
 
-                // Generate image name
-                $folderPath = public_path('service_images');
-                if (!file_exists($folderPath)) {
-                    mkdir($folderPath, 0777, true);
-                }
+            // 1. Handle New Image Upload to S3
+            if (isset($s['image']) && $s['image'] instanceof \Illuminate\Http\UploadedFile) {
+                $dateTime = now()->format('Ymd_His');
+                $ext = $s['image']->getClientOriginalExtension();
+                $imageName = "{$mini_website_id}_la_{$dateTime}_" . uniqid() . ".{$ext}";
 
-                $dateTime  = now()->format('Ymd_His');
-                $ext       = $p['image']->getClientOriginalExtension();
-                $imageName = "{$mini_website_id}_"."la"."_{$dateTime}_" . uniqid() . ".{$ext}";
-
-                // Move new image
-                $p['image']->move($folderPath, $imageName);
+                // Upload to S3 bucket
+                Storage::disk('s3_services')->putFileAs($s3Folder, $s['image'], $imageName, 'public');
                 $newImagePath = $imageName;
             }
 
-            // Data to update
             $data = [
-                'mini_website_id'  => $mini_website_id,
-                'service_name'   => ($p['service_name'] && $p['service_name'] !='undefined') ? $p['service_name'] : '',
+                'mini_website_id' => $mini_website_id,
+                'service_name'    => ($s['service_name'] && $s['service_name'] != 'undefined') ? $s['service_name'] : '',
             ];
 
-            // ============= UPDATE MODE =============
+            // 2. UPDATE MODE
             if (!empty($rowid) && isset($rowid[$index])) {
-
                 $serviceId = $rowid[$index];
 
-                // First get old product
-                $oldService = DB::table('miniweb_services')
-                    ->where('id', $serviceId)
-                    ->first();
-
-                // If new image uploaded → delete old image
                 if ($newImagePath) {
+                    // Get old service record to delete the old image from S3
+                    $oldService = DB::table('miniweb_services')->where('id', $serviceId)->first();
 
                     if ($oldService && $oldService->service_img) {
-                        $oldFile = public_path('service_images/' . $oldService->service_img);
-                        if (file_exists($oldFile)) {
-                            unlink($oldFile);  // delete old image
+                        $oldS3Path = $s3Folder . $oldService->service_img;
+
+                        if (Storage::disk('s3_services')->exists($oldS3Path)) {
+                            Storage::disk('s3_services')->delete($oldS3Path);
                         }
                     }
-
-                    // Save new path
                     $data['service_img'] = $newImagePath;
                 }
 
                 $data['m_date'] = now('Asia/Kolkata')->toDateTimeString();
-                $updated = DB::table('miniweb_services')
-                    ->where('id', $serviceId)
-                    ->update($data);
+                $updated = DB::table('miniweb_services')->where('id', $serviceId)->update($data);
 
-                if ($updated) {
+                if ($updated || $newImagePath) {
                     $anyChanges = true;
-                    $messages[] = "Service ID {$serviceId} updated successfully.";
-                } else {
-                    $messages[] = "No changes for Service ID {$serviceId}.";
+                    $messages[] = "Service updated successfully.";
                 }
             }
-            else { // insert
+            // 3. INSERT MODE
+            else {
                 if ($newImagePath) {
                     $data['service_img'] = $newImagePath;
                 }
@@ -640,31 +637,41 @@ class MiniWebsiteController extends Controller
                 if ($inserted) {
                     $anyChanges = true;
                     $messages[] = "New Service inserted successfully.";
-                } else {
-                    $messages[] = "Failed to Service product.";
                 }
             }
-
         }
 
         return [
             'status'  => $anyChanges,
-            'message' => $anyChanges ? implode(" ", $messages) : "No changes made",
+            'message' => $anyChanges ? "Services saved successfully" : "No changes made",
         ];
     }
 
     // remove gallery 
-    public function removeGalleryImage(Request $request){
+    public function removeGalleryImage(Request $request) {
         $id    = $request->id;
         $image = $request->image;
+
         if (!$id || !$image) {
             return ['status' => false, 'message' => 'Invalid request'];
         }
-        
-        $path = public_path("gallery_images/{$image}");
 
-        if (is_file($path)) {
-            @unlink($path);
+        // No leading slash
+        $s3Path = "gallery_images/" . $image;
+        // echo $image;exit;
+        // Check disk name matches config/filesystems.php
+        // return [
+        //     'exists' => Storage::disk('s3_gallery')->exists("gallery_images/{$image}")
+        // ];
+        $disk = Storage::disk('s3_gallery');
+
+        try {
+            if ($disk->exists($s3Path)) {
+                $s3Deleted = $disk->delete($s3Path);
+            }
+        } catch (\Exception $e) {
+
+            return ['status' => false, 'message' => 'S3 Error: ' . $e->getMessage()];
         }
 
         $updated = DB::table('miniweb_gallery')
@@ -672,8 +679,8 @@ class MiniWebsiteController extends Controller
             ->update(['gallery' => '']);
 
         return [
-            'status'  => (bool) $updated,
-            'message' => $updated ? 'Image Removed successfully.' : 'No changes made.'
+            'status'  => true,
+            'message' => $updated ? 'Deleted Done' : 'Database already empty'
         ];
     }
 
@@ -682,7 +689,7 @@ class MiniWebsiteController extends Controller
         $galleries = collect($request->galleries)->sortKeys()->all();
         $mini_website_id = $request->cardId;
         $rowid = $request->rowid;
-        $anyChanges = false; 
+        $anyChanges = false;
         $messages = [];
 
         if(!$mini_website_id){
@@ -691,23 +698,11 @@ class MiniWebsiteController extends Controller
                 'message' => 'No Gallery Insert!',
             ];
         }
-        try {
-            $result = Storage::disk('s3_gallery')->put(
-                'gallery_images/test.txt',
-                'hello world'
-            );
-            
-            dd($result);
 
-        } catch (\Exception $e) {
-            dd($e->getMessage());
-        }
-
-        exit;
         foreach ($galleries as $index => $p) {
             $newImagePath = '';
-            
-            // 1. S3-க்கு இமேஜை அப்லோட் செய்யும் பகுதி
+
+            // S3-க்கு இமேஜை அப்லோட் செய்யும் பகுதி
             if (isset($p['image']) && $p['image'] instanceof \Illuminate\Http\UploadedFile) {
                 $dateTime  = now()->format('Ymd_His');
                 $ext       = $p['image']->getClientOriginalExtension();
@@ -715,15 +710,14 @@ class MiniWebsiteController extends Controller
 
                 // S3-ல் 'gallery_images' எனும் ஃபோல்டரில் அப்லோட் செய்கிறோம்
                 // 'public' என குறிப்பிடுவது அவசியம் (Visibility)
-                // $path = Storage::disk('s3_gallery')->putFileAs('gallery_images', $p['image'], $imageName, 'public');
-                $path = Storage::disk('s3_gallery')->putFileAs(
-                    'gallery_images',
-                    $p['image'],
-                    $imageName,
-                    ['visibility' => 'public']
-                );
+                try {
+                    $path = Storage::disk('s3_gallery')->putFileAs('gallery_images', $p['image'], $imageName);
+                    // return "Upload Success: " . $path;
+                } catch (\Exception $e) {
+                    // இது AWS தரும் உண்மையான மெசேஜை காட்டும்
+                    dd($e->getMessage());
+                }
 
-                
                 // Database-ல் சேமிக்க வெறும் ஃபைல் பெயரை மட்டும் எடுக்கிறோம்
                 $newImagePath = $imageName;
             }
@@ -755,7 +749,7 @@ class MiniWebsiteController extends Controller
                     $anyChanges = true;
                     $messages[] = "Gallery ID {$galleryId} updated.";
                 }
-            } 
+            }
             // ============= INSERT MODE =============
             else {
                 if ($newImagePath) {
@@ -778,141 +772,61 @@ class MiniWebsiteController extends Controller
 
 
 
-    // public function saveWebGallery(Request $request){
-    //     $galleries = collect($request->galleries)->sortKeys()->all();
-    //     $mini_website_id = $request->cardId;
-    //     $rowid = $request->rowid;
-    //     $inserted = false;
-    //     $anyChanges  = false; 
-    //     $messages    = [];
-
-    //     if(!$mini_website_id){
-    //         return [
-    //             'status'  => false,
-    //             'message' => 'No Gallery Insert!',
-    //         ];
-    //     }
-
-    //     foreach ($galleries as $index => $p) {
-    //         $newImagePath = '';
-    //         if (isset($p['image']) && $p['image'] instanceof \Illuminate\Http\UploadedFile) {
-
-    //             // Generate image name
-    //             $folderPath = public_path('gallery_images');
-    //             if (!file_exists($folderPath)) {
-    //                 mkdir($folderPath, 0777, true);
-    //             }
-
-    //             $dateTime  = now()->format('Ymd_His');
-    //             $ext       = $p['image']->getClientOriginalExtension();
-    //             $imageName = "{$mini_website_id}_"."la"."_{$dateTime}_" . uniqid() . ".{$ext}";
-
-    //             // Move new image
-    //             $p['image']->move($folderPath, $imageName);
-    //             $newImagePath = $imageName;
-    //         }
-
-    //         // Data to update
-    //         $data = [
-    //             'mini_website_id'  => $mini_website_id,
-    //         ];
-
-    //         // ============= UPDATE MODE =============
-    //         if (!empty($rowid) && isset($rowid[$index])) {
-
-    //             $galleryId = $rowid[$index];
-
-    //             // First get old product
-    //             $oldGallery = DB::table('miniweb_gallery')
-    //                 ->where('id', $galleryId)
-    //                 ->first();
-
-    //             // If new image uploaded → delete old image
-    //             if ($newImagePath) {
-
-    //                 if ($oldGallery && $oldGallery->gallery) {
-    //                     $oldFile = public_path('gallery_images/' . $oldGallery->gallery);
-    //                     if (file_exists($oldFile)) {
-    //                         unlink($oldFile);  // delete old image
-    //                     }
-    //                 }
-
-    //                 // Save new path
-    //                 $data['gallery'] = $newImagePath;
-    //             }
-
-    //             $data['m_date'] = now('Asia/Kolkata')->toDateTimeString();
-    //             $updated = DB::table('miniweb_gallery')
-    //                 ->where('id', $galleryId)
-    //                 ->update($data);
-
-    //             if ($updated) {
-    //                 $anyChanges = true;
-    //                 $messages[] = "Gallery ID {$galleryId} updated successfully.";
-    //             } else {
-    //                 $messages[] = "No changes for Gallery ID {$galleryId}.";
-    //             }
-    //         }
-    //         else { // insert
-    //             if ($newImagePath) {
-    //                 $data['gallery'] = $newImagePath;
-    //             }
-
-    //             $inserted = DB::table('miniweb_gallery')->insert($data);
-
-    //             if ($inserted) {
-    //                 $anyChanges = true;
-    //                 $messages[] = "New Gallery inserted successfully.";
-    //             } else {
-    //                 $messages[] = "Failed to Gallery.";
-    //             }
-    //         }
-
-    //     }
-
-    //     return [
-    //         'status'  => $anyChanges,
-    //         'message' => $anyChanges ? implode(" ", $messages) : "No changes made",
-    //     ];
-    // }
-
     // save payment details
-    public function save_miniweb_paymentDetails(Request $request){
+    public function save_miniweb_paymentDetails(Request $request) {
         $mini_website_id = $request->cardId;
-        $rowid  = $request->rowid;
+        $rowid = $request->rowid;
 
         if (!$mini_website_id) {
             return ['status' => false, 'message' => 'Invalid Card ID'];
         }
 
-        $folder = public_path('payment_Details_QrCode');
-
-        if (!File::exists($folder)) {
-            File::makeDirectory($folder, 0777, true);
-        }
-
+        // 1. Fetch old data if we are in update mode
         $oldData = null;
         if ($rowid) {
             $oldData = DB::table('miniweb_payments_details')->where('id', $rowid)->first();
         }
 
-        $uploadQr = function ($fileKey, $oldFile = null) use ($request, $folder, $mini_website_id) {
+        // 2. Define S3 Disk and Folder
+        $disk = Storage::disk('s3_payments');
+        $s3Folder = "payment_Details_QrCode/";
+
+        /**
+         * Helper Closure to handle S3 Upload and Delete
+         */
+        $uploadQr = function ($fileKey, $oldFile = null) use ($request, $disk, $s3Folder, $mini_website_id) {
+            // If no new file is uploaded, return the existing filename
             if (!$request->hasFile($fileKey)) {
-                return $oldFile; // keep old file
+                return $oldFile;
             }
 
-            // Delete old file
-            if ($oldFile && File::exists($folder . '/' . $oldFile)) {
-                File::delete($folder . '/' . $oldFile);
+            // A. Handle old file deletion
+            if ($oldFile) {
+                try {
+                    // We call delete directly. If the file doesn't exist, S3 ignores it.
+                    // This prevents the "Unable to check existence" permission error.
+                    $disk->delete($s3Folder . $oldFile);
+                } catch (\Exception $e) {
+                    Log::warning("S3 Old File Delete Failed: " . $e->getMessage());
+                }
             }
 
-            $file = $request->file($fileKey);
-            $fileName = $mini_website_id . '_la_' . now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->move($folder, $fileName);
+            // B. Upload the new file
+            try {
+                $file = $request->file($fileKey);
+                $fileName = $mini_website_id . '_la_' . now()->format('Ymd_His') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-            return $fileName;
+                // Store file with public visibility so it can be viewed via URL
+                $disk->putFileAs($s3Folder, $file, $fileName, 'public');
+
+                return $fileName;
+            } catch (Exception $e) {
+                Log::error("S3 Upload Failed: " . $e->getMessage());
+                return $oldFile; // Revert to old file if upload fails
+            }
         };
 
+        // 3. Prepare Data for Database
         $data = [
             'mini_website_id' => $mini_website_id,
             'gpay_number'    => $request->gPay ?? 0,
@@ -920,32 +834,32 @@ class MiniWebsiteController extends Controller
             'paytm_number'   => $request->payTm ?? 0,
         ];
 
-        // Handle QR uploads delete and replace
-        $data['gpay_qr_code'] = $uploadQr('gPayFile', $oldData->gpay_qr_code ?? null);
+        // Process each QR code field
+        $data['gpay_qr_code']    = $uploadQr('gPayFile', $oldData->gpay_qr_code ?? null);
         $data['phonepe_qr_code'] = $uploadQr('phonePeFile', $oldData->phonepe_qr_code ?? null);
-        $data['paytm_qr_code'] = $uploadQr('payTmFile', $oldData->paytm_qr_code ?? null);
+        $data['paytm_qr_code']   = $uploadQr('payTmFile', $oldData->paytm_qr_code ?? null);
 
-        // Update or Insert
+        // 4. Update or Insert into Database
         if (!empty($rowid)) {
             $data['m_date'] = Carbon::now('Asia/Kolkata')->toDateTimeString();
 
-            $updated = DB::table('miniweb_payments_details')->where('id', $rowid)->update($data);
+            $updated = DB::table('miniweb_payments_details')
+                ->where('id', $rowid)
+                ->update($data);
 
             return [
-                'status'  => (bool) $updated,
-                'message' => $updated ? 'Payment Details Updated Successfully' : 'No changes made'
+                'status'  => true,
+                'message' => 'Payment Details Updated Successfully'
             ];
-        }
-        else{
+        } else {
             $data['all_step_completed'] = 1;
             $inserted = DB::table('miniweb_payments_details')->insert($data);
-        }
-        
 
-        return [
-            'status'  => (bool) $inserted,
-            'message' => $inserted ? 'Payment Details Inserted Successfully' : 'Insert Failed'
-        ];
+            return [
+                'status'  => (bool) $inserted,
+                'message' => $inserted ? 'Payment Details Inserted Successfully' : 'Insert Failed'
+            ];
+        }
     }
 
     // get website datas
@@ -977,72 +891,69 @@ class MiniWebsiteController extends Controller
         $qrBase         = $request->qrBase;
 
         if (!$webID || !$qrBase) {
-            return response()->json([
-                'status'  => false,
-                'message' => 'Invalid data'
-            ]);
+            return response()->json(['status' => false, 'message' => 'Invalid data']);
         }
 
-        $folder = public_path('qrcodes');
-        File::ensureDirectoryExists($folder);
-
-        // File name
+        $disk = Storage::disk('s3_qr');
+        $s3Folder = "qrcodes/";
         $fileName = "{$webID}_{$website_id}_{$websiteTemp_id}.png";
-        $filePath = "{$folder}/{$fileName}";
+        $s3Path = $s3Folder . $fileName;
 
-        $existing = DB::table('miniweb_qrcode')
-            ->where('mini_website_id', $webID)
-            ->first();
+        // 1. Delete Old QR from S3
+        $existing = DB::table('miniweb_qrcode')->where('mini_website_id', $webID)->first();
 
         if ($existing && !empty($existing->qr_code)) {
-            $oldPath = "{$folder}/{$existing->qr_code}";
-            if (File::exists($oldPath)) {
-                File::delete($oldPath);
+            $oldS3Path = $s3Folder . $existing->qr_code;
+            // We bypass exists() to avoid permission errors as discussed previously
+            $disk->delete($oldS3Path);
+        }
+
+        // 2. Process QR Image (Intervention Image v3)
+        $manager = new ImageManager(new Driver());
+        $qrImageData = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $qrBase));
+        $qrImage = $manager->read($qrImageData);
+
+        // 3. Embed LOGO (S3 or Local Default)
+        $companyLogo = DB::table("miniweb_company_details")
+            ->select("logo_path")
+            ->where("id", $webID)
+            ->first();
+
+        $logoLoaded = false;
+
+        // Check if company has a logo in its S3 bucket
+        if ($companyLogo && $companyLogo->logo_path) {
+            $logoS3Path = "company_logos/" . $companyLogo->logo_path;
+            // Check if logo exists in the logo disk
+            if (Storage::disk('s3_company_logos')->exists($logoS3Path)) {
+                $logoContent = Storage::disk('s3_company_logos')->get($logoS3Path);
+                $logo = $manager->read($logoContent);
+                $logoLoaded = true;
             }
         }
 
-        // -------------------------------
-        // Create Image Manager (v3)
-        // -------------------------------
-        $manager = new ImageManager(new Driver());
+        // Fallback to local default logo if S3 logo not found
+        if (!$logoLoaded) {
+            $defaultPath = public_path('images/linkAuraLogo300.png');
+            if (file_exists($defaultPath)) {
+                $logo = $manager->read($defaultPath);
+                $logoLoaded = true;
+            }
+        }
 
-        // Decode Base64 QR
-        $qrImageData = base64_decode(
-            preg_replace('/^data:image\/\w+;base64,/', '', $qrBase)
-        );
-
-        // Read QR image
-        $qrImage = $manager->read($qrImageData);
-
-        // -------------------------------
-        // Embed LOGO (Watermark)
-        // -------------------------------
-        $defaultPath = public_path('images/linkAuraLogo300.png'); // default logo
-
-        // get logo 
-        $companyLogo = DB::table("miniweb_company_details")->select("id","logo_path")->where("id", $webID)->first();
-
-        $finalLogoPath = (!empty($companyLogo) && !empty($companyLogo->logo_path))  ? public_path('company_logos/' . $companyLogo->logo_path)  : $defaultPath;
-
-
-        if (File::exists($finalLogoPath)) {
-
-            $logo = $manager->read($finalLogoPath);
-
-            // Logo = 20% of QR size
+        // Overlay logo if we have one
+        if ($logoLoaded) {
             $logoSize = (int) ($qrImage->width() * 0.20);
-
             $logo->resize($logoSize, $logoSize);
-
-            // Place logo center
             $qrImage->place($logo, 'center');
         }
-        // return $qrImage;
-        // -------------------------------
-        // Save QR Image
-        // -------------------------------
-        $qrImage->save($filePath);
 
+        // 4. Save to S3
+        // Encode image to PNG format
+        $encoded = $qrImage->toPng();
+        $disk->put($s3Path, (string) $encoded, 'public');
+
+        // 5. Database Update/Insert
         if ($existing) {
             DB::table('miniweb_qrcode')
                 ->where('mini_website_id', $webID)
@@ -1050,24 +961,21 @@ class MiniWebsiteController extends Controller
                     'qr_code' => $fileName,
                     'm_date'  => Carbon::now('Asia/Kolkata'),
                 ]);
-
             $message = 'QR Code updated successfully';
-
         } else {
-
             DB::table('miniweb_qrcode')->insert([
                 'mini_website_id' => $webID,
                 'qr_code'         => $fileName,
                 'created_at'      => Carbon::now('Asia/Kolkata'),
             ]);
-
             $message = 'QR Code generated successfully';
         }
 
         return response()->json([
             'status'    => true,
             'file_name' => $fileName,
-            'path'      => asset("qrcodes/{$fileName}"),
+            // Replace asset() with S3 URL
+            'path'      => $disk->url($s3Path),
             'message'   => $message,
         ]);
     }
