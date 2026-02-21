@@ -129,36 +129,87 @@
             // get data
             const currData = ref({})
             const galleries = ref();
+            // onMounted(async () => {
+            //     const res = await axios.post('/getWebsiteDetails', {
+            //         table: 'miniweb_gallery',
+            //         cardId: Number(cardStore.cardId)
+            //     });
+
+            //     const data = res.data.getData;
+
+            //     // If no galleries → load default 30 empty rows
+            //     if (!data || data.length === 0) {
+            //         galleries.value = Array.from({ length: 30 }, () => ({
+            //             preview: null,
+            //             file: null,
+            //         }));
+            //         rowid.value = []; // No rowid
+            //         return;
+            //     }
+
+            //     // If galleries exist → load DB galleries
+            //     currData.value = data;
+            //     galleries.value = data.map(item => ({
+            //         file: null,
+            //         preview: item.gallery ? `${s3GalleryUrl}/gallery_images/${item.gallery}` : '',
+            //     }));
+
+            //     rowid.value = data.map(item => item.id);
+            // });
+
+
+            // upload gallery area
+            
             onMounted(async () => {
+                // 1. Fetch Plan Details to determine allowedCount
+                const planRes = await axios.post("/collectAllWebsiteDatas", {
+                    table_name: "miniweb_company_details",
+                    cd_id: Number(cardStore.cardId)
+                });
+
+                const companyData = planRes.data[0];
+                let allowedCount = 0;
+
+                if (companyData && companyData.purchased_id > 0) {
+                    const planId = Number(companyData.plan_id);
+                    if (planId === 94) allowedCount = 5;
+                    else if (planId === 95) allowedCount = 15;
+                    else if (planId === 96) allowedCount = 30;
+                }
+
+                // 2. Fetch Gallery Details
                 const res = await axios.post('/getWebsiteDetails', {
                     table: 'miniweb_gallery',
                     cardId: Number(cardStore.cardId)
                 });
 
-                const data = res.data.getData;
+                const data = res.data.getData || [];
+                currData.value = data;
 
-                // If no galleries → load default 30 empty rows
-                if (!data || data.length === 0) {
-                    galleries.value = Array.from({ length: 30 }, () => ({
+                // 3. Map exactly 30 rows with the 'isLocked' flag
+                galleries.value = Array.from({ length: 30 }, (_, index) => {
+                    // If DB data exists for this specific index
+                    if (data[index]) {
+                        const item = data[index];
+                        return {
+                            file: null,
+                            preview: item.gallery ? `${s3GalleryUrl}/gallery_images/${item.gallery}` : '',
+                            isLocked: index >= allowedCount 
+                        };
+                    }
+
+                    // Otherwise, return an empty gallery row template
+                    return {
                         preview: null,
                         file: null,
-                    }));
-                    rowid.value = []; // No rowid
-                    return;
-                }
+                        isLocked: index >= allowedCount
+                    };
+                });
 
-                // If galleries exist → load DB galleries
-                currData.value = data;
-                galleries.value = data.map(item => ({
-                    file: null,
-                    preview: item.gallery ? `${s3GalleryUrl}/gallery_images/${item.gallery}` : '',
-                }));
-
+                // Store existing IDs for database updates
                 rowid.value = data.map(item => item.id);
             });
-
-
-            // upload gallery area
+            
             const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/gif", "image/webp"];
             const selectedImage = (e, i) => {
                 const file = e.target.files[0];
