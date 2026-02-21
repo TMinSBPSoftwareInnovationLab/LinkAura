@@ -134,38 +134,91 @@
             // get data
             const currData = ref({})
             const services = ref();
+            // onMounted(async () => {
+            //     const res = await axios.post('/getWebsiteDetails', {
+            //         table: 'miniweb_services',
+            //         cardId: Number(cardStore.cardId)
+            //     });
+
+            //     const data = res.data.getData;
+
+            //     // If no service → load default 30 empty rows
+            //     if (!data || data.length === 0) {
+            //         services.value = Array.from({ length: 30 }, () => ({
+            //             preview: null,
+            //             file: null,
+            //             service_name: "",
+            //         }));
+            //         rowid.value = []; // No rowid
+            //         return;
+            //     }
+
+            //     // If service exist → load DB service
+            //     currData.value = data;
+            //     services.value = data.map(item => ({
+            //         service_name: item.service_name || '',
+            //         file: null,
+            //         preview: item.service_img ? `${s3ServiceUrl}/service_images/${item.service_img}` : '',
+            //     }));
+
+            //     rowid.value = data.map(item => item.id);
+            // });
+
+
+
+            // upload services area
+            
             onMounted(async () => {
+                // 1. Fetch Plan Details
+                const planRes = await axios.post("/collectAllWebsiteDatas", {
+                    table_name: "miniweb_company_details",
+                    cd_id: Number(cardStore.cardId)
+                });
+
+                const companyData = planRes.data[0];
+                let allowedCount = 0;
+
+                if (companyData && companyData.purchased_id > 0) {
+                    const planId = Number(companyData.plan_id);
+                    if (planId === 94) allowedCount = 5;
+                    else if (planId === 95) allowedCount = 15;
+                    else if (planId === 96) allowedCount = 30;
+                }
+
+                // 2. Fetch Service Details
                 const res = await axios.post('/getWebsiteDetails', {
                     table: 'miniweb_services',
                     cardId: Number(cardStore.cardId)
                 });
 
-                const data = res.data.getData;
+                const data = res.data.getData || [];
+                currData.value = data;
 
-                // If no service → load default 30 empty rows
-                if (!data || data.length === 0) {
-                    services.value = Array.from({ length: 30 }, () => ({
+                // 3. Map exactly 30 rows
+                services.value = Array.from({ length: 30 }, (_, index) => {
+                    // If DB data exists for this index, use it
+                    if (data[index]) {
+                        const item = data[index];
+                        return {
+                            service_name: item.service_name || '',
+                            file: null,
+                            preview: item.service_img ? `${s3ServiceUrl}/service_images/${item.service_img}` : '',
+                            isLocked: index >= allowedCount // Lock if index is beyond plan limit
+                        };
+                    }
+
+                    // Otherwise, return an empty row template
+                    return {
                         preview: null,
                         file: null,
                         service_name: "",
-                    }));
-                    rowid.value = []; // No rowid
-                    return;
-                }
+                        isLocked: index >= allowedCount // Lock if index is beyond plan limit
+                    };
+                });
 
-                // If service exist → load DB service
-                currData.value = data;
-                services.value = data.map(item => ({
-                    service_name: item.service_name || '',
-                    file: null,
-                    preview: item.service_img ? `${s3ServiceUrl}/service_images/${item.service_img}` : '',
-                }));
-
+                // Store existing IDs for updates
                 rowid.value = data.map(item => item.id);
             });
-
-
-            // upload services area
             const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/gif", "image/webp"];
             const selectedImage = (e, i) => {
                 const file = e.target.files[0];
