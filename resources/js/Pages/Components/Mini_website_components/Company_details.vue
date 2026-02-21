@@ -1,6 +1,6 @@
 <template>
     <div class="grid grid-cols-1 md:grid-cols-4">
-        
+
         <!-- Left Sidebar -->
         <div class="col-span-1">
             <SideNavBar />
@@ -16,9 +16,9 @@
                 <router-link to="/dashboard">
                     <button
                         class="outline outline-1 outline-pink-500 text-pink-500 font-semibold
-                            py-1.5 px-3 text-sm 
+                            py-1.5 px-3 text-sm
                             md:py-2 md:px-4 md:text-base
-                            rounded-xl transition-all duration-500 
+                            rounded-xl transition-all duration-500
                             hover:-translate-y-2 hover:shadow-xl">
                         Dashboard
                     </button>
@@ -27,10 +27,10 @@
                 <!-- Right Side Button -->
                 <router-link to="/Website_temp">
                     <button v-if="rowid"
-                        class="bg-[#000b57] text-white 
-                            py-1.5 px-3 text-sm 
+                        class="bg-[#000b57] text-white
+                            py-1.5 px-3 text-sm
                             md:py-2 md:px-4 md:text-base
-                            rounded-xl transition-all duration-500 
+                            rounded-xl transition-all duration-500
                             hover:-translate-y-2 hover:shadow-xl">
                         Website Template
                     </button>
@@ -116,7 +116,7 @@
                         </div>
                         <!-- Logo Upload /.-->
 
-                        
+
                         <div class="text-center">
                             <button type="submit"  :disabled="isSubmitting" class="bg-[#4E5927] text-white px-4 py-2 rounded-lg transition hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed" >
                                 {{ isSubmitting ? "Saving..." : "Save & Next" }}
@@ -153,6 +153,7 @@
             cardStore.$reset()
 
             const isSubmitting = ref(false);
+            const s3LogoUrl = import.meta.env.VITE_AWS_URL_LOGO;
 
             const schema = yup.object({
                 company_name: yup.string().required("Company name is required"),
@@ -164,7 +165,7 @@
             const { handleSubmit, submitCount } = useForm({
                 validationSchema: schema,
             });
-            
+
             // Fields
             const { value: company_name, errorMessage: companynameError } = useField('company_name');
             const { value: owner_name, errorMessage: ownernameError } = useField('owner_name');
@@ -189,7 +190,7 @@
                         headers: { "Content-Type": "multipart/form-data" },
                     });
                     // Reset all form fields
-                    
+
                     if(response.data.status == true){
                         cardStore.setCardId(response.data.cardId)
                         console.log(response.data);
@@ -297,8 +298,8 @@
                     owner_name.value = currData.value.owner_name
                     designation.value = currData.value.designation
                     rowid.value = currData.value.id
-                    previewImage.value = currData.value.logo_path ? `/company_logos/${currData.value.logo_path }`: ''
-                     
+                    previewImage.value = currData.value.logo_path ? `${s3LogoUrl}/company_logos/${currData.value.logo_path }`: ''
+
                     //  console.log("rowid : ".previewImage.value.logo_path)
                 }
             };
@@ -306,7 +307,7 @@
                 getCurrentData();
             });
 
-            
+
 
             return {
                 uploadLogo,
@@ -327,11 +328,12 @@
                 submitCount,
                 company_name,
                 owner_name,
-                designation, 
+                designation,
                 companynameError,
                 ownernameError,
                 designationError,
                 previewImage,
+                s3LogoUrl,
             }
         }
     }
