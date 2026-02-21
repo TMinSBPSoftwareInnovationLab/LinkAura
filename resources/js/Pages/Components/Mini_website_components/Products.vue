@@ -16,9 +16,9 @@
                     <router-link to="/MediaLinks">
                         <button
                             class="outline outline-1 outline-pink-500 text-pink-500 font-semibold
-                                py-1.5 px-3 text-sm 
+                                py-1.5 px-3 text-sm
                                 md:py-2 md:px-4 md:text-base
-                                rounded-xl transition-all duration-500 
+                                rounded-xl transition-all duration-500
                                 hover:-translate-y-2 hover:shadow-xl">
                             Media Links
                         </button>
@@ -28,15 +28,15 @@
                     <button
                         @click="saveAndNext"
                         :disabled="isSubmitting"
-                        class="bg-[#000b57] text-white 
-                            py-1.5 px-3 text-sm 
+                        class="bg-[#000b57] text-white
+                            py-1.5 px-3 text-sm
                             md:py-2 md:px-4 md:text-base
-                            rounded-xl transition-all duration-500 
+                            rounded-xl transition-all duration-500
                             hover:-translate-y-2 hover:shadow-xl">
                         {{ isSubmitting ? "Saving..." : "Save & Next Service" }}
                     </button>
                     <!-- Right Side Button /.-->
-                    
+
                 </div>
                 <!-- top header /. -->
 
@@ -78,7 +78,7 @@
                                         <div class="w-full h-32 flex items-center justify-center border border-gray-200 rounded-lg overflow-hidden">
                                         <img v-if="product.preview" :src="product.preview" class="object-cover w-full h-full" />
                                         <span v-else class="text-gray-400 text-center">Upload Products</span>
-                                        
+
                                         </div>
                                     </label>
                                     <!-- file upload  area /. -->
@@ -94,7 +94,7 @@
                                     <!-- Discount Proce -->
                                     <input type="number" v-model="product.discount_price" placeholder="Discount Price" class="w-full px-3 py-2 mt-2 border border-[#333c79]"  @change="changeDiscountPrice(index)"  />
                                     <!-- Discount Proce /.-->
-                                    
+
                                     <!-- Final Proce -->
                                     <input type="number" v-model="product.final_price" placeholder="Final Price" class="w-full px-3 py-2 mt-2 border border-[#333c79]"   />
                                     <!-- Final Proce /.-->
@@ -140,6 +140,7 @@
             const rowid = ref()
             const cardStore = useCardStore()
             const isSubmitting = ref(false);
+            const s3ProductUrl = import.meta.env.VITE_AWS_URL_PRODUCT_IMAGES;
 
             const changeOriginalPrice = (i) => {
                 const product = products.value[i];
@@ -181,42 +182,95 @@
             // get data
             const currData = ref({})
             const products = ref();
+            // onMounted(async () => {
+            //     const res = await axios.post('/getWebsiteDetails', {
+            //         table: 'miniweb_products',
+            //         cardId: Number(cardStore.cardId)
+            //     });
+
+            //     const data = res.data.getData;
+
+            //      If no products → load default 30 empty rows
+            //     if (!data || data.length === 0) {
+            //         products.value = Array.from({ length: 30 }, () => ({
+            //             preview: null,
+            //             file: null,
+            //             name: '',
+            //             original_price: "",
+            //             discount_price: "",
+            //             final_price: "",
+            //         }));
+            //         rowid.value = []; // No rowid
+            //         return;
+            //     }
+
+            //      If products exist → load DB products
+            //     currData.value = data;
+            //     products.value = data.map(item => ({
+            //         name: item.product_name || '',
+            //         original_price: item.orginal_price || '',
+            //         discount_price: item.discount_price || '',
+            //         final_price: item.final_price || '',
+            //         file: null,
+            //         preview: item.product_img ? `${s3ProductUrl}/product_images/${item.product_img}` : '',
+            //     }));
+
+            //     rowid.value = data.map(item => item.id);
+            // });
+
             onMounted(async () => {
-                const res = await axios.post('/getWebsiteDetails', { 
-                    table: 'miniweb_products', 
+                const planRes = await axios.post("/collectAllWebsiteDatas", {
+                    table_name: "miniweb_company_details",
+                    cd_id: Number(cardStore.cardId) // Assuming cd_id matches cardId
+                });
+
+                const companyData = planRes.data[0];
+                let allowedCount = 0;
+
+                if (companyData && companyData.purchased_id > 0) {
+                    const planId = Number(companyData.plan_id);
+                    if (planId === 94) allowedCount = 5;
+                    else if (planId === 95) allowedCount = 15;
+                    else if (planId === 96) allowedCount = 30;
+                }
+
+                const res = await axios.post('/getWebsiteDetails', {
+                    table: 'miniweb_products',
                     cardId: Number(cardStore.cardId)
                 });
 
-                const data = res.data.getData;
+                const data = res.data.getData || [];
 
-                // If no products → load default 30 empty rows
-                if (!data || data.length === 0) {
-                    products.value = Array.from({ length: 30 }, () => ({
+                products.value = Array.from({ length: 30 }, (_, index) => {
+                    // If we have DB data for this index, use it
+                    if (data[index]) {
+                        const item = data[index];
+                        return {
+                            name: item.product_name || '',
+                            original_price: item.orginal_price || '',
+                            discount_price: item.discount_price || '',
+                            final_price: item.final_price || '',
+                            file: null,
+                            preview: item.product_img ? `${s3ProductUrl}/product_images/${item.product_img}` : '',
+                            // Add a flag to identify if this row is disabled based on the plan
+                            isLocked: index >= allowedCount
+                        };
+                    }
+
+                    // Otherwise, return an empty row template
+                    return {
                         preview: null,
                         file: null,
                         name: '',
                         original_price: "",
                         discount_price: "",
                         final_price: "",
-                    }));
-                    rowid.value = []; // No rowid
-                    return;
-                }
-
-                // If products exist → load DB products
-                currData.value = data;
-                products.value = data.map(item => ({
-                    name: item.product_name || '',
-                    original_price: item.orginal_price || '',
-                    discount_price: item.discount_price || '',
-                    final_price: item.final_price || '',
-                    file: null,
-                    preview: item.product_img ? `/product_images/${item.product_img}` : '',
-                }));
+                        isLocked: index >= allowedCount
+                    };
+                });
 
                 rowid.value = data.map(item => item.id);
             });
-
 
             // upload products area
             const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/gif", "image/webp"];
@@ -262,7 +316,8 @@
                 if (!result.isConfirmed) return;
 
                 try {
-                    const res = await axios.post("/removeProductImage", { id: rowid.value[index], image: product.preview.replace("/product_images/", ""), });
+                    const fileNameOnly = product.preview.split('/').pop();
+                    const res = await axios.post("/removeProductImage", { id: rowid.value[index], image: fileNameOnly, });
 
                     if (res.data.status) {
                     products.value[index].file = null;
@@ -309,11 +364,11 @@
                 rowid.value.forEach((id, idx) => {
                     formData.append(`rowid[${idx}]`, id);
                 });
-                
+
                 try {
                     const res = await axios.post('/saveWebProducts', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' }
-                });                
+                });
                 if(res.data.status == true){
                         document.querySelectorAll('input[type="file"]').forEach(input => {
                             input.value = '';
@@ -329,7 +384,7 @@
                 } catch (error) {
                     toast.error("Something went wrong: " + error);
                 }
-                
+
             }
 
             return {
@@ -345,6 +400,7 @@
                 removeTempImage,
                 removeProductImage,
                 isSubmitting,
+                s3ProductUrl
             }
         }
     }
