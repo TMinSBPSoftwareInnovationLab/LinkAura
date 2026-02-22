@@ -93,7 +93,7 @@
                     @click="logout"
                     class="flex items-center gap-4 w-full px-4 py-3 rounded-lg bg-white/20 hover:bg-white/30 transition"
                 >
-                    <ShareIcon class="w-6 h-6" />
+                    <PowerIcon class="w-6 h-6" />
                     <span class="text-base">Log Out</span>
                 </button>
                 
@@ -127,8 +127,10 @@ import {
     WrenchScrewdriverIcon,
     PhotoIcon,
     CreditCardIcon,
+    PowerIcon
 } from "@heroicons/vue/24/outline";
 export default {
+    components: { PowerIcon },
     name: "SideNavBar",
 
     setup() {
@@ -178,7 +180,7 @@ export default {
             const currentPath = window.location.pathname;
             const currentMenu = flatMenus.value.find(item => item.url === currentPath);
             active.value = currentMenu ? currentMenu.name : "";
-            console.log("active.value : ",currentMenu)
+            // console.log("active.value : ",currentMenu)
             const user = JSON.parse(localStorage.getItem("user"));
             if (user) {
                 username.value = user.name ?? "User";

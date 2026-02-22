@@ -183,7 +183,7 @@
 
                     // Store token
                     const token = res.data.token;
-                    console.log("Token:", token);
+                    // console.log("Token:", token);
                     // Attach token for all future API calls
                     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 

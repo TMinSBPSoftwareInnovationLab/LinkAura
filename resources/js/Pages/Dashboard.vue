@@ -392,7 +392,7 @@ export default {
                         editBtn.className = 'btn-edit';
                         editBtn.onclick = () => {
                             const rowId = params.data.id;
-                            console.log("id", rowId)
+                            // console.log("id", rowId)
                             // localStorage.removeItem('cardId')
                             cardStore.setCardId(rowId);
                             router.push('/Company_details')
@@ -410,7 +410,7 @@ export default {
                     editBtn.className = 'btn-edit';
                     editBtn.onclick = () => {
                         const rowId = params.data.id;
-                        console.log("id", rowId)
+                        // console.log("id", rowId)
                         // localStorage.removeItem('cardId')
                         cardStore.setCardId(rowId);
                         router.push('/Company_details')
@@ -463,7 +463,7 @@ export default {
         // VIEW
         const viewWebsite = (data) => {
             let url = '';
-            console.log("view : ",data)
+            // console.log("view : ",data)
             const encrypt_website_id = btoa(data.website_id)
             const websitefinalUrl = `/${data.company_name}/Website_Temp_${encrypt_website_id}`
 
@@ -494,7 +494,7 @@ export default {
             const encoded = btoa(params)
 
             encodedUrl.value = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`
-            console.log("encodedUrl :", encodedUrl.value)
+            // console.log("encodedUrl :", encodedUrl.value)
             // window.open(, '_blank')
 
         };
@@ -504,7 +504,7 @@ export default {
             selectedRow.value = data;
             paymentModel.value = true;
             websiteRowID.value = data.id
-            console.log("selectedRow.value : ",selectedRow.value)
+            // console.log("selectedRow.value : ",selectedRow.value)
         };
 
         async function loadRazorpayScript() { // Load Razorpay script dynamically
@@ -666,7 +666,8 @@ export default {
                 ])
             }
             catch(error){
-                console.log("Feedback Data Status", error)
+                // console.log("Feedback Data Status", error)
+                Swal.fire('Error', error, 'error');
             }
         })
 

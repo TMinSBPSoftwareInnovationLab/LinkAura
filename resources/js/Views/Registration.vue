@@ -243,7 +243,7 @@
 
             // Submit Function
             const submitRegistration = async(values, { resetForm }) => {
-                console.log("Registration Submitted:", values);
+                // console.log("Registration Submitted:", values);
                 const payload = {
                     ...values,
                     // user_id: user_id.value
@@ -251,7 +251,7 @@
 
                 try {
                     const resData = await axios.post('/userRegister',payload)
-                    console.log('resData : ,resData')
+                    // console.log('resData : ,resData')
                     if(resData.data.status == true){
                         Swal.fire({
                             title: 'Success!',
