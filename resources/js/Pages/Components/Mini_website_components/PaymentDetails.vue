@@ -320,7 +320,7 @@
                         const baseURL = window.location.origin;
                         const qrBase = await QRCode.toDataURL(`${baseURL}${websitefinalUrl}?ilp88LAsBvm=${encoded}`, { width: 300 })
                         qrCodeUrl.value = qrBase
-                        console.log(qrBase)
+                        // console.log(qrBase)
 
                         try {
                             const qr_res = await axios.post('/qrCodeGenerate', {
@@ -336,7 +336,8 @@
                     }
 
                 } catch (error) {
-                    console.log(error)
+                    // console.log(error)
+                    toast.warning("try catch "+ error)
                     // toast.warning(error)
                 }
             }
