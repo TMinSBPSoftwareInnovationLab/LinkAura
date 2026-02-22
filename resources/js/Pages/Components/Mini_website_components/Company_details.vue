@@ -193,7 +193,7 @@
 
                     if(response.data.status == true){
                         cardStore.setCardId(response.data.cardId)
-                        console.log(response.data);
+                        // console.log(response.data);
                         Swal.fire({
                             icon: "success",
                             title: "Success!",
@@ -287,11 +287,11 @@
 
             const getCurrentData = async() => {
                 if (!cardStore.cardId) {
-                    console.log("No cardId found, starting fresh.");
+                    // console.log("No cardId found, starting fresh.");
                     return;
                 }
                 const res = await axios.post('/getWebsiteDetails', {'table': 'miniweb_company_details', 'cardId' : Number(cardStore.cardId)})
-                console.log("res.data")
+                // console.log("res.data")
                 if(res.data.status==true){
                     currData.value = res.data.getData[0]
                     company_name.value = currData.value.company_name
