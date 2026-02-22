@@ -303,12 +303,12 @@
             const selectWesiteDesign = (id, tempId) => {
                 selectedWebsiteId.value = id;
                 selectedWebsiteId_with_webTemp_id.value = tempId 
-                console.log("selectedThemeId")
-                console.log(selectedWebsiteId.value)
+                // console.log("selectedThemeId")
+                // console.log(selectedWebsiteId.value)
                 
                 
-                console.log("selectedThemeId_with_design_id")
-                console.log(selectedWebsiteId_with_webTemp_id.value)
+                // console.log("selectedThemeId_with_design_id")
+                // console.log(selectedWebsiteId_with_webTemp_id.value)
 
                 nextTick(() => {
                      rightPanel.value?.scrollIntoView({ behavior: "smooth", block: "start" })
@@ -382,7 +382,7 @@
                         websiteTemp_id: websiteTemp_id
                     });
                     websiteSaveResponse.value = response.data.getData
-                    console.log(websiteSaveResponse)
+                    // console.log(websiteSaveResponse)
                     if(response.data.status == true || response.data.status == false){
                         toast.success(response.data.message)
                         router.push('/Address')
