@@ -1193,7 +1193,7 @@
             const cardStore = useCardStore()
 
             const decoded = route.query.ilp88LAsBvm ? atob(decodeURIComponent(route.query.ilp88LAsBvm)) : ''
-            console.log("decoded : "+decoded)
+            // console.log("decoded : "+decoded)
             const params = new URLSearchParams(decoded)
             const cd_id   = Number(params.get('cd_id') || 0)
             const templateId  = Number(params.get('template_id') || 0)
@@ -1457,7 +1457,7 @@
                     // Use optional chaining to prevent "cannot read property [0] of undefined"
                     const companyData = planRes.data?.getData?.[0];
                     
-                    console.log("Plan Data Received: ", companyData);
+                    // console.log("Plan Data Received: ", companyData);
 
                     if (companyData && Number(companyData.purchased_id) > 0) {
                         const planId = Number(companyData.plan_id);
@@ -1712,7 +1712,7 @@
                             icon: 'success',
                             confirmButtonText: 'OK'
                         });
-                        console.log(resData.data.getDatas)    
+                        // console.log(resData.data.getDatas)    
                     }
                     else{
                         Swal.fire({
