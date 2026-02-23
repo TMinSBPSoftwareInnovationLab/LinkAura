@@ -49,6 +49,24 @@ Route::post('/getwebAddressDetails',[MiniWebsiteController::class, 'getwebAddres
 Route::post('/getwebMediaLinks',[MiniWebsiteController::class, 'getwebMediaLinks']);
 // website data collections area /.
 
+// sample bill generation
+Route::get('/preview-bill', function () {
+    // Inga neenga template-ku dummy data anupanum, illana error varum
+    $data = [
+        'business_name' => 'TMinSBP Software Innovation Lab',
+        'from_address' => "5 Martin Pl\nSydney NSW 2000\nAustralia",
+        'to_address' => "Your Client\n100 Harris St\nSydney NSW 2009",
+        'invoice_no' => '2022445',
+        'date' => '19/7/2022',
+        'plan_name' => 'Sample service',
+        'description' => '1 hour service description',
+        'amount' => 30.00,
+    ];
+    
+    return view('emails.sample_bill_template', $data);
+});
+// sample bill generation /.
+
 Route::get('/{any}', function () {
     return view('welcome');
 })->where('any', '.*');

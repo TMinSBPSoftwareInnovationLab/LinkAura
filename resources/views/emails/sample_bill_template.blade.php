@@ -7,64 +7,76 @@
   </head>
   <body>
     <main class="m-10">
-        <div class="flex flex-col md:flex-row w-full border-1 border-[#681c6a]">
+        <!-- header section-->
+        <div class="flex flex-col md:flex-row w-full gap-4 border-1 border-[#681c6a] ">
 
             <div class="w-full md:w-[70%] p-4">
-                {{-- Logo dynamic-ah illa na unga project path kudunga --}}
                 <img src="{{ asset('images/linkAuraLogo300.png') }}" class="w-35 h-35"/>
                 <p class="text-[#681c6a] font-bold text-[24px]">
-                    {{ $business_name ?? 'TMinSBP Software Innovation Lab' }}
+                    TMinSBP Software Innovation Lab
                     <br>
                     <span class="text-[18px] text-[#000b58]">A Product of LinkAura</span>
                 </p>
             </div>
 
             <div class="w-full md:w-[30%] bg-[#681c6a] p-4 flex flex-col justify-center text-left">
-                <h1 class="text-3xl font-bold text-white mb-2 uppercase">Invoice</h1>
-                {{-- Contact details dynamic or static --}}
-                <p class="text-white font-semibold text-sm">Mobile : {{ $contact_phone ?? '+91 98423 06487' }}</p>
-                <p class="text-white font-semibold text-sm">Email: {{ $contact_email ?? 'thirumurugan8892@gmail.com' }}</p>
-                <p class="text-white font-semibold text-sm">Website: www.linkaura.co.in</p>
+                <h1 class="text-3xl font-bold text-white mb-2">INVOICE</h1>
+                <p class="text-white font-semibold">Mobile : +91 98423 06487</p>
+                <p class="text-white font-semibold">Email: thirumurugan8892@gmail.com</p>
+                <p class="text-white font-semibold">website: www.linkaura.co.in</p>
             </div>
 
         </div>
+        <!-- header section /.-->
+
+        <!-- address -->
         <div class="flex flex-col md:flex-row w-full border-x-1 border-b-1 border-[#681c6a]">
     
             <div class="w-full md:w-[35%] p-4 border-b-1 md:border-b-0 md:border-r-1 border-[#681c6a]">
-                <h3 class="text-[#681c6a] font-bold uppercase text-xs mb-2 tracking-widest">From:</h3>
-                <div class="text-sm text-gray-700 leading-relaxed">
-                    {!! nl2br(e($from_address ?? "No 288, Smart Bazar Near,\nAnangur Corner, B.Komarapalayam,\nNamakkal(DT), Pincode - 638183")) !!}
-                </div>
+                <h3 class="text-[#681c6a] font-bold uppercase text-xs mb-2">From:</h3>
+                <p class="font-bold text-gray-800">TMinSBP Software Innovation Lab</p>
+                <p class="text-[#681c6a]">
+                    <span class="text-[18px] text-[#000b58]">A Product of LinkAura</span>
+                </p>
+                <p class="text-sm text-gray-600 leading-relaxed">
+                    No 288, Smart Bazar Near,<br>
+                    Anangur Corner, B.Komarapalayam,<br>
+                    B.Komarapalayam(Tk), Namakkal(DT), Pincode - 638183<br>
+                    India
+                </p>
             </div>
 
             <div class="w-full md:w-[35%] p-4 border-b-1 md:border-b-0 md:border-r-1 border-[#681c6a]">
-                <h3 class="text-[#681c6a] font-bold uppercase text-xs mb-2 tracking-widest">To:</h3>
+                <h3 class="text-[#681c6a] font-bold uppercase text-xs mb-2">To:</h3>
                 <p class="font-bold text-gray-800">{{ $company_name ?? 'Client Company Name' }}</p>
-                <div class="text-sm text-gray-700 leading-relaxed">
-                    {!! nl2br(e($to_address ?? "Client Address Details\nCity, State")) !!}
-                </div>
+                <p class="text-sm text-gray-600 leading-relaxed">
+                    {!! nl2br(e($from_address ?? "Client Address Details\nCity, State")) !!}
+                </p>
             </div>
 
             <div class="w-full md:w-[30%] p-4 flex flex-col justify-between bg-gray-50">
                 <div class="space-y-2">
                     <div class="flex justify-between text-sm">
                         <span class="font-bold text-[#681c6a]">Invoice No:</span>
-                        <span class="text-gray-700">#{{ $invoice_no }}</span>
+                        <span class="text-gray-700">#{{ $invoice_no ?? '2026-001' }}</span>
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="font-bold text-[#681c6a]">Issue Date:</span>
-                        <span class="text-gray-700">{{ $date }}</span>
+                        <span class="text-gray-700">{{ $date ?? '23/02/2026' }}</span>
                     </div>
                 </div>
 
                 <div class="mt-4 pt-4 border-t border-dashed border-gray-300">
                     <p class="text-xs uppercase text-gray-500 font-bold">Total Amount due</p>
-                    <p class="text-2xl font-black text-[#681c6a]">₹{{ number_format($amount, 2) }}</p>
+                    <p class="text-2xl font-black text-[#681c6a]">₹{{ number_format($amount ?? 0, 2) }}</p>
                 </div>
             </div>
 
         </div>
-        <div class="w-full mt-4 border-1 border-[#681c6a] overflow-hidden rounded-sm">
+        <!-- address /.-->
+
+        <!-- Purchased details -->
+        <div class="w-full mt-4 border-1 border-[#681c6a] overflow-hidden">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-[#681c6a] text-white">
@@ -75,22 +87,22 @@
                 <tbody class="text-gray-700">
                     <tr class="border-b border-gray-200">
                         <td class="p-4">
-                            <p class="font-bold text-gray-800 text-lg">{{ $plan_name }}</p>
-                            <p class="text-sm text-gray-500 mt-1">{{ $description }}</p>
+                            <p class="font-bold text-gray-800">{{ $plan_name ?? 'Plan Name' }}</p>
+                            <p class="text-xs text-gray-500">{{ $description ?? 'Service description details go here' }}</p>
                         </td>
-                        <td class="p-4 text-right font-semibold text-lg">
-                            ₹{{ number_format($amount, 2) }}
+                        <td class="p-4 text-right font-semibold">
+                            ₹{{ number_format($amount ?? 0, 2) }}
                         </td>
                     </tr>
-                </tbody>
+                    </tbody>
                 <tfoot>
-                    <tr class="text-gray-600 border-t border-gray-100">
+                    <tr class="text-gray-600">
                         <td class="p-4 text-right font-bold text-sm">Subtotal:</td>
-                        <td class="p-4 text-right font-bold text-sm">₹{{ number_format($amount, 2) }}</td>
+                        <td class="p-4 text-right font-bold text-sm">₹{{ number_format($amount ?? 0, 2) }}</td>
                     </tr>
                     <tr class="bg-gray-50 text-[#681c6a]">
-                        <td class="p-4 text-right font-black text-xl italic uppercase">Total (INR):</td>
-                        <td class="p-4 text-right font-black text-xl">₹{{ number_format($amount, 2) }}</td>
+                        <td class="p-4 text-right font-black text-lg">Total (INR):</td>
+                        <td class="p-4 text-right font-black text-lg">₹{{ number_format($amount ?? 0, 2) }}</td>
                     </tr>
                 </tfoot>
             </table>
@@ -99,10 +111,12 @@
         <div class="mt-10 p-4 border-l-4 border-[#681c6a] bg-gray-50">
             <p class="text-sm text-gray-600 italic">
                 This is a digitally generated invoice and a valid digital certificate issued by 
-                <span class="font-bold text-[#681c6a]">{{ $business_name ?? 'TMinSBP Software Innovation Lab' }}</span>. 
+                <span class="font-bold text-[#681c6a]">TMinSBP Software Innovation Lab</span>. 
                 No physical signature is required.
             </p>
         </div>
-        </main>
+        <!-- Purchased details /.-->
+
+    </main>
   </body>
 </html>

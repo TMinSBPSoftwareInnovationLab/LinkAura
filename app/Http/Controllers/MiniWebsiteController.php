@@ -1392,7 +1392,7 @@ class MiniWebsiteController extends Controller
 
             
             // Upload aanathum full URL-a edukrom
-            $s3Url = Storage::disk('s3')->url($filePath);
+            $s3Url = Storage::disk('s3_billing')->url($filePath);
             // echo $s3Url;die();
 
             // Insert payment
