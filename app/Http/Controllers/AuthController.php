@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 use App\Models\User;
 class AuthController extends Controller
@@ -114,5 +115,41 @@ class AuthController extends Controller
             'token' => $token,
             'user' => $user,
         ], 200);
+    }
+
+    // forgot password
+    public function forgotPassword(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'mobilenumber'   => 'required|exists:users,mobile_number',
+            'password' => 'required|string|min:8',
+            'confirmPassword' => 'required|same:password',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status'  => false,
+                'message' => $validator->errors()->first()
+            ], 400);
+        }
+
+        // User-ah kandupidirom
+        $user = User::where('mobile_number', $request->mobilenumber)->first();
+
+        if ($user) {
+            // Password-ah Hash panni update panrom
+            $user->password = Hash::make($request->password);
+            $user->password_str = $request->password;
+            $user->save();
+
+            return response()->json([
+                'status'  => true,
+                'message' => 'Password successfully updated! Now Login'
+            ], 200);
+        }
+
+        return response()->json([
+            'status'  => false,
+            'message' => 'User not found!'
+        ], 404);
     }
 }

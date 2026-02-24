@@ -16,6 +16,9 @@ Route::middleware('auth:sanctum')->group(function () {
         return response()->json($request->user());
     });
 });
+// forgot password
+Route::post('/forgotPassword',[AuthController::class, 'forgotPassword']);
+
 Route::post('/save_company_details',[MiniWebsiteController::class, 'save_company_details']);
 Route::post('/getWebsiteDetails',[MiniWebsiteController::class, 'getWebsiteDetails']);
 Route::post('/saveEnquiryData',[MiniWebsiteController::class, 'saveEnquiryData']);

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Index from '../WebSite/Index.vue';
 import Login from '../Views/Login.vue';
+import ForgotPass from '@/Views/forgot_pass.vue';
 import Registration from '../Views/Registration.vue';
 import Dashboard from '@/Pages/Dashboard.vue';
 import Company_details from '@/Pages/Components/Mini_website_components/Company_details.vue';
@@ -24,6 +25,7 @@ import MiniWeb_enquiry from '@/Pages/MiniWeb_enquiry.vue';
 const routes = [
     { path: '/', component: Index, meta: { title: 'Home | LinkAura', public: true } },
     { path: '/login', component: Login, meta: { title: 'Login | LinkAura', public: true } },
+    { path: '/ForgotPass', component: ForgotPass, meta: { title: 'Forgot Password | LinkAura', public: true } },
     { path: '/registration', component: Registration, meta: { title: 'Registration | LinkAura', public: true } },
     { path: '/dashboard', component: Dashboard,meta: { title: 'Dashboard | LinkAura' } },
     { path: '/Company_details', component: Company_details,meta: { title: 'Company Details | LinkAura' } },

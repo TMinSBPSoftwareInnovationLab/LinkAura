@@ -1429,7 +1429,7 @@ class MiniWebsiteController extends Controller
             return response()->json([
                 'status' => true, 
                 'message' => "You have successfully purchased the {$data['plan_name']} plan, and your miniwebsite is live now!",
-                'pdf_url' => $s3Url
+                // 'pdf_url' => $s3Url
             ]);
 
         }
