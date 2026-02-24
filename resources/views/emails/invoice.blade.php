@@ -93,17 +93,17 @@
                 </td>
                 <td class="meta-col">
                     <div class="meta-row">
-                        <span class="meta-label">Invoice No:</span>
-                        <span class="meta-value">#{{ $invoice_no }}</span>
+                        <span class="meta-label text-[12px]">Invoice No:</span>
+                        <span class="meta-value text-[12px]">#{{ $invoice_no }}</span>
                     </div>
                     <div class="meta-row">
-                        <span class="meta-label">Issue Date:</span>
-                        <span class="meta-value">{{ $date }}</span>
+                        <span class="meta-label text-[12px]">Issue Date:</span>
+                        <span class="meta-value text-[12px]">{{ $date }}</span>
                     </div>
                     
                     <div class="total-due-box">
                         <div class="total-due-label">Total Amount Due</div>
-                        <div class="total-due-amount">₹{{ number_format($amount, 2) }}</div>
+                        <div class="total-due-amount">&#8377;{{ number_format($amount, 2) }}</div>
                     </div>
                 </td>
             </tr>
@@ -113,7 +113,7 @@
             <thead>
                 <tr>
                     <th style="width: 70%;">Description</th>
-                    <th style="width: 30%; text-align: right;">Amount (₹)</th>
+                    <th style="width: 30%; text-align: right;">Amount (&#8377;)</th>
                 </tr>
             </thead>
             <tbody>
@@ -123,18 +123,18 @@
                         <div class="description-sub">{{ $description }}</div>
                     </td>
                     <td class="text-right font-bold" style="font-size: 16px;">
-                        ₹{{ number_format($amount, 2) }}
+                       &#8377;{{ number_format($amount, 2) }}
                     </td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr class="totals-row">
                     <td class="text-right font-bold">Subtotal:</td>
-                    <td class="text-right font-bold">₹{{ number_format($amount, 2) }}</td>
+                    <td class="text-right font-bold">&#8377;{{ number_format($amount, 2) }}</td>
                 </tr>
                 <tr class="totals-row grand-total">
                     <td class="text-right">TOTAL (INR):</td>
-                    <td class="text-right">₹{{ number_format($amount, 2) }}</td>
+                    <td class="text-right">&#8377;{{ number_format($amount, 2) }}</td>
                 </tr>
             </tfoot>
         </table>
