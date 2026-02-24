@@ -577,9 +577,12 @@ export default {
                                 data.message,
                                 data.status ? 'success' : 'error'
                             );
-
                         } catch {
                             Swal.fire('Error', 'Verification failed', 'error');
+                        }
+                        finally {
+                            paymentModel.value = false; 
+                            loadWebsiteData();
                         }
                     },
 
