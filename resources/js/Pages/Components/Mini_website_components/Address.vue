@@ -229,6 +229,7 @@
             phone_number.value = JSON.parse(localStorage.getItem('user')).mobile_number
 
             const onSubmit = handleSubmit(async (values) => {
+                isSubmitting.value = true;
                 try {
                     values.card_id = cardID.value
                     values.rowid = rowid.value
@@ -278,6 +279,7 @@
                 userID,
                 cardID,
                 rowid,
+                isSubmitting,
             }
         }
     }

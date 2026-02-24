@@ -300,7 +300,7 @@
                 rowid.value.forEach((id, idx) => {
                     formData.append(`rowid[${idx}]`, id);
                 });
-
+                isSubmitting.value = true;
                 try {
                     const res = await axios.post('/saveWebGallery', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' }
@@ -318,6 +318,8 @@
                     }
                 } catch (error) {
                     toast.error("Something went wrong: " + error);
+                }finally {
+                    isSubmitting.value = false;
                 }
 
             }

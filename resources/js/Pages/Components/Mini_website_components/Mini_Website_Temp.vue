@@ -26,13 +26,13 @@
 
                 <!-- Right Side Button -->
                 <router-link to="/Address">
-                    <button
+                    <button :disabled="isSubmitting"
                         class="bg-[#000b57] text-white 
                             py-1.5 px-3 text-sm 
                             md:py-2 md:px-4 md:text-base
                             rounded-xl transition-all duration-500 
                             hover:-translate-y-2 hover:shadow-xl" @click="saveAndNext">
-                        Save & Next Address
+                            {{ isSubmitting ? "Saving..." : "Save & Next Address" }}
                     </button>
                 </router-link>
             </div>
@@ -266,6 +266,7 @@
         components: {SideNavBar, Website_Temp_1, Website_Temp_2, Website_Temp_3,Website_Temp_4,Website_Temp_5,Website_Temp_6, Header_tab},
         setup() {
             const router = useRouter();
+            const isSubmitting = ref(false);
             // collect the website templates
             const websiteDesigns = ref([
                 {id: 1, name:"website 1", website_temp: 1, website_image: "website1_thumb1.png"},
@@ -374,7 +375,7 @@
                 const cardId = Number(cardStore.cardId);
                 const website_ID = selectedWebsiteId.value;
                 const websiteTemp_id = selectedWebsiteId_with_webTemp_id.value
-
+                isSubmitting.value = true;
                 try {
                     const response = await axios.post('/saveWebsiteTemp', {
                         cardId: cardId, // website id
@@ -397,7 +398,9 @@
                 {
                     toast.error("Something went wrong! " + error) 
                 }
-                
+                finally {
+                    isSubmitting.value = false;
+                }
                 
             }
 
@@ -417,6 +420,7 @@
                 currData,
                 highlight_temp_id,
                 highlight_website_id,
+                isSubmitting,
             }
         }
     }

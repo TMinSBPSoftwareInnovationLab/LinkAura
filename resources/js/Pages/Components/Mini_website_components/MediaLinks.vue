@@ -261,6 +261,7 @@
             const { value: instaReals2, errorMessage: instaReals2Error } = useField('instaReals2');
 
             const onSubmit = handleSubmit(async (values) => {
+                isSubmitting.value = true;
                 try {
                     values.card_id = cardID.value
                     values.rowid = rowid.value

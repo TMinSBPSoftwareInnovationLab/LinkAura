@@ -307,12 +307,12 @@
                 rowid.value.forEach((id, idx) => {
                     formData.append(`rowid[${idx}]`, id);
                 });
-
+                isSubmitting.value = true;
                 try {
                     const res = await axios.post('/saveWebServices', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 });
-                if(res.data.status == true){
+                    if(res.data.status == true){
                         document.querySelectorAll('input[type="file"]').forEach(input => {
                             input.value = '';
                         });
@@ -326,6 +326,8 @@
                     }
                 } catch (error) {
                     toast.error("Something went wrong: " + error);
+                }finally {
+                    isSubmitting.value = false;
                 }
 
             }

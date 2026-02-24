@@ -270,6 +270,7 @@
 
             // save payment details
             const onSubmit = async() => {
+                isSubmitting.value = true;
                 try {
                     const formData = new FormData();
                     formData.append('gPay', gPay.value);
@@ -339,6 +340,8 @@
                     // console.log(error)
                     toast.warning("try catch "+ error)
                     // toast.warning(error)
+                }finally {
+                    isSubmitting.value = false;
                 }
             }
 
@@ -357,7 +360,8 @@
                 form,
                 preview,
                 onImageSelected,
-                s3PaymentUrl
+                s3PaymentUrl,
+                isSubmitting,
             }
         }
     }

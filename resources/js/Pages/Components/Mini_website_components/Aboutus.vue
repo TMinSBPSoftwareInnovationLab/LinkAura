@@ -149,6 +149,7 @@
             const { value: aboutusPara, errorMessage: aboutusParaError } = useField('aboutusPara');
 
             const onSubmit = handleSubmit(async (values) => {
+                isSubmitting.value = true;
                 try {
                     values.card_id = cardID.value
                     values.rowid = rowid.value
