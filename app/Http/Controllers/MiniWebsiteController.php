@@ -1217,15 +1217,16 @@ class MiniWebsiteController extends Controller
 
                 // Plan condition check
                 if ($item->plan_id == 94) {
-                    $monthsToAdd = 3;
+                    $monthsToAdd = 90;
                 } elseif ($item->plan_id == 95) {
-                    $monthsToAdd = 6;
+                    $monthsToAdd = 180;
                 } elseif ($item->plan_id == 96) {
-                    $monthsToAdd = 12;
+                    $monthsToAdd = 365;
                 }
 
                 if ($monthsToAdd > 0) {
-                    $expiryDate = $created->copy()->addMonths($monthsToAdd);
+                    // $expiryDate = $created->copy()->addMonths($monthsToAdd);
+                    $expiryDate = $created->copy()->addDays($daysToAdd);
                     $remaining = (int) $now->diffInDays($expiryDate, false);
                     
                     $item->expiry_date = $expiryDate->format('d-m-Y');
