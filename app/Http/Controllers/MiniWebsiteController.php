@@ -1226,7 +1226,7 @@ class MiniWebsiteController extends Controller
 
                 if ($monthsToAdd > 0) {
                     // $expiryDate = $created->copy()->addMonths($monthsToAdd);
-                    $expiryDate = $created->copy()->addDays($daysToAdd);
+                    $expiryDate = $created->copy()->addDays($monthsToAdd);
                     $remaining = (int) $now->diffInDays($expiryDate, false);
                     
                     $item->expiry_date = $expiryDate->format('d-m-Y');
