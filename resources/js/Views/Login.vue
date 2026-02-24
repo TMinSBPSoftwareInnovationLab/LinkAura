@@ -88,7 +88,7 @@
                                     </span>
                                 </div>
                             </Field>
-                            <p class="text-[14px] font-bold p-1"><router-link to="/forgotPass" class="text-rose-600 hover:underline">Forgot Password?</router-link> </p>
+                            <p class="text-[14px] font-bold p-1"><router-link to="/ForgotPass" class="text-rose-600 hover:underline">Forgot Password?</router-link> </p>
 
                             <ErrorMessage name="password" class="text-red-500 text-sm mt-1" />
                         </div>

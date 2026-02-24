@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Index from '../WebSite/Index.vue';
 import Login from '../Views/Login.vue';
-import ForgotPass from '@/Views/forgot_pass.vue';
+import ForgotPass from '../Views/Forgot_pass.vue'
 import Registration from '../Views/Registration.vue';
 import Dashboard from '@/Pages/Dashboard.vue';
 import Company_details from '@/Pages/Components/Mini_website_components/Company_details.vue';
