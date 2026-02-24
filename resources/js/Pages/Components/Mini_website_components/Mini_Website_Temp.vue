@@ -269,12 +269,12 @@
             const isSubmitting = ref(false);
             // collect the website templates
             const websiteDesigns = ref([
-                {id: 1, name:"website 1", website_temp: 1, website_image: "website1_thumb1.png"},
-                {id: 2, name:"website 2", website_temp: 6, website_image: "website2_thumb1.png"},
-                {id: 3, name:"website 3", website_temp: 11, website_image: "website3_thumb1.png"},
-                {id: 4, name:"website 4", website_temp: 16, website_image: "website4_thumb1.png"},
-                {id: 5, name:"website 5", website_temp: 21, website_image: "website5_thumb1.jpeg"},
                 {id: 6, name:"website 6", website_temp: 26, website_image: "website6_thumb1.png"},
+                {id: 5, name:"website 5", website_temp: 21, website_image: "website5_thumb1.jpeg"},
+                {id: 4, name:"website 4", website_temp: 16, website_image: "website4_thumb1.png"},
+                {id: 3, name:"website 3", website_temp: 11, website_image: "website3_thumb1.png"},
+                {id: 2, name:"website 2", website_temp: 6, website_image: "website2_thumb1.png"},
+                {id: 1, name:"website 1", website_temp: 1, website_image: "website1_thumb1.png"},
             ]);
 
             const website_templates_images = (websiteImage, websiteId) => {
