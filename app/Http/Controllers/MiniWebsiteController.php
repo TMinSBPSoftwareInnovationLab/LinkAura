@@ -1199,18 +1199,49 @@ class MiniWebsiteController extends Controller
     public function getMiniWebsiteDetails(Request $request){
         $user_id = $request->user_id;
         $getData = DB::table("miniweb_company_details")
-            ->select("id","website_id","websiteTemp_id", "user_id", "company_name", "purchased_id", DB::raw("DATE_FORMAT(created_at, '%d-%m-%Y %h:%i:%s %p') as createdDate"), "created_at")
+            ->select("id","website_id","websiteTemp_id", "user_id", "company_name", "purchased_id", "plan_id", "plan_name", DB::raw("DATE_FORMAT(created_at, '%d-%m-%Y %h:%i:%s %p') as createdDate"), "created_at")
             ->where("user_id","=",$user_id)->get();
 
         $now = Carbon::now('Asia/Kolkata');
         $getData = $getData->map(function ($item) use ($now) {
-
             $created = Carbon::parse($item->created_at, 'Asia/Kolkata');
-            $days = (int) $created->diffInDays($now);
-            if ($now->format('H') >= 12) {
-                $days += 1;
+            
+            // 1. Age Calculation
+            $ageDays = (int) $created->diffInDays($now);
+            if ($now->format('H') >= 12) { $ageDays += 1; }
+            $item->website_age_days = $ageDays;
+
+            // 2. Dynamic Expiry based on Plan ID
+            if ($item->purchased_id > 0) {
+                $monthsToAdd = 0;
+
+                // Plan condition check
+                if ($item->plan_id == 94) {
+                    $monthsToAdd = 3;
+                } elseif ($item->plan_id == 95) {
+                    $monthsToAdd = 6;
+                } elseif ($item->plan_id == 96) {
+                    $monthsToAdd = 12;
+                }
+
+                if ($monthsToAdd > 0) {
+                    $expiryDate = $created->copy()->addMonths($monthsToAdd);
+                    $remaining = (int) $now->diffInDays($expiryDate, false);
+                    
+                    $item->expiry_date = $expiryDate->format('d-m-Y');
+                    $item->days_remaining = $remaining > 0 ? $remaining : 0;
+                    $item->is_expired = $remaining <= 0;
+                    $item->plan_name = $monthsToAdd . " Months Plan";
+                } else {
+                    $item->expiry_date = 'No Plan';
+                    $item->days_remaining = null;
+                    $item->is_expired = false;
+                }
+            } else {
+                $item->expiry_date = 'Not Purchased';
+                $item->days_remaining = null;
+                $item->is_expired = false;
             }
-            $item->website_age_days = $days;
 
             return $item;
         });

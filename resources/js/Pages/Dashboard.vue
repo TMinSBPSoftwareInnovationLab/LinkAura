@@ -371,11 +371,12 @@ export default {
             {
                 field: 'company_name',
                 headerName: 'Company Name',
-                width: 250
+                width: 250,
+                editable: true
             },
             {
                 headerName: 'Actions',
-                minWidth: 320,
+                minWidth: 180,
                 cellRenderer: (params) => {
                     const {website_id, websiteTemp_id, purchased_id } = params.data;
 
@@ -448,15 +449,48 @@ export default {
                     return container;
                 }
             },
+            { 
+                headerName: 'Status', 
+                width: 120,
+                cellRenderer: (params) => {
+                    const isPurchased = params.data.purchased_id > 0;
+                    const span = document.createElement('span');
+                    span.innerText = isPurchased ? 'Live' : 'Draft';
+                    span.style.padding = '4px 8px';
+                    span.style.borderRadius = '4px';
+                    span.style.fontSize = '12px';
+                    span.style.backgroundColor = isPurchased ? '#dcfce7' : '#fef9c3';
+                    span.style.color = isPurchased ? '#166534' : '#854d0e';
+                    return span;
+                }
+            },
+            { 
+                field: 'plan_name', 
+                headerName: 'Current Plan', 
+                width: 100,
+                cellStyle: params => {
+                    if (params.data.plan_id == 96) return {color: 'purple', fontWeight: 'bold'}; // Premium
+                    return null;
+                }
+            },
             {
                 field: 'website_age_days',
                 headerName: 'Website Age  Days',
-                width: 180
+                width: 180,
+                editable: true
+            },
+            { field: 'expiry_date', headerName: 'Expiry Date', width: 150 },
+            { 
+                field: 'days_remaining', 
+                headerName: 'Days Left', 
+                width: 120,
+                cellStyle: params => params.value <= 10 ? {color: 'red', fontWeight: 'bold'} : null 
             },
             {
                 field: 'createdDate',
                 headerName: 'InDate',
-                width: 180
+                width: 180,
+                editable: true
             },
         ]);
 
