@@ -22,8 +22,11 @@
     "dependencies": {
         "@heroicons/vue": "^2.2.0",
         "@inertiajs/vue3": "^2.2.18",
+        "@vuepic/vue-datepicker": "^12.1.0",
         "ag-grid-community": "^34.3.1",
         "ag-grid-vue3": "^34.3.1",
+        "exceljs": "^4.4.0",
+        "file-saver": "^2.0.5",
         "pinia": "^3.0.4",
         "qrcode": "^1.5.4",
         "sweetalert2": "^11.26.3",

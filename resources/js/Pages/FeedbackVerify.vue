@@ -28,8 +28,44 @@
                     <h1>Feedback Verify</h1>
                 </div>
             </div>
+            <!-- export excel / date range / common search -->
+            <div class="flex flex-row w-full bg-white items-center justify-between p-5 border-b">
+                <div class="flex-1 flex justify-start">
+                    <button 
+                        @click="exportToExcel" 
+                        class="btn-export flex items-center gap-2 bg-[#7ecdc6] font-semibold p-2 px-4 rounded-2xl hover:bg-[#6bbdb5] transition-colors"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-green-700">
+                            <path d="M6.25 6.375a.875.875 0 100 1.75.875.875 0 000-1.75zM6.25 9.875a.875.875 0 100 1.75.875.875 0 000-1.75zM5.375 14.25a.875.875 0 111.75 0 .875.875 0 01-1.75 0z" />
+                            <path fill-rule="evenodd" d="M2.625 3.375C2.625 2.063 3.688 1 5 1h6.5l8.5 8.5V20.625c0 1.313-1.063 2.375-2.375 2.375H5a2.375 2.375 0 01-2.375-2.375V3.375zM12 3l7 7H12V3zm-3 8.25a.75.75 0 000 1.5h6.75a.75.75 0 000-1.5H9zm0 3a.75.75 0 000 1.5h6.75a.75.75 0 000-1.5H9zm0 3a.75.75 0 000 1.5h6.75a.75.75 0 000-1.5H9z" clip-rule="evenodd" />
+                        </svg>
+                        <span>Export to Excel</span>
+                    </button>
+                </div>
+
+                <div class="flex-1 flex justify-center">
+                    <div class="flex items-center gap-2">
+                        <!-- <span class="text-gray-400 italic text-sm">Date Range Picker Placeholder</span> -->
+                    </div>
+                </div>
+
+                <div class="flex-1 flex justify-end">
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm font-medium text-gray-700">Search:</label>
+                        <input 
+                            type="text" 
+                            v-model="searchText" 
+                            @input="onFilterTextBoxChanged"
+                            placeholder="Search..." 
+                            class="border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#7ecdc6] w-64"
+                        />
+                    </div>
+                </div>
+
+            </div>
+            <!-- export excel / date range / common search /. -->
             <!-- heading page /. -->
-             <div class="flex flex-col w-full bg-white p-5">
+             <div class="flex flex-col w-full bg-white p-5 pt-0">
                 <ag-grid-vue
                     class="ag-theme-alpine"
                     style="width:100%; height:500px"
@@ -39,45 +75,42 @@
                     :pagination="true"
                     :paginationPageSize="10"
                     :getRowStyle="getRowStyle"
+                    @grid-ready="onGridReady" 
                 />
 
              </div>
         </div>
     </div>
 
-    <div
-  v-if="rejectPopup"
-  class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50"
->
-  <div class="bg-white p-5 rounded-lg w-[420px]">
-    <h3 class="text-lg font-bold mb-3">Reject Feedback</h3>
+    <div v-if="rejectPopup" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50" >
+        <div class="bg-white p-5 rounded-lg w-[420px]">
+            <h3 class="text-lg font-bold mb-3">Reject Feedback</h3>
+            <textarea
+            v-model="rejectReason"
+            class="w-full border rounded p-2"
+            rows="4"
+            placeholder="Enter rejection reason"
+            ></textarea>
 
-    <textarea
-      v-model="rejectReason"
-      class="w-full border rounded p-2"
-      rows="4"
-      placeholder="Enter rejection reason"
-    ></textarea>
+            <div class="flex justify-end gap-3 mt-4">
+            <button
+                class="px-4 py-2 border rounded"
+                @click="rejectPopup = false"
+            >
+                Cancel
+            </button>
 
-    <div class="flex justify-end gap-3 mt-4">
-      <button
-        class="px-4 py-2 border rounded"
-        @click="rejectPopup = false"
-      >
-        Cancel
-      </button>
-
-      <button
-        class="px-4 py-2 bg-red-600 text-white rounded"
-        @click="submitReject"
-      >
-        Submit
-      </button>
+            <button
+                class="px-4 py-2 bg-red-600 text-white rounded"
+                @click="submitReject"
+            >
+                Submit
+            </button>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
-<!-- Reject popup -->
- <div v-if="rejectPopup" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50" >
+    <!-- Reject popup -->
+    <div v-if="rejectPopup" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50" >
     <div class="bg-white p-5 rounded-lg w-[420px]">
         <h3 class="text-lg font-bold mb-3">Reject Feedback</h3>
 
@@ -94,7 +127,7 @@
         </div>
     </div>
     </div>
-<!-- Reject popup /. -->
+    <!-- Reject popup /. -->
 </template>
 
 <script>
@@ -106,11 +139,14 @@ import { ModuleRegistry, AllCommunityModule } from "ag-grid-community";
 import axios from 'axios';
 import { toast } from 'vue3-toastify'
 import Swal from 'sweetalert2';
+import { TableCellsIcon } from '@heroicons/vue/24/solid'
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 
 ModuleRegistry.registerModules([AllCommunityModule]); 
 
 export default {
-    components: { SideNavBar, Header_tab, AgGridVue },
+    components: { SideNavBar, Header_tab, AgGridVue, TableCellsIcon },
     name: 'FeedbackVerify',
 
     setup(){
@@ -120,6 +156,19 @@ export default {
         const rejectPopup = ref(false);
         const rejectReason = ref("");
         const selectedRow = ref(null);
+
+        const gridApi = ref(null);
+        const searchText = ref("");
+
+        // Capture the API when the grid is ready
+        const onGridReady = (params) => {
+            gridApi.value = params.api;
+        };
+
+        // Apply the quick filter
+        const onFilterTextBoxChanged = () => {
+            gridApi.value.setGridOption('quickFilterText', searchText.value);
+        };
 
         const colDefs = ref([
             { headerName: "S.No", valueGetter: "node.rowIndex + 1", width: 80, },
@@ -261,6 +310,62 @@ export default {
             }
         })
         
+        const exportToExcel = async () => {
+            // 1. Create workbook and worksheet
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet('Feedback Data');
+
+            // 2. Define the columns for Excel 
+            // We map your colDefs to ExcelJS columns (skipping "Actions" column)
+            worksheet.columns = [
+                { header: 'S.No', key: 'sno', width: 10 },
+                { header: 'Status', key: 'statusText', width: 15 },
+                { header: 'Company', key: 'company_name', width: 25 },
+                { header: 'Customer Name', key: 'name', width: 20 },
+                { header: 'Phone', key: 'phone', width: 20 },
+                { header: 'Feedback', key: 'feedback_message', width: 30 },
+                { header: 'Reject Remarks', key: 'reject_remarks', width: 20 },
+                { header: 'In Date', key: 'fbCreatedAt', width: 20 },
+            ];
+
+            // 3. Prepare the data
+            // We transform the numeric status into text for the Excel file
+            const formattedData = rowData.value.map((row, index) => {
+                let statusText = "Pending";
+                if (row.verify === 1) statusText = "Verified";
+                if (row.verify === 2) statusText = "Rejected";
+
+                return {
+                    sno: index + 1,
+                    statusText: statusText,
+                    company_name: row.company_name,
+                    name: row.name,
+                    phone: row.phone,
+                    feedback_message: row.feedback_message,
+                    reject_remarks: row.reject_remarks,
+                    fbCreatedAt: row.fbCreatedAt
+                };
+            });
+
+            // 4. Add data to worksheet
+            worksheet.addRows(formattedData);
+
+            // 5. Styling the header row (Optional but recommended)
+            worksheet.getRow(1).eachCell((cell) => {
+                cell.font = { bold: true, color: { argb: 'FFFFFF' } };
+                cell.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: '4F46E5' } // Indigo color
+                };
+                cell.alignment = { vertical: 'middle', horizontal: 'center' };
+            });
+
+            // 6. Generate Buffer and Save File
+            const buffer = await workbook.xlsx.writeBuffer();
+            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            saveAs(blob, `Feedback_Report_${new Date().toISOString().slice(0, 10)}.xlsx`);
+        };
 
         return { 
             rowData, 
@@ -272,6 +377,10 @@ export default {
             gridContext,
             submitReject,
             getRowStyle,
+            exportToExcel,
+            onGridReady,
+            searchText,
+            onFilterTextBoxChanged,
         };
     }
 };

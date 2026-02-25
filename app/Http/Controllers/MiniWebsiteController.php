@@ -1232,7 +1232,7 @@ class MiniWebsiteController extends Controller
                     $item->expiry_date = $expiryDate->format('d-m-Y');
                     $item->days_remaining = $remaining > 0 ? $remaining : 0;
                     $item->is_expired = $remaining <= 0;
-                    $item->plan_name = $monthsToAdd . " Months Plan";
+                    $item->plan_name = $monthsToAdd . " Days";
                 } else {
                     $item->expiry_date = 'No Plan';
                     $item->days_remaining = null;
