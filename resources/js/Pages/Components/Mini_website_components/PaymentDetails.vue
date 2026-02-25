@@ -327,9 +327,16 @@
                             const qr_res = await axios.post('/qrCodeGenerate', {
                                 cd_ID: cd_ID, website_id: website_id, websiteTemp_id: websiteTemp_id, qrBase: qrBase
                             })
+
+                            if (qr_res.data && qr_res.data.status == true) {
+                                window.open(`${websitefinalUrl}?ilp88LAsBvm=${encoded}`, '_blank');
+                                router.push('/dashboard');
+                            } else {
+                                toast.error("QR Code generation failed. Please try again.");
+                            }
                             // console.log("qr_res : "+ qr_res.data)
-                            window.open(`${websitefinalUrl}?ilp88LAsBvm=${encoded}`, '_blank')
-                            router.push('/dashboard')
+                            // window.open(`${websitefinalUrl}?ilp88LAsBvm=${encoded}`, '_blank')
+                            // router.push('/dashboard')
                         } catch (error) {
                             toast.warning("Qrcode error: "+ error)
                         }

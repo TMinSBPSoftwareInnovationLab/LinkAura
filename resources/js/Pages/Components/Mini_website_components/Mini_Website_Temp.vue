@@ -260,6 +260,7 @@
     import { useCardStore } from '@/stores/cardStore'
     import { toast } from 'vue3-toastify'
     import { useRouter } from "vue-router";
+    import QRCode from "qrcode"
 
     export default {
         name: "Website_temp",
@@ -267,6 +268,8 @@
         setup() {
             const router = useRouter();
             const isSubmitting = ref(false);
+            const qrCodeUrl = ref("")
+
             // collect the website templates
             const websiteDesigns = ref([
                 {id: 6, name:"website 6", website_temp: 26, website_image: "website6_thumb1.png"},
@@ -376,6 +379,49 @@
                 const website_ID = selectedWebsiteId.value;
                 const websiteTemp_id = selectedWebsiteId_with_webTemp_id.value
                 isSubmitting.value = true;
+
+                // 25-02-2026
+                // get exist company details
+                const exRes = await axios.post('/getExistCompanyDetails', {
+                    cardId: cardId, // website id
+                    website_ID: website_ID,
+                    websiteTemp_id: websiteTemp_id
+                });
+                const exData = exRes.data.getData
+                if(exData.data.status == true){
+                    // Returns true if record exists (don't regenerate),
+                }
+                else {
+                    const websiteRoute = `/Website_Temp_${website_id}` // website url
+                    const params = `cd_id=${cardId}&template_id=${websiteTemp_id}`
+                    const encoded = btoa(params)             
+                    
+                    const safecompanyName = exData.data.company_name.replace(/\s+/g, '_')
+                    const encrypt_website_id = btoa(website_id)
+                    
+                    const websitefinalUrl = `/${safecompanyName}/Website_Temp_${encrypt_website_id}`
+                    const baseURL = window.location.origin;
+                    const qrBase = await QRCode.toDataURL(`${baseURL}${websitefinalUrl}?ilp88LAsBvm=${encoded}`, { width: 300 })
+                    qrCodeUrl.value = qrBase
+
+                    try {
+                            const qr_res = await axios.post('/qrCodeGenerate', {
+                                cd_ID: cardId, website_id: website_id, websiteTemp_id: websiteTemp_id, qrBase: qrBase
+                            })
+
+                            if (qr_res.data && qr_res.data.status == true) {
+                                window.open(`${websitefinalUrl}?ilp88LAsBvm=${encoded}`, '_blank');
+                                // router.push('/dashboard');
+                            } else {
+                                // toast.error("QR Code generation failed. Please try again.");
+                            }
+                        } catch (error) {
+                            // toast.warning("Qrcode error: "+ error)
+                        }
+                }
+                // 25-02-2026 /.
+
+
                 try {
                     const response = await axios.post('/saveWebsiteTemp', {
                         cardId: cardId, // website id

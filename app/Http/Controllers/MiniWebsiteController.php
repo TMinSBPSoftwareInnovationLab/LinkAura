@@ -854,6 +854,8 @@ class MiniWebsiteController extends Controller
         } else {
             $data['all_step_completed'] = 1;
             $inserted = DB::table('miniweb_payments_details')->insert($data);
+            // update company details all setps are completed
+            DB::table('miniweb_company_details')->where('id', '=', $mini_website_id)->update(['all_steps_completed' => 1]);
 
             return [
                 'status'  => (bool) $inserted,
@@ -881,6 +883,29 @@ class MiniWebsiteController extends Controller
             'data'   => $data ?? null
         ];
     }
+    
+    // get Exist Company Details 
+    public function getExistCompanyDetails(Request $request) {
+        $company = DB::table("miniweb_company_details")
+            ->where('id', $request->cd_ID)
+            ->first();
+
+        // 2. Logic Check
+        $isComplete = ($company && $company->website_id == $request->website_id && 
+                    $company->websiteTemp_id == $request->websiteTemp_id && 
+                    $company->all_steps_completed == 1);
+
+        return [
+            // true: record exists and steps complete (Don't regenerate QR)
+            // false: something is missing (Regenerate QR)
+            'status'  => $isComplete, 
+            
+            // If complete, return full data object. 
+            // If not, return just the company name (or empty string if company doesn't exist at all)
+            'getData' => $isComplete ? $company : ($company->company_name ?? '')
+        ];
+    }
+
 
     // get QR Code Generate
     public function qrCodeGenerate(Request $request)
@@ -975,7 +1000,7 @@ class MiniWebsiteController extends Controller
             'status'    => true,
             'file_name' => $fileName,
             // Replace asset() with S3 URL
-            'path'      => $disk->url($s3Path),
+            // 'path'      => $disk->url($s3Path),
             'message'   => $message,
         ]);
     }

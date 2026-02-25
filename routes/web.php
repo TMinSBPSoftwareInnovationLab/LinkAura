@@ -36,6 +36,7 @@ Route::post('/saveWebGallery',[MiniWebsiteController::class, 'saveWebGallery']);
 Route::post('/save_miniweb_paymentDetails',[MiniWebsiteController::class, 'save_miniweb_paymentDetails']);
 Route::post('/getSelectedWebsite',[MiniWebsiteController::class, 'getSelectedWebsite']);
 Route::post('/qrCodeGenerate',[MiniWebsiteController::class, 'qrCodeGenerate']);
+Route::post('/getExistCompanyDetails',[MiniWebsiteController::class, 'getExistCompanyDetails']);
 Route::post('/getFeedbackDetails',[MiniWebsiteController::class, 'getFeedbackDetails']);
 Route::post('/verifyMiniWebFeedback',[MiniWebsiteController::class, 'verifyMiniWebFeedback']);
 Route::post('/getMiniWebsiteDetails',[MiniWebsiteController::class, 'getMiniWebsiteDetails']);
