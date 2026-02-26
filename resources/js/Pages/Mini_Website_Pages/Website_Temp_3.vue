@@ -845,7 +845,7 @@
                         <!-- facebook share -->
 
                         <!-- insta share -->
-                        <div class="flex flex-grow w-full font-semibold items-center justify-center">
+                        <div class="flex flex-grow w-full font-semibold items-center justify-center" v-if="1==2">
                             <a :href="`https://www.instagram.com/`" target="_blank" class="flex items-center px-4 py-1 hover:text-gray-800 hover:bg-gray-100">
                                 <button class="w-60 flex items-center gap-3  bg-transparent border border-[#cf3b9c]  rounded-xs p-2 justify-center" >
                                     <svg xmlns="http://www.w3.org/2000/svg"
