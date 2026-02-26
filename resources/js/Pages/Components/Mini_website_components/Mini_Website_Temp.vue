@@ -411,7 +411,7 @@
                             })
 
                             if (qr_res.data && qr_res.data.status == true) {
-                                window.open(`${websitefinalUrl}?ilp88LAsBvm=${encoded}`, '_blank');
+                                // window.open(`${websitefinalUrl}?ilp88LAsBvm=${encoded}`, '_blank');
                                 // router.push('/dashboard');
                             } else {
                                 // toast.error("QR Code generation failed. Please try again.");
