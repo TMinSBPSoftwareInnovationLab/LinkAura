@@ -954,7 +954,7 @@
                         <!-- insta share -->
 
                         <!-- whatsapp share -->
-                        <div class="flex flex-grow w-full font-semibold items-center justify-center">
+                        <div class="flex flex-grow w-full font-semibold items-center justify-center pt-5">
                             <a :href="`https://api.whatsapp.com/send?text=${encodedUrl}`" target="_blank" class="flex items-center px-4 hover:bg-gray-100 hover:text-gray-800" >
                                 <button class="w-60 flex items-center gap-3  bg-transparent border border-[#57C785]  rounded-xs p-2 justify-center" >
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6 fill-[#52b84a]">
