@@ -887,14 +887,14 @@ class MiniWebsiteController extends Controller
     // get Exist Company Details 
     public function getExistCompanyDetails(Request $request) {
         $company = DB::table("miniweb_company_details")
-            ->where('id', $request->cd_ID)
+            ->where('id', $request->cardId)
             ->first();
-
+        // return $company;
         // 2. Logic Check
-        $isComplete = ($company && $company->website_id == $request->website_id && 
+        $isComplete = ($company && $company->website_id == $request->website_ID && 
                     $company->websiteTemp_id == $request->websiteTemp_id && 
                     $company->all_steps_completed == 1);
-
+        
         return [
             // true: record exists and steps complete (Don't regenerate QR)
             // false: something is missing (Regenerate QR)

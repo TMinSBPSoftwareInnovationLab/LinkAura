@@ -388,25 +388,26 @@
                     websiteTemp_id: websiteTemp_id
                 });
                 const exData = exRes.data.getData
-                if(exData.data.status == true){
+                if(exRes.data.status == true){
                     // Returns true if record exists (don't regenerate),
                 }
                 else {
-                    const websiteRoute = `/Website_Temp_${website_id}` // website url
+                    // console.log("exData.company_name : ",exData)
+                    const websiteRoute = `/Website_Temp_${website_ID}` // website url
                     const params = `cd_id=${cardId}&template_id=${websiteTemp_id}`
                     const encoded = btoa(params)             
                     
-                    const safecompanyName = exData.data.company_name.replace(/\s+/g, '_')
-                    const encrypt_website_id = btoa(website_id)
+                    const safecompanyName = exData.replace(/\s+/g, '_')
+                    const encrypt_website_id = btoa(website_ID)
                     
                     const websitefinalUrl = `/${safecompanyName}/Website_Temp_${encrypt_website_id}`
                     const baseURL = window.location.origin;
                     const qrBase = await QRCode.toDataURL(`${baseURL}${websitefinalUrl}?ilp88LAsBvm=${encoded}`, { width: 300 })
                     qrCodeUrl.value = qrBase
-
+                    
                     try {
                             const qr_res = await axios.post('/qrCodeGenerate', {
-                                cd_ID: cardId, website_id: website_id, websiteTemp_id: websiteTemp_id, qrBase: qrBase
+                                cd_ID: cardId, website_id: website_ID, websiteTemp_id: websiteTemp_id, qrBase: qrBase
                             })
 
                             if (qr_res.data && qr_res.data.status == true) {
@@ -417,11 +418,11 @@
                             }
                         } catch (error) {
                             // toast.warning("Qrcode error: "+ error)
-                        }
+                        }                       
                 }
                 // 25-02-2026 /.
 
-
+                
                 try {
                     const response = await axios.post('/saveWebsiteTemp', {
                         cardId: cardId, // website id
