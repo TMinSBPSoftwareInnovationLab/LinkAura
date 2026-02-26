@@ -72,7 +72,7 @@
                 <td class="header-right">
                     <h1>Invoice</h1>
                     <p>Mob: {{ $contact_phone ?? '+91 98423 06487' }}</p>
-                    <p>Email: {{ $contact_email ?? 'thirumurugan@gmail.com' }}</p>
+                    <p>Email: {{ $contact_email ?? 'thirumurugan8892@gmail.com' }}</p>
                     <p>Web: www.linkaura.co.in</p>
                 </td>
             </tr>
