@@ -1003,6 +1003,9 @@
             <!-- share my details /.-->
 
         </div>
+        <!-- linkaura Footer -->
+        <linkAuraFooter />
+        <!-- linkaura Footer /.-->
 
         <!-- website footer  -->
         <WebsiteFooterBar v-if="isFooter" />
@@ -1285,10 +1288,11 @@
         import productBG from '@/assets/images/mini_website/com_images/bg3.jpg'
         import serviceBG from '@/assets/images/mini_website/com_images/bg5.jpg'
         import aBG from '@/assets/images/mini_website/com_images/bg1.jpg'
+        import linkAuraFooter from '../Mini_Website_Pages/common_footer/linkaura_foot.vue'
 
     export default {
         name: "Website_Temp_4",
-        components: {PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, ShareIcon, ArrowDownTrayIcon, WebsiteFooterBar},
+        components: {PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, ShareIcon, ArrowDownTrayIcon, WebsiteFooterBar, linkAuraFooter},
         props: {
             // themeId: Number,
             // design: Number,
@@ -1911,7 +1915,8 @@
             const cpyUrl = ref("")
             const currentUrl = window.location.href
             // encodedUrl.value = cpyUrl.value = currentUrl
-            encodedUrl.value = cpyUrl.value = encodeURIComponent(currentUrl)
+            cpyUrl.value = currentUrl
+            encodedUrl.value = encodeURIComponent(currentUrl)
 
             const copyToClipboard = async () => {
                 const textToCopy = cpyUrl.value;
@@ -1920,7 +1925,7 @@
                 if (navigator.clipboard && window.isSecureContext) {
                     try {
                         await navigator.clipboard.writeText(textToCopy);
-                        alert("URL copied!");
+                        toast.success("URL copied!")
                         return;
                     } catch (err) {
                         console.error("Clipboard API failed", err);
@@ -1943,7 +1948,7 @@
                 try {
                     const successful = document.execCommand('copy');
                     if (successful) {
-                        alert("URL copied (fallback)!");
+                        toast.success("URL copied (fallback)!")
                     } else {
                         throw new Error('Copy command failed');
                     }

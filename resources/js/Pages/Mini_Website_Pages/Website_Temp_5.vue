@@ -1221,6 +1221,9 @@
             
 
         </div>
+        <!-- linkaura Footer -->
+        <linkAuraFooter />
+        <!-- linkaura Footer /.-->
 
         <!-- website footer  -->
         <WebsiteFooterBar v-if="isFooter"/>
@@ -1497,13 +1500,14 @@
     import { toast } from 'vue3-toastify'
     import { useRoute,useRouter } from 'vue-router'
     import rebbon1 from '@/assets/images/mini_website/website5/rebbons/rebbon1.png'
+    import linkAuraFooter from '../Mini_Website_Pages/common_footer/linkaura_foot.vue'
 
     import { PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, ChevronLeftIcon, ChevronRightIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/solid'
     import WebsiteFooterBar from '../Components/WebsiteFooterBar.vue';
 
     export default{
         name: "Website_Temp_5",
-        components: {PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, WebsiteFooterBar, ChevronLeftIcon, ChevronRightIcon, ArrowDownTrayIcon},
+        components: {PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, WebsiteFooterBar, ChevronLeftIcon, ChevronRightIcon, ArrowDownTrayIcon,linkAuraFooter},
         props: {
             // themeId: Number,
             // design: Number,
@@ -2124,7 +2128,8 @@
             const cpyUrl = ref("")
             const currentUrl = window.location.href
             // encodedUrl.value = cpyUrl.value = currentUrl
-            encodedUrl.value = cpyUrl.value = encodeURIComponent(currentUrl)
+            cpyUrl.value = currentUrl
+            encodedUrl.value = encodeURIComponent(currentUrl)
 
             const copyToClipboard = async () => {
                 const textToCopy = cpyUrl.value;
@@ -2133,7 +2138,7 @@
                 if (navigator.clipboard && window.isSecureContext) {
                     try {
                         await navigator.clipboard.writeText(textToCopy);
-                        alert("URL copied!");
+                        toast.success("URL copied!")
                         return;
                     } catch (err) {
                         console.error("Clipboard API failed", err);
@@ -2156,7 +2161,7 @@
                 try {
                     const successful = document.execCommand('copy');
                     if (successful) {
-                        alert("URL copied (fallback)!");
+                        toast.success("URL copied (fallback)!")
                     } else {
                         throw new Error('Copy command failed');
                     }

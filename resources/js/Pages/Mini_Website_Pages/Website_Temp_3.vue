@@ -910,11 +910,19 @@
                         </div>
                     </div>
                     <!-- content area /. -->
+
+                    <!-- footer -->
+                    <div class="mt-0 border-1 border-b-[#07254b]  border-t-0 border-l-0 border-r-0 flex flex-col w-full h-[80px] bg-no-repeat " :style="{ backgroundImage: `url(${defaultFooter})`, backgroundSize: 'contain',backgroundPosition: 'right', aspectRatio: '3 / 4' }">
+                    </div>
+                    <!-- footer /. -->
                 </div>
                 <!-- share my detail content /. -->
             </div>
             <!-- share my details /. -->
 
+            <!-- linkaura Footer -->
+            <linkAuraFooter />
+            <!-- linkaura Footer /.-->
 
             <!-- website footer  -->
             <WebsiteFooterBar v-if="isFooter"/>
@@ -1201,10 +1209,11 @@
     import aboutBG from '@/assets/images/mini_website/website3/bg/about_bg3.jpg'
     import productBG from '@/assets/images/mini_website/website3/bg/about_bg7.jpg'
     import galleryBG from '@/assets/images/mini_website/website3/bg/about_bg1.jpg'
+    import linkAuraFooter from '../Mini_Website_Pages/common_footer/linkaura_foot.vue'
     
     export default {
         name: "Website_Temp_3",
-        components: {PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, WebsiteFooterBar, ArrowDownTrayIcon},
+        components: {PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, WebsiteFooterBar, ArrowDownTrayIcon, linkAuraFooter},
         props: {
             // themeId: Number,
             // design: Number,
@@ -1818,7 +1827,8 @@
             const cpyUrl = ref("")
             const currentUrl = window.location.href
             // encodedUrl.value = cpyUrl.value = currentUrl
-            encodedUrl.value = cpyUrl.value = encodeURIComponent(currentUrl)
+            cpyUrl.value = currentUrl
+            encodedUrl.value = encodeURIComponent(currentUrl)
 
             const copyToClipboard = async () => {
                 const textToCopy = cpyUrl.value;
@@ -1827,7 +1837,7 @@
                 if (navigator.clipboard && window.isSecureContext) {
                     try {
                         await navigator.clipboard.writeText(textToCopy);
-                        alert("URL copied!");
+                        toast.success("URL copied!")
                         return;
                     } catch (err) {
                         console.error("Clipboard API failed", err);
@@ -1850,7 +1860,7 @@
                 try {
                     const successful = document.execCommand('copy');
                     if (successful) {
-                        alert("URL copied (fallback)!");
+                        toast.success("URL copied (fallback)!")
                     } else {
                         throw new Error('Copy command failed');
                     }
