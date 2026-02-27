@@ -1913,7 +1913,8 @@
             const encodedUrl = ref("")
             const cpyUrl = ref("")
             const currentUrl = window.location.href
-            encodedUrl.value = cpyUrl.value = currentUrl
+            // encodedUrl.value = cpyUrl.value = currentUrl
+            encodedUrl.value = cpyUrl.value = encodeURIComponent(currentUrl)
 
             const copyToClipboard = async () => {
                 const textToCopy = cpyUrl.value;
