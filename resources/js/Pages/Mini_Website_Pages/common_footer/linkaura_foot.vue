@@ -1,5 +1,7 @@
 <template>
-    <div class="max-w-[430px] mx-auto mt-3 bg-gradient-to-r from-[#000b58] via-[#001a8c] to-[#000b58] ounded-xl shadow-lg p-4 text-center">
+    <div class="max-w-[430px] mx-auto mt-3  bg-gradient-to-r from-[#000b58] via-[#001a8c] to-[#000b58] 
+            rounded-xl shadow-lg p-4 text-center">
+
         <p class="text-gray-200 text-xs font-medium leading-relaxed">
             © {{ new Date().getFullYear() }} 
             <span class="font-semibold text-white">LinkAura</span>,  
