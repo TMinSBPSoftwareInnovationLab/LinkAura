@@ -236,7 +236,7 @@
                             <img :src="item.product_img" class="w-full h-full object-contain" >
                         </div>
 
-                        <div class="flex flex-col w-full h-[200px] p-1 cursor-pointer relative" @click="openImage(item.product_img)">
+                        <div class="w-full h-[200px] md:h-[250px] rounded-[15px] bg-white border border-gray-300 cursor-pointer relative" @click="openImage(item.product_img)">
                             <span v-if="item.status == 1" class="absolute -top-2 right-2 bg-orange-500 text-white text-[10px] px-2 py-1 rounded-md font-bold uppercase shadow-sm z-10">
                                 Trending
                             </span>
