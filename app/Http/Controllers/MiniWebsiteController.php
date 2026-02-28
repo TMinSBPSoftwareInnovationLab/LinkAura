@@ -432,6 +432,7 @@ class MiniWebsiteController extends Controller
                 'orginal_price' => $original,
                 'discount_price' => $discount,
                 'final_price' => $final,
+                'status' => $status ?? 0
             ];
 
             // 2. UPDATE MODE

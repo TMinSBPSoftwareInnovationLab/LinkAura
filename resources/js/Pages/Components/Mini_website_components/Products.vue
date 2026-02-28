@@ -99,6 +99,37 @@
                                     <input type="number" v-model="product.final_price" placeholder="Final Price" class="w-full px-3 py-2 mt-2 border border-[#333c79]"   />
                                     <!-- Final Proce /.-->
 
+                                    <!-- trending / new / empty -->
+                                    <div class="mt-3 flex flex-col gap-2 p-2 bg-gray-50 rounded-md border border-gray-100">
+                                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Product Tag</p>
+                                        
+                                        <div class="flex items-center gap-4">
+                                            <label class="inline-flex items-center cursor-pointer">
+                                                <input type="radio" 
+                                                    :name="'status-' + index" 
+                                                    value="1" 
+                                                    v-model="product.status"
+                                                    class="w-4 h-4 text-blue-600 focus:ring-blue-500">
+                                                <span class="ml-2 text-sm text-gray-700">Trending</span>
+                                            </label>
+
+                                            <label class="inline-flex items-center cursor-pointer">
+                                                <input type="radio" 
+                                                    :name="'status-' + index" 
+                                                    value="2" 
+                                                    v-model="product.status"
+                                                    class="w-4 h-4 text-blue-600 focus:ring-blue-500">
+                                                <span class="ml-2 text-sm text-gray-700">New Arrival</span>
+                                            </label>
+                                        </div>
+                                        
+                                        <button @click="product.status = ''" 
+                                                class="text-[10px] text-left text-red-400 hover:underline">
+                                            Clear Selection
+                                        </button>
+                                    </div>
+                                    <!-- trending / new / empty /. -->
+
                                 </div>
                             </div>
                             <!-- product view area /.-->
@@ -252,6 +283,7 @@
                             final_price: item.final_price || '',
                             file: null,
                             preview: item.product_img ? `${s3ProductUrl}/product_images/${item.product_img}` : '',
+                            status: item.status || '', // 'trending', 'new', or '',
                             // Add a flag to identify if this row is disabled based on the plan
                             isLocked: index >= allowedCount
                         };
@@ -358,6 +390,7 @@
                     formData.append(`products[${index}][original_price]`, p.original_price);
                     formData.append(`products[${index}][discount_price]`, p.discount_price);
                     formData.append(`products[${index}][final_price]`, p.final_price);
+                    formData.append(`products[${index}][status]`, p.status); // 1-Trending, 2-New Arrival
                 });
 
                 // update data
