@@ -142,6 +142,8 @@
                         <li>✍ Customer Enquiry Section</li>
                         <li>⭐ Customer Feedback Section</li>
                         <li>🎨 Custom Theme Colors</li>
+                        <li>🔥 Trending Tags to boost sales</li>
+                        <li>✨ New Arrival Labels for fresh stock</li>
                         <li>📤 Social Media Sharing:
                             <ul class="px-10">
                                 <li>Facebook Share</li>
@@ -164,7 +166,7 @@
 
                 <!-- purchase button -->
                 <div class="flex flex-col w-full px-5 pt-2 pb-2 justify-center items-center mt-5 mb-10 bg-[#2A7B9B]">
-                    <button @click="purchasePlan(94, 1, 'Basic Plan')"
+                    <button @click="purchasePlan(94, 999, 'Basic Plan')"
                     class="w-[150px] text-gray bg-transparent border-1 border-[#ffffff] text-[#ffffff] py-2 rounded-xl transition hover:bg-[#2A7B9B] hover:text-white" >
                     Buy Now
                     </button>
@@ -218,6 +220,8 @@
                         <li>✍ Customer Enquiry Section</li>
                         <li>⭐ Customer Feedback Section</li>
                         <li>🎨 Custom Theme Colors</li>
+                        <li>🔥 Trending Tags to boost sales</li>
+                        <li>✨ New Arrival Labels for fresh stock</li>
                         <li>📤 Social Media Sharing:
                             <ul class="px-10">
                                 <li>Facebook Share</li>
@@ -240,7 +244,7 @@
 
                 <!-- purchase button -->
                 <div class="flex flex-col w-full px-5 pt-2 pb-2 justify-center items-center mt-5 mb-10 bg-[#066856]">
-                    <button @click="purchasePlan(95, 1, 'Standard Plan')"
+                    <button @click="purchasePlan(95, 1499, 'Standard Plan')"
                     class="w-[150px] text-gray bg-transparent border-1 border-[#ffffff] text-[#ffffff] py-2 rounded-xl transition hover:bg-[#066856] hover:text-white" >
                     Buy Now
                     </button>
@@ -294,6 +298,8 @@
                         <li>✍ Customer Enquiry Section</li>
                         <li>⭐ Customer Feedback Section</li>
                         <li>🎨 Custom Theme Colors</li>
+                        <li>🔥 Trending Tags to boost sales</li>
+                        <li>✨ New Arrival Labels for fresh stock</li>
                         <li>📤 Social Media Sharing:
                             <ul class="px-10">
                                 <li>Facebook Share</li>
@@ -316,7 +322,7 @@
 
                 <!-- purchase button -->
                 <div class="flex flex-col w-full px-5 pt-2 pb-2 justify-center items-center mt-5 mb-10 bg-[#6c075b]">
-                    <button @click="purchasePlan(96, 1, 'Premium Plan')"
+                    <button @click="purchasePlan(96, 2999, 'Premium Plan')"
                     class="w-[150px] text-gray bg-transparent border-1 border-[#ffffff] text-[#ffffff] py-2 rounded-xl transition hover:bg-[#6c075b] hover:text-white" >
                     Buy Now
                     </button>

@@ -102,7 +102,7 @@
 
                          <!-- Logo Upload -->
                         <div>
-                            <label class="font-semibold text-gray-700">Upload Logo</label>
+                            <label class="font-semibold text-gray-700">Profile Picture / Logo</label>
                             <input
                                 type="file"
                                 @change="uploadLogo"
