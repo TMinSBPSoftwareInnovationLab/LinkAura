@@ -232,8 +232,20 @@
                     <!-- PRODUCT CARD -->
                     <div v-for="(item, index) in products" :key="index" class="flex flex-col w-full h-full bg-white p-3">
                         <!-- product image -->
-                        <div class="w-full h-[200px] md:h-[250px] rounded-[15px] bg-white border border-gray-300 cursor-pointer" @click="openImage(item.product_img)" >
+                        <div class="w-full h-[200px] md:h-[250px] rounded-[15px] bg-white border border-gray-300 cursor-pointer" @click="openImage(item.product_img)" v-if="1==2">
                             <img :src="item.product_img" class="w-full h-full object-contain" >
+                        </div>
+
+                        <div class="flex flex-col w-full h-[200px] p-1 cursor-pointer relative" @click="openImage(item.product_img)">
+                            <span v-if="item.status == 1" class="absolute -top-2 right-2 bg-orange-500 text-white text-[10px] px-2 py-1 rounded-md font-bold uppercase shadow-sm z-10">
+                                Trending
+                            </span>
+                            
+                            <span v-else-if="item.status === 2" class="absolute -top-2 right-2 bg-green-600 text-white text-[10px] px-2 py-1 rounded-md font-bold uppercase shadow-sm z-10">
+                                New Arrival
+                            </span>
+
+                            <img :src="item.product_img" class="w-full h-full object-contain">
                         </div>
 
                         <!-- product name -->
@@ -1391,6 +1403,7 @@
                                 orginal_price: Number(item.orginal_price),
                                 discount_price: Number(item.discount_price),
                                 final_price: Number(item.final_price),
+                                status: Number(item.status),
                             }));
 
                         products.value = allowedCount > 0 ? formatted.slice(0, allowedCount) : formatted;
