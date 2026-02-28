@@ -111,7 +111,7 @@
                             />
                         </div>
                         <div class="flex flex-col p-3 justify-left" v-if="previewImage">
-                            <span class="text-2xl font-bold text-green-700">Logo</span>
+                            <span class="text-2xl font-bold text-green-700">Profile Picture / Logo</span>
                             <img :src="previewImage" alt="Preview" class="rounded-lg mt-2 w-full max-h-60 object-contain" />
                         </div>
                         <!-- Logo Upload /.-->
