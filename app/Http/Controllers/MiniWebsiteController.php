@@ -433,7 +433,7 @@ class MiniWebsiteController extends Controller
                 'orginal_price' => $original,
                 'discount_price' => $discount,
                 'final_price' => $final,
-                'status' => $p['status'] ?? 0
+                'status' => (int)($p['status'] ?? 0)
             ];
             
                     $newSts[] = $data['status'];
@@ -477,7 +477,7 @@ class MiniWebsiteController extends Controller
                 }
             }
         }
-                    return $newSts;
+                    // return $newSts;
         return [
             'status' => $anyChanges,
             'message' => $anyChanges ? "Changes saved successfully" : "No changes made",
