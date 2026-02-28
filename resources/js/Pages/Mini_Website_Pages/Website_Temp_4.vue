@@ -261,11 +261,11 @@
                         :key="index"
                     >
                         <!-- Stock badge -->
-                        <span v-if="item.status == 1" class="absolute top-2 right-2 bg-orange-500 text-white text-[10px] px-2 py-1 rounded-md font-bold uppercase shadow-sm z-10">
+                        <span v-if="item.status == 1" class="absolute top-0 right-8 bg-orange-500 text-white text-[10px] px-2 py-1 rounded-md font-bold uppercase shadow-sm z-10">
                             Trending
                         </span>
                         
-                        <span v-else-if="item.status === 2" class="absolute top-2 right-2 bg-green-600 text-white text-[10px] px-2 py-1 rounded-md font-bold uppercase shadow-sm z-10">
+                        <span v-else-if="item.status === 2" class="absolute top-0 right-8 bg-green-600 text-white text-[10px] px-2 py-1 rounded-md font-bold uppercase shadow-sm z-10">
                             New Arrival
                         </span>
 
