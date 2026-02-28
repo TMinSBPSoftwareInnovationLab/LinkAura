@@ -327,6 +327,8 @@
                                 <li>✍ Customer Enquiry Section</li>
                                 <li>⭐ Customer Feedback Section</li>
                                 <li>🎨 Custom Theme Colors</li>
+                                <li>🔥 Trending Tags to boost sales</li>
+                                <li>✨ New Arrival Labels for fresh stock</li>
                                 <li>📤 Social Media Sharing:
                                     <ul class="px-10">
                                         <li>Facebook Share</li>
@@ -378,6 +380,8 @@
                                     <li>✍ Customer Enquiry Section</li>
                                     <li>⭐ Customer Feedback Section</li>
                                     <li>🎨 Custom Theme Colors</li>
+                                    <li>🔥 Trending Tags to boost sales</li>
+                                    <li>✨ New Arrival Labels for fresh stock</li>
                                     <li>📤 Social Media Sharing:
                                         <ul class="px-10">
                                             <li>Facebook Share</li>
@@ -429,6 +433,8 @@
                                     <li>✍ Customer Enquiry Section</li>
                                     <li>⭐ Customer Feedback Section</li>
                                     <li>🎨 Custom Theme Colors</li>
+                                    <li>🔥 Trending Tags to boost sales</li>
+                                    <li>✨ New Arrival Labels for fresh stock</li>
                                     <li>📤 Social Media Sharing:
                                         <ul class="px-10">
                                             <li>Facebook Share</li>
