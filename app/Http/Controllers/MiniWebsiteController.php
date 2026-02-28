@@ -402,7 +402,6 @@ class MiniWebsiteController extends Controller
         $rowid = $request->rowid;
         $anyChanges = false;
         $messages = [];
-        $newSts = [];
 
         if (!$mini_website_id) {
             return ['status' => false, 'message' => 'No Products Insert!'];
@@ -436,7 +435,6 @@ class MiniWebsiteController extends Controller
                 'status' => (int)($p['status'] ?? 0)
             ];
             
-                    $newSts[] = $data['status'];
             // 2. UPDATE MODE
             if (!empty($rowid) && isset($rowid[$index])) {
                 $productId = $rowid[$index];
@@ -477,7 +475,7 @@ class MiniWebsiteController extends Controller
                 }
             }
         }
-                    // return $newSts;
+                    
         return [
             'status' => $anyChanges,
             'message' => $anyChanges ? "Changes saved successfully" : "No changes made",
