@@ -1543,6 +1543,7 @@
                                 orginal_price: Number(item.orginal_price),
                                 discount_price: Number(item.discount_price),
                                 final_price: Number(item.final_price),
+                                status: Number(item.status),
                             }));
 
                         products.value = allowedCount > 0 ? formatted.slice(0, allowedCount) : formatted;
