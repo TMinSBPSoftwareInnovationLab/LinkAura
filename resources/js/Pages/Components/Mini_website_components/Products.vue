@@ -103,7 +103,7 @@
                                     <div class="mt-3 flex flex-col gap-2 p-2 bg-gray-50 rounded-md border border-gray-100">
                                         <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Product Tag</p>
                                         
-                                        <div class="flex items-center gap-4">
+                                        <div class="flex flex-col sm:flex-col sm:items-left gap-3 sm:gap-4">
                                             <label class="inline-flex items-center cursor-pointer">
                                                 <input type="radio" 
                                                     :name="'status-' + index" 
@@ -124,7 +124,7 @@
                                         </div>
                                         
                                         <button @click="product.status = ''" 
-                                                class="text-[10px] text-left text-red-400 hover:underline">
+                                                class="text-[10px] font-bold text-left text-red-400 hover:underline">
                                             Clear Selection
                                         </button>
                                     </div>
