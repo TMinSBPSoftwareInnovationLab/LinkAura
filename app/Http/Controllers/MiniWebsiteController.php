@@ -230,7 +230,8 @@ class MiniWebsiteController extends Controller
                     'name'             => $fbUserName,
                     'phone'            => $fbphone,
                     'feedback_message' => $fbmessage,
-                    'created_at'       => now() // நல்ல பழக்கம்
+                    'created_at'       => now(),
+                    'verify'           => 0
                 ];
                 
                 // InsertOrIgnore-க்கு பதில் Insert உபயோகித்தால் எரர் தெளிவாகத் தெரியும்
