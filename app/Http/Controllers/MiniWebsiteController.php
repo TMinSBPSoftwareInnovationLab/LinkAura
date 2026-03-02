@@ -221,7 +221,6 @@ class MiniWebsiteController extends Controller
             $fbphone    = $request->fbphone;
             $fbmessage  = $request->fbmessage;
             
-            // மொபைலில் miniWebId வருகிறதா என்று சரிபார்க்கவும்
             $miniWebId  = $request->miniWebId; 
 
             if ($miniWebId) {
