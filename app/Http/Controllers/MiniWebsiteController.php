@@ -219,8 +219,7 @@ class MiniWebsiteController extends Controller
             // Input தரவுகளைப் பெறுதல்
             $fbUserName = $request->fbUserName;
             $fbphone    = $request->fbphone;
-            $fbmessage  = $request->fbmessage;
-            
+            $fbmessage  = $request->fbmessage;            
             $miniWebId  = $request->miniWebId; 
 
             if ($miniWebId) {

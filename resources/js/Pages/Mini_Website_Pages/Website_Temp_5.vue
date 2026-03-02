@@ -2042,7 +2042,8 @@
             const enquiryOnSubmit = handleSubmit(async (values) => {
                 // console.log("SUBMITTED VALUES:", values);
                 try {
-                    values.miniWebId = Number(cardStore.cardId)
+                    // values.miniWebId = Number(cardStore.cardId)
+                    values.miniWebId = cd_id
                     const resData = await axios.post('/saveEnquiryData',{...values});
                     if(resData.data.status == true){
                         enquiryUserName.value = ''
