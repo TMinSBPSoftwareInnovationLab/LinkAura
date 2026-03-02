@@ -214,34 +214,77 @@ class MiniWebsiteController extends Controller
     }
 
     // save mini website feedback
-    public function saveFeedBackData(Request $request){
-        $fbUserName = $request->fbUserName;
-        $fbphone = $request->fbphone;
-        $fbmessage = $request->fbmessage;
-        $miniWebId = $request->miniWebId ?? $request->miniWebId;
-
-        if($miniWebId){
-            $adData = [
-                'miniWebId' => $miniWebId,
-                'name' => $fbUserName,
-                'phone' => $fbphone,
-                'feedback_message' => $fbmessage
-            ];
+    public function saveFeedBackData(Request $request) {
+        try {
+            // Input தரவுகளைப் பெறுதல்
+            $fbUserName = $request->fbUserName;
+            $fbphone    = $request->fbphone;
+            $fbmessage  = $request->fbmessage;
             
-            $ins = DB::table('miniweb_feedback')->insertOrIgnore($adData);
+            // மொபைலில் miniWebId வருகிறதா என்று சரிபார்க்கவும்
+            $miniWebId  = $request->input('miniWebId'); 
 
+            if ($miniWebId) {
+                $adData = [
+                    'miniWebId'        => $miniWebId,
+                    'name'             => $fbUserName,
+                    'phone'            => $fbphone,
+                    'feedback_message' => $fbmessage,
+                    'created_at'       => now() // நல்ல பழக்கம்
+                ];
+                
+                // InsertOrIgnore-க்கு பதில் Insert உபயோகித்தால் எரர் தெளிவாகத் தெரியும்
+                $ins = DB::table('miniweb_feedback')->insert($adData);
+
+                return [
+                    'status'  => true,
+                    'message' => 'FeedBack submitted successfully!'
+                ];
+            } else {
+                return [
+                    'status'  => false,
+                    'message' => 'MiniWeb ID is missing in mobile request!'
+                ];
+            }
+
+        } catch (\Exception $e) {
+            // எரர் என்ன என்பதைத் தெரிந்து கொள்ள $e->getMessage() உதவும்
             return [
-                'status' => $ins ? true:false,
-                'message' => $ins ? 'FeedBack is Form submit Successfully':'FeedBack is not submit! Plase try again'
-            ];
-        }
-        else{
-            return [
-                'status' => false,
-                'message' => 'Something Went wrong! FeedBack Not Save!'
+                'status'  => false,
+                'message' => 'Error: ' . $e->getMessage()
             ];
         }
     }
+
+
+    // public function saveFeedBackData(Request $request){
+    //     $fbUserName = $request->fbUserName;
+    //     $fbphone = $request->fbphone;
+    //     $fbmessage = $request->fbmessage;
+    //     $miniWebId = $request->miniWebId ?? $request->miniWebId;
+
+    //     if($miniWebId){
+    //         $adData = [
+    //             'miniWebId' => $miniWebId,
+    //             'name' => $fbUserName,
+    //             'phone' => $fbphone,
+    //             'feedback_message' => $fbmessage
+    //         ];
+            
+    //         $ins = DB::table('miniweb_feedback')->insertOrIgnore($adData);
+
+    //         return [
+    //             'status' => $ins ? true:false,
+    //             'message' => $ins ? 'FeedBack is Form submit Successfully':'FeedBack is not submit! Plase try again'
+    //         ];
+    //     }
+    //     else{
+    //         return [
+    //             'status' => false,
+    //             'message' => 'Something Went wrong! FeedBack Not Save!'
+    //         ];
+    //     }
+    // }
 
     // save website templates
     public function saveWebsiteTemp(Request $request){
