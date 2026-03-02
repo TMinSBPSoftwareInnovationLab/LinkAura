@@ -2099,9 +2099,24 @@
             const { value: fbphone, errorMessage: fbphoneError } = useField('fbphone')
             const { value: fbmessage, errorMessage: fbmessageError } = useField('fbmessage')
 
-            const feedbackOnSubmit = handleFbSubmit(async (values) => {
-                alert("Number(cardStore.cardId) : ",Number(cardStore.cardId))
-                return
+            const feedbackOnSubmit = handleSubmit(async (values) => {
+                // 1. முதலில் ஸ்டோரை ரீ-செக் செய்யவும் (Sync)
+                const currentId = cardStore.syncCardId(); 
+
+                // 2. வேல்யூ இருக்கிறதா என்று செக் செய்த பின்பே அசைன் செய்யவும்
+                if (currentId) {
+                    values.miniWebId = Number(currentId);
+                    
+                    // API கால் இங்கே தொடரும்...
+                    console.log("Submitting values:", values);
+                } else {
+                    // மொபைலில் வேல்யூ இல்லை என்றால் யூசருக்கு தெரியப்படுத்த
+                    alert("Card session expired or ID missing. Please refresh.");
+                    return;
+                }
+            })
+
+            const feedbackOnSubmit_original = handleFbSubmit(async (values) => {
                 try {
                     const res = await axios.post('/saveFeedBackData', {
                         fbUserName: values.fbUserName,
