@@ -76,7 +76,7 @@ class MiniWebsiteController extends Controller
         ];
 
         if ($path) {
-            $addData['logo_path'] = $path ?? '';
+            $addData['logo_path'] = $path;
         }
 
         if ($rowid) { // Update
