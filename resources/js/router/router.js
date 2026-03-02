@@ -24,7 +24,6 @@ const PaymentDetails = () => import('@/Pages/Components/Mini_website_components/
 const FeedbackVerify = () => import('@/Pages/FeedbackVerify.vue');
 const MiniWeb_enquiry = () => import('@/Pages/MiniWeb_enquiry.vue');
 
-
 const routes = [
     { path: '/', component: Index, meta: { title: 'Home | LinkAura', public: true } },
     { path: '/login', component: Login, meta: { title: 'Login | LinkAura', public: true } },
@@ -41,7 +40,7 @@ const routes = [
     { path: '/Gallery', component: Gallery, meta: { title: 'Gallery | LinkAura' } },
     { path: '/PaymentDetails', component: PaymentDetails, meta: { title: 'Payment Details | LinkAura' } },
     { path: '/FeedbackVerify', component: FeedbackVerify, meta: { title: 'Feedback Verify | LinkAura' } },
-    { path: '/MiniWebEnquiry', component: MiniWeb_enquiry, meta: { title: 'Feedback Verify | LinkAura' } },
+    { path: '/MiniWebEnquiry', component: MiniWeb_enquiry, meta: { title: 'Enquiry | LinkAura' } }, // enquiry usually public
 
     // { path: '/Website_Temp_6', component: Website_Temp_6,meta: { title: 'Website6 | LinkAura' } }, // for testing purpose
 
@@ -64,13 +63,20 @@ const routes = [
 
                 if (!map[decodedId]) return next('/');
 
-                // Dynamic Import load ஆன பிறகு component செட் செய்கிறோம்
+               // Dynamic Import load ஆன பிறகு component செட் செய்கிறோம்
                 const component = await map[decodedId]();
                 to.matched[0].components.default = component.default;
                 next();
             } catch (error) {
-                console.error("Invalid themeIdEnc or Import error:", error);
-                next('/');
+                // இங்கே எரர் வந்தால், அது Build பிரச்சனைதானா என்று செக் செய்கிறோம்
+                const isChunkError = /Failed to fetch dynamically imported module|Importing a module script failed|error loading dynamically imported module/i.test(error.message);
+                
+                if (isChunkError) {
+                    window.location.reload();
+                } else {
+                    console.error("Route Error:", error);
+                    next('/');
+                }
             }
         }
     }
@@ -81,15 +87,26 @@ const router = createRouter({
     routes,
 });
 
-router.beforeEach((to, from, next) => {
-    if (to.meta && to.meta.title) { // dynamic title set
-        document.title = to.meta.title;
-    } else {
-        document.title = "LinkAura";
+// --- புதிய Build எரரை சரிசெய்யும் பகுதி ---
+router.onError((error) => {
+    const errors = [
+        'Failed to fetch dynamically imported module',
+        'Importing a module script failed',
+        'error loading dynamically imported module'
+    ];
+
+    if (errors.some(msg => error.message?.includes(msg))) {
+        window.location.reload();
     }
-    // Check if user is logged in
+});
+
+// --- Auth மற்றும் Title சரிபார்க்கும் பகுதி ---
+router.beforeEach((to, from, next) => {
+    // Dynamic Title
+    document.title = to.meta?.title || "LinkAura";
+
+    // Auth Check
     const isLoggedIn = localStorage.getItem("user");
-    // If route is NOT public and user not logged in → redirect to login
     if (!to.meta.public && !isLoggedIn) {
         return next("/login");
     }
