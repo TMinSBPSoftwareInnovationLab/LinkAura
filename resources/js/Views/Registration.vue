@@ -177,11 +177,13 @@
     import leftBgImage from '@/assets/images/loginImages/leftBg1.jpg';
     import Swal from 'sweetalert2';
     import axios from 'axios';
+    import { useRouter } from "vue-router";
 
     export default {
         name: 'Registration',
         components: { Form, Field, ErrorMessage },
         setup(){
+            const router = useRouter();
             const footer_year = new Date().getFullYear();
             const showPass = ref(false);
             const showConfirmPass = ref(false);
@@ -260,6 +262,7 @@
                             confirmButtonText: 'OK'
                         }) 
                         resetForm();
+                        router.push('/login')
                     }
                     else
                     {
