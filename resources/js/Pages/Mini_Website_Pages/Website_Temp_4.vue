@@ -30,8 +30,8 @@
                             
                             <!-- right div -->
                             <div class="flex flex-col px-4">
-                                <h1 class="fade-in-left font-bold text-[18px] uppercase text-[#3e3e3e]">S.Balamurugan</h1>
-                                <h3 class="fade-in-left font-semibold text-[14px] uppercase text-[#6f6c6c]">Managing Director</h3>
+                                <h1 class="fade-in-left font-bold text-[18px] uppercase text-[#3e3e3e]">{{  ownerName || "Balamurugan S" }}</h1>
+                                <h3 class="fade-in-left font-semibold text-[14px] uppercase text-[#6f6c6c]">{{ designation || "Managing Director" }}</h3>
                             </div>
                         </div>
                     </div>
