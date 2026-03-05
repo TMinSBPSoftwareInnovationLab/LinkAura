@@ -1273,10 +1273,10 @@ class MiniWebsiteController extends Controller
                 "cd.websiteTemp_id", 
                 "cd.user_id", 
                 "cd.company_name", 
-                "cd.purchased_id",
-                "cd.plan_id", 
-                "cd.plan_name", 
-                "mpp.billing_pdf",
+                "mpp.id as purchased_id",
+                "mpp.plan_id",           
+                "mpp.plan_name",         
+                "mpp.billing_pdf",       
                 DB::raw("DATE_FORMAT(cd.created_at, '%d-%m-%Y %h:%i:%s %p') as createdDate"), 
                 "cd.created_at"
             )

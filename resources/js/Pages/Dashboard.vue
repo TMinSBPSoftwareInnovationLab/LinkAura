@@ -482,7 +482,30 @@ export default {
                 field: 'billing_pdf',
                 headerName: 'Billing Pdf',
                 width: 180,
-                editable: true
+                editable: false,
+                cellRenderer: (params) => {
+                    // Check if the URL exists
+                    if (params.value && params.value !== 'Not Purchased') {
+                        return `
+                            <a href="${params.value}" target="_blank" style="text-decoration: none;">
+                                <button style="
+                                    background-color: #28a745; 
+                                    color: white; 
+                                    border: none; 
+                                    padding: 4px 12px; 
+                                    border-radius: 4px; 
+                                    cursor: pointer;
+                                    font-weight: bold;
+                                    font-size: 12px;
+                                    line-height: 1.5;
+                                ">
+                                    Download PDF
+                                </button>
+                            </a>
+                        `;
+                    }
+                    return '<span style="color: #999;">No File</span>';
+                }
             },
             {
                 field: 'website_age_days',
