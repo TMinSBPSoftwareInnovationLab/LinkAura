@@ -1268,7 +1268,9 @@ class MiniWebsiteController extends Controller
         $user_id = $request->user_id;
         $getData = DB::table("miniweb_company_details")
             ->select("id","website_id","websiteTemp_id", "user_id", "company_name", "purchased_id", "plan_id", "plan_name", DB::raw("DATE_FORMAT(created_at, '%d-%m-%Y %h:%i:%s %p') as createdDate"), "created_at")
-            ->where("user_id","=",$user_id)->get();
+            ->where("user_id","=",$user_id)
+            ->orderBy('id', 'desc')
+            ->get();
 
         $now = Carbon::now('Asia/Kolkata');
         $getData = $getData->map(function ($item) use ($now) {
