@@ -1266,8 +1266,21 @@ class MiniWebsiteController extends Controller
     // website datas
     public function getMiniWebsiteDetails(Request $request){
         $user_id = $request->user_id;
-        $getData = DB::table("miniweb_company_details")
-            ->select("id","website_id","websiteTemp_id", "user_id", "company_name", "purchased_id", "plan_id", "plan_name", DB::raw("DATE_FORMAT(created_at, '%d-%m-%Y %h:%i:%s %p') as createdDate"), "created_at")
+        $getData = DB::table("miniweb_company_details as cd")
+            ->select(
+                "cd.id", 
+                "cd.website_id", 
+                "cd.websiteTemp_id", 
+                "cd.user_id", 
+                "cd.company_name", 
+                "cd.purchased_id",
+                "cd.plan_id", 
+                "cd.plan_name", 
+                "mpp.billing_pdf",
+                DB::raw("DATE_FORMAT(cd.created_at, '%d-%m-%Y %h:%i:%s %p') as createdDate"), 
+                "cd.created_at"
+            )
+            ->leftJoin("miniweb_plan_purchase as mpp","cd.id","=","mpp.mini_website_id")
             ->where("user_id","=",$user_id)
             ->orderBy('id', 'desc')
             ->get();

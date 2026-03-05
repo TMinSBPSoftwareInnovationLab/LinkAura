@@ -479,6 +479,12 @@ export default {
                 }
             },
             {
+                field: 'billing_pdf',
+                headerName: 'Billing Pdf',
+                width: 180,
+                editable: true
+            },
+            {
                 field: 'website_age_days',
                 headerName: 'Website Age  Days',
                 width: 180,
