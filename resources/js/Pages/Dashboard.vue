@@ -166,7 +166,7 @@
 
                 <!-- purchase button -->
                 <div class="flex flex-col w-full px-5 pt-2 pb-2 justify-center items-center mt-5 mb-10 bg-[#2A7B9B]">
-                    <button @click="purchasePlan(94, 1, 'Basic Plan')"
+                    <button @click="purchasePlan(94, 999, 'Basic Plan')"
                     class="w-[150px] text-gray bg-transparent border-1 border-[#ffffff] text-[#ffffff] py-2 rounded-xl transition hover:bg-[#2A7B9B] hover:text-white" >
                     Buy Now
                     </button>
