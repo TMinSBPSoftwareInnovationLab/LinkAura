@@ -42,6 +42,7 @@ Route::post('/verifyMiniWebFeedback',[MiniWebsiteController::class, 'verifyMiniW
 Route::post('/getMiniWebsiteDetails',[MiniWebsiteController::class, 'getMiniWebsiteDetails']);
 Route::post('/getMiniWebEnquiry',[MiniWebsiteController::class, 'getMiniWebEnquiry']);
 Route::post('/getBillingSuccess',[MiniWebsiteController::class, 'getBillingSuccess']);
+Route::post('/getBillingFailure',[MiniWebsiteController::class, 'getBillingFailure']);
 // razorpayment area
 Route::post('/createRazorpayOrder',[MiniWebsiteController::class, 'createRazorpayOrder']);
 Route::post('/verifyPayment',[MiniWebsiteController::class, 'verifyPayment']);

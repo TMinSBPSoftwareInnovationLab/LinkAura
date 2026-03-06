@@ -1372,6 +1372,24 @@ class MiniWebsiteController extends Controller
         ]);
     }
 
+    // billing failure
+    public function getBillingFailure(Request $request){
+        $getData = DB::table("payment_failure_tracking as pft")
+            // ".*" enbatharku bathilaaga "mpp.*" nu table alias use pannunga
+            ->select(
+                "pft.*", 
+                DB::raw("DATE_FORMAT(created_at, '%d-%m-%Y %h:%i:%s') as CDate")
+            )
+            ->orderBy("pft.id","desc")
+            ->get();
+
+        return response()->json([
+            'status' => true,
+            'getData' => $getData,
+            'message' => $getData->isNotEmpty() ? 'Billing Success data found' : 'No Billing Success data found'
+        ]);
+    }
+
     // create razorpay order
     public function createRazorpayOrder(Request $request){
         // return $request;

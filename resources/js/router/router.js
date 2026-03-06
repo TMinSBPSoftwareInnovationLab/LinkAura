@@ -24,6 +24,7 @@ const PaymentDetails = () => import('@/Pages/Components/Mini_website_components/
 const FeedbackVerify = () => import('@/Pages/FeedbackVerify.vue');
 const MiniWeb_enquiry = () => import('@/Pages/MiniWeb_enquiry.vue');
 const BillingSuccess = () => import('@/Pages/billing/billing_success.vue');
+const BillingFailure = () => import('@/Pages/billing/billing_failure.vue');
 
 const routes = [
     { path: '/', component: Index, meta: { title: 'Home | LinkAura', public: true } },
@@ -43,6 +44,7 @@ const routes = [
     { path: '/FeedbackVerify', component: FeedbackVerify, meta: { title: 'Feedback Verify | LinkAura' } },
     { path: '/MiniWebEnquiry', component: MiniWeb_enquiry, meta: { title: 'Enquiry | LinkAura' } }, // enquiry usually public
     { path: '/BillingSuccess', component: BillingSuccess, meta: { title: 'BS | LinkAura'} },
+    { path: '/BillingFailure', component: BillingFailure, meta: { title: 'BF | LinkAura'} },
 
     // { path: '/Website_Temp_6', component: Website_Temp_6,meta: { title: 'Website6 | LinkAura' } }, // for testing purpose
 

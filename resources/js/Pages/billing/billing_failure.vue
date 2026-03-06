@@ -23,7 +23,7 @@
             <!-- heading page -->
             <div class="flex flex-col w-full mt-2">
                 <div class="flex w-full bg-[#000b57] text-white text-center items-center justify-center uppercase font-bold p-2">
-                    <h1>Billing Success</h1>
+                    <h1>Billing Failure</h1>
                 </div>
             </div>
             <!-- heading page /. -->
@@ -124,15 +124,14 @@
                 { field: "plan_id", headerName: "Plan ID",  width:100, editable: true },
                 { field: "plan_name", headerName: "Plan Name", width: 150, editable: true },
                 { field: "txn_amt", headerName: "TXN AMT", width: 100, editable: true },
-                { field: "txn_status", headerName: "TXN Status", width: 120, editable: true },
-                { field: "transaction_id", headerName: "Transaction ID", width: 180, editable: true },
-                { field: "txnDate", headerName: "TXN Date", width: 180, editable: true },
-                { field: "plan_expiry_status_label", headerName: "Plan Expiry", width: 180, editable: true },
+                { field: "reason", headerName: "Reason", width: 180, editable: true },
+                { field: "status", headerName: "Status", width: 180, editable: true },
+                { field: "CDate", headerName: "CDate", width: 180, editable: true },
             ]);
 
             const loadBS = async() => {
                 try{
-                    const res = await axios.post("/getBillingSuccess", { user_id: user_id.value }) 
+                    const res = await axios.post("/getBillingFailure", { user_id: user_id.value }) 
                     rowData.value = res.data.getData;
 
                     if (res.data.status && Array.isArray(res.data.getData)) {
@@ -173,10 +172,9 @@
                     { header: 'Plan ID', key: 'plan_id', width: 20 },
                     { header: 'Plan Name', key: 'plan_name', width: 20 },
                     { header: 'TXN AMT', key: 'txn_amt', width: 20 },
-                    { header: 'TXN Status', key: 'txn_status', width: 30 },
-                    { header: 'Transaction ID', key: 'transaction_id', width: 20 },
-                    { header: 'Txn Date', key: 'txnDate', width: 20 },
-                    { header: 'Plan Expiry', key: 'plan_expiry_status_label', width: 20 },
+                    { header: 'TXN Status', key: 'status', width: 30 },
+                    { header: 'Reason', key: 'reason', width: 20 },
+                    { header: 'Created Date', key: 'CDate', width: 20 },
                 ];
 
                 // 3. Prepare the data
@@ -186,12 +184,10 @@
                         sno: index + 1,
                         mini_website_id: row.mini_website_id,
                         plan_id: row.plan_id,
-                        plan_name: row.plan_name,
                         txn_amt: row.txn_amt,
-                        txn_status: row.txn_status,
-                        transaction_id: row.transaction_id,
-                        txnDate: row.txnDate,
-                        plan_expiry_status_label: row.plan_expiry_status_label,
+                        plan_name: row.plan_name,
+                        status: row.status,
+                        CDate: row.CDate,
                     };
                 });
 

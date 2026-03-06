@@ -153,7 +153,7 @@ export default {
                 ...(isAdmin
                 ? [
                     { name: "Billing Success", icon: CheckCircleIcon, url: '/BillingSuccess' },
-                    { name: "Billing Failure", icon: XCircleIcon },
+                    { name: "Billing Failure", icon: XCircleIcon, url: '/BillingFailure' },
                   ]
                 : []),
             ],
@@ -191,7 +191,7 @@ export default {
             const path = window.location.pathname;
 
             // if (path === "/dashboard") {
-            if(/^\/(dashboard|FeedbackVerify|MiniWebEnquiry|BillingSuccess)/.test(path)){
+            if(/^\/(dashboard|FeedbackVerify|MiniWebEnquiry|BillingSuccess|BillingFailure)/.test(path)){
                 menu.value = allMenus.dashboard;
             } 
             else if (/^\/(Company_details|Website_temp|Address|Aboutus|MediaLinks|Products|Service|Gallery|PaymentDetails)/.test(path)) {
