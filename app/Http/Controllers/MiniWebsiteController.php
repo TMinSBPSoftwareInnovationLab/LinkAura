@@ -1353,6 +1353,25 @@ class MiniWebsiteController extends Controller
         ]);
     }
 
+    // Billing Success
+    public function getBillingSuccess(Request $request) {
+        $getData = DB::table("miniweb_plan_purchase as mpp")
+            // ".*" enbatharku bathilaaga "mpp.*" nu table alias use pannunga
+            ->select(
+                "mpp.*", 
+                DB::raw("DATE_FORMAT(txn_date, '%d-%m-%Y %h:%i:%s') as txnDate"), 
+                DB::raw("(CASE WHEN plan_expiry_status = 0 THEN 'Active' ELSE 'Inactive' END) as plan_expiry_status_label")
+            )
+            ->orderBy("mpp.id","desc")
+            ->get();
+
+        return response()->json([
+            'status' => true,
+            'getData' => $getData,
+            'message' => $getData->isNotEmpty() ? 'Billing Success data found' : 'No Billing Success data found'
+        ]);
+    }
+
     // create razorpay order
     public function createRazorpayOrder(Request $request){
         // return $request;

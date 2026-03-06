@@ -152,7 +152,7 @@ export default {
                 { name: "Card Enquiries", icon: InboxStackIcon, url: '/MiniWebEnquiry' },
                 ...(isAdmin
                 ? [
-                    { name: "Billing Success", icon: CheckCircleIcon },
+                    { name: "Billing Success", icon: CheckCircleIcon, url: '/BillingSuccess' },
                     { name: "Billing Failure", icon: XCircleIcon },
                   ]
                 : []),
@@ -191,7 +191,7 @@ export default {
             const path = window.location.pathname;
 
             // if (path === "/dashboard") {
-            if(/^\/(dashboard|FeedbackVerify|MiniWebEnquiry)/.test(path)){
+            if(/^\/(dashboard|FeedbackVerify|MiniWebEnquiry|BillingSuccess)/.test(path)){
                 menu.value = allMenus.dashboard;
             } 
             else if (/^\/(Company_details|Website_temp|Address|Aboutus|MediaLinks|Products|Service|Gallery|PaymentDetails)/.test(path)) {
