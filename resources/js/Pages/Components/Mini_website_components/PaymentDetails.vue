@@ -317,7 +317,7 @@
                         // console.log(safecompanyName)
                         const encrypt_website_id = btoa(website_id)
                         // console.log(encrypt_website_id)
-                        const websitefinalUrl = `/${safecompanyName}/Website_Temp_${encrypt_website_id}`
+                        const websitefinalUrl = `/shop/${safecompanyName}/Website_Temp_${encrypt_website_id}`
                         const baseURL = window.location.origin;
                         const qrBase = await QRCode.toDataURL(`${baseURL}${websitefinalUrl}?ilp88LAsBvm=${encoded}`, { width: 300 })
                         qrCodeUrl.value = qrBase
@@ -329,7 +329,7 @@
                             })
 
                             if (qr_res.data && qr_res.data.status == true) {
-                                window.open(`${websitefinalUrl}?ilp88LAsBvm=${encoded}`, '_blank');
+                                window.open(`/shop/${websitefinalUrl}?ilp88LAsBvm=${encoded}`, '_blank');
                                 router.push('/dashboard');
                             } else {
                                 toast.error("QR Code generation failed. Please try again.");

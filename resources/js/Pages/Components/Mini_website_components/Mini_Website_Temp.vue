@@ -400,7 +400,7 @@
                     const safecompanyName = exData.replace(/\s+/g, '_')
                     const encrypt_website_id = btoa(website_ID)
                     
-                    const websitefinalUrl = `/${safecompanyName}/Website_Temp_${encrypt_website_id}`
+                    const websitefinalUrl = `/shop/${safecompanyName}/Website_Temp_${encrypt_website_id}`
                     const baseURL = window.location.origin;
                     const qrBase = await QRCode.toDataURL(`${baseURL}${websitefinalUrl}?ilp88LAsBvm=${encoded}`, { width: 300 })
                     qrCodeUrl.value = qrBase
