@@ -326,7 +326,7 @@
 
                 <!-- PRODUCT AREA -->
                 <span v-if="products.length > 0">
-                <div class="grid grid-cols-2 gap-4 items-stretch px-1">
+                <div class="grid grid-cols-2 gap-4 items-stretch px-1 mt-5">
 
                     <!-- PRODUCT CARD -->
                     <div v-for="(item, index) in products" :key="index" class="flex flex-col w-full h-full bg-white p-3 rounded-[10px]">
