@@ -56,7 +56,7 @@ Route::post('/getwebMediaLinks',[MiniWebsiteController::class, 'getwebMediaLinks
 // website data collections area /.
 
 // meta data collection
-Route::get('/shop/{company_name}/{id}', [MiniWebsiteController::class, 'viewDigitalShop']);
+Route::get('/shop/{company_name}/Website_Temp_{id}', [MiniWebsiteController::class, 'viewDigitalShop']);
 // meta data collection /.
 
 // sample bill generation
