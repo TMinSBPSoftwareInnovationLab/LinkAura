@@ -533,7 +533,7 @@ export default {
             let url = '';
             // console.log("view : ",data)
             const encrypt_website_id = btoa(data.website_id)
-            const websitefinalUrl = `/shop/${data.company_name}/Website_Temp_${encrypt_website_id}`
+            const websitefinalUrl = `/${data.company_name}/Website_Temp_${encrypt_website_id}`
 
             const params = `cd_id=${data.id}&template_id=${data.websiteTemp_id}`
             const encoded = btoa(params)
@@ -561,12 +561,7 @@ export default {
             const params = `cd_id=${data.id}&template_id=${data.websiteTemp_id}`
             const encoded = btoa(params)
 
-            // இடைவெளிகளை நீக்கி '-' ஆக மாற்ற (Slugify)
-            const companySlug = data.company_name.trim().toLowerCase().replace(/\s+/g, '-');
-            const website_id = data.website_id;
-            encodedUrl.value = `${baseURL}/shop/${companySlug}/Website_Temp_${website_id}?ilp88LAsBvm=${encoded}`;
-
-            // encodedUrl.value = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`
+            encodedUrl.value = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`
             // console.log("encodedUrl :", encodedUrl.value)
             // window.open(, '_blank')
 
