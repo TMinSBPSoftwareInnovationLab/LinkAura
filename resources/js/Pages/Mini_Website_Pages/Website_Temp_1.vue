@@ -1218,8 +1218,8 @@
             // themeId: Number,
             // design: Number,
             shop: {
-                shop: { type: Object, default: () => ({}) },
-                isFooter: { type: Boolean, default: true }
+                type: Object,
+                default: () => ({})
             },
             isFooter: {
                 type: Boolean,
