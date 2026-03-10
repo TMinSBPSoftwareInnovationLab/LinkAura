@@ -1609,23 +1609,21 @@ class MiniWebsiteController extends Controller
 
     // view Digital Shop
     public function viewDigitalShop($company_name, $id) {
-        // 1. DB syntax correct pannunga (tabla -> table)
-        $shop = DB::table("miniweb_company_details")
-                ->where("id", "=", $id)
-                ->first();
-
-        if (!$shop) {
-            abort(404);
-        }
-
-        // 2. Inertia render with meta data for Social Media
-        return inertia("Mini_Website_Pages/Website_Temp_{$id}", [
-            'shop' => $shop // Vue components-ku props-ah pogum
-        ])->withViewData([
-            // Intha values thaan app.blade.php-la irukra $metaTitle, $metaImage-ku pogum
-            'metaTitle' => $shop->company_name . " | LinkAura",
-            'metaDescription' => "Shop online from " . $shop->company_name . " at LinkAura.",
-            'metaImage' => $shop->logo_url // Thumbnail image link
-        ]);
+    // 1. $id-ஐ டீகோட் செய்ய வேண்டும் (URL-இல் என்க்ரிப்ட் செய்து அனுப்பியிருந்தால்)
+    try {
+        $real_id = base64_decode($id);
+    } catch (\Exception $e) {
+        return abort(404);
     }
+
+    // 2. கடையைத் தேடவும்
+    $shop = Shop::where('id', $real_id)->first();
+
+    if (!$shop) {
+        // கடை இல்லை என்றால் 404 வரும்
+        return abort(404);
+    }
+
+    return inertia('Website_Temp_1', ['shop' => $shop]);
+}
 }
