@@ -49,7 +49,8 @@ const routes = [
     // { path: '/Website_Temp_6', component: Website_Temp_6,meta: { title: 'Website6 | LinkAura' } }, // for testing purpose
 
     {
-        path: '/shop/:company/Website_Temp_:themeIdEnc',
+        // path: '/shop/:company/Website_Temp_:themeIdEnc',
+        path: '/shop/:company/:themeIdEnc',
         name: 'DynamicWebsiteTemp',
         meta: { public: true },
         component: { render: () => null }, // Placeholder
