@@ -300,7 +300,7 @@
             <!-- about us /. -->
 
             <!-- products -->
-            <div id="products" class="flex flex-col w-full mt-2 bg-white pt-2">
+            <div id="products" class="flex flex-col w-full mt-2 bg-[#585858] pt-2">
                 <!-- product header -->
                 <div class="flex flex-col w-full">
                      <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 320 56">
@@ -331,7 +331,7 @@
                     <!-- PRODUCT CARD -->
                     <div v-for="(item, index) in products" :key="index" class="flex flex-col w-full h-full bg-white p-3">
                         <!-- product image -->
-                        <div class="w-full h-[200px] md:h-[250px] rounded-[15px] bg-white border border-gray-300 cursor-pointer" @click="openImage(item.product_img)"  v-if="1==2">
+                        <div class="w-full h-[200px] md:h-[250px] rounded-[10px] bg-white border border-gray-300 cursor-pointer" @click="openImage(item.product_img)"  v-if="1==2">
                             <img :src="item.product_img" class="w-full h-full object-contain" >
                         </div>
 
@@ -402,7 +402,7 @@
                 <div class="grid grid-cols-3 w-full mt-10">
                     <!-- column1 -->
                      <div class="flex flex-col h-[40px] w-full">
-                        <div class="h-1/2 bg-white"></div>
+                        <div class="h-1/2 bg-[#585858]"></div>
                         <div class="h-1/2 bg-[#DF1968] border-7 border-t-0 border-l-0 border-r-0 border-b-gray-800 " style="clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 0% 100%);"></div>
                     </div>
                     <!-- column1 /.-->
