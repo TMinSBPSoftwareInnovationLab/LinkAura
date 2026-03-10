@@ -1,21 +1,4 @@
 <template>
-    <Head>
-        <title>{{ props.shop?.company_name }} | LinkAura</title>
-
-        <meta property="og:type" content="website" />
-        <meta property="og:title" :content="`${props.shop?.company_name} | LinkAura`" />
-        <meta property="og:description" :content="aboutTxt ? aboutTxt.substring(0, 160) : 'Create your digital business card with LinkAura'" />
-        <meta property="og:image" :content="logoImage || defaultLogo" />
-        <meta property="og:url" :content="currentUrl" />
-
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" :content="`${props.shop?.company_name} | LinkAura`" />
-    </Head>
-    <div>
-        <h1>Welcome to {{ props.shop?.company_name }}</h1>
-        <div v-if="isFooter">
-            </div>
-    </div>
     <main class="p-2 px-0 bg-gray-50 border-2 border-[#6b3f69]">
         <div class="max-w-[430px] pb-0 mx-auto grid grid-cols-1  bg-center bg-cover bg-no-repeat ">
             <!-- purchase message -->
@@ -1187,7 +1170,6 @@
 </template>
 
 <script>
-    import { Head } from '@inertiajs/vue3'
     import { ref, onMounted, computed, nextTick  } from 'vue'
     import { useForm, useField } from 'vee-validate'
     import * as yup from 'yup';
@@ -1213,14 +1195,10 @@
 
     export default{
         name: "Website_Temp_1",
-        components: {Head, PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, WebsiteFooterBar, ChevronLeftIcon, ChevronRightIcon, ArrowDownTrayIcon, linkAuraFooter},
+        components: {PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, WebsiteFooterBar, ChevronLeftIcon, ChevronRightIcon, ArrowDownTrayIcon, linkAuraFooter},
         props: {
             // themeId: Number,
             // design: Number,
-            shop: {
-                shop: { type: Object, default: () => ({}) },
-                isFooter: { type: Boolean, default: true }
-            },
             isFooter: {
                 type: Boolean,
                 default: true

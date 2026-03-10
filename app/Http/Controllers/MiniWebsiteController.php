@@ -1606,26 +1606,4 @@ class MiniWebsiteController extends Controller
 
         return response()->json(['status' => true, 'message' => 'Payment Failure']);
     }
-
-    // view Digital Shop
-    public function viewDigitalShop($company_name, $id) {
-        // 1. DB syntax correct pannunga (tabla -> table)
-        $shop = DB::table("miniweb_company_details")
-                ->where("id", "=", $id)
-                ->first();
-
-        if (!$shop) {
-            abort(404);
-        }
-
-        // 2. Inertia render with meta data for Social Media
-        return inertia("Mini_Website_Pages/Website_Temp_{$id}", [
-            'shop' => $shop // Vue components-ku props-ah pogum
-        ])->withViewData([
-            // Intha values thaan app.blade.php-la irukra $metaTitle, $metaImage-ku pogum
-            'metaTitle' => $shop->company_name . " | LinkAura",
-            'metaDescription' => "Shop online from " . $shop->company_name . " at LinkAura.",
-            'metaImage' => $shop->logo_url // Thumbnail image link
-        ]);
-    }
 }
