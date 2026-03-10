@@ -671,7 +671,7 @@
                                     :src="item.gallery" 
                                     alt="item.gallery"
                                     @click="openImage(item.gallery)"
-                                    class="w-full h-full object-contain rounded-xl"
+                                    class="w-full h-full object-cover rounded-xl"
                                 >
                             </div>
                         </div>
