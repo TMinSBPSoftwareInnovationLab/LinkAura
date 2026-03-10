@@ -332,7 +332,7 @@
                     <div v-for="(item, index) in products" :key="index" class="flex flex-col w-full h-full bg-white p-3 rounded-[10px]">
                         <!-- product image -->
                         <div class="w-full h-[200px] md:h-[250px] rounded-[10px] bg-white border border-gray-300 cursor-pointer" @click="openImage(item.product_img)"  v-if="1==2">
-                            <img :src="item.product_img" class="w-full h-full object-full" >
+                            <img :src="item.product_img" class="w-full h-full object-contain" >
                         </div>
 
                         <div class="w-full h-[200px] md:h-[250px] rounded-[15px] bg-white border border-gray-300 cursor-pointer  relative" @click="openImage(item.product_img)">
@@ -345,7 +345,7 @@
                                 New Arrival
                             </span>
 
-                            <img :src="item.product_img" class="w-full h-full object-contain">
+                            <img :src="item.product_img" class="w-full h-full object-cover">
                         </div>
 
                         <!-- product name -->
