@@ -430,7 +430,7 @@
 
 
             <!-- service -->
-            <div id="services" class="flex flex-col w-full mt-2 bg-white pt-2">
+            <div id="services" class="flex flex-col w-full mt-2 bg-[#262323] pt-2">
                 <!-- service header -->
                 <div class="flex flex-col w-full">
                      <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 320 56">
@@ -474,7 +474,7 @@
 
                             <!-- service name -->
                             <div class="flex flex-col w-full text-center p-2"> 
-                                <p class="text-[14px] font-semibold">
+                                <p class="text-[14px] font-semibold text-white">
                                     {{ item.service_name }}
                                 </p>
                             </div>
@@ -494,7 +494,7 @@
                 <div class="grid grid-cols-3 w-full mt-10">
                     <!-- column1 -->
                      <div class="flex flex-col h-[40px] w-full">
-                        <div class="h-1/2 bg-white"></div>
+                        <div class="h-1/2 bg-[#262323]"></div>
                         <div class="h-1/2 bg-[#DF1968] border-7 border-t-0 border-l-0 border-r-0 border-b-gray-800 " style="clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 0% 100%);"></div>
                     </div>
                     <!-- column1 /.-->
