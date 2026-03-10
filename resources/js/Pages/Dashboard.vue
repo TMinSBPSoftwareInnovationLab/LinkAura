@@ -561,8 +561,13 @@ export default {
             const params = `cd_id=${data.id}&template_id=${data.websiteTemp_id}`
             const encoded = btoa(params)
 
-            encodedUrl.value = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`
-            // console.log("encodedUrl :", encodedUrl.value)
+            // இடைவெளிகளை நீக்கி '-' ஆக மாற்ற (Slugify)
+            const companySlug = data.company_name.trim().toLowerCase().replace(/\s+/g, '-');
+
+            // encodedUrl.value = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}` 10-03-2026
+            encodedUrl.value = `${baseURL}/shop/${companySlug}/Website_Temp_${data.website_id}?ilp88LAsBvm=${encoded}`;
+
+            console.log("encodedUrl :", encodedUrl.value)
             // window.open(, '_blank')
 
         };
