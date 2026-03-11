@@ -1212,7 +1212,7 @@
 
     export default{
         name: "Website_Temp_1",
-        components: {PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, WebsiteFooterBar, ChevronLeftIcon, ChevronRightIcon, ArrowDownTrayIcon, linkAuraFooter},
+        components: {Head, PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, WebsiteFooterBar, ChevronLeftIcon, ChevronRightIcon, ArrowDownTrayIcon, linkAuraFooter},
         props: {
             // themeId: Number,
             // design: Number,
