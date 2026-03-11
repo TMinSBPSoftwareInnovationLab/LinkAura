@@ -1,4 +1,20 @@
 <template>
+    <Head>
+    <title>{{ company.company_name }}</title>
+
+        <meta name="description" :content="company.description">
+
+        <meta property="og:title" :content="company.company_name" />
+        <meta property="og:description" :content="company.description" />
+        <meta property="og:image" :content="company.logo_path" />
+        <meta property="og:type" content="website" />
+    </Head>
+
+    <div class="p-4">
+        <h1>{{ company.company_name }}</h1>
+
+        <img :src="company.logo_path" class="w-32">
+    </div>
     <main class="p-2 px-0 bg-gray-50 border-2 border-[#6b3f69]">
         <div class="max-w-[430px] pb-0 mx-auto grid grid-cols-1  bg-center bg-cover bg-no-repeat ">
             <!-- purchase message -->
@@ -1170,6 +1186,7 @@
 </template>
 
 <script>
+    import { Head } from '@inertiajs/vue3'
     import { ref, onMounted, computed, nextTick  } from 'vue'
     import { useForm, useField } from 'vee-validate'
     import * as yup from 'yup';
@@ -1199,6 +1216,7 @@
         props: {
             // themeId: Number,
             // design: Number,
+            company: Object,
             isFooter: {
                 type: Boolean,
                 default: true
@@ -1206,6 +1224,7 @@
         },
         
         setup(props){
+            console.log(props.company);
             // getting data from selected website 
             const route = useRoute();
             const router = useRouter();

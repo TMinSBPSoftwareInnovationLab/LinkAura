@@ -546,24 +546,51 @@ export default {
             //     url = `http://192.168.1.117:8000/Thirumurugan_LinkAura/Website_Temp_Mg==`;
             // }
 
-            window.open(url, '_blank');
+            // window.open(url, '_blank');
         };
 
         // SHARE
         const openShare = (data) => {
             selectedRow.value = data;
-            shareModal.value = true
+            shareModal.value = true;
             
             const baseURL = window.location.origin; 
-            const encrypt_website_id = btoa(data.website_id)
-            const websitefinalUrl = `${data.company_name}/Website_Temp_${encrypt_website_id}`
 
-            const params = `cd_id=${data.id}&template_id=${data.websiteTemp_id}`
-            const encoded = btoa(params)
+            const encrypt_website_id = btoa(data.website_id);
 
-            encodedUrl.value = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`
-            // console.log("encodedUrl :", encodedUrl.value)
-            // window.open(, '_blank')
+            const websitefinalUrl = `${data.company_name}/Website_Temp_${encrypt_website_id}`;
+
+            const params = `cd_id=${data.id}&template_id=${data.websiteTemp_id}`;
+
+            const encoded = btoa(params);
+
+            encodedUrl.value = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`;
+
+            const url = encodeURIComponent(encodedUrl.value);
+
+            window.open(
+                `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+                '_blank'
+            );
+
+            // selectedRow.value = data;
+            // shareModal.value = true
+            
+            // const baseURL = window.location.origin; 
+            // const encrypt_website_id = btoa(data.website_id)
+            // const websitefinalUrl = `${data.company_name}/Website_Temp_${encrypt_website_id}`
+
+            // const params = `cd_id=${data.id}&template_id=${data.websiteTemp_id}`
+            // const encoded = btoa(params)
+
+            // encodedUrl.value = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`
+            // // console.log("encodedUrl :", encodedUrl.value)
+            // // window.open(, '_blank')
+            // const url = encodeURIComponent(encodedUrl.value)
+            // window.open(
+            //     `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+            //     '_blank'
+            // )
 
         };
 
