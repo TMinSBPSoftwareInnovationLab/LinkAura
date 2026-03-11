@@ -5,14 +5,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title inertia>{{ $metaTitle ?? config('app.name', 'LinkAura') }}</title>
+        {{-- <title inertia>{{ $metaTitle ?? config('app.name', 'LinkAura') }}</title>
         <meta name="description" content="{{ $metaDescription ?? 'LinkAura provide best services in India' }}">
 
         <meta property="og:type" content="website">
         <meta property="og:url" content="{{ url()->current() }}">
         <meta property="og:title" content="{{ $metaTitle ?? 'LinkAura' }}">
         <meta property="og:description" content="{{ $metaDescription ?? 'LinkAura provide best services in India' }}">
-        <meta property="og:image" content="{{ $metaImage ?? asset('default-share-image.png') }}">
+        <meta property="og:image" content="{{ $metaImage ?? asset('default-share-image.png') }}"> --}}
+
+        <meta property="og:type" content="website">
+        <meta property="og:title">
+        <meta property="og:description">
+        <meta property="og:image">
+        <meta property="og:url">
 
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
