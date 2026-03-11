@@ -554,7 +554,7 @@ export default {
 
             const baseURL = window.location.origin; 
 
-            const encrypt_website_id = btoa(data.website_id);
+            const encrypt_website_id = btoa(data.website_id).replace(/=/g,'');
 
             const websitefinalUrl = `${data.company_name}/Website_Temp_${encrypt_website_id}`;
 

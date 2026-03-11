@@ -1610,6 +1610,8 @@ class MiniWebsiteController extends Controller
     // view Digital Shop
     public function viewDigitalShop($company, $themeIdEnc)
     {
+        $themeIdEnc = str_pad($themeIdEnc, strlen($themeIdEnc) % 4 ? strlen($themeIdEnc) + 4 - strlen($themeIdEnc) % 4 : strlen($themeIdEnc), '=', STR_PAD_RIGHT);
+
         $id = base64_decode($themeIdEnc);
 
         $shop = DB::table("miniweb_company_details")
@@ -1621,7 +1623,7 @@ class MiniWebsiteController extends Controller
             abort(404);
         }
 
-        return inertia("Mini_Website_Pages/Website_Temp_{$shop->websiteTemp_id}", [
+        return inertia("Mini_Website_Pages/Website_Temp_{$shop->website_id}", [
             'company' => $shop
         ])->withViewData([
             'metaTitle' => $shop->company_name . " | LinkAura",

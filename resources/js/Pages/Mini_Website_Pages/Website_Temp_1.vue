@@ -1,13 +1,6 @@
 <template>
     <Head>
     <title>{{ company.company_name }}</title>
-
-        <!-- <meta name="description" :content="company.description"> -->
-
-        <meta property="og:title" :content="company.company_name" />
-        <!-- <meta property="og:description" :content="company.description" /> -->
-        <meta property="og:image" :content="company.logo_path" />
-        <!-- <meta property="og:type" content="website" /> -->
     </Head>
 
     <div class="p-4">
