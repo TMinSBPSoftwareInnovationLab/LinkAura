@@ -1620,7 +1620,7 @@ class MiniWebsiteController extends Controller
 
         // 2. Inertia render with meta data for Social Media
         return inertia("Mini_Website_Pages/Website_Temp_{$id}", [
-            'shop' => $shop // Vue components-ku props-ah pogum
+            'company' => $shop // Vue components-ku props-ah pogum
         ])->withViewData([
             // Intha values thaan app.blade.php-la irukra $metaTitle, $metaImage-ku pogum
             'metaTitle' => $shop->company_name . " | LinkAura",
