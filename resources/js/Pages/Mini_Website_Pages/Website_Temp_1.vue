@@ -1,9 +1,13 @@
 <template>
     <Head>
-    <title>{{ company.company_name }}</title>
+    <title>{{ company?.company_name }}</title>
+
+    <h1>{{ company?.company_name }}</h1>
+
+    <img :src="company?.logo_path">
     </Head>
 
-    <div class="p-4">
+    <div class="p-4" v-if="1==2">
         <h1>{{ company.company_name }}</h1>
 
         <img :src="company.logo_path" class="w-32">
@@ -1209,7 +1213,10 @@
         props: {
             // themeId: Number,
             // design: Number,
-            company: Object,
+            company: {
+                type: Object,
+                default: () => ({})
+            },
             isFooter: {
                 type: Boolean,
                 default: true
