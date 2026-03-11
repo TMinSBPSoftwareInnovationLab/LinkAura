@@ -1608,11 +1608,13 @@ class MiniWebsiteController extends Controller
     }
 
     // view Digital Shop
-    public function viewDigitalShop($company, $themeIdEnc){
+    public function viewDigitalShop($company, $themeIdEnc)
+    {
         $id = base64_decode($themeIdEnc);
 
         $shop = DB::table("miniweb_company_details")
                 ->where("id", $id)
+                ->where("company_name", $company)
                 ->first();
 
         if (!$shop) {
@@ -1624,7 +1626,7 @@ class MiniWebsiteController extends Controller
         ])->withViewData([
             'metaTitle' => $shop->company_name . " | LinkAura",
             'metaDescription' => "Shop online from " . $shop->company_name . " at LinkAura.",
-            'metaImage' => $shop->logo_url
+            'metaImage' => $shop->logo_path
         ]);
     }
 }
