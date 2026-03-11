@@ -55,7 +55,7 @@ Route::post('/getwebAddressDetails',[MiniWebsiteController::class, 'getwebAddres
 Route::post('/getwebMediaLinks',[MiniWebsiteController::class, 'getwebMediaLinks']);
 // website data collections area /.
 
-Route::get('/{company}/Website_Temp_{themeIdEnc}', [MiniWebsiteController::class, 'viewDigitalShop']);
+// Route::get('/{company}/Website_Temp_{themeIdEnc}', [MiniWebsiteController::class, 'viewDigitalShop']);
 
 // sample bill generation
 Route::get('/preview-bill', function () {
