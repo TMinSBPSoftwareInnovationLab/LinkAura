@@ -2010,25 +2010,32 @@
             }
 
             const buyProduct = async(proImage, proName, orginal_price) => {
-                const s3URL = "https://linkaura-product-images.s3.us-east-1.amazonaws.com/product_images/";
+                const s3URL = "https://linkaura-product-images.s3.amazonaws.com/product_images/";
                 
-                // Cache issue varaama irukka oru timestamp add pannalam (optional)
-                const product_image_url = `${proImage}`;
-                console.log("Full Image URL:", product_image_url);
+                // Step 1: Base URL fix
+                const base = proImage.includes("http") ? proImage : `${s3URL}${proImage}`;
+                
+                // Step 2: Cache Buster add pannunga (Vera vazhiye illa, idhu thaan solve pannum)
+                const product_image_url = `${base}?t=${new Date().getTime()}`;
 
                 const message = `*${proName}*\nPrice: ${orginal_price}`;
 
                 try {
-                    // Fetch pannumpothu mode: 'cors' kuduppathu safe
-                    // const response = await fetch(product_image_url, { mode: 'cors' });
-                    const response = await fetch(product_image_url);
+                    // Step 3: Fetch with fresh headers
+                    const response = await fetch(product_image_url, { 
+                        method: 'GET',
+                        mode: 'cors',
+                        cache: 'no-cache' // Browser cache-ah bypass panna solrom
+                    });
                     
                     if (!response.ok) throw new Error('Network response was not ok');
                     
                     const blob = await response.blob();
+                    
+                    // Step 4: Share logic
                     const file = new File([blob], "product.png", { type: blob.type });
 
-                    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                    if (navigator.share) {
                         await navigator.share({
                             title: proName,
                             text: message,
@@ -2037,12 +2044,11 @@
                         return; 
                     }
                 } catch (e) {
-                    console.error("Product image fetch/share error:", e);
+                    console.error("Final Fetch Error:", e);
+                    // Fallback
+                    const fallback = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+                    window.open(fallback, "_blank");
                 }
-
-                // Fallback
-                const fallback = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-                window.open(fallback, "_blank");
             }
 
             const selectProduct = (name) => {
