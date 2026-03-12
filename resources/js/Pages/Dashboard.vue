@@ -540,7 +540,7 @@ export default {
             const params = `cd_id=${data.id}&template_id=${data.websiteTemp_id}`
             const encoded = btoa(params)
 
-            window.open(`${websitefinalUrl}?ilp88LAsBvm=${encoded}`, '_blank')
+            window.location.href(`${websitefinalUrl}?ilp88LAsBvm=${encoded}`, '_blank')
 
             // if (data.purchased_id) {
             //     url = `http://192.168.1.117:8000/Thirumurugan_LinkAura/Website_Temp_Mg==?ilp88LAsBvm=Y2RfaWQ9${data.website_id}&dGVtcGxhdGVfaWQ9${data.websiteTemp_id}`;
