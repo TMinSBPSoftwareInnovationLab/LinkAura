@@ -1629,4 +1629,19 @@ class MiniWebsiteController extends Controller
             'metaImage' => $shop->logo_url // Thumbnail image link
         ]);
     }
+
+    public function websiteView($company_name, $website_id)
+    {
+        // 1. Decode the ID
+        $decoded_id = base64_decode($website_id);
+
+        // 2. Get data from Database
+        $website_data = DB::table("miniweb_company_details")->where('id', $decoded_id)->first();
+
+        // 3. Data illana 404 error kaatum
+        if (!$website_data) { abort(404); }
+
+        // 4. Blade file-ku data-vah anupuvom
+        return view('website_template', compact('website_data'));
+    }
 }
