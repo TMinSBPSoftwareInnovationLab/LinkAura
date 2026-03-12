@@ -596,7 +596,9 @@ export default {
             const finalUrl = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`
 
             // logo
-            const logo = data.logo_path ? "https://linkaura-company-logos.s3.us-east-1.amazonaws.com/company_logos/"+data.logo_path : baseURL + defaultLogo
+            const logo = data.logo_path ? `https://linkaura-company-logos.s3.us-east-1.amazonaws.com/company_logos/${data.logo_path}` 
+            : baseURL + defaultLogo;
+
 
             // message text
             const message = `${data.company_name}
