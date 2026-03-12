@@ -336,6 +336,7 @@
 </template>
 
 <script>
+import defaultLogo from '@/assets/images/commonImages/linkAura_logo.png'
 import SideNavBar from './Components/SideNavBar.vue';
 import Header_tab from './Components/Header_tab.vue';
 import { ref, onMounted } from "vue";
@@ -565,10 +566,10 @@ export default {
             encodedUrl.value = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`
 
             const finalUrl = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`
-            
+            const logo = data.logo_path ? data.logo_path : defaultLogo
             const message = `
                         ${data.company_name}
-                        ${data.logo_path}
+                        ${data.logo}
                         Visit our website: ${finalUrl} `
 
             whatsappUrl.value = message
@@ -775,6 +776,7 @@ export default {
             websiteRowID,
             purchasePlan,
             whatsappUrl,
+            defaultLogo,
         };
     }
 };
