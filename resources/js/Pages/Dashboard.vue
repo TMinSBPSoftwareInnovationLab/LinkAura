@@ -566,11 +566,11 @@ export default {
             encodedUrl.value = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`
 
             const finalUrl = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`
-            const logo = data.logo_path ? data.logo_path : defaultLogo
+            const logo = data.logo_path ? data.logo_path : baseURL+defaultLogo
             const message = `
                         ${data.company_name}
                         ${logo}
-                        Visit our website: ${finalUrl} `
+                        Visit our website: encodeURIComponent(${finalUrl}) `
 
             whatsappUrl.value = message
 
