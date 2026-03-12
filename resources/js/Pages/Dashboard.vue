@@ -583,55 +583,58 @@ export default {
 
         const openShare = async (data) => {
 
-            selectedRow.value = data;
-            shareModal.value = true
+    selectedRow.value = data
+    shareModal.value = true
 
-            const baseURL = window.location.origin; 
-            const encrypt_website_id = btoa(data.website_id)
-            const websitefinalUrl = `${data.company_name}/Website_Temp_${encrypt_website_id}`
+    const baseURL = window.location.origin
 
-            const params = `cd_id=${data.id}&template_id=${data.websiteTemp_id}`
-            const encoded = btoa(params)
+    const encrypt_website_id = btoa(data.website_id)
 
-            const finalUrl = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`
+    // company name slug (space remove)
+    const companySlug = data.company_name.replace(/\s+/g, '-')
 
-            // logo
-            const logo = data.logo_path
+    const websitefinalUrl = `${companySlug}/Website_Temp_${encrypt_website_id}`
+
+    const params = `cd_id=${data.id}&template_id=${data.websiteTemp_id}`
+    const encoded = btoa(params)
+
+    const finalUrl = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`
+
+    const logo = data.logo_path
         ? `https://linkaura-company-logos.s3.us-east-1.amazonaws.com/company_logos/${data.logo_path}`
         : baseURL + defaultLogo
 
-            // message text
-            const message = `${data.company_name}
-            Visit our website: ${finalUrl}`
+    const message = `${data.company_name}
+Visit our website:
+${finalUrl}`
 
-            try {
+    try {
 
-                const response = await fetch(logo)
-                const blob = await response.blob()
+        const response = await fetch(logo)
+        const blob = await response.blob()
 
-                const file = new File([blob], "logo.png", { type: blob.type })
+        const file = new File([blob], "logo.png", { type: blob.type })
 
-                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
 
-                    await navigator.share({
-                        title: data.company_name,
-                        text: message,
-                        files: [file]
-                    })
+            await navigator.share({
+                title: data.company_name,
+                text: message,
+                files: [file]
+            })
 
-                } else {
+        } else {
 
-                    // fallback for desktop
-                    const whatsappLink = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`
-                    window.open(whatsappLink, "_blank")
-
-                }
-
-            } catch (error) {
-                console.error("Share error:", error)
-            }
+            // desktop fallback
+            const whatsappLink = `https://wa.me/?text=${encodeURIComponent(message)}`
+            window.open(whatsappLink, "_blank")
 
         }
+
+    } catch (error) {
+        console.error("Share error:", error)
+    }
+}
 
         // PURCHASE
         const openPurchase = (data) => {
