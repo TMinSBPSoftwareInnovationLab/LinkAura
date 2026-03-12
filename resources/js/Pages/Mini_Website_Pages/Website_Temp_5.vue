@@ -2011,44 +2011,39 @@
 
             const buyProduct = async(proImage, proName, orginal_price) => {
                 const s3URL = "https://linkaura-product-images.s3.amazonaws.com/product_images/";
-                
-                // Step 1: Base URL fix
                 const base = proImage.includes("http") ? proImage : `${s3URL}${proImage}`;
-                
-                // Step 2: Cache Buster add pannunga (Vera vazhiye illa, idhu thaan solve pannum)
                 const product_image_url = `${base}?t=${new Date().getTime()}`;
 
-                const message = `*${proName}*\nPrice: ${orginal_price}`;
+                // Happy & Excited Message for Customer
+                const message = `✨ *I'M SO EXCITED ABOUT THIS!* ✨\n\n🔥 *Product:* ${proName}\n💰 *Price:* ₹${orginal_price}\n\n--------------------------\nHey! I just saw this on your store and I absolutely love it! 😍 Could you please share more details or availability? 🚀`;
 
                 try {
-                    // Step 3: Fetch with fresh headers
                     const response = await fetch(product_image_url, { 
                         method: 'GET',
                         mode: 'cors',
-                        cache: 'no-cache' // Browser cache-ah bypass panna solrom
+                        cache: 'no-cache' 
                     });
                     
                     if (!response.ok) throw new Error('Network response was not ok');
                     
                     const blob = await response.blob();
-                    
-                    // Step 4: Share logic
                     const file = new File([blob], "product.png", { type: blob.type });
 
                     if (navigator.share) {
                         await navigator.share({
                             title: proName,
-                            text: message,
+                            text: message, 
                             files: [file]
                         });
                         return; 
                     }
                 } catch (e) {
-                    console.error("Final Fetch Error:", e);
-                    // Fallback
-                    const fallback = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-                    window.open(fallback, "_blank");
+                    console.error("Fetch/Share Error:", e);
                 }
+
+                // Fallback for Desktop
+                const fallback = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+                window.open(fallback, "_blank");
             }
 
             const selectProduct = (name) => {
