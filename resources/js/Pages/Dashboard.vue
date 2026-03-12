@@ -625,8 +625,10 @@ export default {
                 } else {
 
                     // fallback for desktop
-                    const whatsappLink = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`
-                    window.open(whatsappLink, "_blank")
+                    console.error("Share error:", error);
+                // Error vandhalum fallback-ah work panna vaipom
+                const fallback = `https://api.whatsapp.com/send?text=${message}`;
+                window.location.href(fallback, "_blank");
 
                 }
 
