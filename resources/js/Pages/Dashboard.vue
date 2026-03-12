@@ -569,7 +569,7 @@ export default {
             const logo = data.logo_path ? data.logo_path : defaultLogo
             const message = `
                         ${data.company_name}
-                        ${data.logo}
+                        ${logo}
                         Visit our website: ${finalUrl} `
 
             whatsappUrl.value = message
