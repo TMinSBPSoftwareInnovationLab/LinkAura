@@ -582,13 +582,13 @@ export default {
         */ 
 
         const openShare = async (data) => {
-            alert("ok")
             selectedRow.value = data;
             shareModal.value = true
 
             const baseURL = window.location.origin; 
             const encrypt_website_id = btoa(data.website_id)
-            const websitefinalUrl = `${data.company_name}/Website_Temp_${encrypt_website_id}`
+            const safeCompanyName = encodeURIComponent(data.company_name);
+            const websitefinalUrl = `${safeCompanyName}/Website_Temp_${encrypt_website_id}`
 
             const params = `cd_id=${data.id}&template_id=${data.websiteTemp_id}`
             const encoded = btoa(params)
