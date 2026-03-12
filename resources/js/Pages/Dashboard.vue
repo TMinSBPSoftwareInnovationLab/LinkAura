@@ -581,20 +581,55 @@ export default {
         };
         */ 
 
-        const openShare = (data) => {
-            const baseURL = window.location.origin; 
-            const encrypt_id = btoa(data.id); // ID-ah encode panrom
-            
-            // Intha URL thaan share aagum
-            const shareUrl = `${baseURL}/share/${data.company_name}/${encrypt_id}`;
-            
-            // WhatsApp message
-            const message = `*${data.company_name}*%0AVisit our website: ${shareUrl}`;
-            
-            // Intha whatsappUrl-ah thaan <a> tag-la bind pannanum
-            whatsappUrl.value = message;
-            shareModal.value = true;
-        };
+        const openShare = async (data) => {
+
+    selectedRow.value = data;
+    shareModal.value = true
+
+    const baseURL = window.location.origin; 
+    const encrypt_website_id = btoa(data.website_id)
+    const websitefinalUrl = `${data.company_name}/Website_Temp_${encrypt_website_id}`
+
+    const params = `cd_id=${data.id}&template_id=${data.websiteTemp_id}`
+    const encoded = btoa(params)
+
+    const finalUrl = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`
+
+    // logo
+    const logo = data.logo_path ? data.logo_path : baseURL + defaultLogo
+
+    // message text
+    const message = `${data.company_name}
+Visit our website: ${finalUrl}`
+
+    try {
+
+        const response = await fetch(logo)
+        const blob = await response.blob()
+
+        const file = new File([blob], "logo.png", { type: blob.type })
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+
+            await navigator.share({
+                title: data.company_name,
+                text: message,
+                files: [file]
+            })
+
+        } else {
+
+            // fallback for desktop
+            const whatsappLink = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`
+            window.open(whatsappLink, "_blank")
+
+        }
+
+    } catch (error) {
+        console.error("Share error:", error)
+    }
+
+}
 
         // PURCHASE
         const openPurchase = (data) => {
