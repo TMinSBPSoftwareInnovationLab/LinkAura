@@ -2014,6 +2014,7 @@
                 
                 // Cache issue varaama irukka oru timestamp add pannalam (optional)
                 const product_image_url = `${s3URL}${proImage}`;
+                console.log("Full Image URL:", product_image_url);
 
                 const message = `*${proName}*\nPrice: ${orginal_price}`;
 
