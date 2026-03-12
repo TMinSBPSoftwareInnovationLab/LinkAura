@@ -582,7 +582,7 @@ export default {
         */ 
 
         const openShare = async (data) => {
-
+            alert("ok")
             selectedRow.value = data;
             shareModal.value = true
 
