@@ -376,6 +376,15 @@
                         <!-- FLEX SPACER -->
                         <div class="flex-1"></div>
 
+                        <!-- buy button -->
+                        <button
+                            class="w-[110px] bg-[#DF1968] p-[8px] text-white text-[12px]
+                            font-semibold rounded-lg uppercase mt-3"
+                            @click="buyProduct(item.product_img, item.product_name, item.orginal_price)"
+                        >
+                            Buy Now
+                        </button>
+                        
                         <!-- enquiry button -->
                         <button
                             class="w-[110px] bg-[#DF1968] p-[8px] text-white text-[12px]
@@ -1544,6 +1553,9 @@
             const purchaseID  = Number(params.get('purchased_id') || 0)
             const is_purchased = ref("")
 
+            const productImage = ref();
+            const proUrl = ref();
+
             // implement .env
             const s3ProductsUrl = import.meta.env.VITE_AWS_URL_PRODUCT_IMAGES;
             const s3ServiceUrl = import.meta.env.VITE_AWS_URL_SERVICE_IMAGES;
@@ -1997,6 +2009,39 @@
                 showPlan.value = false
             }
 
+            const buyProduct = async(proImage, proName, orginal_price) => {
+                const s3URL = "https://linkaura-company-logos.s3.us-east-1.amazonaws.com/company_logos/";
+                const product_image = `${s3URL}${proImage}`
+
+                const message = `${proName}\nOriginal Price: ${orginal_price}`;
+                proUrl.value = message;
+
+                try {
+                    const response = await fetch(logoPath);
+                    const blob = await response.blob();
+                    productImage.value = new File([blob], "logo.png", { type: blob.type });
+                } catch (e) {
+                    console.error("Logo fetch error", e);
+                }
+
+                if (navigator.share && productImage.value) {
+                    try {
+                        await navigator.share({
+                            title: proName,
+                            text: orginal_price,
+                            files: [productImage.value]
+                        });
+                        return; // Share success aana ingaye stop aagidum
+                    } catch (error) {
+                        console.log("Navigator share failed, using fallback");
+                    }
+                }
+                
+                // Desktop fallback: Direct Link
+                const fallback = `https://api.whatsapp.com/send?text=${encodeURIComponent(proUrl.value)}`;
+                window.open(fallback, "_blank");
+            }
+
             const selectProduct = (name) => {
                 productnameEnquiry.value = name;
 
@@ -2238,6 +2283,9 @@
                 gotoPlanPopupClose,
                 showPlan,
                 selectProduct,
+                buyProduct,
+                productImage,
+                proUrl,
                 // service
                 serviceData,
                 service2,
