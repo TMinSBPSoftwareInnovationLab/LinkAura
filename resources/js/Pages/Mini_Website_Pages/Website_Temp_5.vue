@@ -2013,7 +2013,7 @@
                 const s3URL = "https://linkaura-product-images.s3.us-east-1.amazonaws.com/product_images/";
                 
                 // Cache issue varaama irukka oru timestamp add pannalam (optional)
-                const product_image_url = `${s3URL}${proImage}`;
+                const product_image_url = `${proImage}`;
                 console.log("Full Image URL:", product_image_url);
 
                 const message = `*${proName}*\nPrice: ${orginal_price}`;
