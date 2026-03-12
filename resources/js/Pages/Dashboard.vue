@@ -552,7 +552,8 @@ export default {
         };
 
         // SHARE
-        const openShare = (data) => {
+        /*
+        const openShare = async(data) => {
             selectedRow.value = data;
             shareModal.value = true
             
@@ -565,18 +566,34 @@ export default {
 
             encodedUrl.value = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`
 
+            // collect company details
+
             const finalUrl = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`
             const logo = data.logo_path ? data.logo_path : baseURL+defaultLogo
-            const message = `
-                        ${data.company_name}
-                        ${logo}
-                        Visit our website: encodeURIComponent(${finalUrl}) `
+            const message = `${data.company_name}
+                        Visit our website: ${finalUrl}`
 
             whatsappUrl.value = message
 
             // console.log("encodedUrl :", encodedUrl.value)
             // window.open(, '_blank')
 
+        };
+        */ 
+
+        const openShare = (data) => {
+            const baseURL = window.location.origin; 
+            const encrypt_id = btoa(data.id); // ID-ah encode panrom
+            
+            // Intha URL thaan share aagum
+            const shareUrl = `${baseURL}/share/${data.company_name}/${encrypt_id}`;
+            
+            // WhatsApp message
+            const message = `*${data.company_name}*%0AVisit our website: ${shareUrl}`;
+            
+            // Intha whatsappUrl-ah thaan <a> tag-la bind pannanum
+            whatsappUrl.value = message;
+            shareModal.value = true;
         };
 
         // PURCHASE
