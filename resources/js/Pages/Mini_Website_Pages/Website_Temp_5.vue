@@ -1553,7 +1553,7 @@
             const purchaseID  = Number(params.get('purchased_id') || 0)
             const is_purchased = ref("")
 
-            const productImage = ref();
+            const productImg = ref();
             const proUrl = ref();
 
             // implement .env
@@ -2011,34 +2011,35 @@
 
             const buyProduct = async(proImage, proName, orginal_price) => {
                 const s3URL = "https://linkaura-product-images.s3.us-east-1.amazonaws.com/product_images/";
-                const product_image = `${s3URL}${proImage}`
+                
+                // Cache issue varaama irukka oru timestamp add pannalam (optional)
+                const product_image_url = `${s3URL}${proImage}`;
 
-                const message = `${proName}\nOriginal Price: ${orginal_price}`;
-                proUrl.value = message;
+                const message = `*${proName}*\nPrice: ${orginal_price}`;
 
                 try {
-                    const response = await fetch(product_image);
+                    // Fetch pannumpothu mode: 'cors' kuduppathu safe
+                    const response = await fetch(product_image_url, { mode: 'cors' });
+                    
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    
                     const blob = await response.blob();
-                    productImage.value = new File([blob], "logo.png", { type: blob.type });
-                } catch (e) {
-                    console.error("Logo fetch error", e);
-                }
+                    const file = new File([blob], "product.png", { type: blob.type });
 
-                if (navigator.share && productImage.value) {
-                    try {
+                    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
                         await navigator.share({
                             title: proName,
-                            text: orginal_price,
-                            files: [productImage.value]
+                            text: message,
+                            files: [file]
                         });
-                        return; // Share success aana ingaye stop aagidum
-                    } catch (error) {
-                        console.log("Navigator share failed, using fallback");
+                        return; 
                     }
+                } catch (e) {
+                    console.error("Product image fetch/share error:", e);
                 }
-                
-                // Desktop fallback: Direct Link
-                const fallback = `https://api.whatsapp.com/send?text=${encodeURIComponent(proUrl.value)}`;
+
+                // Fallback
+                const fallback = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
                 window.open(fallback, "_blank");
             }
 
@@ -2284,7 +2285,7 @@
                 showPlan,
                 selectProduct,
                 buyProduct,
-                productImage,
+                productImg,
                 proUrl,
                 // service
                 serviceData,
