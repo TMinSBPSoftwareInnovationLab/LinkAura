@@ -2010,14 +2010,14 @@
             }
 
             const buyProduct = async(proImage, proName, orginal_price) => {
-                const s3URL = "https://linkaura-company-logos.s3.us-east-1.amazonaws.com/company_logos/";
+                const s3URL = "https://linkaura-product-images.s3.us-east-1.amazonaws.com/product_images/";
                 const product_image = `${s3URL}${proImage}`
 
                 const message = `${proName}\nOriginal Price: ${orginal_price}`;
                 proUrl.value = message;
 
                 try {
-                    const response = await fetch(logoPath);
+                    const response = await fetch(product_image);
                     const blob = await response.blob();
                     productImage.value = new File([blob], "logo.png", { type: blob.type });
                 } catch (e) {
