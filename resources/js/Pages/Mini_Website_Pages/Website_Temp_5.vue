@@ -2020,7 +2020,8 @@
 
                 try {
                     // Fetch pannumpothu mode: 'cors' kuduppathu safe
-                    const response = await fetch(product_image_url, { mode: 'cors' });
+                    // const response = await fetch(product_image_url, { mode: 'cors' });
+                    const response = await fetch(product_image_url);
                     
                     if (!response.ok) throw new Error('Network response was not ok');
                     
