@@ -1273,6 +1273,7 @@ class MiniWebsiteController extends Controller
                 "cd.websiteTemp_id", 
                 "cd.user_id", 
                 "cd.company_name", 
+                "cd.logo_path",
                 "mpp.id as purchased_id",
                 "mpp.plan_id",           
                 "mpp.plan_name",         
