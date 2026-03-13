@@ -211,7 +211,7 @@
             <!-- about us /.-->
 
             <!-- products -->
-            <div id="products" class="relative flex flex-col w-full mt-5 shadow-2xl">
+            <div id="products" class="relative flex flex-col w-full mt-5 shadow-2xl bg-gray-800">
                 <!-- header -->
                 <div class="relative flex flex-col w-full max-w-4xl">
                     <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 798 153" class="w-full h-auto">
@@ -227,7 +227,7 @@
 
                 <!-- PRODUCT AREA -->
                 <span v-if="products.length > 0">
-                    <div class="grid grid-cols-2 gap-4 items-stretch px-1 mb-5 mt-5 bg-gray-800">
+                    <div class="grid grid-cols-2 gap-4 items-stretch px-1 mb-5 mt-5">
                         <!-- PRODUCT CARD -->
                         <div 
                         v-for="(item, index) in products" 
