@@ -1,5 +1,5 @@
 <template>
-    <main class="p-2 px-0 bg-gray-50 border-2 border-[#6b3f69] bg-[#faf5fb]">
+    <main class="p-2 px-0 border-2 border-[#6b3f69] bg-[#faf5fb]">
         <div class="max-w-[430px] pb-0 mx-auto grid grid-cols-1  bg-center bg-cover bg-no-repeat ">
             <!-- purchase message -->
              <div class="border-1 border-b-gray-400 border-t-0 border-l-0 border-r-0 justify-center items-center flex flex-col w-full bg-white p-2" v-if="!is_purchased">
@@ -14,7 +14,7 @@
             <!-- purchase message /. -->
              
             <!-- company details with contact details -->
-             <div id="home" class="flex flex-col w-full">
+             <div id="home" class="flex flex-col w-full bg-white">
                 <!-- image section -->
                  <div class="flex flex-col justify-center items-center p-5 ">
                     <!-- <img  :src="defaultLogo" class="w-[200px] h-[200px] object-contain border-2 border-gray-200 rounded-full shadow-xl
@@ -186,7 +186,7 @@
             <!-- company details with contact details /. -->
 
             <!-- About Us Section -->
-             <div id="aboutus" class="flex flex-col w-full">
+             <div id="aboutus" class="flex flex-col w-full bg-[#f8f8f8]">
                 <!-- heade rebbon -->
                  <div class="flex flex-col w-full p-5">
                     <!-- header name -->
@@ -216,7 +216,7 @@
             <!-- About Us Section /. -->
 
             <!-- Product section -->
-            <div id="products" class="flex flex-col w-full mt-8">
+            <div id="products" class="flex flex-col w-full mt-3 bg-white pt-5 border-2 border-l-0 border-r-0 border-b-0 border-t-[#3d023a]">
                 <!-- header name -->
                 <div class="grid grid-flow-row justify-center mx-auto">
                     <div class="inline-block border-2 border-[#3d023a] text-[#3d023a] p-2 
@@ -337,7 +337,7 @@
             <!-- Product section /. -->
 
             <!-- Service Section -->
-            <div id="services" class="flex flex-col w-full bg-[#f9fafb] py-6">
+            <div id="services" class="flex flex-col w-full mt-3 bg-[#f3f4f6] pt-5 border-2 border-l-0 border-r-0 border-b-0 border-t-[#3d023a]">
             <!-- Header -->
             <div class="grid grid-flow-row justify-center mb-4">
                 <div class="inline-block border-2 border-[#3d023a] text-[#3d023a] p-2 
