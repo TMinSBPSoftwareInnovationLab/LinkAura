@@ -376,39 +376,29 @@
                 <div class="flex flex-col w-full bg-white">
                     <!-- main grid -->
                     <span v-if="serviceData.length > 0">
-                    <div class="grid grid-cols-2 px-2 gap-2 p-2 mb-5">
-                        <div 
-                            v-for="(item, index) in serviceData" 
-                            :key="index"
-                            class="flex flex-col w-full shadow-2xl p-2 d-xl rounded-3xl mt-2 border-1 border-gray-300"
-                            :class="index >= 2 ? 'mt-5' : ''"
-                        >
-                            <!-- Service image -->
-                            <div class="flex w-full h-[100px] items-center justify-center text-center">
-                                <div 
-                                    class="p-[1px] bg-[#379596]"
-                                    style="clip-path: circle(50% at 50% 50%);"
+                        <div class="grid grid-cols-2 px-3 gap-4 p-2 mb-5">
+                            <div 
+                                v-for="(item, index) in serviceData" 
+                                :key="index"
+                                class="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden border border-gray-200"
                                 >
-                                <div 
-                                    class="w-[100px] h-[100px] overflow-hidden bg-white"
-                                    style="clip-path: inherit;"
-                                >
+                                <!-- Service Image -->
+                                <div class="w-full h-[130px] overflow-hidden bg-gray-100">
                                     <img 
                                         :src="item.service_img"
                                         :alt="item.service_name"
-                                        class="w-full h-full object-cover rounded-full"
+                                        class="w-full h-full object-cover transition duration-300 hover:scale-110 cursor-pointer"
                                         @click="openImage(item.service_img)"
-                                    >
+                                        >
                                 </div>
+                                <!-- Service Content -->
+                                <div class="flex flex-col items-center text-center p-3">
+                                    <p class="text-[13px] font-semibold text-[#2A7B9B] leading-tight">
+                                        {{ item.service_name }}
+                                    </p>
                                 </div>
-                            </div>
-
-                            <!-- name -->
-                            <div class="flex w-full items-center text-center justify-center pt-3">
-                                <p class="text-[12px] md:text-[10px] font-bold text-[#414143] uppercase">{{ item.service_name }}</p>
                             </div>
                         </div>
-                    </div>
                     </span>
                     <span v-else>
                         <p class="p-5 font-semibold bg-gradient-to-br from-[#2A7B9B] via-[#57C785] to-[#52b84a] bg-clip-text text-transparent">
