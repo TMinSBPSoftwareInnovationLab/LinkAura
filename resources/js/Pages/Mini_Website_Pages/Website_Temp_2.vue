@@ -253,7 +253,7 @@
             <!-- About us /. -->
 
             <!-- product areas -->
-            <div id="products" class="mt-0 flex flex-col w-full border-1 border-b-[#52b84a] bg-white ">
+            <div id="products" class="mt-0 flex flex-col w-full border-1 border-b-[#52b84a] bg-[#06402a] ">
                 <!-- theme top bg -->
                 <div class="flex justify-center items-center w-full">
                     <div class="w-48 h-9 bg-gradient-to-br from-[#2A7B9B] via-[#57C785] to-[#52b84a]"
@@ -264,14 +264,14 @@
 
                 <!-- theme bg -->
                 <div class="flex w-full">
-                    <div class="w-full h-10  px-5 flex justify-start items-center mx-2 mt-1 text-[#414143]"> 
+                    <div class="w-full h-10  px-5 flex justify-start items-center mx-2 mt-1 text-white">  <!-- text-[#414143] -->
                         <p class="font-bold text-[18px] uppercase stroke-red-50">Products</p>
                     </div>
                 </div>
                 <!-- theme bg /.-->
 
                 <!-- product areas -->
-                <div class="flex flex-col w-full bg-white p-2">
+                <div class="flex flex-col w-full bg-[#06402a] p-2">
                     <!-- main grid -->
                     <span v-if="products.length > 0">
                         <div class="grid grid-cols-2 px-2 gap-4 p-2 mb-5">
@@ -512,7 +512,7 @@
             <!-- videos /. -->
 
             <!-- gallery  -->
-            <div id="gallery" class="mt-0 flex flex-col w-full border-1 border-b-[#52b84a] bg-white px-2 ">
+            <div id="gallery" class="mt-0 flex flex-col w-full border-1 border-b-[#52b84a] bg-[#06402a] px-2 ">
                 <!-- theme top bg -->
                 <div class="flex justify-center items-center w-full">
                     <div class="w-48 h-9 bg-gradient-to-br from-[#2A7B9B] via-[#57C785] to-[#52b84a]"
@@ -523,7 +523,7 @@
 
                 <!-- theme bg -->
                 <div class="flex w-full">
-                    <div class="w-full h-10  px-5 flex justify-start items-center mx-2 mt-1 text-[#414143]"> 
+                    <div class="w-full h-10  px-5 flex justify-start items-center mx-2 mt-1 text-white"> <!-- text-[#414143] -->
                         <p class="font-bold text-[18px] uppercase stroke-red-50">Gallery</p>
                     </div>
                 </div>
