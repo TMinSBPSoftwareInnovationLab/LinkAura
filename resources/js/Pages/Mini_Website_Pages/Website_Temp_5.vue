@@ -326,7 +326,7 @@
 
                 <!-- PRODUCT AREA -->
                 <span v-if="products.length > 0">
-                <div class="grid grid-cols-2 gap-4 items-stretch px-1 mt-5">
+                <div class="grid grid-cols-2 gap-2 items-stretch px-1 mt-5">
 
                     <!-- PRODUCT CARD -->
                     <div v-for="(item, index) in products" :key="index" class="flex flex-col w-full h-full bg-white p-3 rounded-[10px]">
@@ -382,7 +382,7 @@
                                 font-bold rounded-lg uppercase leading-none flex items-center justify-center"
                                 @click="buyProduct(item.product_img, item.product_name, item.orginal_price)"
                             >
-                                Buy Now
+                                Buy
                             </button>
                             
                             <button
