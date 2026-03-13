@@ -2199,7 +2199,7 @@
             const handleWhatsAppShare = async () => {
                 // Current URL-ah encode pannuvom
                 const shareUrl = window.location.href;
-                const message = `✨ *Check out ${companyName.value}!* ✨\n\nVisit our website here:\n${encodeURIComponent(shareUrl)}`;
+                const message = `✨ *Check out ${companyName.value}!* ✨\n\nVisit our website here:\n${encodedUrl.value}`;
 
                 // Mobile Navigator Share Logic
                 if (navigator.share && logoImage.value) {
