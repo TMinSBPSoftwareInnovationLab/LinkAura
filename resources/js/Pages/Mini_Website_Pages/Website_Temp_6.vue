@@ -227,76 +227,72 @@
 
                 <!-- PRODUCT AREA -->
                 <span v-if="products.length > 0">
-                <div class="grid grid-cols-2 gap-4 items-stretch px-1">
-
-                    <!-- PRODUCT CARD -->
-                    <div v-for="(item, index) in products" :key="index" class="flex flex-col w-full h-full bg-white p-3">
-                        <!-- product image -->
-                        <div class="w-full h-[200px] md:h-[250px] rounded-[15px] bg-white border border-gray-300 cursor-pointer" @click="openImage(item.product_img)" v-if="1==2">
-                            <img :src="item.product_img" class="w-full h-full object-contain" >
-                        </div>
-
-                        <div class="w-full h-[200px] md:h-[250px] rounded-[15px] bg-white border border-gray-300 cursor-pointer relative" @click="openImage(item.product_img)">
-                            <span v-if="item.status == 1" class="absolute -top-2 right-2 bg-orange-500 text-white text-[10px] px-2 py-1 rounded-md font-bold uppercase shadow-sm z-10">
-                                Trending
-                            </span>
-                            
-                            <span v-else-if="item.status === 2" class="absolute -top-2 right-2 bg-green-600 text-white text-[10px] px-2 py-1 rounded-md font-bold uppercase shadow-sm z-10">
-                                New Arrival
-                            </span>
-
-                            <img :src="item.product_img" class="w-full h-full object-contain">
-                        </div>
-
-                        <!-- product name -->
-                        <p class="font-bold text-[14px] text-gray-800 mt-2">
-                            {{ item.product_name }}
-                        </p>
-
-                        <!-- price area -->
-                        <div class="flex items-center gap-2 mt-1">
-                            <p
-                                class="relative text-[18px] font-semibold text-gray-500
-                                after:content-[''] after:absolute after:left-0 after:top-1/2
-                                after:w-full after:h-[2px] after:bg-gray-200 after:-rotate-12"
+                    <div class="grid grid-cols-2 gap-4 items-stretch px-1 mb-5">
+                        <!-- PRODUCT CARD -->
+                        <div 
+                        v-for="(item, index) in products" 
+                        :key="index"
+                        class="flex flex-col w-full h-full bg-[#111827] rounded-xl border border-[#1f2937] shadow-lg overflow-hidden"
+                        >
+                        <!-- IMAGE -->
+                        <div 
+                            class="relative w-full h-[200px] bg-[#1f2937] flex items-center justify-center cursor-pointer"
+                            @click="openImage(item.product_img)"
                             >
+                            <!-- badge -->
+                            <span v-if="item.status == 1"
+                                class="absolute top-2 left-2 text-[10px] bg-orange-500 text-white px-2 py-[2px] rounded">
+                            🔥 Trending
+                            </span>
+                            <span v-else-if="item.status === 2"
+                                class="absolute top-2 left-2 text-[10px] bg-green-600 text-white px-2 py-[2px] rounded">
+                            ✨ New
+                            </span>
+                            <img 
+                                :src="item.product_img" 
+                                class="w-[80%] h-[80%] object-contain"
+                                >
+                        </div>
+                        <!-- CONTENT -->
+                        <div class="p-3 flex flex-col">
+                            <!-- name -->
+                            <p class="text-[14px] font-semibold text-white">
+                                {{ item.product_name }}
+                            </p>
+                            <!-- price -->
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="text-[13px] text-gray-400 line-through">
                                 ₹{{ item.orginal_price }}
-                            </p>
-
-                            <p class="text-[17px] font-bold text-gray-900">
+                                </span>
+                                <span class="text-[17px] font-bold text-green-400">
                                 ₹{{ item.final_price }}
+                                </span>
+                            </div>
+                            <!-- discount -->
+                            <p class="text-[12px] text-red-400 font-medium">
+                                Save ₹{{ item.discount_price }}
                             </p>
-                        </div>
-
-                        <!-- discount -->
-                        <p class="font-bold text-[12px] text-red-800 mt-1">
-                            DISCOUNT ₹{{ item.discount_price }}
-                        </p>
-
-                        <!-- FLEX SPACER -->
-                        <div class="flex-1"></div>
-
-                        <!-- enquiry button -->
-                        <div class="flex flex-row gap-2 mt-3 w-full">
-                            <button
-                                class="flex-1 bg-[#3bbc4d] p-[8px] text-white text-[11px] font-bold rounded-lg uppercase whitespace-nowrap"
-                                @click="buyProduct(item.product_img, item.product_name, item.orginal_price)"
-                            >
+                            <div class="flex-1"></div>
+                            <!-- buttons -->
+                            <div class="flex gap-2 mt-3">
+                                <button
+                                    class="flex-1 bg-green-500 text-white text-[12px] font-semibold py-[7px] rounded-md"
+                                    @click="buyProduct(item.product_img, item.product_name, item.orginal_price)"
+                                    >
                                 Buy
-                            </button>
-                            
-                            <button
-                                class="flex-1 bg-[#00FFFF] p-[8px] text-gray-800 text-[11px] font-bold rounded-lg uppercase whitespace-nowrap"
-                                @click="selectProduct(item.product_name)"
-                            >
+                                </button>
+                                <button
+                                    class="flex-1 bg-gray-700 text-white text-[12px] font-semibold py-[7px] rounded-md"
+                                    @click="selectProduct(item.product_name)"
+                                    >
                                 Enquiry
-                            </button>
+                                </button>
+                            </div>
                         </div>
+                        </div>
+                        <!-- PRODUCT CARD /. -->
 
                     </div>
-                    <!-- PRODUCT CARD /. -->
-
-                </div>
                 </span>
                 <span v-else class="bg-white shadow-2xl">
                     <p class="p-5 font-semibold text-[#e52228]">
