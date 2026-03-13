@@ -376,23 +376,23 @@
                         <!-- FLEX SPACER -->
                         <div class="flex-1"></div>
 
-                        <!-- buy button -->
-                        <button
-                            class="w-[110px] bg-[#DF1968] p-[8px] text-white text-[12px]
-                            font-semibold rounded-lg uppercase mt-3"
-                            @click="buyProduct(item.product_img, item.product_name, item.orginal_price)"
-                        >
-                            Buy Now
-                        </button>
-                        
-                        <!-- enquiry button -->
-                        <button
-                            class="w-[110px] bg-[#DF1968] p-[8px] text-white text-[12px]
-                            font-semibold rounded-lg uppercase mt-3"
-                            @click="selectProduct(item.product_name)"
-                        >
-                            Enquiry Now
-                        </button>
+                        <div class="flex items-center gap-2 mt-3">
+                            <button
+                                class="flex-1 bg-[#3bbc4d] p-[8px] text-white text-[12px]
+                                font-semibold rounded-lg uppercase whitespace-nowrap"
+                                @click="buyProduct(item.product_img, item.product_name, item.orginal_price)"
+                            >
+                                Buy Now
+                            </button>
+                            
+                            <button
+                                class="flex-1 bg-[#DF1968] p-[8px] text-white text-[12px]
+                                font-semibold rounded-lg uppercase whitespace-nowrap"
+                                @click="selectProduct(item.product_name)"
+                            >
+                                Enquiry Now
+                            </button>
+                        </div>
 
                     </div>
                     <!-- PRODUCT CARD /. -->
