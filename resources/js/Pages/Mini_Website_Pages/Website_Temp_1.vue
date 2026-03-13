@@ -230,7 +230,7 @@
 
                 <!-- product areas -->
                 <span v-if="products.length > 0">
-                    <div class="grid grid-cols-2 gap-4 mt-6 px-3">
+                    <div class="grid grid-cols-2 gap-2 mt-6 px-3">
                         <div 
                             v-for="(item, index) in products" 
                             :key="index"
