@@ -249,9 +249,9 @@
                             ✨ New
                             </span>
                             <img 
-                                :src="item.product_img" 
-                                class="w-[80%] h-[80%] object-contain"
-                                >
+                            :src="item.product_img" 
+                            class="w-full h-full object-cover rounded-lg"
+                            >
                         </div>
                         <!-- CONTENT -->
                         <div class="p-3 flex flex-col">
