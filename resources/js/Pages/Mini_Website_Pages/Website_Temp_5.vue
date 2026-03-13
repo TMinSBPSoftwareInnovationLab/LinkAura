@@ -356,14 +356,14 @@
                         <!-- price area -->
                         <div class="flex items-center gap-2 mt-1">
                             <p
-                                class="relative text-[18px] font-semibold text-gray-500
+                                class="relative text-[16px] font-semibold text-gray-500
                                 after:content-[''] after:absolute after:left-0 after:top-1/2
                                 after:w-full after:h-[2px] after:bg-gray-200 after:-rotate-12"
                             >
                                 ₹{{ item.orginal_price }}
                             </p>
 
-                            <p class="text-[17px] font-bold text-gray-900">
+                            <p class="text-[16px] font-bold text-gray-900">
                                 ₹{{ item.final_price }}
                             </p>
                         </div>

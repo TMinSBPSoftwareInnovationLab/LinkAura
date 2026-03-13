@@ -230,84 +230,84 @@
 
                 <!-- product areas -->
                 <span v-if="products.length > 0">
-                <div class="grid grid-cols-2 gap-2 mt-5 px-2">
-                    <div 
-                        v-for="(item, index) in products" 
-                        :key="index"
-                        class="flex flex-col w-full gap-2">
-                        <!-- product image area -->
-                        <div class="flex flex-col w-full border border-gray-300 relative">
-                            <!-- image area -->
-                            <div class="flex flex-col w-full h-[200px] p-1 cursor-pointer" @click="openImage(item.product_img)" v-if="1==2">
-                                <img :src="item.product_img" class="w-full h-full object-contain">
-                            </div>
+                    <div class="grid grid-cols-2 gap-4 mt-6 px-3">
+                        <div 
+                            v-for="(item, index) in products" 
+                            :key="index"
+                            class="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden"
+                        >
 
-                            <div class="flex flex-col w-full h-[200px] p-1 cursor-pointer relative" @click="openImage(item.product_img)">
-    
-                                <span v-if="item.status == 1" class="absolute top-2 right-2 bg-orange-500 text-white text-[10px] px-2 py-1 rounded-md font-bold uppercase shadow-sm z-10">
-                                    Trending
-                                </span>
-                                
-                                <span v-else-if="item.status === 2" class="absolute top-2 right-2 bg-green-600 text-white text-[10px] px-2 py-1 rounded-md font-bold uppercase shadow-sm z-10">
-                                    New Arrival
+                            <!-- Image Area -->
+                            <div class="relative group bg-gray-50 h-[200px] flex items-center justify-center overflow-hidden">
+
+                                <!-- Badge -->
+                                <span v-if="item.status == 1"
+                                    class="absolute top-2 left-2 bg-orange-500 text-white text-[10px] px-2 py-1 rounded shadow font-bold">
+                                    🔥 Trending
                                 </span>
 
-                                <img :src="item.product_img" class="w-full h-full object-contain">
-                            </div>
+                                <span v-else-if="item.status == 2"
+                                    class="absolute top-2 left-2 bg-green-600 text-white text-[10px] px-2 py-1 rounded shadow font-bold">
+                                    ✨ New
+                                </span>
 
-                            <!-- content area -->
-                            <div class="flex flex-col w-full mt-2 bg-[#3d023a]">
-
-                                <!-- name -->
-                                <div class="flex flex-col w-full text-center p-1 border-b border-white">
-                                    <p class="font-semibold text-[14px] text-white">
-                                        {{ item.product_name }}
-                                    </p>
-                                </div>
-
-                                <!-- original price -->
-                                <div class="flex flex-row w-full text-center p-2 items-center">
-                                    <p class="font-semibold text-[14px] text-white flex justify-center items-center">
-                                        Original Price:
-                                        <span class="ml-1">{{ item.orginal_price }}</span>
-                                    </p>
-                                </div>
-                                
-                                <!-- discount price -->
-                                <div class="flex flex-row w-full text-center p-2 items-center">
-                                    <p class="font-semibold text-[14px] text-white flex justify-center items-center">
-                                        Dicount:
-                                        <span class="ml-1">{{ item.discount_price }}</span>
-                                    </p>
-                                </div>
-                                
-                                <!-- Final price -->
-                                <div class="flex flex-row w-full text-center p-2 items-center">
-                                    <p class="font-semibold text-[14px] text-white flex justify-center items-center">
-                                        Final Price:
-                                        <span class="ml-1">{{ item.final_price }}</span>
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="flex flex-row gap-1 px-1 mt-2 mb-2 w-full justify-center">
-                                <button 
-                                    class="flex-1 text-[11px] font-bold py-2 outline outline-1 hover:bg-gray-100 uppercase" 
-                                    @click="buyProduct(item.product_img, item.product_name, item.final_price)"
+                                <!-- Image -->
+                                <img 
+                                    :src="item.product_img"
+                                    class="h-full object-contain transition duration-300 group-hover:scale-110 cursor-pointer"
+                                    @click="openImage(item.product_img)"
                                 >
-                                    Buy Now
-                                </button>
-                                
-                                <button 
-                                    class="flex-1 text-[11px] font-bold py-2 outline outline-1 hover:bg-gray-100 uppercase" 
-                                    @click="selectProduct(item.product_name)"
-                                >
-                                    Enquiry
-                                </button>
+
                             </div>
+
+                            <!-- Content -->
+                            <div class="p-3 flex flex-col gap-2">
+
+                                <!-- Product Name -->
+                                <h3 class="text-[14px] font-semibold text-gray-800 text-center">
+                                    {{ item.product_name }}
+                                </h3>
+
+                                <!-- Prices -->
+                                <div class="flex flex-col text-center text-[13px]">
+
+                                    <span class="text-gray-400 line-through">
+                                        ₹ {{ item.orginal_price }}
+                                    </span>
+
+                                    <span class="text-red-600 font-bold text-[16px]">
+                                        ₹ {{ item.final_price }}
+                                    </span>
+
+                                    <span class="text-green-600 font-semibold text-[12px]">
+                                        Save ₹ {{ item.discount_price }}
+                                    </span>
+
+                                </div>
+
+                                <!-- Buttons -->
+                                <div class="flex gap-2 mt-2">
+
+                                    <button 
+                                        class="flex-1 bg-[#3d023a] text-white text-[11px] py-2 rounded-md font-semibold hover:bg-[#5a0456] transition"
+                                        @click="buyProduct(item.product_img, item.product_name, item.final_price)"
+                                    >
+                                        Buy Now
+                                    </button>
+
+                                    <button 
+                                        class="flex-1 border border-[#3d023a] text-[#3d023a] text-[11px] py-2 rounded-md font-semibold hover:bg-[#3d023a] hover:text-white transition"
+                                        @click="selectProduct(item.product_name)"
+                                    >
+                                        Enquiry
+                                    </button>
+
+                                </div>
+
+                            </div>
+
                         </div>
                     </div>
-                </div>
                 </span>
                 <span v-else>
                     <p class="p-5 font-semibold text-[#6b3f69]">
