@@ -234,7 +234,7 @@
                         <div 
                             v-for="(item, index) in products" 
                             :key="index"
-                            class="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden"
+                            class="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden border-1 border-[#3d023a]"
                         >
 
                             <!-- Image Area -->
