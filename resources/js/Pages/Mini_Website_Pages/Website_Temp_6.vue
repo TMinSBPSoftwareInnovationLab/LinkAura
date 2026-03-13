@@ -277,13 +277,21 @@
                         <div class="flex-1"></div>
 
                         <!-- enquiry button -->
-                        <button
-                            class="w-[110px] bg-[#00FFFF] p-[8px] text-gray--800 text-[12px]
-                            font-semibold rounded-lg uppercase mt-3"
-                            @click="selectProduct(item.product_name)"
-                        >
-                            Enquiry Now
-                        </button>
+                        <div class="flex flex-row gap-2 mt-3 w-full">
+                            <button
+                                class="flex-1 bg-[#3bbc4d] p-[8px] text-white text-[11px] font-bold rounded-lg uppercase whitespace-nowrap"
+                                @click="buyProduct(item.product_img, item.product_name, item.orginal_price)"
+                            >
+                                Buy
+                            </button>
+                            
+                            <button
+                                class="flex-1 bg-[#00FFFF] p-[8px] text-gray-800 text-[11px] font-bold rounded-lg uppercase whitespace-nowrap"
+                                @click="selectProduct(item.product_name)"
+                            >
+                                Enquiry
+                            </button>
+                        </div>
 
                     </div>
                     <!-- PRODUCT CARD /. -->
@@ -833,8 +841,8 @@
 
                         <!-- whatsapp share -->
                         <div class="flex flex-grow w-full font-semibold items-center justify-center mt-2">
-                            <a :href="`https://api.whatsapp.com/send?text=${encodedUrl}`" target="_blank" class="flex items-center px-4 hover:bg-gray-100 hover:text-gray-800" >
-                                <button class="w-60 flex items-center gap-3  bg-transparent border border-[#57C785]  rounded-xs p-2 justify-center" >
+                            <!-- <a :href="`https://api.whatsapp.com/send?text=${encodedUrl}`" target="_blank" class="flex items-center px-4 hover:bg-gray-100 hover:text-gray-800" > -->
+                                <button class="w-60 flex items-center gap-3  bg-transparent border border-[#57C785]  rounded-xs p-2 justify-center" @click="handleWhatsAppShare">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6 fill-[#52b84a]">
                                         <path d="M19.05 4.91A9.816 9.816 0 0 0 12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.264 8.264 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 0 1 2.41 5.83c.02 4.54-3.68 8.23-8.22 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43s.17-.25.25-.41c.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18s-.22-.16-.47-.28z"/>
                                     </svg>
@@ -843,7 +851,7 @@
                                         Share to WhatsApp
                                     </span>
                                 </button>
-                            </a>
+                            <!-- </a> -->
                         </div>
                         <!-- Whatsapp share -->
 
@@ -1650,6 +1658,43 @@
                 showPlan.value = false
             }
 
+            const buyProduct = async(proImage, proName, orginal_price) => {
+                const s3URL = "https://linkaura-product-images.s3.amazonaws.com/product_images/";
+                const base = proImage.includes("http") ? proImage : `${s3URL}${proImage}`;
+                const product_image_url = `${base}?t=${new Date().getTime()}`;
+
+                // Happy & Excited Message for Customer
+                const message = `🛒 *NEW ORDER REQUEST* 🛒\n\n🔹 *Product:* ${proName}\n🔹 *Price:* ₹${orginal_price}\n\nHi! I want to buy this. 😍 Please let me know the payment details and delivery process! 🚀`;
+
+                try {
+                    const response = await fetch(product_image_url, { 
+                        method: 'GET',
+                        mode: 'cors',
+                        cache: 'no-cache' 
+                    });
+                    
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    
+                    const blob = await response.blob();
+                    const file = new File([blob], "product.png", { type: blob.type });
+
+                    if (navigator.share) {
+                        await navigator.share({
+                            title: proName,
+                            text: message, 
+                            files: [file]
+                        });
+                        return; 
+                    }
+                } catch (e) {
+                    console.error("Fetch/Share Error:", e);
+                }
+
+                // Fallback for Desktop
+                const fallback = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+                window.open(fallback, "_blank");
+            }
+
             const selectProduct = (name) => {
                 productnameEnquiry.value = name;
 
@@ -1800,6 +1845,49 @@
             cpyUrl.value = currentUrl
             encodedUrl.value = encodeURIComponent(currentUrl)
 
+            const handleWhatsAppShare = async () => {
+                // Current URL-ah encode pannuvom
+                const cleanUrl = encodeURI(window.location.href);
+                const message = `✨ *Check out ${companyName.value}!* ✨\n\nVisit our website here:\n${cleanUrl}`;
+
+                // Mobile Navigator Share Logic
+                if (navigator.share && logoImage.value) {
+                    try {
+                        // S3 Cache bypass panna timestamp add panrom
+                        const logoWithCacheBuster = `${logoImage.value}?t=${new Date().getTime()}`;
+                        
+                        // 1. Fetch the image
+                        const response = await fetch(logoWithCacheBuster, { 
+                            mode: 'cors',
+                            cache: 'no-cache'
+                        });
+                        
+                        if (!response.ok) throw new Error('Logo fetch failed');
+
+                        const blob = await response.blob();
+                        
+                        // 2. Create File object (WhatsApp logo-nu oru name kudupom)
+                        const file = new File([blob], "company_logo.png", { type: blob.type });
+
+                        // 3. Share with File
+                        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                            await navigator.share({
+                                title: companyName.value,
+                                text: message,
+                                files: [file]
+                            });
+                            return; 
+                        }
+                    } catch (error) {
+                        console.error("Navigator share failed:", error);
+                    }
+                }
+                
+                // Desktop Fallback (Link only)
+                const fallback = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+                window.open(fallback, "_blank");
+            };
+
             const copyToClipboard = async () => {
                 const textToCopy = cpyUrl.value;
 
@@ -1891,6 +1979,7 @@
                 gotoPlanPopupClose,
                 showPlan,
                 selectProduct,
+                buyProduct,
                 // service
                 serviceData,
                 service2,
@@ -1940,7 +2029,8 @@
                 s3GalleryUrl,
                 s3PaymenyUrl,
                 s3QrCodeUrl,
-                s3LogoUrl
+                s3LogoUrl,
+                handleWhatsAppShare
             }
         }
     }
