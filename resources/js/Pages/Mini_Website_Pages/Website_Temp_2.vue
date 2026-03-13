@@ -947,7 +947,7 @@
                                         Share to Facebook
                                     </span>
                                 </button>
-                            <!-- </a> -->
+                            </a>
                         </div>
                         <!-- facebook share -->
                         
@@ -985,7 +985,7 @@
                                         Share to WhatsApp
                                     </span>
                                 </button>
-                            </a>
+                            <!-- </a> -->
                         </div>
                         <!-- Whatsapp share -->
 
