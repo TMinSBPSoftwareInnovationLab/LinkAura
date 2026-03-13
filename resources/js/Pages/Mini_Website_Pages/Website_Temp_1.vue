@@ -1,5 +1,5 @@
 <template>
-    <main class="p-2 px-0 bg-gray-50 border-2 border-[#6b3f69]">
+    <main class="p-2 px-0 bg-gray-50 border-2 border-[#6b3f69] bg-[#faf5fb]">
         <div class="max-w-[430px] pb-0 mx-auto grid grid-cols-1  bg-center bg-cover bg-no-repeat ">
             <!-- purchase message -->
              <div class="border-1 border-b-gray-400 border-t-0 border-l-0 border-r-0 justify-center items-center flex flex-col w-full bg-white p-2" v-if="!is_purchased">
@@ -337,65 +337,53 @@
             <!-- Product section /. -->
 
             <!-- Service Section -->
-            <div id="services" class="flex flex-col w-full">
-            <!-- heade rebbon -->
-                <div class="flex flex-col w-full p-5 px-0">
-                <!-- header name -->
-                <div class="grid grid-flow-row justify-center">
-                    <div class="inline-block border-2 border-[#3d023a] text-[#3d023a] p-2 
-                                min-w-[120px] max-w-[250px] text-center
-                                [clip-path:polygon(10%_0%,100%_0%,90%_100%,0%_100%)] 
-                                ">
-                                Our Service
-                    </div>
+            <div id="services" class="flex flex-col w-full bg-[#f9fafb] py-6">
+            <!-- Header -->
+            <div class="grid grid-flow-row justify-center mb-4">
+                <div class="inline-block border-2 border-[#3d023a] text-[#3d023a] p-2 
+                    min-w-[120px] max-w-[250px] text-center
+                    [clip-path:polygon(10%_0%,100%_0%,90%_100%,0%_100%)]">
+                    Our Service
                 </div>
-                <!-- header name /. -->
-                <span v-if="serviceData.length > 0">
-                <div class="flex flex-col w-full mt-2">
-                    <!-- service area -->
-                    <div class="grid grid-cols-2 gap-2">
-                        <div 
-                            v-for="(item, index) in serviceData" 
-                            :key="index"
-                            class="flex flex-col w-full items-center shadow-2xl mt-5">
-                            <!-- service image -->
-                            <div class="flex flex-col w-full h-[250px] p-2 items-center overflow-hidden">
-                                <img 
-                                    :src="item.service_img" 
-                                    :alt="item.service_img"
-                                    @click="openImage(item.service_img)"
-                                    class="w-full h-full object-cover rounded-md"
-                                >
-                            </div>
-
-                            <!-- service name -->
-                            <div class="flex flex-col w-full text-center p-2"> 
-                                <p class="text-[14px] font-semibold">
-                                    {{ item.service_name }}
-                                </p>
-                            </div>
-                        </div>
-
-                    </div>
-                    <!-- service area /. -->
-                </div>
-                </span>
-                <span v-else>
-                    <p class="p-5 font-semibold text-[#6b3f69]">
-                        Currently, our services are being updated. We'll be back shortly!
-                    </p>
-                </span>
-                </div>
-            <!-- heade rebbon /. -->
-                <!-- footer designing Corner -->
-                <div class="flex flex-col gap-4  w-full max-w-[430px]">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-                    <path fill="#3d023a" fill-opacity="1" d="M0,96L60,112C120,128,240,160,360,192C480,224,600,256,720,229.3C840,203,960,117,1080,96C1200,75,1320,117,1380,138.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
-                    </svg>
-                    </div>
-                <!-- footer designing Corner /. -->
             </div>
-            <!-- Service Section /. -->
+            <span v-if="serviceData.length > 0">
+                <div class="grid grid-cols-2 gap-4 px-3">
+                    <div 
+                        v-for="(item, index) in serviceData" 
+                        :key="index"
+                        class="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden group">
+                        <!-- Service Image -->
+                        <div class="relative h-[180px] overflow-hidden">
+                        <img 
+                            :src="item.service_img" 
+                            :alt="item.service_name"
+                            @click="openImage(item.service_img)"
+                            class="w-full h-full object-cover transition duration-300 group-hover:scale-110 cursor-pointer"
+                            />
+                        </div>
+                        <!-- Service Name -->
+                        <div class="p-3 text-center">
+                        <p class="text-[14px] font-semibold text-gray-800 group-hover:text-[#3d023a] transition">
+                            {{ item.service_name }}
+                        </p>
+                        </div>
+                    </div>
+                </div>
+            </span>
+            <span v-else>
+                <p class="p-5 font-semibold text-[#6b3f69]">
+                    Currently, our services are being updated. We'll be back shortly!
+                </p>
+            </span>
+            <!-- Wave Footer -->
+            <div class="flex flex-col gap-4 w-full max-w-[430px] mt-6">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                    <path fill="#3d023a" fill-opacity="1"
+                        d="M0,96L60,112C120,128,240,160,360,192C480,224,600,256,720,229.3C840,203,960,117,1080,96C1200,75,1320,117,1380,138.7L1440,160L1440,320L0,320Z"></path>
+                </svg>
+            </div>
+            </div>
+             <!-- Service Section /. -->
 
             <!-- video -->
             <div id="Videos" class="flex flex-col w-full mb-2 shadow-2xl mt-5">
