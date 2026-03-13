@@ -274,63 +274,62 @@
                 <div class="flex flex-col w-full bg-white p-2">
                     <!-- main grid -->
                     <span v-if="products.length > 0">
-                    <div class="grid grid-cols-2 px-2 gap-4 p-2 mb-5">
-   <div 
-      v-for="(item, index) in products" 
-      :key="index"
-      class="relative rounded-xl overflow-hidden shadow-lg group cursor-pointer"
-      >
-      <!-- Product Image -->
-      <div class="h-[220px] w-full overflow-hidden">
-         <img 
-            :src="item.product_img"
-            class="w-full h-full object-cover transition duration-500 group-hover:scale-110"
-            />
-      </div>
-      <!-- Badge -->
-      <span v-if="item.status == 1"
-         class="absolute top-2 left-2 bg-orange-500 text-white text-[10px] px-2 py-1 rounded font-bold">
-      🔥 Trending
-      </span>
-      <span v-else-if="item.status === 2"
-         class="absolute top-2 left-2 bg-green-600 text-white text-[10px] px-2 py-1 rounded font-bold">
-      ✨ New
-      </span>
-      <!-- Bottom Overlay -->
-      <div class="absolute bottom-0 w-full bg-gradient-to-t from-black/80 to-transparent p-3">
-         <!-- Product Name -->
-         <p class="text-white text-[14px] font-semibold">
-            {{ item.product_name }}
-         </p>
-         <!-- Price -->
-         <div class="flex items-center gap-2 mt-1">
-            <span class="text-gray-300 text-[11px] line-through">
-            ₹ {{ item.orginal_price }}
-            </span>
-            <span class="text-green-400 font-bold text-[14px]">
-            ₹ {{ item.final_price }}
-            </span>
-         </div>
-      </div>
-      <!-- Floating Buttons -->
-      <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-         <div class="flex flex-col gap-2">
-            <button
-               class="bg-white text-black text-[11px] px-4 py-2 rounded-lg font-semibold shadow"
-               @click="buyProduct(item.product_img, item.product_name, item.orginal_price)"
-               >
-            Buy Now
-            </button>
-            <button
-               class="bg-[#52b84a] text-white text-[11px] px-4 py-2 rounded-lg font-semibold shadow"
-               @click="selectProduct(item.product_name)"
-               >
-            Enquiry
-            </button>
-         </div>
-      </div>
-   </div>
-</div>
+                        <div class="grid grid-cols-2 px-2 gap-4 p-2 mb-5">
+                            <div 
+                                v-for="(item, index) in products" 
+                                :key="index"
+                                class="flex flex-col rounded-xl overflow-hidden shadow-lg bg-white"
+                                >
+                                <!-- Image Card -->
+                                <div class="relative group cursor-pointer">
+                                    <div class="h-[220px] w-full overflow-hidden">
+                                        <img 
+                                        :src="item.product_img"
+                                        class="w-full h-full object-cover transition duration-500 group-hover:scale-110"
+                                        @click="openImage(item.product_img)"
+                                        />
+                                    </div>
+                                    <!-- Badge -->
+                                    <span v-if="item.status == 1"
+                                        class="absolute top-2 left-2 bg-orange-500 text-white text-[10px] px-2 py-1 rounded font-bold">
+                                    🔥 Trending
+                                    </span>
+                                    <span v-else-if="item.status === 2"
+                                        class="absolute top-2 left-2 bg-green-600 text-white text-[10px] px-2 py-1 rounded font-bold">
+                                    ✨ New
+                                    </span>
+                                    <!-- Overlay Info -->
+                                    <div class="absolute bottom-0 w-full bg-gradient-to-t from-black/80 to-transparent p-3">
+                                        <p class="text-white text-[14px] font-semibold">
+                                        {{ item.product_name }}
+                                        </p>
+                                        <div class="flex items-center gap-2 mt-1">
+                                        <span class="text-gray-300 text-[11px] line-through">
+                                        ₹ {{ item.orginal_price }}
+                                        </span>
+                                        <span class="text-green-400 font-bold text-[14px]">
+                                        ₹ {{ item.final_price }}
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Buttons -->
+                                <div class="flex gap-2 p-2">
+                                    <button
+                                        class="flex-1 bg-[#52b84a] text-white text-[11px] py-2 rounded-lg font-semibold"
+                                        @click="buyProduct(item.product_img, item.product_name, item.orginal_price)"
+                                        >
+                                    Buy Now
+                                    </button>
+                                    <button
+                                        class="flex-1 border border-[#52b84a] text-[#52b84a] text-[11px] py-2 rounded-lg font-semibold"
+                                        @click="selectProduct(item.product_name)"
+                                        >
+                                    Enquiry
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </span>
                     <span v-else>
                         <p class="p-5 font-semibold bg-gradient-to-br from-[#2A7B9B] via-[#57C785] to-[#52b84a] bg-clip-text text-transparent">
