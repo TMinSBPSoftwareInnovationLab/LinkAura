@@ -290,10 +290,19 @@
                                 </div>
                             </div>
 
-                            <!-- enquiry button -->
-                            <div class="flex flex-col bg-white items-center mt-2 mb-2">
-                                <button class="w-[150px] outline outline-1" @click="selectProduct(item.product_name)">
-                                    Enquiry Now
+                            <div class="flex flex-row gap-1 px-1 mt-2 mb-2 w-full justify-center">
+                                <button 
+                                    class="flex-1 text-[11px] font-bold py-2 outline outline-1 hover:bg-gray-100 uppercase" 
+                                    @click="buyProduct(item.product_img, item.product_name, item.final_price)"
+                                >
+                                    Buy Now
+                                </button>
+                                
+                                <button 
+                                    class="flex-1 text-[11px] font-bold py-2 outline outline-1 hover:bg-gray-100 uppercase" 
+                                    @click="selectProduct(item.product_name)"
+                                >
+                                    Enquiry
                                 </button>
                             </div>
                         </div>
@@ -1667,6 +1676,42 @@
                 showPlan.value = false
             }
 
+            const buyProduct = async(proImage, proName, orginal_price) => {
+                const s3URL = "https://linkaura-product-images.s3.amazonaws.com/product_images/";
+                const base = proImage.includes("http") ? proImage : `${s3URL}${proImage}`;
+                const product_image_url = `${base}?t=${new Date().getTime()}`;
+
+                // Happy & Excited Message for Customer
+                const message = `🛒 *NEW ORDER REQUEST* 🛒\n\n🔹 *Product:* ${proName}\n🔹 *Price:* ₹${orginal_price}\n\nHi! I want to buy this. 😍 Please let me know the payment details and delivery process! 🚀`;
+
+                try {
+                    const response = await fetch(product_image_url, { 
+                        method: 'GET',
+                        mode: 'cors',
+                        cache: 'no-cache' 
+                    });
+                    
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    
+                    const blob = await response.blob();
+                    const file = new File([blob], "product.png", { type: blob.type });
+
+                    if (navigator.share) {
+                        await navigator.share({
+                            title: proName,
+                            text: message, 
+                            files: [file]
+                        });
+                        return; 
+                    }
+                } catch (e) {
+                    console.error("Fetch/Share Error:", e);
+                }
+
+                // Fallback for Desktop
+                const fallback = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+                window.open(fallback, "_blank");
+            }
             
 
             const selectProduct = (name) => {
@@ -1950,6 +1995,7 @@
                 gPay,
                 paytm,
                 selectProduct,
+                buyProduct,
                 // .env from
                 s3ProductsUrl,
                 s3ServiceUrl,
