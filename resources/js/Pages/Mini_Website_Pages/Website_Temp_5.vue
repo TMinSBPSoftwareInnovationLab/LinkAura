@@ -376,21 +376,21 @@
                         <!-- FLEX SPACER -->
                         <div class="flex-1"></div>
 
-                        <div class="flex items-center gap-2 mt-3">
+                        <div class="grid grid-cols-2 gap-2 mt-3 w-full">
                             <button
-                                class="flex-1 bg-[#3bbc4d] p-[8px] text-white text-[12px]
-                                font-semibold rounded-lg uppercase whitespace-nowrap"
+                                class="bg-[#3bbc4d] p-[10px] text-white text-[11px] md:text-[12px]
+                                font-bold rounded-lg uppercase leading-none flex items-center justify-center"
                                 @click="buyProduct(item.product_img, item.product_name, item.orginal_price)"
                             >
                                 Buy Now
                             </button>
                             
                             <button
-                                class="flex-1 bg-[#DF1968] p-[8px] text-white text-[12px]
-                                font-semibold rounded-lg uppercase whitespace-nowrap"
+                                class="bg-[#DF1968] p-[10px] text-white text-[11px] md:text-[12px]
+                                font-bold rounded-lg uppercase leading-none flex items-center justify-center"
                                 @click="selectProduct(item.product_name)"
                             >
-                                Enquiry Now
+                                Enquiry
                             </button>
                         </div>
 
