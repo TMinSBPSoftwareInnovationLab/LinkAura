@@ -257,11 +257,14 @@
                                     class="h-full object-contain transition duration-300 group-hover:scale-110 cursor-pointer"
                                     @click="openImage(item.product_img)"
                                 >
-                                <img 
-                                    :src="item.product_img"
-                                    class="w-full h-full object-cover transition duration-300 group-hover:scale-110 cursor-pointer"
-                                    @click="openImage(item.product_img)"
-                                >
+                                <div class="relative group bg-gray-100 h-[200px] w-full overflow-hidden rounded-t-xl">
+                                    <img 
+                                        :src="item.product_img"
+                                        class="w-full h-full object-cover transition duration-300 group-hover:scale-110 cursor-pointer"
+                                        @click="openImage(item.product_img)"
+                                    >
+
+                                </div>
 
                             </div>
 
