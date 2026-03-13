@@ -274,58 +274,63 @@
                 <div class="flex flex-col w-full bg-white p-2">
                     <!-- main grid -->
                     <span v-if="products.length > 0">
-                    <div class="grid grid-cols-2 px-2 gap-2 p-2 mb-5">                        
-                        <div 
-                            v-for="(item, index) in products" 
-                            :key="index"
-                            class="flex flex-col w-full shadow-xl p-2 border border-[#379596] rounded-xl"
-                            :class="index >= 2 ? 'mt-5' : ''"
-                        >
-                            <!-- product image -->
-                            <div class="flex w-full h-[180px]" v-if="1==2">
-                                <img :src="item.product_img" :alt="item.name" class="w-full h-full object-contain" @click="openImage(item.product_img)">
-                            </div>
-
-                            <div class="flex flex-col w-full h-[200px] p-1 cursor-pointer relative" @click="openImage(item.product_img)">
-    
-                                <span v-if="item.status == 1" class="absolute top-2 right-2 bg-orange-500 text-white text-[10px] px-2 py-1 rounded-md font-bold uppercase shadow-sm z-10">
-                                    Trending
-                                </span>
-                                
-                                <span v-else-if="item.status === 2" class="absolute top-2 right-2 bg-green-600 text-white text-[10px] px-2 py-1 rounded-md font-bold uppercase shadow-sm z-10">
-                                    New Arrival
-                                </span>
-
-                                <img :src="item.product_img" class="w-full h-full object-contain">
-                            </div>
-
-                            <!-- name -->
-                            <div class="flex w-full justify-center pt-3">
-                                <p class="text-[14px] font-bold text-[#379596] uppercase">{{ item.product_name }}</p>
-                            </div>
-
-                            <!-- prices -->
-                            <div class="flex flex-col w-full justify-center p-1 mb-2 border-l-4 border-[#52b84a] mt-1 rounded-lg">
-                                <p class="text-[12px] text-gray-500">Original Price : {{ item.orginal_price }}</p>
-                                <p class="text-[12px] text-gray-500">Discount : {{ item.discount_price }}</p>
-                                <p class="text-[12px] font-bold">Final Price : {{ item.final_price }}</p>
-                            </div>
-
-                            <!-- buy -->
-                            <div class="flex w-full justify-center p-1">
-                                <button class="w-full outline outline-1 outline-[#2A7B9B] rounded-lg"  @click="buyProduct(item.product_img, item.product_name, item.orginal_price)">
-                                    Buy Now
-                                </button>
-                            </div>
-                            
-                            <!-- enquiry button -->
-                            <div class="flex w-full justify-center p-1">
-                                <button class="w-full outline outline-1 rounded-lg"  @click="selectProduct(item.product_name)">
-                                    Enquiry Now
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="grid grid-cols-2 px-2 gap-4 p-2 mb-5">
+   <div 
+      v-for="(item, index) in products" 
+      :key="index"
+      class="relative rounded-xl overflow-hidden shadow-lg group cursor-pointer"
+      >
+      <!-- Product Image -->
+      <div class="h-[220px] w-full overflow-hidden">
+         <img 
+            :src="item.product_img"
+            class="w-full h-full object-cover transition duration-500 group-hover:scale-110"
+            />
+      </div>
+      <!-- Badge -->
+      <span v-if="item.status == 1"
+         class="absolute top-2 left-2 bg-orange-500 text-white text-[10px] px-2 py-1 rounded font-bold">
+      🔥 Trending
+      </span>
+      <span v-else-if="item.status === 2"
+         class="absolute top-2 left-2 bg-green-600 text-white text-[10px] px-2 py-1 rounded font-bold">
+      ✨ New
+      </span>
+      <!-- Bottom Overlay -->
+      <div class="absolute bottom-0 w-full bg-gradient-to-t from-black/80 to-transparent p-3">
+         <!-- Product Name -->
+         <p class="text-white text-[14px] font-semibold">
+            {{ item.product_name }}
+         </p>
+         <!-- Price -->
+         <div class="flex items-center gap-2 mt-1">
+            <span class="text-gray-300 text-[11px] line-through">
+            ₹ {{ item.orginal_price }}
+            </span>
+            <span class="text-green-400 font-bold text-[14px]">
+            ₹ {{ item.final_price }}
+            </span>
+         </div>
+      </div>
+      <!-- Floating Buttons -->
+      <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+         <div class="flex flex-col gap-2">
+            <button
+               class="bg-white text-black text-[11px] px-4 py-2 rounded-lg font-semibold shadow"
+               @click="buyProduct(item.product_img, item.product_name, item.orginal_price)"
+               >
+            Buy Now
+            </button>
+            <button
+               class="bg-[#52b84a] text-white text-[11px] px-4 py-2 rounded-lg font-semibold shadow"
+               @click="selectProduct(item.product_name)"
+               >
+            Enquiry
+            </button>
+         </div>
+      </div>
+   </div>
+</div>
                     </span>
                     <span v-else>
                         <p class="p-5 font-semibold bg-gradient-to-br from-[#2A7B9B] via-[#57C785] to-[#52b84a] bg-clip-text text-transparent">
