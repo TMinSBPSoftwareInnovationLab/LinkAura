@@ -386,7 +386,7 @@
              <!-- Service Section /. -->
 
             <!-- video -->
-            <div id="Videos" class="flex flex-col w-full mb-2 shadow-2xl mt-5">
+            <div id="Videos" class="flex flex-col w-full mb-2 shadow-2xl mt-5 pt-5 border-2 border-l-0 border-r-0 border-b-0 border-t-[#3d023a]">
                 <!-- header name -->
                 <div class="grid grid-flow-row justify-center mx-auto">
                     <div class="inline-block border-2 border-[#3d023a] text-[#3d023a] p-2 
@@ -467,7 +467,7 @@
             <!-- video /. -->
 
             <!-- gallery section -->
-            <div id="gallery" class="flex flex-col w-full pt-5 bg-gradient-to-bl from-[#ffe4e6]  to-[#ccfbf1]">
+            <div id="gallery" class="flex flex-col w-full pt-5 bg-gradient-to-bl from-[#ffe4e6]  to-[#ccfbf1] border-2 border-l-0 border-r-0 border-b-0 border-t-[#3d023a]">
                 <!-- header name -->
                 <div class="grid grid-flow-row justify-center mx-auto">
                     <div class="inline-block border-2 border-[#3d023a] text-[#3d023a] p-2 
@@ -505,9 +505,9 @@
             <!-- gallery section /. -->
 
             <!-- payment section -->
-            <div id="payments" class="flex flex-col w-full pt-5">
+            <div id="payments" class="flex flex-col w-full bg-white mt-5 pt-5 border-2 border-l-0 border-r-0 border-b-0 border-t-[#3d023a]">
                 <!-- header name -->
-                <div class="grid grid-flow-row justify-center mx-auto">
+                <div class="grid grid-flow-row justify-center mx-auto pb-5">
                     <div class="inline-block border-2 border-[#3d023a] text-[#3d023a] p-2 
                                 min-w-[120px] max-w-[250px] text-center
                                 [clip-path:polygon(10%_0%,100%_0%,90%_100%,0%_100%)] 
@@ -545,7 +545,7 @@
                 </div>
 
                 <!-- default -->
-                <div v-else class="text-center text-gray-500 py-10">
+                <div v-else class="text-center text-gray-500 py-5">
                     <div class="flex flex-col w-full bg-white">
                         <!-- qr section -->
                         <div class="grid grid-cols-1 gap-4 items-center justify-center text-center px-3 py-5">
@@ -579,7 +579,7 @@
             <!-- payment section /. -->
 
             <!-- Enquiry -->
-             <div id="enquiry" class="flex flex-col w-full pt-5  bg-gradient-to-bl from-[#ffe4e6]  to-[#ccfbf1]">
+             <div id="enquiry" class="flex flex-col w-full pt-5   bg-gradient-to-bl from-[#ffe4e6]  to-[#ccfbf1] border-2 border-l-0 border-r-0 border-b-0 border-t-[#3d023a] mt-5" >
                 <!-- header name -->
                 <div class="grid grid-flow-row justify-center mx-auto">
                     <div class="inline-block border-2 border-[#3d023a] text-[#3d023a] p-2 
@@ -665,7 +665,7 @@
 
 
             <!-- FeedBack -->
-             <div id="feedback" class="flex flex-col w-full pt-5  bg-gradient-to-bl from-[#ffe4e6]  to-[#ccfbf1]">
+             <div id="feedback" class="flex flex-col w-full pt-5 mt-5 bg-gradient-to-bl from-[#ffe4e6]  to-[#ccfbf1] border-2 border-l-0 border-r-0 border-b-0 border-t-[#3d023a]">
                 <!-- header name -->
                 <div class="grid grid-flow-row justify-center mx-auto">
                     <div class="inline-block border-2 border-[#3d023a] text-[#3d023a] p-2 
@@ -773,7 +773,7 @@
             <!-- FeedBack /. -->
 
             <!-- share  my details -->
-            <div id="shareMyDetails" class="flex flex-col w-full pt-5 bg-white">
+            <div id="shareMyDetails" class="flex flex-col w-full pt-5 mt-5 bg-white border-2 border-l-0 border-r-0 border-b-0 border-t-[#3d023a]">
                 <!-- header name -->
                 <div class="grid grid-flow-row justify-center mx-auto">
                     <div class="inline-block border-2 border-[#3d023a] text-[#3d023a] p-2 
