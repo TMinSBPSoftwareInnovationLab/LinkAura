@@ -227,7 +227,7 @@
 
                 <!-- PRODUCT AREA -->
                 <span v-if="products.length > 0">
-                    <div class="grid grid-cols-2 gap-4 items-stretch px-1 mb-5">
+                    <div class="grid grid-cols-2 gap-4 items-stretch px-1 mb-5 mt-5">
                         <!-- PRODUCT CARD -->
                         <div 
                         v-for="(item, index) in products" 
@@ -248,10 +248,7 @@
                                 class="absolute top-2 left-2 text-[10px] bg-green-600 text-white px-2 py-[2px] rounded">
                             ✨ New
                             </span>
-                            <img 
-                            :src="item.product_img" 
-                            class="w-full h-full object-cover rounded-lg"
-                            >
+                            <img :src="item.product_img" class="w-full h-full object-cover rounded-lg">
                         </div>
                         <!-- CONTENT -->
                         <div class="p-3 flex flex-col">
@@ -277,14 +274,12 @@
                             <div class="flex gap-2 mt-3">
                                 <button
                                     class="flex-1 bg-green-500 text-white text-[12px] font-semibold py-[7px] rounded-md"
-                                    @click="buyProduct(item.product_img, item.product_name, item.orginal_price)"
-                                    >
+                                    @click="buyProduct(item.product_img, item.product_name, item.orginal_price)" >
                                 Buy
                                 </button>
                                 <button
                                     class="flex-1 bg-gray-700 text-white text-[12px] font-semibold py-[7px] rounded-md"
-                                    @click="selectProduct(item.product_name)"
-                                    >
+                                    @click="selectProduct(item.product_name)" >
                                 Enquiry
                                 </button>
                             </div>
