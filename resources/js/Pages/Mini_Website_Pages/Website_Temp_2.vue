@@ -947,7 +947,7 @@
                                         Share to Facebook
                                     </span>
                                 </button>
-                            </a>
+                            <!-- </a> -->
                         </div>
                         <!-- facebook share -->
                         
