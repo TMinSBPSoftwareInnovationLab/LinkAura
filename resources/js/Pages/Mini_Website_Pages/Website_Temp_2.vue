@@ -530,7 +530,7 @@
                 <!-- theme bg /.-->
 
                 <!-- gallery areas -->
-                <div class="flex flex-col w-full bg-white">
+                <div class="flex flex-col w-full bg-[#06402a]">
                     <!-- main grid -->
                     <div class="grid grid-cols-2 px-2 gap-2 p-2 mb-5" v-if="1==2">
                         <div 
