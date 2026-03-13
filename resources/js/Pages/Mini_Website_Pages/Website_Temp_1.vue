@@ -252,9 +252,14 @@
                                 </span>
 
                                 <!-- Image -->
-                                <img 
+                                <img v-if="1==2"
                                     :src="item.product_img"
                                     class="h-full object-contain transition duration-300 group-hover:scale-110 cursor-pointer"
+                                    @click="openImage(item.product_img)"
+                                >
+                                <img 
+                                    :src="item.product_img"
+                                    class="w-full h-full object-cover transition duration-300 group-hover:scale-110 cursor-pointer"
                                     @click="openImage(item.product_img)"
                                 >
 
