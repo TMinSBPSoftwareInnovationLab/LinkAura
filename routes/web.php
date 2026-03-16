@@ -55,6 +55,9 @@ Route::post('/getwebAddressDetails',[MiniWebsiteController::class, 'getwebAddres
 Route::post('/getwebMediaLinks',[MiniWebsiteController::class, 'getwebMediaLinks']);
 // website data collections area /.
 
+// school admission datas save
+Route::post('/save_school_datas',[MiniWebsiteController::class, 'saveAdmission']);
+
 // Route::get('/{company}/Website_Temp_{themeIdEnc}', [MiniWebsiteController::class, 'viewDigitalShop']);
 Route::get('/share/{company_name}/{website_id}', [WebsiteController::class, 'websiteView']);
 

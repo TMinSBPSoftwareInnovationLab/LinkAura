@@ -15,6 +15,7 @@ use Razorpay\Api\Api;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Validator;
 
 class MiniWebsiteController extends Controller
 {
@@ -1643,5 +1644,69 @@ class MiniWebsiteController extends Controller
 
         // 4. Blade file-ku data-vah anupuvom
         return view('website_template', compact('website_data'));
+    }
+
+    // save admission 
+    public function saveAdmission(Request $request)
+    {
+        // 1. Enna check panna vendum (Rules)
+        $rules = [
+            'sname'           => 'required|string|max:150',
+            'aadharno'        => 'required|digits:12|unique:school_reg,aadharno',
+            'phone_number'    => 'required|digits:10|unique:school_reg,phone_number',
+            'whatsapp_number' => 'required|digits:10|unique:school_reg,whatsapp_number',
+            'address'         => 'required',
+            'refName'         => 'required',
+        ];
+
+        // 2. Error vanthaal enna message solla vendum (Custom Messages)
+        $messages = [
+            'aadharno.unique'        => 'Intha Aadhar Number munnadiyae register seiyappattu vittathu.',
+            'phone_number.unique'    => 'Intha Phone Number munnadiyae payanbaattil ullathu.',
+            'whatsapp_number.unique' => 'Intha WhatsApp Number munnadiyae register aagi ullathu.',
+            'aadharno.digits'        => 'Aadhar Number 12 ilakkangal irukka vendum.',
+            'phone_number.digits'    => 'Phone Number 10 ilakkangal irukka vendum.',
+            'required'               => 'Intha field-ai kandaipaaga fill seiyavum.',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        // 3. Validation fail aanaal
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors() // Ingae thaan namma custom messages irukkum
+            ], 422);
+        }
+
+        try {
+            DB::table('school_reg')->insert([
+                'sname'           => $request->sname,
+                'dob'             => $request->dob,
+                'age'             => $request->age,
+                'aadharno'        => $request->aadharno,
+                'lastStudied'     => $request->lastStudied,
+                'schoolName'      => $request->schoolName,
+                'phone_number'    => $request->phone_number,
+                'whatsapp_number' => $request->whatsapp_number,
+                'address'         => $request->address,
+                'pCollege'        => $request->pCollege ?? 'N/A',
+                'course'          => $request->course ?? 'N/A',
+                'pLocation'       => $request->pLocation ?? 'N/A',
+                'refName'         => $request->refName,
+                'created_at'      => now(),
+            ]);
+
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'Student registered successfully!'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Database error: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }
