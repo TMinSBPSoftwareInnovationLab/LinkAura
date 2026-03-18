@@ -1,8 +1,4 @@
 <template>
-    <div>
-        <h1>{{ companyFullName }}</h1>
-        <h2>{{ viewStoreData?.company_name }}</h2>
-    </div>
     <main class="p-2 px-0 border-2 border-[#6b3f69] bg-[#faf5fb]">
         <div class="max-w-[430px] pb-0 mx-auto grid grid-cols-1  bg-center bg-cover bg-no-repeat ">
             <!-- purchase message -->
@@ -1201,7 +1197,6 @@
     import { PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, ChevronLeftIcon, ChevronRightIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/solid'
     import WebsiteFooterBar from '../Components/WebsiteFooterBar.vue';
     import linkAuraFooter from '../Mini_Website_Pages/common_footer/linkaura_foot.vue'
-    import { usePage } from '@inertiajs/vue3'
 
     export default{
         name: "Website_Temp_1",
@@ -1216,15 +1211,6 @@
         },
         
         setup(props){
-            const page = usePage()
-
-            // Inertia data
-            const companyFullName = page.props.company
-            const viewStoreData = page.props.companyData
-
-            // debug
-            console.log("companyData : ",viewStoreData)
-            
             // getting data from selected website 
             const route = useRoute();
             const router = useRouter();
@@ -2056,10 +2042,7 @@
                 s3PaymenyUrl,
                 s3QrCodeUrl,
                 s3LogoUrl,
-                handleWhatsAppShare,
-                viewStoreData,
-                companyFullName,
-                props,
+                handleWhatsAppShare
             }
         }
     }
