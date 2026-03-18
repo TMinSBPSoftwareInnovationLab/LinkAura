@@ -22,6 +22,10 @@ Route::post('/forgotPassword',[AuthController::class, 'forgotPassword']);
 Route::get('/dashboard', fn () => Inertia::render('Dashboard'));
 Route::get('/{company}/Website_Temp_{themeIdEnc}', [MiniWebsiteController::class, 'viewWebsite']);
 
+Route::get('/Company_details', function () {
+    return Inertia::render('Components/Mini_website_components/Company_details');
+});
+
 Route::post('/save_company_details',[MiniWebsiteController::class, 'save_company_details']);
 Route::post('/getWebsiteDetails',[MiniWebsiteController::class, 'getWebsiteDetails']);
 Route::post('/saveEnquiryData',[MiniWebsiteController::class, 'saveEnquiryData']);

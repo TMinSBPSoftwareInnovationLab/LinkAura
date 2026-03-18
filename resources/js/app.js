@@ -18,8 +18,20 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 import axios from 'axios';
 axios.get('/sanctum/csrf-cookie');
 
+// 🔥 IMPORTANT CHANGE HERE
+const pages = import.meta.glob('./Pages/**/*.vue')
+
 createInertiaApp({
-  resolve: name => import(`./Pages/${name}.vue`),
+  resolve: name => {
+    const page = pages[`./Pages/${name}.vue`]
+
+    if (!page) {
+      console.error(`Page not found: ${name}`)
+      return
+    }
+
+    return page()
+  },
 
   setup({ el, App, props, plugin }) {
     const app = createApp({ render: () => h(App, props) })
