@@ -349,6 +349,7 @@ import Header_tab from './Components/Header_tab.vue';
 import { ref, onMounted } from "vue";
 import { toast } from 'vue3-toastify'
 import Swal from 'sweetalert2';
+import { router } from '@inertiajs/vue3'
 // import { useRouter } from "vue-router";
 import { Link } from '@inertiajs/vue3'
 import { useCardStore } from '@/stores/cardStore';
