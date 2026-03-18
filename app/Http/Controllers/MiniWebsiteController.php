@@ -16,6 +16,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia;
 
 class MiniWebsiteController extends Controller
 {
@@ -1644,6 +1645,41 @@ class MiniWebsiteController extends Controller
 
         // 4. Blade file-ku data-vah anupuvom
         return view('website_template', compact('website_data'));
+    }
+
+    // facebook meta data collect
+    public function viewWebsite($company, $themeIdEnc)
+    {   
+        $defaultPath = public_path('images/linkAuraLogo300.png');
+        try {
+            // decode theme id
+            $decodedId = base64_decode($themeIdEnc);
+
+            // DB fetch
+            $companyData = DB::table('miniweb_company_details')
+                ->where('id', $decodedId)
+                ->first();
+
+            // data இல்லனா redirect
+            if (!$companyData) {
+                return redirect('/');
+            }
+            $allowed = [1,2,3,4,5,6];
+
+            if (!in_array($decodedId, $allowed)) {
+                return redirect('/');
+            }
+            return Inertia::render('Mini_Website_Pages/Website_Temp_' . $decodedId, [
+                'company' => $company,
+                'companyData' => $companyData,
+                'metaTitle' => $companyData->company_name,
+                'metaDescription' => $companyData->description ?? 'Welcome',
+                'metaImage' => $companyData->logo_path ?? $defaultPath,
+            ]);
+
+        } catch (\Exception $e) {
+            return redirect('/');
+        }
     }
 
     // save admission 

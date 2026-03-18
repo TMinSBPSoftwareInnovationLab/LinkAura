@@ -5,7 +5,7 @@ const Index = () => import('../WebSite/Index.vue');
 const Login = () => import('../Views/Login.vue');
 const ForgotPass = () => import('../Views/Forgot_pass.vue');
 const Registration = () => import('../Views/Registration.vue');
-const Dashboard = () => import('@/Pages/Dashboard.vue');
+// const Dashboard = () => import('@/Pages/Dashboard.vue');
 const Company_details = () => import('@/Pages/Components/Mini_website_components/Company_details.vue');
 const Website_Temp_1 = () => import('@/Pages/Mini_Website_Pages/Website_Temp_1.vue');
 const Website_Temp_2 = () => import('@/Pages/Mini_Website_Pages/Website_Temp_2.vue');

@@ -19,6 +19,9 @@ Route::middleware('auth:sanctum')->group(function () {
 // forgot password
 Route::post('/forgotPassword',[AuthController::class, 'forgotPassword']);
 
+Route::get('/dashboard', fn () => Inertia::render('Dashboard'));
+Route::get('/{company}/Website_Temp_{themeIdEnc}', [WebsiteController::class, 'viewWebsite']);
+
 Route::post('/save_company_details',[MiniWebsiteController::class, 'save_company_details']);
 Route::post('/getWebsiteDetails',[MiniWebsiteController::class, 'getWebsiteDetails']);
 Route::post('/saveEnquiryData',[MiniWebsiteController::class, 'saveEnquiryData']);
