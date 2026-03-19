@@ -1238,7 +1238,6 @@
             const ownerName = ref("")
             const designation = ref("")
             const logoImage = ref("")
-            const company_mobile = ref("")
 
             const loadCompanyDetails = async () => {
                 const res = await axios.post('/collectAllWebsiteDatas', {'table_name':'miniweb_company_details', cd_id });
@@ -1251,7 +1250,6 @@
                 designation.value = data.designation || '';
                 logoImage.value = data.logo_path ? `${s3LogoUrl}/company_logos/${data.logo_path}` : '';
                 is_purchased.value = data.purchased_id
-                company_mobile.value = data.company_mobile
 
                 // Guard check
                 if (cd_id && is_purchased.value <= 0) {
@@ -1675,27 +1673,11 @@
             }
 
             const buyProduct = async(proImage, proName, orginal_price) => {
-                const targetMobile = company_mobile.value; 
-
-                // Message-la image link-aiye sethudunga (Product Link or Image Link)
-                const s3URL = "https://linkaura-product-images.s3.amazonaws.com/product_images/";
-                const fullImageUrl = proImage.includes("http") ? proImage : `${s3URL}${proImage}`;
-
-                const message = `🛒 *NEW ORDER REQUEST* 🛒\n\n🔹 *Product:* ${proName}\n🔹 *Price:* ₹${orginal_price}\n\n🖼️ *Image:* ${fullImageUrl}\n\nHi! I want to buy this. 😍`;
-
-                // Direct WhatsApp API (Direct-a number-ku chat open aagum)
-                const whatsappUrl = `https://api.whatsapp.com/send?phone=${targetMobile}&text=${encodeURIComponent(message)}`;
-                
-                window.open(whatsappUrl, "_blank");
-            }
-            /* 19-03-2026
-            const buyProduct = async(proImage, proName, orginal_price) => {
-                const targetMobile = company_mobile.value; 
-
                 const s3URL = "https://linkaura-product-images.s3.amazonaws.com/product_images/";
                 const base = proImage.includes("http") ? proImage : `${s3URL}${proImage}`;
                 const product_image_url = `${base}?t=${new Date().getTime()}`;
 
+                // Happy & Excited Message for Customer
                 const message = `🛒 *NEW ORDER REQUEST* 🛒\n\n🔹 *Product:* ${proName}\n🔹 *Price:* ₹${orginal_price}\n\nHi! I want to buy this. 😍 Please let me know the payment details and delivery process! 🚀`;
 
                 try {
@@ -1710,22 +1692,22 @@
                     const blob = await response.blob();
                     const file = new File([blob], "product.png", { type: blob.type });
 
-                    // Navigator Share (Mobile Devices)
                     if (navigator.share) {
                         await navigator.share({
                             title: proName,
                             text: message, 
                             files: [file]
                         });
-                        return; // Share success-na function ingaye end aagidum
+                        return; 
                     }
                 } catch (e) {
                     console.error("Fetch/Share Error:", e);
                 }
-                const fallback = `https://api.whatsapp.com/send?phone=${targetMobile}&text=${encodeURIComponent(message)}`;
+
+                // Fallback for Desktop
+                const fallback = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
                 window.open(fallback, "_blank");
             }
-            */
             
 
             const selectProduct = (name) => {
@@ -1974,7 +1956,6 @@
                 ownerName,
                 designation,
                 logoImage,
-                company_mobile,
                 is_purchased,
                 // address and contact details
                 addData,
