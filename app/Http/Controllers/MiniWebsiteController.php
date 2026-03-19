@@ -1126,8 +1126,10 @@ class MiniWebsiteController extends Controller
             switch ($table_name) {
                 // company data
                 case 'miniweb_company_details':
-                    $getData = DB::table('miniweb_company_details')
-                        ->where("id", "=", $cd_id)
+                    $getData = DB::table('miniweb_company_details as mcd')
+                        ->join('users as u', 'u.id', '=', 'mcd.user_id')
+                        ->select('mcd.*', 'u.mobile_number as company_mobile')
+                        ->where("mcd.id", "=", $cd_id)
                         ->get();
                     break;
                 
