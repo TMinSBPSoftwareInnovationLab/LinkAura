@@ -1675,13 +1675,12 @@
             }
 
             const buyProduct = async(proImage, proName, orginal_price) => {
-                const userMobile = company_mobile.value
+                const targetMobile = company_mobile.value; 
 
                 const s3URL = "https://linkaura-product-images.s3.amazonaws.com/product_images/";
                 const base = proImage.includes("http") ? proImage : `${s3URL}${proImage}`;
                 const product_image_url = `${base}?t=${new Date().getTime()}`;
 
-                // Happy & Excited Message for Customer
                 const message = `🛒 *NEW ORDER REQUEST* 🛒\n\n🔹 *Product:* ${proName}\n🔹 *Price:* ₹${orginal_price}\n\nHi! I want to buy this. 😍 Please let me know the payment details and delivery process! 🚀`;
 
                 try {
@@ -1696,24 +1695,20 @@
                     const blob = await response.blob();
                     const file = new File([blob], "product.png", { type: blob.type });
 
+                    // Navigator Share (Mobile Devices)
                     if (navigator.share) {
                         await navigator.share({
                             title: proName,
                             text: message, 
                             files: [file]
                         });
-                        return; 
+                        return; // Share success-na function ingaye end aagidum
                     }
                 } catch (e) {
                     console.error("Fetch/Share Error:", e);
                 }
-
-                // Fallback for Desktop
-                // Fallback for Desktop with Specific Number
-                const fallback = `https://api.whatsapp.com/send?phone=${userMobile}&text=${encodeURIComponent(message)}`;
+                const fallback = `https://api.whatsapp.com/send?phone=${targetMobile}&text=${encodeURIComponent(message)}`;
                 window.open(fallback, "_blank");
-                // const fallback = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-                // window.open(fallback, "_blank");
             }
             
 
