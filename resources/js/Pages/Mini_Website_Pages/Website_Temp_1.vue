@@ -1677,6 +1677,21 @@
             const buyProduct = async(proImage, proName, orginal_price) => {
                 const targetMobile = company_mobile.value; 
 
+                // Message-la image link-aiye sethudunga (Product Link or Image Link)
+                const s3URL = "https://linkaura-product-images.s3.amazonaws.com/product_images/";
+                const fullImageUrl = proImage.includes("http") ? proImage : `${s3URL}${proImage}`;
+
+                const message = `🛒 *NEW ORDER REQUEST* 🛒\n\n🔹 *Product:* ${proName}\n🔹 *Price:* ₹${orginal_price}\n\n🖼️ *Image:* ${fullImageUrl}\n\nHi! I want to buy this. 😍`;
+
+                // Direct WhatsApp API (Direct-a number-ku chat open aagum)
+                const whatsappUrl = `https://api.whatsapp.com/send?phone=${targetMobile}&text=${encodeURIComponent(message)}`;
+                
+                window.open(whatsappUrl, "_blank");
+            }
+            /* 19-03-2026
+            const buyProduct = async(proImage, proName, orginal_price) => {
+                const targetMobile = company_mobile.value; 
+
                 const s3URL = "https://linkaura-product-images.s3.amazonaws.com/product_images/";
                 const base = proImage.includes("http") ? proImage : `${s3URL}${proImage}`;
                 const product_image_url = `${base}?t=${new Date().getTime()}`;
@@ -1710,6 +1725,7 @@
                 const fallback = `https://api.whatsapp.com/send?phone=${targetMobile}&text=${encodeURIComponent(message)}`;
                 window.open(fallback, "_blank");
             }
+            */
             
 
             const selectProduct = (name) => {
