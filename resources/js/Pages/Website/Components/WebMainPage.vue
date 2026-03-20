@@ -17,9 +17,9 @@
                     </p>
                 </div>
                 <div class="flex flex-col md:flex-col p-5">
-                    <router-link to="/login" target="_blank">
+                    <Link href="/login" target="_blank">
                         <button type="button" class="text-white bg-[#DC143C] box-border border border-transparent hover:bg-success-strong focus:ring-4 focus:success-subtle shadow-xs font-medium leading-5 rounded-full text-sm px-4 py-2.5 focus:outline-none w-50 uppercase">Create mini website</button>
-                    </router-link>
+                    </Link>
                 </div>
             </div>
 
@@ -72,11 +72,11 @@
                             <ShareIcon class="size-5 text-[#780e7a]" /> One smart shareable link
                         </li>
                     </ul>
-                    <router-link to="/login" target="_blank">
+                    <Link href="/login" target="_blank">
                         <button class="mt-8 w-fit bg-[#dc143c] text-white px-8 py-3 rounded-xl shadow-lg hover:bg-[#780e7a]  transition" >
                             Create Mini Website
                         </button>
-                    </router-link>
+                    </Link>
                 </div>
                 <!-- LEFT /. -->
 
@@ -348,11 +348,11 @@
                             </ul>
                         </div>
                         <div class="flex flex-col text-center p-5">
-                            <router-link to="/login" target="_blank">
+                            <Link href="/login" target="_blank">
                                 <button class="mt-8 bg-red-600 text-white px-6 py-2 rounded-full text-sm font-semibold">
                                 BUY NOW
                                 </button>
-                            </router-link>
+                            </Link>
                         </div>
                     </div>
                     </div>
@@ -401,11 +401,11 @@
                                 </ul>
                             </div>
                             <div class="flex flex-col text-center p-5">
-                                <router-link to="/login" target="_blank">
+                                <Link href="/login" target="_blank">
                                     <button class="mt-8 bg-[#681c6a] text-white px-6 py-2 rounded-full text-sm font-semibold">
                                     BuY NOW
                                     </button>
-                                </router-link>
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -454,11 +454,11 @@
                                 </ul>
                             </div>
                             <div class="flex flex-col text-center p-5">
-                                <router-link to="/login" target="_blank">
+                                <Link href="/login" target="_blank">
                                     <button class="mt-8 bg-green-600 text-white px-6 py-2 rounded-full text-sm font-semibold">
                                     BUY NOW
                                     </button>
-                                </router-link>
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -479,6 +479,7 @@
 </template>
 
 <script>
+    import { router } from '@inertiajs/vue3'
     import homeImage from '@/assets/images/websiteImages/home_page_image1.png'
     import aBG from '@/assets/images/mini_website/com_images/bg1.jpg'
     import template1 from '@/assets/images/websiteImages/templates/website1_thumb1.png'
@@ -492,7 +493,7 @@
 
     export default {
         name: 'WebMainPage',
-        components: {PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, ChevronLeftIcon, ChevronRightIcon, UserIcon, DocumentIcon ,ShareIcon, DocumentTextIcon, DevicePhoneMobileIcon},
+        components: {PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, ChevronLeftIcon, ChevronRightIcon, UserIcon, DocumentIcon ,ShareIcon, DocumentTextIcon, DevicePhoneMobileIcon, router},
         setup() {
             const collectTemp = [
                 template1,

@@ -12,14 +12,14 @@
 
             <!-- main content area -->
              <div class="flex w-full py-5 px-5 bg-white mt-2 justify-end" v-if="1==2">
-                <router-link to="/Company_details">
+                <Link href="/Company_details">
                     <button
                         class="bg-[#000b57] text-white py-2 px-4 rounded-xl 
                                 transition-all duration-500 
                                 hover:-translate-y-2 hover:shadow-xl">
                             Create Mini Website
                     </button>
-                </router-link>
+                </Link>
 
              </div>
              <!-- heading page -->
@@ -85,7 +85,7 @@
 <script>
 import SideNavBar from './Components/SideNavBar.vue';
 import Header_tab from './Components/Header_tab.vue';
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { AgGridVue } from "ag-grid-vue3";
 import { ModuleRegistry, AllCommunityModule } from "ag-grid-community";
 import axios from 'axios';
@@ -93,6 +93,7 @@ import { toast } from 'vue3-toastify'
 import Swal from 'sweetalert2';
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
+import { router, usePage } from '@inertiajs/vue3'
 
 ModuleRegistry.registerModules([AllCommunityModule]); 
 
@@ -101,8 +102,9 @@ export default {
     name: 'MiniWebEnquiry',
 
     setup(){
-        const user_id = ref('')
-        user_id.value = JSON.parse(localStorage.getItem('user')).id;
+        const page = usePage();
+        const user_id = computed(() => page.props.auth.user?.id);
+        // user_id.value = computed(() => page.props.auth.user?.id);
         const rowData = ref({});
         const rejectPopup = ref(false);
         const rejectReason = ref("");
@@ -136,7 +138,7 @@ export default {
 
         const loadFeedBack = async() => {
             try{
-                const res = await axios.post("/getMiniWebEnquiry", { user_id: user_id.value }) 
+                const res = await axios.post("/getMiniWebEnquiry", { user_id: Number(user_id.value) }) 
                 rowData.value = res.data.getData;
 
                  if (res.data.status && Array.isArray(res.data.getData)) {

@@ -1127,7 +1127,7 @@ class MiniWebsiteController extends Controller
                 // company data
                 case 'miniweb_company_details':
                     $getData = DB::table('miniweb_company_details as mcd')
-                        ->join('users as u', 'u.id', '=', 'mcd.user_id')
+                        ->leftjoin('users as u', 'u.id', '=', 'mcd.user_id')
                         ->select('mcd.*', 'u.mobile_number as company_mobile')
                         ->where("mcd.id", "=", $cd_id)
                         ->get();

@@ -13,7 +13,7 @@
             <!-- main content area -->
             <div class="flex flex-row md:flex-row w-full py-5 px-5 bg-white mt-2  justify-between gap-3 md:gap-0 border border-sky-500/30">
                 <!-- Left Side Button -->
-                <router-link to="/Company_details">
+                <Link href="/Company_details">
                     <button
                         class="outline outline-1 outline-pink-500 text-pink-500 font-semibold
                             py-1.5 px-3 text-sm 
@@ -22,10 +22,10 @@
                             hover:-translate-y-2 hover:shadow-xl">
                         Company Details
                     </button>
-                </router-link>
+                </Link>
 
                 <!-- Right Side Button -->
-                <router-link to="/Address">
+                <Link href="/Address">
                     <button :disabled="isSubmitting"
                         class="bg-[#000b57] text-white 
                             py-1.5 px-3 text-sm 
@@ -34,7 +34,7 @@
                             hover:-translate-y-2 hover:shadow-xl" @click="saveAndNext">
                             {{ isSubmitting ? "Saving..." : "Save & Next Address" }}
                     </button>
-                </router-link>
+                </Link>
             </div>
 
             <!-- heading page -->

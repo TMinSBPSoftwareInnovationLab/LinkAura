@@ -1162,7 +1162,8 @@
     import axios from 'axios';
     import { useCardStore } from '@/stores/cardStore'
     import { toast } from 'vue3-toastify'
-    import { useRoute,useRouter } from 'vue-router'
+    import { router } from '@inertiajs/vue3'
+    // import { useRoute,useRouter } from 'vue-router'
     import rebbon1 from '@/assets/images/mini_website/website5/rebbons/rebbon1.png'
 
     import { PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, ChevronLeftIcon, ChevronRightIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/solid'
@@ -1183,17 +1184,34 @@
         },
         setup(props){
             // getting data from selected website 
-            const route = useRoute();
-            const router = useRouter();
+            // const route = useRoute();
+            // const router = useRouter();
             const cardStore = useCardStore()
 
-            const decoded = route.query.ilp88LAsBvm ? atob(decodeURIComponent(route.query.ilp88LAsBvm)) : ''
-            // console.log("decoded : "+decoded)
-            const params = new URLSearchParams(decoded)
-            const cd_id   = Number(params.get('cd_id') || 0)
-            const templateId  = Number(params.get('template_id') || 0)
-            const purchaseID  = Number(params.get('purchased_id') || 0)
+            /* 20-03-2026 
+                const decoded = route.query.ilp88LAsBvm ? atob(decodeURIComponent(route.query.ilp88LAsBvm)) : ''
+                // console.log("decoded : "+decoded)
+                const params = new URLSearchParams(decoded)
+                const cd_id   = Number(params.get('cd_id') || 0)
+                const templateId  = Number(params.get('template_id') || 0)
+                const purchaseID  = Number(params.get('purchased_id') || 0)
+                const is_purchased = ref("")
+            */
+            const decoded = ref('');
+            const cd_id = ref(0);
+            const templateId = ref(0);
+            const purchaseID = ref(0);
             const is_purchased = ref("")
+            const param = new URLSearchParams(window.location.search).get('ilp88LAsBvm');
+            if (param) {
+                decoded.value = atob(decodeURIComponent(param));
+
+                const params = new URLSearchParams(decoded.value);
+
+                cd_id.value = Number(params.get('cd_id') || 0);
+                templateId.value = Number(params.get('template_id') || 0);
+                purchaseID.value = Number(params.get('purchased_id') || 0);
+            }
 
             // implement .env
             const s3ProductsUrl = import.meta.env.VITE_AWS_URL_PRODUCT_IMAGES;
@@ -1213,7 +1231,7 @@
             const logoImage = ref("")
 
             const loadCompanyDetails = async () => {
-                const res = await axios.post('/collectAllWebsiteDatas', {'table_name':'miniweb_company_details', cd_id });
+                const res = await axios.post('/collectAllWebsiteDatas', {'table_name':'miniweb_company_details', cd_id:cd_id.value });
                 const data = res?.data?.getData?.[0];
                 if (!data) return;
 
@@ -1230,9 +1248,16 @@
                     // console.log('Access blocked 4:', cd_id, is_purchased.value)
 
                     // remove query string
-                    router.replace({
-                        path: route.path
-                    })
+                    /* 20-3-2026
+                        router.replace({
+                            path: route.path
+                        })
+                    */
+                    router.visit(window.location.pathname, {
+                        replace: true,
+                        preserveState: true,
+                    });
+
                 } else {
                     // console.log("else url ")
                     // console.log('Access allowed:', cd_id, is_purchased.value)
@@ -1248,7 +1273,7 @@
             const currentAddress = ref("")
 
             const loadAddressDetails = async () => {
-                const res = await axios.post('/collectAllWebsiteDatas', { 'table_name':'miniweb_contact', cd_id });
+                const res = await axios.post('/collectAllWebsiteDatas', { 'table_name':'miniweb_contact', cd_id:cd_id.value });
                 const data = res?.data?.getData?.[0];
                 if (!data) return;
 
@@ -1268,7 +1293,7 @@
             const instaReals_link1 = ref("")
             const instaReals_link2 = ref("")
             const loadSocialMediaLinks = async() => {
-                const res = await axios.post("/collectAllWebsiteDatas", { 'table_name':'miniweb_social_links', cd_id:cd_id })
+                const res = await axios.post("/collectAllWebsiteDatas", { 'table_name':'miniweb_social_links', cd_id:cd_id.value })
                 const data = res?.data?.getData?.[0];
                 if(!data) return;
 
@@ -1299,7 +1324,7 @@
             const aboutUsData = ref({})
             const aboutTxt = ref("")
             const loadAboutUs = async() => {
-                const res = await axios.post("/collectAllWebsiteDatas", { 'table_name':'miniweb_aboutus', cd_id:cd_id })
+                const res = await axios.post("/collectAllWebsiteDatas", { 'table_name':'miniweb_aboutus', cd_id:cd_id.value })
                 const data = res?.data?.getData?.[0];
                 if(!data) return;
 
@@ -1382,9 +1407,9 @@
 
                     // Run both data fetches in parallel for better performance
                     const [prodRes, servRes, gallRes] = await Promise.all([
-                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_products", cd_id: cd_id }),
-                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_services", cd_id: cd_id }),
-                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_gallery", cd_id: cd_id })
+                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_products", cd_id:cd_id.value }),
+                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_services", cd_id:cd_id.value }),
+                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_gallery", cd_id:cd_id.value })
                     ]);
 
                     // get all response data
@@ -1453,7 +1478,7 @@
                 try {
                     const planRes = await axios.post("/collectAllWebsiteDatas", {
                         table_name: "miniweb_company_details",
-                        cd_id: cd_id
+                        cd_id:cd_id.value
                     });
 
                     // Use optional chaining to prevent "cannot read property [0] of undefined"
@@ -1482,7 +1507,7 @@
                 try {
                     const res = await axios.post("/collectAllWebsiteDatas", {
                         table_name: "miniweb_payments_details",
-                        cd_id: cd_id
+                        cd_id:cd_id.value
                     });
 
                     const data = res?.data?.getData?.[0];
@@ -1514,7 +1539,7 @@
                 try {
                     const res = await axios.post("/collectAllWebsiteDatas", {
                         table_name: "miniweb_feedback",
-                        cd_id: cd_id
+                        cd_id:cd_id.value
                     });
 
                     const data = res?.data?.getData;
@@ -1536,7 +1561,7 @@
             const qrImage = ref(null)
             const loadQrCode = async () => {
                 try{
-                    const res = await axios.post("/collectAllWebsiteDatas", { 'table_name':'miniweb_qrcode', cd_id:cd_id })
+                    const res = await axios.post("/collectAllWebsiteDatas", { 'table_name':'miniweb_qrcode', cd_id:cd_id.value })
                     const data = res?.data?.getData?.[0];
                     if(!data) return;
 
@@ -1642,7 +1667,7 @@
             const showPlan = ref(false)
             function gotoPlanPopup(){
                 // showPlan.value = true
-                router.push('/dashboard')
+                router.visit('/dashboard')
             }
             // plan popup close
             function gotoPlanPopupClose(){
@@ -1732,7 +1757,7 @@
                 // console.log("SUBMITTED VALUES:", values);
                 try {
                     // values.miniWebId = Number(cardStore.cardId)
-                    values.miniWebId = cd_id
+                    values.miniWebId = cd_id.value
                     const resData = await axios.post('/saveEnquiryData',{...values});
                     if(resData.data.status == true){
                         enquiryUserName.value = ''
@@ -1796,7 +1821,7 @@
                         fbphone: values.fbphone,
                         fbmessage: values.fbmessage,
                         // miniWebId: Number(cardStore.cardId),
-                        miniWebId: cd_id,
+                        miniWebId: cd_id.value,
                     })
 
                     
@@ -2021,7 +2046,11 @@
                 s3PaymenyUrl,
                 s3QrCodeUrl,
                 s3LogoUrl,
-                handleWhatsAppShare
+                handleWhatsAppShare,
+                decoded,
+                cd_id,
+                templateId,
+                purchaseID
             }
         }
     }

@@ -5,19 +5,20 @@
             <p class="font-mono text-[12px] md:text-[14px] lg:text-[16px]">{{ slogan }}</p>
         </div>
 
-        <router-link to="/dashboard">
+        <Link href="/dashboard">
             <button
                 class="outline outline-1 bg-gray-800 text-white font-semibold
                     text-[12px] p-1 px-2
                     rounded-xl ">
                 Go To Dashboard
             </button>
-        </router-link>
+        </Link>
     </div>
 </template>
 
 <script>
     import {ref, onMounted} from "vue"
+    import { router } from '@inertiajs/vue3'
     export default {
         name: 'HeaderTab',
         setup(){

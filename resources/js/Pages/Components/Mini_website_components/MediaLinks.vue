@@ -13,7 +13,7 @@
                 <!-- top header -->
                 <div class="flex flex-row md:flex-row w-full py-5 px-5 bg-white mt-2  justify-between gap-3 md:gap-0 border border-sky-500/30">
                     <!-- Left Side Button -->
-                    <router-link to="/Aboutus">
+                    <Link href="/Aboutus">
                         <button
                             class="outline outline-1 outline-pink-500 text-pink-500 font-semibold
                                 py-1.5 px-3 text-sm 
@@ -22,7 +22,7 @@
                                 hover:-translate-y-2 hover:shadow-xl">
                             About Us
                         </button>
-                    </router-link>
+                    </Link>
 
                     <!-- Right Side Button -->
                     <button
@@ -199,7 +199,8 @@
     import SideNavBar from '../SideNavBar.vue';
     import Header_tab from '../Header_tab.vue';
     import { useCardStore } from '@/stores/cardStore';
-    import { useRouter } from "vue-router";
+    // import { useRouter } from "vue-router";
+    import { router, usePage } from '@inertiajs/vue3'
     import { Form, Field, ErrorMessage, useForm, useField } from "vee-validate";
     import * as yup from "yup";
     import { toast } from 'vue3-toastify'
@@ -209,7 +210,8 @@
         name: "MediaLinks",
         components: { SideNavBar, Header_tab },
         setup(){
-            const router = useRouter()
+            const page = usePage();
+            // const router = useRouter()
             const isSubmitting = ref(false);
             const cardStore = useCardStore()
 
@@ -217,7 +219,7 @@
             const cardID = ref('')
             const rowid = ref('')
             const currData = ref({})
-            userID.value = JSON.parse(localStorage.getItem('user')).id 
+            userID.value = computed(() => page.props.auth.user?.id)
             cardID.value = JSON.parse(localStorage.getItem('cardId'))
 
             onMounted(async() => {
@@ -225,14 +227,16 @@
                 const res = await axios.post('/getWebsiteDetails', {'table': 'miniweb_social_links', 'cardId' : Number(cardStore.cardId)})
                 if(res.data.status==true){
                     currData.value = res.data.getData[0]
-                    facebookUrl.value = currData.value.facebook_url
-                    instagramUrl.value = currData.value.instagram_url
-                    whatsappUrl.value = currData.value.whatsapp_link
-                    youtubeUrl1.value = currData.value.youtube_Url1
-                    youtubeUrl2.value = currData.value.youtube_Url2
-                    instaReals1.value = currData.value.instaReals_Url1
-                    instaReals2.value = currData.value.instaReals_Url2
-                    rowid.value = currData.value.id
+                    if(currData.value){
+                        facebookUrl.value = currData.value.facebook_url
+                        instagramUrl.value = currData.value.instagram_url
+                        whatsappUrl.value = currData.value.whatsapp_link
+                        youtubeUrl1.value = currData.value.youtube_Url1
+                        youtubeUrl2.value = currData.value.youtube_Url2
+                        instaReals1.value = currData.value.instaReals_Url1
+                        instaReals2.value = currData.value.instaReals_Url2
+                        rowid.value = currData.value.id
+                    }
                 }
             });
 
@@ -276,7 +280,7 @@
                         instaReals2 .value = ''
                         rowid.value = ''
                         toast.success(resData.data.message);
-                        router.push("/Products");
+                        router.visit("/Products");
                     }
                     else
                     {

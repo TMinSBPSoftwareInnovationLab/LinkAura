@@ -8,14 +8,21 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MiniWebsiteController;
 
 
-Route::post('/userRegister',[AuthController::class, 'userRegister']);
-Route::post('/checkExistMobile',[AuthController::class, 'checkExistMobile']);
-Route::post('/login',[AuthController::class, 'login']);
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/profile', function (Request $request) {
-        return response()->json($request->user());
-    });
+/*
+|--------------------------------------------------------------------------
+| Public Pages (meta.public = true)
+|--------------------------------------------------------------------------
+*/
+
+// Home Page
+Route::get('/', function () {
+    return Inertia::render('Website/Index');
 });
+
+Route::post('/userRegister',[AuthController::class, 'userRegister']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/checkExistMobile',[AuthController::class, 'checkExistMobile']);
+// old backup
 // forgot password
 Route::post('/forgotPassword',[AuthController::class, 'forgotPassword']);
 
@@ -78,28 +85,158 @@ Route::get('/preview-bill', function () {
     return view('emails.sample_bill_template', $data);
 });
 // sample bill generation /.
+// old backup /.
 
+
+// Login
+Route::get('/login', function () {
+    return Inertia::render('Views/Login');
+})->name('login');;
+
+// Forgot Password
+Route::get('/ForgotPass', function () {
+    return Inertia::render('Views/Forgot_pass');
+});
+
+// Registration
+Route::get('/registration', function () {
+    return Inertia::render('Views/Registration');
+});
+
+// School Registration
+Route::get('/SchoolReg', function () {
+    return Inertia::render('Views/SchoolReg');
+});
+
+// Mini Website Enquiry (public)
+Route::get('/MiniWebEnquiry', function () {
+    return Inertia::render('MiniWeb_enquiry');
+});
+
+// Feedback Verify (public)
+Route::get('/FeedbackVerify', function () {
+    return Inertia::render('FeedbackVerify');
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| Protected Pages (auth required)
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth:sanctum'])->group(function () {
+
+    // Dashboard
+    Route::get('/dashboard', function () {
+        return Inertia::render('Pages/Dashboard');
+    });
+
+    // Company Details
+    Route::get('/Company_details', function () {
+        return Inertia::render('Components/Mini_website_components/Company_details');
+    });
+
+    // Website Temp Main Page
+    Route::get('/Website_temp', function () {
+        return Inertia::render('Components/Mini_website_components/Mini_Website_Temp');
+    });
+
+    // Address
+    Route::get('/Address', function () {
+        return Inertia::render('Components/Mini_website_components/Address');
+    });
+
+    // About Us
+    Route::get('/Aboutus', function () {
+        return Inertia::render('Components/Mini_website_components/Aboutus');
+    });
+
+    // Media Links
+    Route::get('/MediaLinks', function () {
+        return Inertia::render('Components/Mini_website_components/MediaLinks');
+    });
+
+    // Products
+    Route::get('/Products', function () {
+        return Inertia::render('Components/Mini_website_components/Products');
+    });
+
+    // Services
+    Route::get('/Service', function () {
+        return Inertia::render('Components/Mini_website_components/Service');
+    });
+
+    // Gallery
+    Route::get('/Gallery', function () {
+        return Inertia::render('Components/Mini_website_components/Gallery');
+    });
+
+    // Payment Details
+    Route::get('/PaymentDetails', function () {
+        return Inertia::render('Components/Mini_website_components/PaymentDetails');
+    });
+
+    // Billing Success
+    Route::get('/BillingSuccess', function () {
+        return Inertia::render('billing/billing_success');
+    });
+
+    // Billing Failure
+    Route::get('/BillingFailure', function () {
+        return Inertia::render('billing/billing_failure');
+    });
+
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| Dynamic Website Template (🔥 Important Conversion)
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/{company}/Website_Temp_{themeIdEnc}', function ($company, $themeIdEnc) {
+
+    try {
+        // Base64 decode
+        $decodedId = base64_decode($themeIdEnc);
+
+        // Map theme → Inertia page
+        $map = [
+            1 => 'Mini_Website_Pages/Website_Temp_1',
+            2 => 'Mini_Website_Pages/Website_Temp_2',
+            3 => 'Mini_Website_Pages/Website_Temp_3',
+            4 => 'Mini_Website_Pages/Website_Temp_4',
+            5 => 'Mini_Website_Pages/Website_Temp_5',
+            6 => 'Mini_Website_Pages/Website_Temp_6',
+        ];
+
+        // Invalid themeனா homeக்கு redirect
+        if (!isset($map[$decodedId])) {
+            return redirect('/');
+        }
+
+        // சரியான template load
+        return Inertia::render($map[$decodedId], [
+            'company' => $company,
+            'themeId' => $decodedId
+        ]);
+
+    } catch (\Exception $e) {
+        return redirect('/');
+    }
+
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| Fallback Route (IMPORTANT)
+|--------------------------------------------------------------------------
+*/
+
+// Vue Routerக்கு பதிலா இது catch-all route
 Route::get('/{any}', function () {
-    return view('welcome');
+    return Inertia::render('Website/Index');
 })->where('any', '.*');
-
-// Route::get('/', function () {
-//     return Inertia::render('Welcome', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//         'laravelVersion' => Application::VERSION,
-//         'phpVersion' => PHP_VERSION,
-//     ]);
-// });
-
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
-// Route::middleware('auth')->group(function () {
-//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-// });
-
-// require __DIR__.'/auth.php';

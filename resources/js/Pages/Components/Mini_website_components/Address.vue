@@ -12,7 +12,7 @@
                 <!-- top header -->
                 <div class="flex flex-row md:flex-row w-full py-5 px-5 bg-white mt-2  justify-between gap-3 md:gap-0 border border-sky-500/30">
                     <!-- Left Side Button -->
-                    <router-link to="/Website_temp">
+                    <Link href="/Website_temp">
                         <button
                             class="outline outline-1 outline-pink-500 text-pink-500 font-semibold
                                 py-1.5 px-3 text-sm 
@@ -21,7 +21,7 @@
                                 hover:-translate-y-2 hover:shadow-xl">
                             Website Template
                         </button>
-                    </router-link>
+                    </Link>
 
                     <!-- Right Side Button -->
                     <button
@@ -161,17 +161,19 @@
     import SideNavBar from '../SideNavBar.vue';
     import Header_tab from '../Header_tab.vue';
     import { useCardStore } from '@/stores/cardStore';
-    import { useRouter } from "vue-router";
+    // import { useRouter } from "vue-router";
     import { Form, Field, ErrorMessage, useForm, useField } from "vee-validate";
     import * as yup from "yup";
     import { toast } from 'vue3-toastify'
     import axios from 'axios';
+    import { router, usePage } from '@inertiajs/vue3'
 
     export default {
         name: "Address",
         components: { SideNavBar, Header_tab },
         setup(){
-            const router = useRouter()
+            const page = usePage();
+            // const router = useRouter()
             const isSubmitting = ref(false);
             const cardStore = useCardStore()
 
@@ -179,8 +181,9 @@
             const cardID = ref('')
             const rowid = ref('')
             const currData = ref({})
-            userID.value = JSON.parse(localStorage.getItem('user')).id 
+            userID.value = computed(() => page.props.auth.user?.id)
             cardID.value = JSON.parse(localStorage.getItem('cardId'))
+            const regMobile = ref("")
 
             // get datas
             onMounted( async() => {
@@ -193,6 +196,8 @@
                     email.value = currData.value.email
                     rowid.value = currData.value.id
                 }
+
+                regMobile.value = page.props.auth.user?.mobile_number || '';
             });
             
             // save and go to media links
@@ -226,7 +231,7 @@
             const { value: address, errorMessage: addressError } = useField('address');
 
             // set the phone number from the user registration
-            phone_number.value = JSON.parse(localStorage.getItem('user')).mobile_number
+            phone_number.value = regMobile.value
 
             const onSubmit = handleSubmit(async (values) => {
                 isSubmitting.value = true;
@@ -241,7 +246,7 @@
                         address.value = '';
                         rowid.value = '';
                         toast.success(resData.data.message);
-                        router.push("/Aboutus");
+                        router.visit("/Aboutus");
 
                     }
                     else
@@ -280,6 +285,7 @@
                 cardID,
                 rowid,
                 isSubmitting,
+                regMobile,
             }
         }
     }

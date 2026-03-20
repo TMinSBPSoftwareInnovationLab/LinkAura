@@ -13,7 +13,7 @@
             <!-- main content area -->
             <div class="flex flex-row md:flex-row w-full py-5 px-5 bg-white mt-2  justify-between gap-3 md:gap-0 border border-sky-500/30">
                 <!-- Left Side Button -->
-                <router-link to="/dashboard">
+                <Link href="/dashboard">
                     <button
                         class="outline outline-1 outline-pink-500 text-pink-500 font-semibold
                             py-1.5 px-3 text-sm
@@ -22,10 +22,10 @@
                             hover:-translate-y-2 hover:shadow-xl">
                         Dashboard
                     </button>
-                </router-link>
+                </Link>
 
                 <!-- Right Side Button -->
-                <router-link to="/Website_temp">
+                <Link href="/Website_temp">
                     <button v-if="rowid"
                         class="bg-[#000b57] text-white
                             py-1.5 px-3 text-sm
@@ -34,7 +34,7 @@
                             hover:-translate-y-2 hover:shadow-xl">
                         Website Template
                     </button>
-                </router-link>
+                </Link>
             </div>
 
             <!-- heading page -->
@@ -140,13 +140,16 @@
     import Swal from 'sweetalert2';
     import axios from 'axios';
     import { useCardStore } from '@/stores/cardStore';
-    import { useRouter } from "vue-router";
+    // import { useRouter } from "vue-router";
+    import { router, usePage } from '@inertiajs/vue3'
 
     export default {
         components: { SideNavBar, Header_tab, Form, Field, ErrorMessage},
         name: "Company_Details",
         setup(){
-            const router = useRouter();
+            const page = usePage();
+            const userId = computed(() => page.props.auth.user?.id);
+            // const router = useRouter();
             const mini_web_id = ref('')
             const user_id = ref('')
             const cardStore = useCardStore() // store card id
@@ -170,10 +173,10 @@
             const { value: company_name, errorMessage: companynameError } = useField('company_name');
             const { value: owner_name, errorMessage: ownernameError } = useField('owner_name');
             const { value: designation, errorMessage: designationError } = useField('designation');
-
+            
             const submitForm = handleSubmit(async (values, {resetForm}) => {
                 isSubmitting.value = true;
-                const user_id = JSON.parse(localStorage.getItem('user')).id;
+                const user_id = userId.value;
                 const formData = new FormData();
                 formData.append("company_name", values.company_name);
                 formData.append("owner_name", values.owner_name);
@@ -212,7 +215,7 @@
                     // Clear file input & preview
                     logoFile.value = null;
                     previewImage.value = null;
-                    router.push('/Website_temp')
+                    router.visit('/Website_temp')
                 } catch (error) {
                     Swal.fire({
                         icon: "error",
@@ -334,6 +337,7 @@
                 designationError,
                 previewImage,
                 s3LogoUrl,
+                userId,
             }
         }
     }

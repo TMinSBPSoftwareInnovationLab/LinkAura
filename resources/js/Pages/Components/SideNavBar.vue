@@ -112,7 +112,8 @@
 <script>
 import { ref, computed, onMounted } from "vue";
 import logo from '@/assets/images/commonImages/linkAura_logo.png'
-import { useRouter } from 'vue-router';
+// import { useRouter } from 'vue-router';
+import { router, usePage } from '@inertiajs/vue3';
 
 import {
     HomeIcon,
@@ -135,11 +136,16 @@ export default {
     name: "SideNavBar",
 
     setup() {
-        const router = useRouter();
+        const page = usePage();
+        console.log("session: ",page.props.auth.user);
+        const userId = computed(() => page.props.auth.user?.id);
+        const username = computed(() => page.props.auth.user?.name);
+        const email = computed(() => page.props.auth.user?.email);
+        // const router = useRouter();
         const open = ref(false);
         const active = ref("");
-        const username = ref("User");
-        const email = ref("user@gmail.com");
+        // const username = ref("User");
+        // const email = ref("user@gmail.com");
         const userImage = ref("/default-avatar.png");
         const menu = ref([]);
 
@@ -182,12 +188,12 @@ export default {
             const currentMenu = flatMenus.value.find(item => item.url === currentPath);
             active.value = currentMenu ? currentMenu.name : "";
             // console.log("active.value : ",currentMenu)
-            const user = JSON.parse(localStorage.getItem("user"));
-            if (user) {
-                username.value = user.name ?? "User";
-                email.value = user.email ?? "email@example.com";
-                userImage.value = user.profile ?? "/default-avatar.png";
-            }
+            // const user = JSON.parse(localStorage.getItem("user"));
+            // if (user) {
+            //     username.value = user.name ?? "User";
+            //     email.value = user.email ?? "email@example.com";
+            //     userImage.value = user.profile ?? "/default-avatar.png";
+            // }
 
             const path = window.location.pathname;
 
@@ -219,7 +225,7 @@ export default {
 
         const navigate = (item) => {
             active.value = item.name;
-            router.push(item.url);
+            router.visit(item.url);
         };
 
         return {
@@ -236,6 +242,7 @@ export default {
             menu,
             logo,
             goToProfileEdit,
+            userId,
         };
     }
 };

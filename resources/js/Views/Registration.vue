@@ -153,7 +153,7 @@
 
                         <p class="text-[14px] font-bold">
                         Already member?
-                        <router-link to="/login" class="text-rose-600 hover:underline">SIGN IN</router-link>
+                        <Link href="/login" class="text-rose-600 hover:underline">SIGN IN</Link>
                         </p>
                     </Form>
                 </div>
@@ -177,13 +177,14 @@
     import leftBgImage from '@/assets/images/loginImages/leftBg1.jpg';
     import Swal from 'sweetalert2';
     import axios from 'axios';
-    import { useRouter } from "vue-router";
+    import { router } from '@inertiajs/vue3'
+    // import { useRouter } from "vue-router";
 
     export default {
         name: 'Registration',
         components: { Form, Field, ErrorMessage },
         setup(){
-            const router = useRouter();
+            // const router = useRouter();
             const footer_year = new Date().getFullYear();
             const showPass = ref(false);
             const showConfirmPass = ref(false);
@@ -262,7 +263,7 @@
                             confirmButtonText: 'OK'
                         }) 
                         resetForm();
-                        router.push('/login')
+                        router.visit('/login')
                     }
                     else
                     {

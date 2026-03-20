@@ -143,14 +143,14 @@
     import leftBgImage from '@/assets/images/loginImages/leftBg1.jpg';
     import axios from 'axios';
     import Swal from 'sweetalert2';
-    // import { router } from '@inertiajs/vue3'
+    import { router } from '@inertiajs/vue3'
     import { useRouter } from 'vue-router';
     // const router = useRouter();
     export default {
         name: 'ForgotPass',
         components: { Form, Field, ErrorMessage },
         setup(){
-            const router = useRouter();
+            // const router = useRouter();
             const footer_year = new Date().getFullYear();
             const showPassword = ref(false);
             const isLoading = ref(false);
@@ -208,7 +208,7 @@
                             confirmButtonText: 'OK'
                         }) 
                         resetForm();
-                        router.push('/Login');
+                        router.visit('/login');
                     }
                     else
                     {

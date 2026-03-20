@@ -88,7 +88,7 @@
                                     </span>
                                 </div>
                             </Field>
-                            <p class="text-[14px] font-bold p-1"><router-link to="/ForgotPass" class="text-rose-600 hover:underline">Forgot Password?</router-link> </p>
+                            <p class="text-[14px] font-bold p-1"><Link href="/ForgotPass" class="text-rose-600 hover:underline">Forgot Password?</Link> </p>
 
                             <ErrorMessage name="password" class="text-red-500 text-sm mt-1" />
                         </div>
@@ -109,7 +109,8 @@
                             Logging in...
                         </span>
                         </button>
-                        <p class="text-[14px] font-bold">Not a member? <router-link to="/registration" class="text-rose-600 hover:underline">Signup now</router-link> </p>
+                        <p class="text-[14px] font-bold">Not a member? 
+                            <Link href="/registration" class="text-rose-600 hover:underline">Signup now</Link></p>
                     </Form>
                 </div>
             </div>
@@ -132,14 +133,14 @@
     import leftBgImage from '@/assets/images/loginImages/leftBg1.jpg';
     import axios from 'axios';
     import Swal from 'sweetalert2';
-    // import { router } from '@inertiajs/vue3'
-    import { useRouter } from 'vue-router';
+    import { router } from '@inertiajs/vue3'
+    // import { useRouter } from 'vue-router';
     // const router = useRouter();
     export default {
         name: 'Login',
         components: { Form, Field, ErrorMessage },
         setup(){
-            const router = useRouter();
+            // const router = useRouter();
             const footer_year = new Date().getFullYear();
             const showPassword = ref(false);
             const isLoading = ref(false);
@@ -165,77 +166,31 @@
                 password: yup.string().required("Password is required"),
             });
 
-            const submitLogin = async (values) => {
+            const submitLogin = (values) => {
                 isLoading.value = true;
-                try {
-                    const res = await axios.post('/login', {
-                        mobile: values.phone,
-                        password: values.password
-                    }, { withCredentials: true });
 
-                    if (!res.data.status) {
-                        return Swal.fire({
-                            title: "Error!",
-                            text: res.data.message || "Invalid credentials",
-                            icon: "error",
+                router.post('/login', {
+                    mobile: values.phone,
+                    password: values.password
+                }, {
+                    onSuccess: () => {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Login successful!',
+                            icon: 'success'
                         });
-                    }
-
-                    // Store token
-                    const token = res.data.token;
-                    // console.log("Token:", token);
-                    // Attach token for all future API calls
-                    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-                    // Now request profile
-                    try{
-                        const profileData = await axios.get('/api/profile', {
-                            headers: {
-                                Authorization: `Bearer ${token}`
-                            }
-                        });
-
-                        // console.log("profileData : ",profileData.data)
-                        if(profileData.data){
-                            localStorage.setItem('user', JSON.stringify(profileData.data))
-                            localStorage.setItem('user_token', res.data.token)
-                            Swal.fire({
-                                title: 'Success!',
-                                text: 'Login successful!',
-                                icon: 'success',
-                                confirmButtonText: 'OK'
-                            })
-                            router.push('/dashboard');
-                        }
-                        else
-                        {
-                            Swal.fire({
-                                title: "Error!",
-                                text: profileData.data.message || "Login Invalid credentials",
-                                icon: "error",
-                            });
-                        }
-                    }
-                    catch(error){
+                    },
+                    onError: (errors) => {
                         Swal.fire({
                             title: "Error!",
-                            text: error.response?.data?.message || "Invalid Credentials",
+                            text: errors.mobile || errors.password || "Invalid credentials",
                             icon: "error",
                         });
-                        return;
+                    },
+                    onFinish: () => {
+                        isLoading.value = false;
                     }
-                        
-                } catch (error) {
-                    // console.log(error)
-                    Swal.fire({
-                        title: "Error!",
-                        text: error.response?.data?.message || "Invalid Credentials",
-                        icon: "error",
-                    });
-                }
-                finally {
-                    isLoading.value = false;
-                }
+                });
             };
 
 

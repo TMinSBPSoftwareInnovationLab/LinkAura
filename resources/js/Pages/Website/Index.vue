@@ -5,6 +5,7 @@
 
 
 <script>
+    import { router } from '@inertiajs/vue3'
     import { ref, onMounted } from "vue";
     import HeadSection from './Components/Header.vue'
     import WebMainPage from "./Components/WebMainPage.vue";

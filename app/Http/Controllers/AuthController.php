@@ -106,15 +106,21 @@ class AuthController extends Controller
             ], 401);
         }
 
-        // Create token
-        $token = $user->createToken('TMEA_Success_LinkAura')->plainTextToken;
+        Auth::login($user);
+        $request->session()->regenerate();
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Login successful',
-            'token' => $token,
-            'user' => $user,
-        ], 200);
+        // redirect to dashboard
+        return redirect('/dashboard');
+
+        // Create token
+        // $token = $user->createToken('TMEA_Success_LinkAura')->plainTextToken;
+
+        // return response()->json([
+        //     'status' => true,
+        //     'message' => 'Login successful',
+        //     'token' => $token,
+        //     'user' => $user,
+        // ], 200);
     }
 
     // forgot password

@@ -28,11 +28,11 @@
 
       <!-- Right: Login + Mobile Menu Button -->
       <div class="flex items-center space-x-4">
-        <router-link to="/login" target="_blank">
+        <Link href="/login" target="_blank">
             <button class="bg-[#3d023a] text-white px-4 py-1 rounded-md hover:bg-[#3d023a] transition">
                 Login
             </button>
-        </router-link>
+        </Link>
 
         <!-- Mobile Menu Button -->
         <button

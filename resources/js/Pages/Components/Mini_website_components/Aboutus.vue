@@ -13,7 +13,7 @@
                 <!-- top header -->
                 <div class="flex flex-row md:flex-row w-full py-5 px-5 bg-white mt-2  justify-between gap-3 md:gap-0 border border-sky-500/30">
                     <!-- Left Side Button -->
-                    <router-link to="/Address">
+                    <Link href="/Address">
                         <button
                             class="outline outline-1 outline-pink-500 text-pink-500 font-semibold
                                 py-1.5 px-3 text-sm 
@@ -22,7 +22,7 @@
                                 hover:-translate-y-2 hover:shadow-xl">
                             Address
                         </button>
-                    </router-link>
+                    </Link>
 
                     <!-- Right Side Button -->
                     <button
@@ -107,17 +107,19 @@
     import SideNavBar from '../SideNavBar.vue';
     import Header_tab from '../Header_tab.vue';
     import { useCardStore } from '@/stores/cardStore';
-    import { useRouter } from "vue-router";
+    // import { useRouter } from "vue-router";
     import { Form, Field, ErrorMessage, useForm, useField } from "vee-validate";
     import * as yup from "yup";
     import { toast } from 'vue3-toastify'
     import axios from 'axios';
+    import { router, usePage } from '@inertiajs/vue3'
 
     export default {
         name: "AboutUs",
         components: { SideNavBar, Header_tab },
         setup(){
-            const router = useRouter()
+            const page = usePage();
+            // const router = useRouter()
             const isSubmitting = ref(false);
             const cardStore = useCardStore()
 
@@ -125,7 +127,7 @@
             const cardID = ref('')
             const rowid = ref('')
             const currData = ref({})
-            userID.value = JSON.parse(localStorage.getItem('user')).id 
+            userID.value = computed(() => page.props.auth.user?.id)
             cardID.value = JSON.parse(localStorage.getItem('cardId'))
 
             onMounted(async()=>{
@@ -133,8 +135,10 @@
                 const res = await axios.post('/getWebsiteDetails', {'table': 'miniweb_aboutus', 'cardId' : Number(cardStore.cardId)})
                 if(res.data.status==true){
                     currData.value = res.data.getData[0]
-                    aboutusPara.value = currData.value.aboutus_text
-                    rowid.value = currData.value.id
+                    if(currData.value){
+                        aboutusPara.value = currData.value.aboutus_text || ''
+                        rowid.value = currData.value.id
+                    }                    
                 }
             })
 
@@ -158,7 +162,7 @@
                         aboutusPara.value = ''
                         rowid.value = ''
                         toast.success(resData.data.message);
-                        router.push("/MediaLinks");
+                        router.visit("/MediaLinks");
                     }
                     else
                     {

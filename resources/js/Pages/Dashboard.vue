@@ -12,14 +12,12 @@
 
             <!-- main content area -->
              <div class="flex w-full py-5 px-5 bg-white mt-2 justify-end">
-                <!-- <router-link to="/Company_details"> -->
-                    <button @click="gotoCompany_details"
-                        class="bg-[#000b57] text-white py-2 px-4 rounded-xl 
-                                transition-all duration-500 
-                                hover:-translate-y-2 hover:shadow-xl">
-                            Create Mini Website
-                    </button>
-                <!-- </router-link> -->
+                <button @click="gotoCompany_details"
+                    class="bg-[#000b57] text-white py-2 px-4 rounded-xl 
+                            transition-all duration-500 
+                            hover:-translate-y-2 hover:shadow-xl">
+                        Create Mini Website
+                </button>
 
              </div>
              <div class="flex flex-col w-full bg-white p-5">
@@ -349,9 +347,12 @@ import defaultLogo from '@/assets/images/commonImages/linkAura_logo.png'
 import SideNavBar from './Components/SideNavBar.vue';
 import Header_tab from './Components/Header_tab.vue';
 import { ref, onMounted } from "vue";
+import { computed } from "vue";
 import { toast } from 'vue3-toastify'
 import Swal from 'sweetalert2';
-import { useRouter } from "vue-router";
+import { router } from '@inertiajs/vue3'
+import { usePage } from '@inertiajs/vue3';
+// import { useRouter } from "vue-router";
 import { useCardStore } from '@/stores/cardStore';
 import axios from "axios";
 import { AgGridVue } from "ag-grid-vue3";
@@ -365,10 +366,12 @@ export default {
     name: 'Dashboard',
 
     setup(){
-        const router = useRouter();
+        const page = usePage();
+        const userId = computed(() => page.props.auth.user?.id); // get user loged id
+        // const router = useRouter();
         const cardStore = useCardStore() // store card id
         const user_id = ref('')
-        user_id.value = JSON.parse(localStorage.getItem('user')).id;
+        user_id.value = userId.value;
         const rowData = ref([]);
         const shareModal = ref(false);
         const rejectReason = ref("");
@@ -378,7 +381,7 @@ export default {
         const logoFile = ref(null);
         const paymentModel = ref(false) // payment popup
         const websiteRowID = ref() // website rowid
-
+        
         const colDefs = ref([
             {
                 headerName: "S.No",
@@ -413,7 +416,7 @@ export default {
                             // console.log("id", rowId)
                             // localStorage.removeItem('cardId')
                             cardStore.setCardId(rowId);
-                            router.push('/Company_details')
+                            router.visit('/Company_details')
                         };
 
                         container.append(editBtn);
@@ -431,7 +434,7 @@ export default {
                         // console.log("id", rowId)
                         // localStorage.removeItem('cardId')
                         cardStore.setCardId(rowId);
-                        router.push('/Company_details')
+                        router.visit('/Company_details')
                     };
                     container.append(editBtn);
 
@@ -820,7 +823,7 @@ export default {
 
         const gotoCompany_details = async() => {
             localStorage.removeItem('cardId');
-            router.push('/Company_details')
+            router.visit('/Company_details')
         }
 
 
@@ -843,6 +846,7 @@ export default {
             defaultLogo,
             logoFile,
             handleWhatsAppShare,
+            userId,
         };
     }
 };

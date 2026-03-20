@@ -13,7 +13,7 @@
                 <!-- top header -->
                 <div class="flex flex-row md:flex-row w-full py-5 px-5 bg-white mt-2  justify-between gap-3 md:gap-0 border border-sky-500/30">
                     <!-- Left Side Button -->
-                    <router-link to="/Products">
+                    <Link href="/Products">
                         <button
                             class="outline outline-1 outline-pink-500 text-pink-500 font-semibold
                                 py-1.5 px-3 text-sm
@@ -22,7 +22,7 @@
                                 hover:-translate-y-2 hover:shadow-xl">
                             Products
                         </button>
-                    </router-link>
+                    </Link>
 
                     <!-- Right Side Button -->
                     <button
@@ -114,7 +114,8 @@
     import SideNavBar from '../SideNavBar.vue';
     import Header_tab from '../Header_tab.vue';
     import { useCardStore } from '@/stores/cardStore';
-    import { useRouter } from "vue-router";
+    // import { useRouter } from "vue-router";
+    import { router, usePage } from '@inertiajs/vue3'
     import { toast } from 'vue3-toastify'
     import axios from 'axios';
     import { TrashIcon } from '@heroicons/vue/24/solid'
@@ -125,7 +126,8 @@
         name: "Service",
         components: { SideNavBar, Header_tab, TrashIcon },
         setup() {
-            const router = useRouter()
+            const page = usePage();
+            // const router = useRouter()
             const rowid = ref()
             const cardStore = useCardStore()
             const isSubmitting = ref(false);
@@ -318,7 +320,7 @@
                         });
                         services.value = [];
                         toast.success(res.data.message)
-                        router.push('/Gallery')
+                        router.visit('/Gallery')
                     }
                     else
                     {
