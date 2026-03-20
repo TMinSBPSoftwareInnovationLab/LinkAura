@@ -259,14 +259,15 @@
     import { ref, watch, computed, onMounted, nextTick } from 'vue';
     import { useCardStore } from '@/stores/cardStore'
     import { toast } from 'vue3-toastify'
-    import { useRouter } from "vue-router";
+    // import { useRouter } from "vue-router";
+    import { router, usePage } from '@inertiajs/vue3'
     import QRCode from "qrcode"
 
     export default {
         name: "Website_temp",
         components: {SideNavBar, Website_Temp_1, Website_Temp_2, Website_Temp_3,Website_Temp_4,Website_Temp_5,Website_Temp_6, Header_tab},
         setup() {
-            const router = useRouter();
+            // const router = useRouter();
             const isSubmitting = ref(false);
             const qrCodeUrl = ref("")
 
@@ -433,7 +434,7 @@
                     // console.log(websiteSaveResponse)
                     if(response.data.status == true || response.data.status == false){
                         toast.success(response.data.message)
-                        router.push('/Address')
+                        router.visit('/Address')
                         showMobilePopup.value = false
                     }
                     else{
