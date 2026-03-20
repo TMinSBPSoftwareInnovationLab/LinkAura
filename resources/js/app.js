@@ -2,7 +2,8 @@ import './bootstrap';
 import '../css/app.css';
 import '../css/custom.css';
 
-import axios from 'axios';
+// import axios from 'axios';
+import axios from '@/utils/axios';
 import { createApp, h } from 'vue';
 import { createInertiaApp, Head, Link } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
