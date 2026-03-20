@@ -137,7 +137,7 @@ export default {
 
     setup() {
         const page = usePage();
-        console.log("session: ",page.props.auth.user);
+        // console.log("session: ",page.props.auth.user);
         const userId = computed(() => page.props.auth.user?.id);
         const username = computed(() => page.props.auth.user?.name);
         const email = computed(() => page.props.auth.user?.email);
