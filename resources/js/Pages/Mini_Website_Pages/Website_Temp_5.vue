@@ -2220,47 +2220,15 @@
             cpyUrl.value = currentUrl
             encodedUrl.value = encodeURIComponent(currentUrl)
 
-            const handleWhatsAppShare = async () => {
-                // Current URL-ah encode pannuvom
-                const cleanUrl = encodeURI(window.location.href);
-                const message = `✨ *Check out ${companyName.value}!* ✨\n\nVisit our website here:\n${cleanUrl}`;
+            const handleWhatsAppShare = () => {
+                const company = encodeURIComponent(companyName.value);
+                const websiteId = encodedWebsiteId.value; // 🔥 use your actual encoded id
 
-                // Mobile Navigator Share Logic
-                if (navigator.share && logoImage.value) {
-                    try {
-                        // S3 Cache bypass panna timestamp add panrom
-                        const logoWithCacheBuster = `${logoImage.value}?t=${new Date().getTime()}`;
-                        
-                        // 1. Fetch the image
-                        const response = await fetch(logoWithCacheBuster, { 
-                            mode: 'cors',
-                            cache: 'no-cache'
-                        });
-                        
-                        if (!response.ok) throw new Error('Logo fetch failed');
+                const shareUrl = `${window.location.origin}/share/${company}/${websiteId}`;
 
-                        const blob = await response.blob();
-                        
-                        // 2. Create File object (WhatsApp logo-nu oru name kudupom)
-                        const file = new File([blob], "company_logo.png", { type: blob.type });
+                const message = `✨ Check out ${companyName.value}!\n\n${shareUrl}`;
 
-                        // 3. Share with File
-                        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                            await navigator.share({
-                                title: companyName.value,
-                                text: message,
-                                files: [file]
-                            });
-                            return; 
-                        }
-                    } catch (error) {
-                        console.error("Navigator share failed:", error);
-                    }
-                }
-                
-                // Desktop Fallback (Link only)
-                const fallback = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-                window.open(fallback, "_blank");
+                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`, "_blank");
             };
 
 
