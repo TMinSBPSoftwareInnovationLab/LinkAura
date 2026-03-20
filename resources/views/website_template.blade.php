@@ -6,14 +6,18 @@
 
     <title>{{ $website_data->company_name }}</title>
 
-    <!-- OG Tags (VERY IMPORTANT 🔥) -->
     <meta property="og:title" content="{{ $website_data->company_name }}" />
     <meta property="og:description" content="View our professional profile on LinkAura." />
-    <meta property="og:image" content="{{ asset('storage/company_logos/' . $website_data->logo_path) }}" />
-    <meta property="og:url" content="{{ url()->current() }}" />
+
+    <meta property="og:image" content="{{ 
+        $website_data->logo_path 
+        ? asset('storage/company_logos/' . $website_data->logo_path) 
+        : asset('default-logo.png') 
+    }}" />
+
+    <meta property="og:url" content="{{ url('/share/'.$website_data->company_name.'/'.base64_encode($website_data->id)) }}" />
     <meta property="og:type" content="website" />
 
-    <!-- Optional (better preview) -->
     <meta name="twitter:card" content="summary_large_image">
 
 </head>

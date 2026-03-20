@@ -1638,7 +1638,7 @@ class MiniWebsiteController extends Controller
     {
         // 1. Decode the ID
         $decoded_id = base64_decode($website_id);
-
+        
         // 2. Get data from Database
         $website_data = DB::table("miniweb_company_details")->where('id', $decoded_id)->first();
 
