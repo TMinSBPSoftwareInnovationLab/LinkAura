@@ -2222,7 +2222,9 @@
 
             const handleWhatsAppShare = () => {
                 const company = encodeURIComponent(companyName.value);
-                const websiteId = encodedWebsiteId.value; // 🔥 use your actual encoded id
+
+                // 🔥 get encoded id from URL
+                const websiteId = window.location.pathname.split('/').pop();
 
                 const shareUrl = `${window.location.origin}/share/${company}/${websiteId}`;
 
