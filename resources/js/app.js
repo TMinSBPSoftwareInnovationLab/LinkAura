@@ -20,6 +20,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 // ✅ Axios default config (important for auth)
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+axios.defaults.baseURL = window.location.origin;
 
 // ✅ CSRF cookie
 // axios.get('/sanctum/csrf-cookie');
