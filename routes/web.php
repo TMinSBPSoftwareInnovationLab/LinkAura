@@ -129,7 +129,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // Dashboard
     Route::get('/dashboard', function () {
-        return Inertia::render('Pages/Dashboard');
+        return Inertia::render('Dashboard');
     });
 
     // Company Details
