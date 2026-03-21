@@ -1647,7 +1647,7 @@ class MiniWebsiteController extends Controller
                     ->where('id', $companyID)
                     ->where('website_id', $decoded_template_id)
                     ->first();
-        echo 'https://linkaura-company-logos.s3.us-east-1.amazonaws.com/company_logos/' . $company->logo_path;exit;
+        // echo 'https://linkaura-company-logos.s3.us-east-1.amazonaws.com/company_logos/' . $company->logo_path;exit;
         if (!$company) {
             abort(404); 
         }
@@ -1656,7 +1656,7 @@ class MiniWebsiteController extends Controller
         return Inertia::render($templateName, [
             'company' => [
                 'title' => $company->company_name,
-                'image' => asset('storage/' . $company->logo_path), 
+                'image' => 'https://linkaura-company-logos.s3.us-east-1.amazonaws.com/company_logos/' . $company->logo_path, 
                 'url' => url()->current(),
             ],
             'og_data' => [
