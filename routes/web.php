@@ -64,7 +64,8 @@ Route::post('/getwebMediaLinks',[MiniWebsiteController::class, 'getwebMediaLinks
 
 // school admission datas save
 Route::post('/save_school_datas',[MiniWebsiteController::class, 'saveAdmission']);
-Route::get('/{slug}/{company_id}/{website_id}', [MiniWebsiteController::class, 'showCompanyDatas'])->name('company.show');
+// Route::get('/{slug}/{company_id}/{website_id}', [MiniWebsiteController::class, 'showCompanyDatas'])->name('company.show');
+Route::get('/{slug}/{companyID}/{lastPart}', [MiniWebsiteController::class, 'showCompanyDatas'])->name('company.show');
 
 // Route::get('/{company}/Website_Temp_{themeIdEnc}', [MiniWebsiteController::class, 'viewDigitalShop']);
 

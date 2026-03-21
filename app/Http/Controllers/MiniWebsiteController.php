@@ -1636,18 +1636,18 @@ class MiniWebsiteController extends Controller
     }
     
     // final showCompanyDatas
-    public function showCompanyDatas($slug, $company_id, $website_id) { // $website_id சரியாகப் பெறவும்
-    
+    public function showCompanyDatas($slug, $companyID, $lastPart) { // $website_id சரியாகப் பெறவும்
+                    
         // 1. $website_id-ல் இருந்து 'Website_Temp_MQ==' என வந்தால் 'MQ==' மட்டும் பிரிக்க
-        $encodedPart = Str::after($website_id, 'Website_Temp_');
+        $encodedPart = Str::after($lastPart, 'Website_Temp_');
         $decoded_template_id = base64_decode($encodedPart);
 
         // 2. Database Query-ல் பிழை இருந்தது. Array-க்குள் conditions இப்படி இருக்க வேண்டும்:
-        $company = DB::table("miniweb_company_details")
-                    ->where('id', $company_id)
+       return  $company = DB::table("miniweb_company_details")
+                    ->where('id', $companyID)
                     ->where('website_id', $decoded_template_id)
                     ->first();
-
+        
         if (!$company) {
             abort(404); 
         }
