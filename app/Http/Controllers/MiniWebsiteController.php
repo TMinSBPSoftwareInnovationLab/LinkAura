@@ -1654,7 +1654,11 @@ class MiniWebsiteController extends Controller
         $templateName = "Mini_Website_Pages/Website_Temp_" . $decoded_template_id;
                     
         return Inertia::render($templateName, [
-            'company' => $company,
+            'company' => [
+                'title' => $company->company_name,
+                'image' => asset('storage/' . $company->logo_path), 
+                'url' => url()->current(),
+            ],
             'og_data' => [
                 'title' => $company->company_name,
                 'image' => asset('storage/' . $company->logo_path), 
