@@ -1890,17 +1890,18 @@
             const handleWhatsAppShare = () => {
                 const company = encodeURIComponent(companyName.value);
 
-                // 🔥 correct id extract
                 const lastPart = window.location.pathname.split('/').pop();
 
-                // remove "Website_Temp_" prefix
                 const websiteId = lastPart.replace('Website_Temp_', '');
 
-                const shareUrl = `${window.location.origin}/share/${company}/${websiteId}`;
-                console.log("lastPart : ",lastPart)
+                // 🔥 ADD THIS (query params get pannunga)
+                const query = window.location.search; 
+
+                const shareUrl = `${window.location.origin}/share/${company}/${websiteId}${query}`;
+
                 const message = `✨ Check out ${companyName.value}!\n\n${shareUrl}`;
 
-                // window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`, "_blank");
+                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`, "_blank");
             };
 
             const copyToClipboard = async () => {
