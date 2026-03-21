@@ -1888,19 +1888,34 @@
             encodedUrl.value = encodeURIComponent(currentUrl)
 
             const handleWhatsAppShare = () => {
-                const company = encodeURIComponent(companyName.value);
 
+                // 🔥 1. Company name → slug (no space, clean URL)
+                const companySlug = companyName.value
+                    .toLowerCase()
+                    .replace(/[^a-z0-9\s]/g, '') // special chars remove
+                    .replace(/\s+/g, ''); // space remove
+
+                // 🔥 2. முழு last part (Website_Temp_MQ==)
                 const lastPart = window.location.pathname.split('/').pop();
 
-                const websiteId = lastPart; // ✅ full value
+                const websiteId = lastPart; // ❌ replace remove pannala
 
+                // 🔥 3. Query params (ilp88LAsBvm=...)
                 const query = window.location.search;
 
-                const shareUrl = `${window.location.origin}/share/${company}/${websiteId}${query}`;
+                // 🔥 4. Final Share URL
+                const shareUrl = `${window.location.origin}/share/${companySlug}/${websiteId}${query}`;
 
+                console.log("Share URL:", shareUrl);
+
+                // 🔥 5. WhatsApp message
                 const message = `✨ Check out ${companyName.value}!\n\n${shareUrl}`;
 
-                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`, "_blank");
+                // 🔥 6. Open WhatsApp
+                window.open(
+                    `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`,
+                    "_blank"
+                );
             };
 
             const copyToClipboard = async () => {
