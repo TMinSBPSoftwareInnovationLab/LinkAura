@@ -1643,7 +1643,7 @@ class MiniWebsiteController extends Controller
         $decoded_template_id = base64_decode($encodedPart);
 
         // 2. Database Query-ல் பிழை இருந்தது. Array-க்குள் conditions இப்படி இருக்க வேண்டும்:
-        return $company = DB::table("miniweb_company_details")
+        $company = DB::table("miniweb_company_details")
                     ->where('id', $company_id)
                     ->where('website_id', $decoded_template_id)
                     ->first();
@@ -1652,7 +1652,7 @@ class MiniWebsiteController extends Controller
             abort(404); 
         }
         $templateName = "Mini_Website_Pages/Website_Temp_" . $decoded_template_id;
-
+                    
         return Inertia::render($templateName, [
             'company' => $company,
             'og_data' => [

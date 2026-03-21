@@ -2,7 +2,11 @@
     <Head v-if="og_data">
         <title>{{ company?.company_name }}</title>
         <meta property="og:title" :content="og_data.title" />
+        <meta property="og:description" content="Check out our digital business card" />
         <meta property="og:image" :content="og_data.image" />
+        <meta property="og:url" :content="og_data.url" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
     </Head>
     <main class="p-2 px-0 border-2 border-[#6b3f69] bg-[#faf5fb]">
         <div class="max-w-[430px] pb-0 mx-auto grid grid-cols-1  bg-center bg-cover bg-no-repeat ">
@@ -1206,7 +1210,7 @@
 
     export default{
         name: "Website_Temp_1",
-        components: {PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, WebsiteFooterBar, ChevronLeftIcon, ChevronRightIcon, ArrowDownTrayIcon, linkAuraFooter},
+        components: {Head, PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, WebsiteFooterBar, ChevronLeftIcon, ChevronRightIcon, ArrowDownTrayIcon, linkAuraFooter},
         props: {
             // themeId: Number,
             // design: Number,
