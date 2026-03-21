@@ -1389,7 +1389,7 @@
                 is_purchased.value = data.purchased_id
 
                 // Guard check
-                if (cd_id && is_purchased.value <= 0) {
+                if (cd_id.value && is_purchased.value <= 0) {
                     // console.log('Access blocked:', cd_id, is_purchased.value)
 
                     // remove query string
@@ -1402,7 +1402,7 @@
                         replace: true,
                         preserveState: true,
                     });
-                } else if (cd_id) {
+                } else if (cd_id.value) {
                     // console.log('Access allowed:', cd_id, is_purchased.value)
                 }
             };
@@ -1544,7 +1544,7 @@
             const initWebsiteData = async () => {
                 try {
                     // Execute Plan check ONCE
-                    const allowedCount = await getAllowedCount(cd_id);
+                    const allowedCount = await getAllowedCount(cd_id.value);
 
                     // Run both data fetches in parallel for better performance
                     const [prodRes, servRes, gallRes] = await Promise.all([
@@ -1740,7 +1740,7 @@
             };
 
             onMounted(async () => {
-                if (!cd_id) return;
+                if (!cd_id.value) return;
 
                 try {
                     await Promise.all([
@@ -2178,7 +2178,6 @@
                 s3LogoUrl,
                 handleWhatsAppShare,
                 decoded,
-                cd_id,
                 templateId,
                 purchaseID
             }

@@ -1373,7 +1373,7 @@
                 is_purchased.value = data.purchased_id
 
                 // Guard check
-                if (cd_id && is_purchased.value <= 0) {
+                if (cd_id.value && is_purchased.value <= 0) {
                     // console.log("if url full :", is_purchased.value)
                     // console.log('Access blocked 4:', cd_id, is_purchased.value)
 
@@ -1536,7 +1536,7 @@
             const initWebsiteData = async () => {
                 try {
                     // Execute Plan check ONCE
-                    const allowedCount = await getAllowedCount(cd_id);
+                    const allowedCount = await getAllowedCount(cd_id.value);
 
                     // Run both data fetches in parallel for better performance
                     const [prodRes, servRes, gallRes] = await Promise.all([
@@ -1734,7 +1734,7 @@
 
 
             onMounted(async () => {
-                if (!cd_id) return;
+                if (!cd_id.value) return;
 
                 try {
                     await Promise.all([
