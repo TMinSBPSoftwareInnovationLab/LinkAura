@@ -548,7 +548,8 @@ export default {
             let url = '';
             // console.log("view : ",data)
             const encrypt_website_id = btoa(data.website_id)
-            const websitefinalUrl = `/${data.company_name}/Website_Temp_${encrypt_website_id}`
+            const companySlug = data.company_name.replace(/\s+/g, '');
+            const websitefinalUrl = `/${companySlug}/Website_Temp_${encrypt_website_id}`
 
             const params = `cd_id=${data.id}&template_id=${data.websiteTemp_id}`
             const encoded = btoa(params)

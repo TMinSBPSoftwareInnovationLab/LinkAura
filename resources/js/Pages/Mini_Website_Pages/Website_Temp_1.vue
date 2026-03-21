@@ -1890,14 +1890,17 @@
             const handleWhatsAppShare = () => {
                 const company = encodeURIComponent(companyName.value);
 
-                // 🔥 get encoded id from URL
-                const websiteId = window.location.pathname.split('/').pop();
+                // 🔥 correct id extract
+                const lastPart = window.location.pathname.split('/').pop();
+
+                // remove "Website_Temp_" prefix
+                const websiteId = lastPart.replace('Website_Temp_', '');
 
                 const shareUrl = `${window.location.origin}/share/${company}/${websiteId}`;
-
+                console.log("lastPart : ",lastPart)
                 const message = `✨ Check out ${companyName.value}!\n\n${shareUrl}`;
 
-                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`, "_blank");
+                // window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`, "_blank");
             };
 
             const copyToClipboard = async () => {
