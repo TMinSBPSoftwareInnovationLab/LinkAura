@@ -1904,7 +1904,7 @@
                 const query = window.location.search;
 
                 // 🔥 4. Final Share URL
-                const shareUrl = `${window.location.origin}/${companySlug}/${websiteId}${query}`;
+                const shareUrl = `${window.location.origin}/share/${companySlug}/${websiteId}${query}`;
 
                 console.log("Share URL:", shareUrl);
 

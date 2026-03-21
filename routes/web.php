@@ -66,6 +66,8 @@ Route::post('/getwebMediaLinks',[MiniWebsiteController::class, 'getwebMediaLinks
 Route::post('/save_school_datas',[MiniWebsiteController::class, 'saveAdmission']);
 
 // Route::get('/{company}/Website_Temp_{themeIdEnc}', [MiniWebsiteController::class, 'viewDigitalShop']);
+
+Route::get('/share/{company_name}/{website_id}', [MiniWebsiteController::class, 'shareView']);
 Route::get('/{company_name}/{website_id}', [MiniWebsiteController::class, 'websiteView']);
 
 // sample bill generation

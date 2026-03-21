@@ -1649,6 +1649,19 @@ class MiniWebsiteController extends Controller
         return view('website_template', compact('website_data'));
     }
 
+    public function shareView($company_name, $website_id)
+    {
+        $decoded_id = base64_decode(str_replace('Website_Temp_', '', $website_id));
+
+        $website_data = DB::table("miniweb_company_details")
+            ->where('id', $decoded_id)
+            ->first();
+
+        if (!$website_data) { abort(404); }
+
+        return view('website_template', compact('website_data'));
+    }
+
     // facebook meta data collect
     public function viewWebsite($company, $themeIdEnc)
     {   
