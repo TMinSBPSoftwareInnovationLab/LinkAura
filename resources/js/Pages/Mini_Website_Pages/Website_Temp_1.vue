@@ -1,4 +1,9 @@
 <template>
+    <Head v-if="og_data">
+        <title>{{ company?.company_name }}</title>
+        <meta property="og:title" :content="og_data.title" />
+        <meta property="og:image" :content="og_data.image" />
+    </Head>
     <main class="p-2 px-0 border-2 border-[#6b3f69] bg-[#faf5fb]">
         <div class="max-w-[430px] pb-0 mx-auto grid grid-cols-1  bg-center bg-cover bg-no-repeat ">
             <!-- purchase message -->
@@ -1193,7 +1198,7 @@
     import axios from 'axios';
     import { useCardStore } from '@/stores/cardStore'
     import { toast } from 'vue3-toastify'
-    import { router } from '@inertiajs/vue3'
+    import { router,Head } from '@inertiajs/vue3'
     // import { useRoute,useRouter } from 'vue-router'
     import { PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon, ChevronLeftIcon, ChevronRightIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/solid'
     import WebsiteFooterBar from '../Components/WebsiteFooterBar.vue';
@@ -1205,6 +1210,8 @@
         props: {
             // themeId: Number,
             // design: Number,
+            company: Object,
+            og_data: Object,
             isFooter: {
                 type: Boolean,
                 default: true
@@ -1275,7 +1282,7 @@
                 is_purchased.value = data.purchased_id
 
                 // Guard check
-                if (cd_id && is_purchased.value <= 0) {
+                if (cd_id.value && is_purchased.value <= 0) {
                     // console.log('Access blocked:', cd_id, is_purchased.value)
 
                     // remove query string
@@ -1286,7 +1293,7 @@
                         replace: true,
                         preserveState: true,
                     });
-                } else if (cd_id) {
+                } else if (cd_id.value) {
                     // console.log('Access allowed:', cd_id, is_purchased.value)
                 }
             };
@@ -1428,7 +1435,7 @@
             const initWebsiteData = async () => {
                 try {
                     // Execute Plan check ONCE
-                    const allowedCount = await getAllowedCount(cd_id);
+                    const allowedCount = await getAllowedCount(cd_id.value);
 
                     // Run both data fetches in parallel for better performance
                     const [prodRes, servRes, gallRes] = await Promise.all([
@@ -1888,35 +1895,50 @@
             encodedUrl.value = encodeURIComponent(currentUrl)
 
             const handleWhatsAppShare = () => {
-
-                // 🔥 1. Company name → slug (no space, clean URL)
+                const companyID = cd_id.value
                 const companySlug = companyName.value
                     .toLowerCase()
-                    .replace(/[^a-z0-9\s]/g, '') // special chars remove
-                    .replace(/\s+/g, ''); // space remove
+                    .replace(/[^a-z0-9\s]/g, '')
+                    .replace(/\s+/g, '');
 
-                // 🔥 2. முழு last part (Website_Temp_MQ==)
                 const lastPart = window.location.pathname.split('/').pop();
-
-                const websiteId = lastPart; // ❌ replace remove pannala
-
-                // 🔥 3. Query params (ilp88LAsBvm=...)
                 const query = window.location.search;
 
-                // 🔥 4. Final Share URL
-                const shareUrl = `${window.location.origin}/share/${companySlug}/${websiteId}${query}`;
+                // This is the URL WhatsApp will crawl for the logo
+                // const shareUrl = `${window.location.origin}/${companySlug}/${lastPart}${query}`;
+                const shareUrl = `${window.location.origin}/${companySlug}/${companyID}/${lastPart}${query}`;
+                console.log("final shareUrl : ",shareUrl)
+                // Formatting the message
+                const message = `✨ *${companyName.value}*\n\nCheck this out here:\n${shareUrl}`;
 
-                console.log("Share URL:", shareUrl);
+                const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+                
+                window.open(whatsappUrl, "_blank");
+            };
 
-                // 🔥 5. WhatsApp message
-                const message = `✨ Check out ${companyName.value}!\n\n${shareUrl}`;
+            /*
+            const handleWhatsAppShare = () => {
 
-                // 🔥 6. Open WhatsApp
+                const companySlug = companyName.value
+                    .toLowerCase()
+                    .replace(/[^a-z0-9\s]/g, '')
+                    .replace(/\s+/g, '');
+
+                const lastPart = window.location.pathname.split('/').pop();
+
+                const query = window.location.search;
+
+                const shareUrl = `${window.location.origin}/share/${companySlug}/${lastPart}${query}`;
+
+                // 🔥 முக்கியம்: message simple ஆக இருக்கணும்
+                const message = `✨ ${companyName.value}\n\n${shareUrl}`;
+
                 window.open(
                     `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`,
                     "_blank"
                 );
             };
+            */
 
             const copyToClipboard = async () => {
                 const textToCopy = cpyUrl.value;

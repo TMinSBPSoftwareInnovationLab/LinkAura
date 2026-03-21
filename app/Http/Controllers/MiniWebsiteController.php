@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
+use Illuminate\Support\Str;
 
 class MiniWebsiteController extends Controller
 {
@@ -1633,6 +1634,35 @@ class MiniWebsiteController extends Controller
             'metaImage' => $shop->logo_url // Thumbnail image link
         ]);
     }
+    
+    // final showCompanyDatas
+    public function showCompanyDatas($slug, $company_id, $website_id) { // $website_id சரியாகப் பெறவும்
+    
+        // 1. $website_id-ல் இருந்து 'Website_Temp_MQ==' என வந்தால் 'MQ==' மட்டும் பிரிக்க
+        $encodedPart = Str::after($website_id, 'Website_Temp_');
+        $decoded_template_id = base64_decode($encodedPart);
+
+        // 2. Database Query-ல் பிழை இருந்தது. Array-க்குள் conditions இப்படி இருக்க வேண்டும்:
+        $company = DB::table("miniweb_company_details")
+                    ->where('id', $company_id)
+                    ->where('website_id', $decoded_template_id)
+                    ->first();
+
+        if (!$company) {
+            abort(404); 
+        }
+        $templateName = "Mini_Website_Pages/Website_Temp_" . $decoded_template_id;
+
+        return Inertia::render($templateName, [
+            'company' => $company,
+            'og_data' => [
+                'title' => $company->company_name,
+                'image' => asset('storage/' . $company->logo_path), 
+                'url' => url()->current(),
+            ]
+        ]);    
+    }
+
 
     public function websiteView($company_name, $website_id)
     {
@@ -1646,19 +1676,6 @@ class MiniWebsiteController extends Controller
         if (!$website_data) { abort(404); }
 
         // 4. Blade file-ku data-vah anupuvom
-        return view('website_template', compact('website_data'));
-    }
-
-    public function shareView($company_name, $website_id)
-    {
-        $decoded_id = base64_decode(str_replace('Website_Temp_', '', $website_id));
-
-        $website_data = DB::table("miniweb_company_details")
-            ->where('id', $decoded_id)
-            ->first();
-
-        if (!$website_data) { abort(404); }
-
         return view('website_template', compact('website_data'));
     }
 
