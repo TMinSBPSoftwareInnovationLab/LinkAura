@@ -1634,17 +1634,19 @@ class MiniWebsiteController extends Controller
         ]);
     }
 
-    public function shareView($company_name, $website_id)
+    public function websiteView($company_name, $website_id)
     {
+        // 1. Decode the ID
         $decoded_id = base64_decode($website_id);
+        
+        // 2. Get data from Database
+        $website_data = DB::table("miniweb_company_details")->where('id', $decoded_id)->first();
 
-        $website_data = DB::table("miniweb_company_details")
-            ->where('id', $decoded_id)
-            ->first();
-
+        // 3. Data illana 404 error kaatum
         if (!$website_data) { abort(404); }
 
-        return view('share_template', compact('website_data'));
+        // 4. Blade file-ku data-vah anupuvom
+        return view('website_template', compact('website_data'));
     }
 
     // facebook meta data collect
