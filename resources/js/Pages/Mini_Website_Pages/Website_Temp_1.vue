@@ -1892,10 +1892,9 @@
 
                 const lastPart = window.location.pathname.split('/').pop();
 
-                const websiteId = lastPart.replace('Website_Temp_', '');
+                const websiteId = lastPart; // ✅ full value
 
-                // 🔥 ADD THIS (query params get pannunga)
-                const query = window.location.search; 
+                const query = window.location.search;
 
                 const shareUrl = `${window.location.origin}/share/${company}/${websiteId}${query}`;
 
