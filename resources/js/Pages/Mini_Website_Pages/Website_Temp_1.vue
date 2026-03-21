@@ -1914,11 +1914,11 @@
                 const shareUrl = `${window.location.origin}/${companySlug}/${companyID}/${lastPart}${query}`;
                 console.log("final shareUrl : ",shareUrl)
                 // Formatting the message
-                // const message = `✨ *${companyName.value}*\n\nCheck this out here:\n${shareUrl}`;
+                const message = `✨ *${companyName.value}*\n\nCheck this out here:\n${shareUrl}`;
 
-                // const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+                const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
                 
-                // window.open(whatsappUrl, "_blank");
+                window.open(whatsappUrl, "_blank");
             };
 
             /*

@@ -1643,7 +1643,7 @@ class MiniWebsiteController extends Controller
         $decoded_template_id = base64_decode($encodedPart);
 
         // 2. Database Query-ல் பிழை இருந்தது. Array-க்குள் conditions இப்படி இருக்க வேண்டும்:
-       return  $company = DB::table("miniweb_company_details")
+       $company = DB::table("miniweb_company_details")
                     ->where('id', $companyID)
                     ->where('website_id', $decoded_template_id)
                     ->first();
@@ -1661,7 +1661,7 @@ class MiniWebsiteController extends Controller
             ],
             'og_data' => [
                 'title' => $company->company_name,
-                'image' => asset('storage/' . $company->logo_path), 
+                'image' => 'https://linkaura-company-logos.s3.us-east-1.amazonaws.com/company_logos/' . $company->logo_path, 
                 'url' => url()->current(),
             ]
         ]);    
