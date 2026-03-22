@@ -614,7 +614,7 @@ export default {
 
 
             const shareUrl = `${window.location.origin}/share/${data.id}`;
-            const message = `✨ *${companyName.value}*\n\nnVisit our website:\n${shareUrl}`;
+            const message = `✨ *${data.company_name}*\n\nnVisit our website:\n${shareUrl}`;
             const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
             window.open(whatsappUrl, "_blank");
 
