@@ -594,6 +594,9 @@ export default {
 
         };
         */ 
+        const fb_shareUrl = computed(() => 
+            encodeURIComponent(`${window.location.origin}/share/${cd_id.value}`)
+        );
 
         const openShare = async (data) => {
             selectedRow.value = data;
@@ -607,7 +610,7 @@ export default {
 
             // Prepare URLs
             const finalUrl = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`;
-            encodedUrl.value = finalUrl; // Facebook kaga
+            encodedUrl.value = fb_shareUrl.value; // Facebook kaga
             
             const message = `${data.company_name}\nVisit our website: ${finalUrl}`;
             whatsappUrl.value = message; // Modal-kulla use panna
@@ -626,6 +629,7 @@ export default {
 
             shareModal.value = true; // Final-ah modal-ah open pannunga
         };
+
 
         const handleWhatsAppShare = async () => {
             // Mobile-la Navigator Share irukka nu check panrom
@@ -848,6 +852,7 @@ export default {
             logoFile,
             handleWhatsAppShare,
             userId,
+            fb_shareUrl,
         };
     }
 };
