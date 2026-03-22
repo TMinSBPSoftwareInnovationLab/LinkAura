@@ -1716,10 +1716,10 @@
 
             const buyProduct = (item) => {
                 // ✅ Product Share URL (OG preview)
-                const shareUrl = `${window.location.origin}/product-share/${item.id}`;
-
+                // const shareUrl = `${window.location.origin}/product-share/${item.id}`;
+                console.log(company_mobile.value)
                 // ✅ Format mobile number
-                let phone = company_mobile.value.toString().replace(/\D/g, '');
+                let phone = company_mobile.value;
 
                 if (phone.length === 10) {
                     phone = "91" + phone; // India code
@@ -1728,13 +1728,13 @@
                 // ✅ Message with product link
                 const message = `🛒 *NEW ORDER REQUEST* 🛒
 
-            🔹 *Product:* ${item.product_name}
-            🔹 *Price:* ₹${item.final_price}
+                🔹 *Product:* ${item.product_name}
+                🔹 *Price:* ₹${item.final_price}
 
-            🔗 *View Product:*
-            ${shareUrl}
+                🔗 *View Product:*
+                ${shareUrl}
 
-            Hi! I want to buy this 😍`;
+                Hi! I want to buy this 😍`;
 
                 // ✅ WhatsApp URL
                 const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
