@@ -1728,7 +1728,7 @@
 
                 // ✅ Message with product link
                 const message = 
-                `🛒 *NEW ORDER REQUEST* 🛒\n\n` +
+                `🛒 *NEW ORDER REQUEST*\n\n` +
                 `🔹 *Product:* ${proName}\n` +
                 `🔹 *Price:* ₹${orginal_price}\n\n` +
                 `🔗 *View Product:*\n${shareUrl}\n\n` +

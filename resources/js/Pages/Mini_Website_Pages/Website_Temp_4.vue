@@ -291,7 +291,7 @@
                                 <p class="mt-1 text-sm text-gray-400 leading-snug">
                                     Original Price: <span class="ml-1">{{ item.orginal_price }}</span>
                                 </p>
-                                <button class="px-2  bg-[#04a143] text-white text-[12px] rounded-lg" @click="buyProduct(item.product_img, item.product_name, item.orginal_price)">
+                                <button class="px-2  bg-[#04a143] text-white text-[12px] rounded-lg" @click="buyProduct(item.id, item.product_img, item.product_name, item.orginal_price)">
                                     Buy Now
                                 </button>
                             </div>
@@ -1359,6 +1359,7 @@
             const ownerName = ref("")
             const designation = ref("")
             const logoImage = ref("")
+            const company_mobile = ref("")
 
             const loadCompanyDetails = async () => {
                 const res = await axios.post('/collectAllWebsiteDatas', {'table_name':'miniweb_company_details', cd_id:cd_id.value });
@@ -1371,6 +1372,7 @@
                 designation.value = data.designation || '';
                 logoImage.value = data.logo_path ? `${s3LogoUrl}/company_logos/${data.logo_path}` : '';
                 is_purchased.value = data.purchased_id
+                company_mobile.value = data.company_mobile 
 
                 // Guard check
                 if (cd_id.value && is_purchased.value <= 0) {
@@ -1555,6 +1557,7 @@
                         const formatted = prodData
                             .filter(item => item.product_name && item.final_price > 0)
                             .map(item => ({
+                                id: item.id,
                                 product_name: item.product_name,
                                 product_img: item.product_img ? `${s3ProductsUrl}/product_images/${item.product_img}` : "",
                                 orginal_price: Number(item.orginal_price),
@@ -1811,42 +1814,31 @@
                 showPlan.value = false
             }
 
-            const buyProduct = async(proImage, proName, orginal_price) => {
-                const s3URL = "https://linkaura-product-images.s3.amazonaws.com/product_images/";
-                const base = proImage.includes("http") ? proImage : `${s3URL}${proImage}`;
-                const product_image_url = `${base}?t=${new Date().getTime()}`;
+            const buyProduct = async(id, proImage, proName, orginal_price) => {
+                // ✅ Product Share URL (OG preview)
+                const shareUrl = `${window.location.origin}/product-share/${id}`;
+                console.log(id)
+                // ✅ Format mobile number
+                let phone = company_mobile.value;
 
-                // Happy & Excited Message for Customer
-                const message = `🛒 *NEW ORDER REQUEST* 🛒\n\n🔹 *Product:* ${proName}\n🔹 *Price:* ₹${orginal_price}\n\nHi! I want to buy this. 😍 Please let me know the payment details and delivery process! 🚀`;
+                // if (phone.length === 10) {
+                //     phone = "91" + phone; // India code
+                // }
 
-                try {
-                    const response = await fetch(product_image_url, { 
-                        method: 'GET',
-                        mode: 'cors',
-                        cache: 'no-cache' 
-                    });
-                    
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    
-                    const blob = await response.blob();
-                    const file = new File([blob], "product.png", { type: blob.type });
+                // ✅ Message with product link
+                const message = 
+                `🛒 *NEW ORDER REQUEST*\n\n` +
+                `🔹 *Product:* ${proName}\n` +
+                `🔹 *Price:* ₹${orginal_price}\n\n` +
+                `🔗 *View Product:*\n${shareUrl}\n\n` +
+                `Hi! I want to buy this 😍`;
 
-                    if (navigator.share) {
-                        await navigator.share({
-                            title: proName,
-                            text: message, 
-                            files: [file]
-                        });
-                        return; 
-                    }
-                } catch (e) {
-                    console.error("Fetch/Share Error:", e);
-                }
+                // ✅ WhatsApp URL
+                const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 
-                // Fallback for Desktop
-                const fallback = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-                window.open(fallback, "_blank");
-            }
+                // ✅ Open WhatsApp
+                window.open(whatsappUrl, "_blank");
+            };
 
             const selectProduct = (name) => {
                 productnameEnquiry.value = name;
@@ -2065,6 +2057,7 @@
                 designation,
                 logoImage,
                 is_purchased,
+                company_mobile,
                 // address and contact details
                 addData,
                 phoneNo,
