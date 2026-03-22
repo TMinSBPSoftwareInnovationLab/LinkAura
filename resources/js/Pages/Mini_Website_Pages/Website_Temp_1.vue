@@ -1227,7 +1227,6 @@
             // const route = useRoute();
             // const router = useRouter();
             const cardStore = useCardStore()
-            const url_share = ref("")
 
             /* 20-03-2026
             const decoded = route.query.ilp88LAsBvm ? atob(decodeURIComponent(route.query.ilp88LAsBvm)) : ''
@@ -1638,7 +1637,6 @@
 
             onMounted(async () => {
                 if (!cd_id) return;
-                url_share.value = `${window.location.origin}/share/${cd_id.value}`;
 
                 try {
                     await Promise.all([
@@ -1686,7 +1684,9 @@
                 }
             });
 
-            const fb_shareUrl = computed(() => encodeURIComponent(url_share.value));
+            const fb_shareUrl = computed(() => 
+                encodeURIComponent(`${window.location.origin}/share/${cd_id.value}`)
+            );
 
             // functions are
             const selectedImage = ref(null);
@@ -2051,7 +2051,6 @@
                 cd_id,
                 templateId,
                 purchaseID,
-                url_share,
                 fb_shareUrl,
             }
         }
