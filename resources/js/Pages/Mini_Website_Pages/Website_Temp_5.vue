@@ -2221,16 +2221,10 @@
             encodedUrl.value = encodeURIComponent(currentUrl)
 
             const handleWhatsAppShare = () => {
-                const company = encodeURIComponent(companyName.value);
-
-                // 🔥 get encoded id from URL
-                const websiteId = window.location.pathname.split('/').pop();
-
-                const shareUrl = `${window.location.origin}/share/${company}/${websiteId}`;
-
-                const message = `✨ Check out ${companyName.value}!\n\n${shareUrl}`;
-
-                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`, "_blank");
+                const shareUrl = `${window.location.origin}/share/${cd_id.value}`;
+                const message = `✨ *${companyName.value}*\n\nCheck this out:\n${shareUrl}`;
+                const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, "_blank");
             };
 
 
