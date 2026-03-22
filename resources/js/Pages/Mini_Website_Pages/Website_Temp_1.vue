@@ -1728,8 +1728,8 @@
                 // ✅ Message with product link
                 const message = `🛒 *NEW ORDER REQUEST* 🛒
 
-                🔹 *Product:* ${item.proName}
-                🔹 *Price:* ₹${item.orginal_price}
+                🔹 *Product:* ${proName}
+                🔹 *Price:* ₹${orginal_price}
 
                 🔗 *View Product:*
                 ${shareUrl}
