@@ -1727,15 +1727,12 @@
                 // }
 
                 // ✅ Message with product link
-                const message = `🛒 *NEW ORDER REQUEST* 🛒
-
-                🔹 *Product:* ${proName}
-                🔹 *Price:* ₹${orginal_price}
-
-                🔗 *View Product:*
-                ${shareUrl}
-
-                Hi! I want to buy this 😍`;
+                const message = 
+                `🛒 *NEW ORDER REQUEST* 🛒\n\n` +
+                `🔹 *Product:* ${proName}\n` +
+                `🔹 *Price:* ₹${orginal_price}\n\n` +
+                `🔗 *View Product:*\n${shareUrl}\n\n` +
+                `Hi! I want to buy this 😍`;
 
                 // ✅ WhatsApp URL
                 const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
