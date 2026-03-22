@@ -850,7 +850,6 @@ export default {
             logoFile,
             handleWhatsAppShare,
             userId,
-            fb_shareUrl,
         };
     }
 };
