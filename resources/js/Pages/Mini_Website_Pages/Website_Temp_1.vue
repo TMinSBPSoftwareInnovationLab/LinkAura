@@ -1687,7 +1687,7 @@
                 }
             });
 
-            fb_shareUrl.value = computed(() => encodeURIComponent(shareUrl.value));
+            fb_shareUrl.value = computed(() => encodeURIComponent(url_share.value));
 
             // functions are
             const selectedImage = ref(null);
