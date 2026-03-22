@@ -1636,6 +1636,7 @@ class MiniWebsiteController extends Controller
     }
     
     // final showCompanyDatas
+    /*
     public function showCompanyDatas($slug, $companyID, $lastPart) { // $website_id சரியாகப் பெறவும்
                     
         // 1. $website_id-ல் இருந்து 'Website_Temp_MQ==' என வந்தால் 'MQ==' மட்டும் பிரிக்க
@@ -1666,6 +1667,7 @@ class MiniWebsiteController extends Controller
             ]
         ]);    
     }
+    */
 
 
     public function websiteView($company_name, $website_id)
@@ -1780,5 +1782,57 @@ class MiniWebsiteController extends Controller
                 'message' => 'Database error: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+     /*
+    |--------------------------------------------------------------------------
+    | 🔥 SHARE PAGE (WhatsApp OG)
+    |--------------------------------------------------------------------------
+    */
+    public function sharePage($id)
+    {
+        $website_data = DB::table("miniweb_company_details")
+            ->where('id', $id)
+            ->first();
+
+        if (!$website_data) {
+            abort(404);
+        }
+
+        return view('share_template', compact('website_data'));
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | 🔥 ACTUAL WEBSITE PAGE (Vue / Inertia)
+    |--------------------------------------------------------------------------
+    */
+    public function showCompanyDatas($slug, $companyID, $lastPart)
+    {
+        // Extract base64
+        $encodedPart = Str::after($lastPart, 'Website_Temp_');
+        $decoded_template_id = base64_decode($encodedPart);
+
+        $company = DB::table("miniweb_company_details")
+            ->where('id', $companyID)
+            ->where('website_id', $decoded_template_id)
+            ->first();
+
+        if (!$company) {
+            abort(404);
+        }
+
+        $templateName = "Mini_Website_Pages/Website_Temp_" . $decoded_template_id;
+
+        return Inertia::render($templateName, [
+            'company' => [
+                'title' => $company->company_name,
+                'image' => 'https://linkaura-company-logos.s3.us-east-1.amazonaws.com/company_logos/' . $company->logo_path,
+                'url' => url()->current(),
+                'id' => $company->id,
+                'website_id' => $company->website_id
+            ]
+        ]);
     }
 }
