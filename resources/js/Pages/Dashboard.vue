@@ -612,20 +612,12 @@ export default {
             // Final URL (for WhatsApp text)
             const finalUrl = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`;
 
-            const message = `${data.company_name}\nVisit our website: ${finalUrl}`;
-            whatsappUrl.value = message;
 
-            // Logo fetch
-            const s3URL = "https://linkaura-company-logos.s3.us-east-1.amazonaws.com/company_logos/";
-            const logoPath = data.logo_path ? `${s3URL}${data.logo_path}` : baseURL + defaultLogo;
+            const shareUrl = `${window.location.origin}/share/${data.id}`;
+            const message = `✨ *${companyName.value}*\n\nnVisit our website:\n${shareUrl}`;
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, "_blank");
 
-            try {
-                const response = await fetch(logoPath);
-                const blob = await response.blob();
-                logoFile.value = new File([blob], "logo.png", { type: blob.type });
-            } catch (e) {
-                console.error("Logo fetch error", e);
-            }
         };
 
 
