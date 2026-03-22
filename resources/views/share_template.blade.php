@@ -37,7 +37,7 @@
 
 <script>
     setTimeout(() => {
-        window.location.href = "/{{ $slug }}/{{ $website_data->id }}/Website_Temp_{{ $encoded }}";
+        window.location.href = "{{ $final_url }}";
     }, 1000);
 </script>
 
