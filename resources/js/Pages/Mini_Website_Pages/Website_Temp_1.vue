@@ -824,7 +824,7 @@
 
                         <!-- facebook share -->
                         <div class="flex flex-grow w-full font-semibold items-center justify-center">
-                            <a :href="`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`" target="_blank" class="flex items-center px-4 hover:bg-gray-100 hover:text-gray-800" >
+                            <a :href="`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + '/share/' + cd_id)}`"  target="_blank" class="flex items-center px-4 hover:bg-gray-100 hover:text-gray-800" >
                                 <button class="w-60 flex items-center gap-3  bg-transparent border border-[#2A7B9B]  rounded-xs p-2 justify-center" >
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="#2A7B9B" viewBox="0 0 24 24" class="w-6 h-6" >
                                         <path d="M22 12a10 10 0 1 0-11.5 9.9v-7h-2v-3h2v-2.3c0-2 1.2-3.1 3-3.1 
@@ -1897,52 +1897,13 @@
             // encodedUrl.value = cpyUrl.value = currentUrl
             cpyUrl.value = currentUrl
             encodedUrl.value = encodeURIComponent(currentUrl)
+            
             const handleWhatsAppShare = () => {
-                const finalUrl = `${window.location.origin}/${companySlug.value}/${cd_id.value}/Website_Temp_${btoa(template_id.value)}?ilp88LAsBvm=${btoa(`cd_id=${cd_id.value}&template_id=${template_id.value}`)}`;
-
                 const shareUrl = `${window.location.origin}/share/${cd_id.value}`;
-
-                const message = `✨ *${companyName.value}*\n\nVisit here:\n${finalUrl}\n\nPreview:\n${shareUrl}`;
-
-                const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-
-                window.open(whatsappUrl, "_blank");
-            };
-            /* 22-03-2026 working fine 
-            const handleWhatsAppShare = () => {
-
-                const shareUrl = `${window.location.origin}/share/${cd_id.value}`;
-
                 const message = `✨ *${companyName.value}*\n\nCheck this out:\n${shareUrl}`;
-
                 const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-
                 window.open(whatsappUrl, "_blank");
             };
-            */ 
-            /*
-            const handleWhatsAppShare = () => {
-
-                const companySlug = companyName.value
-                    .toLowerCase()
-                    .replace(/[^a-z0-9\s]/g, '')
-                    .replace(/\s+/g, '');
-
-                const lastPart = window.location.pathname.split('/').pop();
-
-                const query = window.location.search;
-
-                const shareUrl = `${window.location.origin}/share/${companySlug}/${lastPart}${query}`;
-
-                // 🔥 முக்கியம்: message simple ஆக இருக்கணும்
-                const message = `✨ ${companyName.value}\n\n${shareUrl}`;
-
-                window.open(
-                    `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`,
-                    "_blank"
-                );
-            };
-            */
 
             const copyToClipboard = async () => {
                 const textToCopy = cpyUrl.value;
