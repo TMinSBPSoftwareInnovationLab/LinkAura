@@ -51,7 +51,7 @@
 
                 <!-- facebook share -->
                 <div class="flex flex-grow w-full font-semibold items-center justify-center bg-white">
-                    <a :href="`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`"  target="_blank" class="flex items-center px-4 hover:bg-gray-100 hover:text-gray-800" >
+                    <a :href="`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(encodedUrl)}`"  target="_blank" class="flex items-center px-4 hover:bg-gray-100 hover:text-gray-800" >
                         <button class="w-60 flex items-center gap-3  bg-transparent border border-[#2A7B9B]  rounded-xs p-2 justify-center" >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="#2A7B9B" viewBox="0 0 24 24" class="w-6 h-6" >
                                 <path d="M22 12a10 10 0 1 0-11.5 9.9v-7h-2v-3h2v-2.3c0-2 1.2-3.1 3-3.1 
@@ -605,14 +605,10 @@ export default {
             const params = `cd_id=${data.id}&template_id=${data.websiteTemp_id}`;
             const encoded = btoa(params);
 
-            // facebook
-            const fb_shareUrl = computed(() => 
-                encodeURIComponent(`${window.location.origin}/share/${data.id}`)
-            );
-
             // Prepare URLs
             const finalUrl = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`;
-            encodedUrl.value = fb_shareUrl; // Facebook kaga
+            // encodedUrl.value = fb_shareUrl.value; 
+            encodedUrl.value = encodeURIComponent(`${window.location.origin}/share/${data.id}`); // Facebook 
             
             const message = `${data.company_name}\nVisit our website: ${finalUrl}`;
             whatsappUrl.value = message; // Modal-kulla use panna
@@ -854,6 +850,7 @@ export default {
             logoFile,
             handleWhatsAppShare,
             userId,
+            fb_shareUrl,
         };
     }
 };
