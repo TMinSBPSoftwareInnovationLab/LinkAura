@@ -594,10 +594,11 @@ export default {
 
         };
         */ 
-        
+
         const openShare = async (data) => {
+            shareModal.value = true;
             selectedRow.value = data;
-            
+
             const baseURL = window.location.origin; 
             const encrypt_website_id = btoa(data.website_id);
             const safeCompanyName = encodeURIComponent(data.company_name);
@@ -605,15 +606,16 @@ export default {
             const params = `cd_id=${data.id}&template_id=${data.websiteTemp_id}`;
             const encoded = btoa(params);
 
-            // Prepare URLs
-            const finalUrl = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`;
-            // encodedUrl.value = fb_shareUrl.value; 
-            encodedUrl.value = encodeURIComponent(`${window.location.origin}/share/${data.id}`); // Facebook 
-            
-            const message = `${data.company_name}\nVisit our website: ${finalUrl}`;
-            whatsappUrl.value = message; // Modal-kulla use panna
+            // ✅ Facebook URL (FIXED)
+            encodedUrl.value = encodeURIComponent(`${window.location.origin}/share/${data.id}`);
 
-            // Logo-vah munnadiye fetch panni vachukalam (File share-ku ready-ah irukka)
+            // Final URL (for WhatsApp text)
+            const finalUrl = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`;
+
+            const message = `${data.company_name}\nVisit our website: ${finalUrl}`;
+            whatsappUrl.value = message;
+
+            // Logo fetch
             const s3URL = "https://linkaura-company-logos.s3.us-east-1.amazonaws.com/company_logos/";
             const logoPath = data.logo_path ? `${s3URL}${data.logo_path}` : baseURL + defaultLogo;
 
@@ -624,8 +626,6 @@ export default {
             } catch (e) {
                 console.error("Logo fetch error", e);
             }
-
-            shareModal.value = true; // Final-ah modal-ah open pannunga
         };
 
 
