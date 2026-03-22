@@ -1799,7 +1799,19 @@ class MiniWebsiteController extends Controller
             abort(404);
         }
 
-        return view('share_template', compact('website_data'));
+        // ✅ ORIGINAL URL build (IMPORTANT)
+        $encoded = base64_encode($website_data->website_id);
+
+        $correctUrl = url('/') . '/' 
+            . $website_data->company_slug  // 👈 DB column இருக்கணும்
+            . '/' . $website_data->id 
+            . '/Website_Temp_' . $encoded
+            . '?ilp88LAsBvm=' . base64_encode("cd_id={$website_data->id}&template_id={$website_data->website_id}");
+
+        return view('share_template', [
+            'website_data' => $website_data,
+            'final_url' => $correctUrl
+        ]);
     }
 
 
