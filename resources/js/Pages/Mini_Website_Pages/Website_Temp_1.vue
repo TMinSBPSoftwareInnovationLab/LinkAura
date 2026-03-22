@@ -1272,6 +1272,7 @@
             const ownerName = ref("")
             const designation = ref("")
             const logoImage = ref("")
+            const company_mobile = ref("")
 
             const loadCompanyDetails = async () => {
                 const res = await axios.post('/collectAllWebsiteDatas', {'table_name':'miniweb_company_details', cd_id:cd_id.value });
@@ -1284,6 +1285,7 @@
                 designation.value = data.designation || '';
                 logoImage.value = data.logo_path ? `${s3LogoUrl}/company_logos/${data.logo_path}` : '';
                 is_purchased.value = data.purchased_id
+                company_mobile.value = data.company_mobile 
 
                 // Guard check
                 if (cd_id.value && is_purchased.value <= 0) {
@@ -1717,7 +1719,7 @@
                 const shareUrl = `${window.location.origin}/product-share/${item.id}`;
 
                 // ✅ Format mobile number
-                let phone = item.company_mobile.toString().replace(/\D/g, '');
+                let phone = company_mobile.value.toString().replace(/\D/g, '');
 
                 if (phone.length === 10) {
                     phone = "91" + phone; // India code
@@ -1953,6 +1955,7 @@
                 designation,
                 logoImage,
                 is_purchased,
+                company_mobile,
                 // address and contact details
                 addData,
                 phoneNo,
