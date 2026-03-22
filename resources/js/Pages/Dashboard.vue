@@ -594,10 +594,7 @@ export default {
 
         };
         */ 
-        const fb_shareUrl = computed(() => 
-            encodeURIComponent(`${window.location.origin}/share/${cd_id.value}`)
-        );
-
+        
         const openShare = async (data) => {
             selectedRow.value = data;
             
@@ -607,6 +604,11 @@ export default {
             const websitefinalUrl = `${safeCompanyName}/Website_Temp_${encrypt_website_id}`;
             const params = `cd_id=${data.id}&template_id=${data.websiteTemp_id}`;
             const encoded = btoa(params);
+
+            // facebook
+            const fb_shareUrl = computed(() => 
+                encodeURIComponent(`${window.location.origin}/share/${data.id}`)
+            );
 
             // Prepare URLs
             const finalUrl = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`;
