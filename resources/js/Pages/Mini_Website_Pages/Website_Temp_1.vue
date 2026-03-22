@@ -1460,6 +1460,7 @@
                         const formatted = prodData
                             .filter(item => item.product_name && item.final_price > 0)
                             .map(item => ({
+                                id: item.id,
                                 product_name: item.product_name,
                                 product_img: item.product_img ? `${s3ProductsUrl}/product_images/${item.product_img}` : "",
                                 orginal_price: Number(item.orginal_price),
@@ -1714,7 +1715,7 @@
                 showPlan.value = false
             }
 
-            const buyProduct = async(id,proImage, proName, orginal_price) => {
+            const buyProduct = async(id, proImage, proName, orginal_price) => {
                 // ✅ Product Share URL (OG preview)
                 const shareUrl = `${window.location.origin}/product-share/${id}`;
                 console.log(id)
