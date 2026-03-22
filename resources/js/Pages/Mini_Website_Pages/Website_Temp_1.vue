@@ -1897,7 +1897,18 @@
             // encodedUrl.value = cpyUrl.value = currentUrl
             cpyUrl.value = currentUrl
             encodedUrl.value = encodeURIComponent(currentUrl)
+            const handleWhatsAppShare = () => {
+                const finalUrl = `${window.location.origin}/${companySlug.value}/${cd_id.value}/Website_Temp_${btoa(template_id.value)}?ilp88LAsBvm=${btoa(`cd_id=${cd_id.value}&template_id=${template_id.value}`)}`;
 
+                const shareUrl = `${window.location.origin}/share/${cd_id.value}`;
+
+                const message = `✨ *${companyName.value}*\n\nVisit here:\n${finalUrl}\n\nPreview:\n${shareUrl}`;
+
+                const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+
+                window.open(whatsappUrl, "_blank");
+            };
+            /* 22-03-2026 working fine 
             const handleWhatsAppShare = () => {
 
                 const shareUrl = `${window.location.origin}/share/${cd_id.value}`;
@@ -1908,7 +1919,7 @@
 
                 window.open(whatsappUrl, "_blank");
             };
-
+            */ 
             /*
             const handleWhatsAppShare = () => {
 
