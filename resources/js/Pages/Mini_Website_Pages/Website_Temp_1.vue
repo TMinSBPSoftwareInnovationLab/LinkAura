@@ -1732,9 +1732,6 @@
                 🔹 *Product:* ${proName}
                 🔹 *Price:* ₹${orginal_price}
 
-                🔗 *View Product:*
-                ${shareUrl}
-
                 Hi! I want to buy this 😍`;
 
                 // ✅ WhatsApp URL
