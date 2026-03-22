@@ -307,7 +307,7 @@
 
                                     <button 
                                         class="flex-1 bg-[#3d023a] text-white text-[11px] py-2 rounded-md font-semibold hover:bg-[#5a0456] transition"
-                                        @click="buyProduct(item.product_img, item.product_name, item.final_price)"
+                                        @click="buyProduct(item.product_img, item.product_name, item.final_price, item.company_mobile)"
                                     >
                                         Buy Now
                                     </button>
@@ -1712,13 +1712,13 @@
                 showPlan.value = false
             }
 
-            const buyProduct = async(proImage, proName, orginal_price) => {
+            const buyProduct = async (proImage, proName, orginal_price, company_mobile) => {
                 const s3URL = "https://linkaura-product-images.s3.amazonaws.com/product_images/";
                 const base = proImage.includes("http") ? proImage : `${s3URL}${proImage}`;
                 const product_image_url = `${base}?t=${new Date().getTime()}`;
 
-                // Happy & Excited Message for Customer
-                const message = `🛒 *NEW ORDER REQUEST* 🛒\n\n🔹 *Product:* ${proName}\n🔹 *Price:* ₹${orginal_price}\n\nHi! I want to buy this. 😍 Please let me know the payment details and delivery process! 🚀`;
+                // ✅ message
+                const message = `🛒 *NEW ORDER REQUEST* 🛒\n\n🔹 *Product:* ${proName}\n🔹 *Price:* ₹${orginal_price}\n\nHi! I want to buy this 😍`;
 
                 try {
                     const response = await fetch(product_image_url, { 
@@ -1726,28 +1726,39 @@
                         mode: 'cors',
                         cache: 'no-cache' 
                     });
-                    
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    
+
+                    if (!response.ok) throw new Error('Image fetch failed');
+
                     const blob = await response.blob();
                     const file = new File([blob], "product.png", { type: blob.type });
 
+                    // ✅ Mobile share (image + text)
                     if (navigator.share) {
                         await navigator.share({
                             title: proName,
-                            text: message, 
+                            text: message,
                             files: [file]
                         });
-                        return; 
+                        return;
                     }
+
                 } catch (e) {
                     console.error("Fetch/Share Error:", e);
                 }
 
-                // Fallback for Desktop
-                const fallback = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-                window.open(fallback, "_blank");
-            }
+                // ✅ FORMAT MOBILE NUMBER (VERY IMPORTANT)
+                let phone = company_mobile.toString().replace(/\D/g, '');
+
+                // 👉 India default +91
+                if (phone.length === 10) {
+                    phone = "91" + phone;
+                }
+
+                // ✅ WhatsApp direct
+                const whatsappUrl = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`;
+
+                window.open(whatsappUrl, "_blank");
+            };
             
 
             const selectProduct = (name) => {
