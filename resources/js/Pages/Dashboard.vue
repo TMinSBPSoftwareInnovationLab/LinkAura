@@ -608,37 +608,14 @@ export default {
 
             // ✅ Facebook URL (FIXED)
             encodedUrl.value = encodeURIComponent(`${window.location.origin}/share/${data.id}`);
-
-            // Final URL (for WhatsApp text)
-            const finalUrl = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`;
-
-
-            const shareUrl = `${window.location.origin}/share/${data.id}`;
-            const message = `✨ *${data.company_name}*\n\nnVisit our website:\n${shareUrl}`;
-            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, "_blank");
-
         };
 
 
         const handleWhatsAppShare = async () => {
-            // Mobile-la Navigator Share irukka nu check panrom
-            if (navigator.share && logoFile.value) {
-                try {
-                    await navigator.share({
-                        title: selectedRow.value.company_name,
-                        text: whatsappUrl.value,
-                        files: [logoFile.value]
-                    });
-                    return; // Share success aana ingaye stop aagidum
-                } catch (error) {
-                    console.log("Navigator share failed, using fallback");
-                }
-            }
-            
-            // Desktop fallback: Direct Link
-            const fallback = `https://api.whatsapp.com/send?text=${encodeURIComponent(whatsappUrl.value)}`;
-            window.open(fallback, "_blank");
+            const shareUrl = `${window.location.origin}/share/${selectedRow.value.id}`;
+            const message = `✨ *${selectedRow.value.company_name}*\n\nnVisit our website:\n${shareUrl}`;
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, "_blank");
         };
 
         // PURCHASE
