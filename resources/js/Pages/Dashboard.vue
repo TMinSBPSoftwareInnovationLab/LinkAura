@@ -612,7 +612,7 @@ export default {
 
             // Prepare URLs
             const finalUrl = `${baseURL}/${websitefinalUrl}?ilp88LAsBvm=${encoded}`;
-            encodedUrl.value = fb_shareUrl.value; // Facebook kaga
+            encodedUrl.value = fb_shareUrl; // Facebook kaga
             
             const message = `${data.company_name}\nVisit our website: ${finalUrl}`;
             whatsappUrl.value = message; // Modal-kulla use panna
@@ -854,7 +854,6 @@ export default {
             logoFile,
             handleWhatsAppShare,
             userId,
-            fb_shareUrl,
         };
     }
 };
