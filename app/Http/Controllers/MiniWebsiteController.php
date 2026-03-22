@@ -30,6 +30,7 @@ class MiniWebsiteController extends Controller
         ]);
 
         $companyName = trim($request->company_name);
+        $slug = Str::slug($request->company_name);
         $owner_name = trim($request->owner_name);
         $designation = trim($request->designation);
         $user_id = $request->user_id;
@@ -94,6 +95,7 @@ class MiniWebsiteController extends Controller
                 'cardId'  => $rowid
             ];
         } else { // New Insert
+            $addData['company_slug'] = $slug;
             $insert = DB::table('miniweb_company_details')->insert($addData);
             $last_Id = DB::getPdo()->lastInsertId();
 
