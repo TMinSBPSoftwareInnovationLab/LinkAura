@@ -1717,7 +1717,7 @@
             const buyProduct = (item) => {
                 // ✅ Product Share URL (OG preview)
                 const shareUrl = `${window.location.origin}/product-share/${item.id}`;
-                console.log(company_mobile.value)
+                console.log(item.id)
                 // ✅ Format mobile number
                 let phone = company_mobile.value;
 
