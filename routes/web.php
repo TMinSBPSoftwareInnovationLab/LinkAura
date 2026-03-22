@@ -199,6 +199,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 | Dynamic Website Template (🔥 Important Conversion)
 |--------------------------------------------------------------------------
 */
+// product order
+Route::get('/product-share/{id}', [MiniWebsiteController::class, 'productShare']);
 
 Route::get('/share/{id}', [MiniWebsiteController::class, 'sharePage'])->name('share.page');
 Route::get('/{slug}/{companyID}/{lastPart}', [MiniWebsiteController::class, 'showCompanyDatas'])->name('companyShow');

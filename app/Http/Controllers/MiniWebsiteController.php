@@ -1849,4 +1849,35 @@ class MiniWebsiteController extends Controller
             ]
         ]);
     }
+
+    // product order
+    public function productShare($id)
+    {
+        $product = DB::table("miniweb_products")
+            ->where('id', $id)
+            ->first();
+
+        if (!$product) {
+            abort(404);
+        }
+
+        // Company details (optional)
+        $company = DB::table("miniweb_company_details")
+            ->where('id', $product->mini_website_id )
+            ->first();
+
+        // Final redirect URL
+        $encoded = base64_encode($company->website_id);
+
+        $finalUrl = url('/') . '/' 
+            . $company->company_slug
+            . '/' . $company->id
+            . '/Website_Temp_' . $encoded;
+
+        return view('product_share_template', [
+            'product' => $product,
+            'company' => $company,
+            'final_url' => $finalUrl
+        ]);
+    }
 }
