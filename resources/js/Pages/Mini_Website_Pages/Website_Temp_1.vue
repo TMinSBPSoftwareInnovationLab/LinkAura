@@ -307,7 +307,7 @@
 
                                     <button 
                                         class="flex-1 bg-[#3d023a] text-white text-[11px] py-2 rounded-md font-semibold hover:bg-[#5a0456] transition"
-                                        @click="buyProduct(item)"
+                                        @click="buyProduct(item.id, item.product_img, item.product_name, item.orginal_price)"
                                     >
                                         Buy Now
                                     </button>
@@ -1714,22 +1714,22 @@
                 showPlan.value = false
             }
 
-            const buyProduct = (item) => {
+            const buyProduct = async(id,proImage, proName, orginal_price) => {
                 // ✅ Product Share URL (OG preview)
-                const shareUrl = `${window.location.origin}/product-share/${item.id}`;
-                console.log(item.id)
+                const shareUrl = `${window.location.origin}/product-share/${id}`;
+                console.log(id)
                 // ✅ Format mobile number
                 let phone = company_mobile.value;
 
-                if (phone.length === 10) {
-                    phone = "91" + phone; // India code
-                }
+                // if (phone.length === 10) {
+                //     phone = "91" + phone; // India code
+                // }
 
                 // ✅ Message with product link
                 const message = `🛒 *NEW ORDER REQUEST* 🛒
 
-                🔹 *Product:* ${item.product_name}
-                🔹 *Price:* ₹${item.final_price}
+                🔹 *Product:* ${item.proName}
+                🔹 *Price:* ₹${item.orginal_price}
 
                 🔗 *View Product:*
                 ${shareUrl}
