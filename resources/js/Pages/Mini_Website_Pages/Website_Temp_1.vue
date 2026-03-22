@@ -1228,7 +1228,6 @@
             // const router = useRouter();
             const cardStore = useCardStore()
             const url_share = ref("")
-            const fb_shareUrl = ref("")
 
             /* 20-03-2026
             const decoded = route.query.ilp88LAsBvm ? atob(decodeURIComponent(route.query.ilp88LAsBvm)) : ''
@@ -1687,7 +1686,7 @@
                 }
             });
 
-            fb_shareUrl.value = computed(() => encodeURIComponent(url_share.value));
+            const fb_shareUrl = computed(() => encodeURIComponent(url_share.value));
 
             // functions are
             const selectedImage = ref(null);
