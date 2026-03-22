@@ -1227,6 +1227,8 @@
             // const route = useRoute();
             // const router = useRouter();
             const cardStore = useCardStore()
+            const url_share = ref("")
+            const fb_shareUrl = ref("")
 
             /* 20-03-2026
             const decoded = route.query.ilp88LAsBvm ? atob(decodeURIComponent(route.query.ilp88LAsBvm)) : ''
@@ -1893,8 +1895,6 @@
             })
             
             const encodedUrl = ref("")
-            const url_share = ref("")
-            const fb_shareUrl = ref("")
             const cpyUrl = ref("")
             const currentUrl = window.location.href
             // encodedUrl.value = cpyUrl.value = currentUrl
