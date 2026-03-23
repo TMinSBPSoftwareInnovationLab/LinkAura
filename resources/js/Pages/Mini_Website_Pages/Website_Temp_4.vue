@@ -584,7 +584,7 @@
                 <div v-if="paymentQrs.length" class="flex flex-col w-full">
 
                     <!-- qr section -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 px-4 py-6">
+                    <div class="grid grid-cols-1 gap-5 px-4 py-6">
 
                         <div
                             v-for="(item, index) in paymentQrs"
@@ -592,7 +592,7 @@
                             class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition duration-300 p-4 flex flex-col items-center"
                         >
                             <!-- QR Image -->
-                            <div class="w-full h-48 flex items-center justify-center bg-gray-50 rounded-xl overflow-hidden">
+                            <div class="w-full h-full flex items-center justify-center bg-gray-50 rounded-xl overflow-hidden">
                                 <img
                                     :src="item.img"
                                     :alt="item.name"
