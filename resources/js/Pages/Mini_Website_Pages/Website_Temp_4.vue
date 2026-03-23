@@ -600,6 +600,9 @@
                             <p class="text-center text-sm font-semibold mt-2">
                                 {{ item.name }}
                             </p>
+                            <p class="text-center text-sm font-semibold mt-2">
+                                {{ item.upiid }}
+                            </p>
                         </div>
 
                     </div>
@@ -1652,15 +1655,18 @@
                     paymentQrs.value = [
                         {
                             name: "Google Pay",
-                            img: data.gpay_qr_code ? `${s3PaymenyUrl}/payment_Details_QrCode/${data.gpay_qr_code}` :  (!data.id ? gPay : null)
+                            img: data.gpay_qr_code ? `${s3PaymenyUrl}/payment_Details_QrCode/${data.gpay_qr_code}` :  (!data.id ? gPay : null),
+                            upiid: data.gPay_upi_id ?? ''
                         },
                         {
                             name: "PhonePe",
-                            img: data.phonepe_qr_code ? `${s3PaymenyUrl}/payment_Details_QrCode/${data.phonepe_qr_code}` : (!data.id ? gPay : null)
+                            img: data.phonepe_qr_code ? `${s3PaymenyUrl}/payment_Details_QrCode/${data.phonepe_qr_code}` : (!data.id ? gPay : null),
+                            upiid: data.phonePe_upi_id ?? ''
                         },
                         {
                             name: "Paytm",
-                            img: data.paytm_qr_code ? `${s3PaymenyUrl}/payment_Details_QrCode/${data.paytm_qr_code}` : (!data.id ? gPay : null)
+                            img: data.paytm_qr_code ? `${s3PaymenyUrl}/payment_Details_QrCode/${data.paytm_qr_code}` : (!data.id ? gPay : null),
+                            upiid: data.payTm_upi_id ?? ''
                         }
                     ].filter(item => item.img);
 
