@@ -76,7 +76,8 @@ class MiniWebsiteController extends Controller
             'user_id' => $user_id,
             'company_name' => $companyName,
             'owner_name' => $owner_name,
-            'designation' => $designation
+            'designation' => $designation,
+            'company_slug' =>  $slug
         ];
 
         if ($path) {
@@ -95,7 +96,6 @@ class MiniWebsiteController extends Controller
                 'cardId'  => $rowid
             ];
         } else { // New Insert
-            $addData['company_slug'] = $slug;
             $insert = DB::table('miniweb_company_details')->insert($addData);
             $last_Id = DB::getPdo()->lastInsertId();
 
@@ -877,9 +877,12 @@ class MiniWebsiteController extends Controller
         // 3. Prepare Data for Database
         $data = [
             'mini_website_id' => $mini_website_id,
-            'gpay_number'    => $request->gPay ?? 0,
-            'phonepe_number' => $request->phonePe ?? 0,
-            'paytm_number'   => $request->payTm ?? 0,
+            'gpay_number'    => $request->gPay ?? null,
+            'phonepe_number' => $request->phonePe ?? null,
+            'paytm_number'   => $request->payTm ?? null,
+            'gPay_upi_id'    => $request->gPay_upi_id ?? null,
+            'phonePe_upi_id' => $request->phonePe_upi_id ?? null,
+            'payTm_upi_id'   => $request->payTm_upi_id ?? null,
         ];
 
         // Process each QR code field

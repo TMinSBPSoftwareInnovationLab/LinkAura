@@ -69,7 +69,25 @@
                                     maxlength="10"
                                 />
                                 <div class="mt-1">
-                                    <span v-if="submitCount > 0 && gPayError" class="text-red-500 text-sm">{{ gPayError }}</span>
+                                    <!-- <span v-if="submitCount > 0 && gPayError" class="text-red-500 text-sm">{{ gPayError }}</span> -->
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="font-semibold text-gray-700">GPayUPI ID</label>
+                                <input
+                                    v-model="gPay_upi_id"
+                                    type="text"
+                                    placeholder="Enter UPI ID (example@okaxis)"
+                                    class="text-gray-700 w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring focus:border-blue-300"
+                                    @focus="activeUpiField = 'gpay'"
+                                    @input="gPay_upi_id = gPay_upi_id.toLowerCase()"
+                                />
+                                <div class="mt-1">
+                                    <span v-if="activeUpiField === 'gpay' && upiError" class="text-red-500 text-sm">
+                                        {{ upiError }}
+                                    </span>
+                                    <!-- <span v-if="submitCount > 0 && gPay_upi_idError" class="text-red-500 text-sm">{{ gPay_upi_idError }}</span> -->
                                 </div>
                             </div>
 
@@ -100,7 +118,25 @@
                                     maxlength="10"
                                 />
                                 <div class="mt-1">
-                                    <span v-if="submitCount > 0 && phonePeError" class="text-red-500 text-sm">{{ phonePeError }}</span>
+                                    <!-- <span v-if="submitCount > 0 && phonePeError" class="text-red-500 text-sm">{{ phonePeError }}</span> -->
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="font-semibold text-gray-700">PhonePe UPI ID</label>
+                                <input
+                                    v-model="phonePe_upi_id"
+                                    type="text"
+                                    placeholder="Enter UPI ID (example@okaxis)"
+                                    class="text-gray-700 w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring focus:border-blue-300"
+                                    @focus="activeUpiField = 'phonepe'"
+                                    @input="phonePe_upi_id = phonePe_upi_id.toLowerCase()"
+                                />
+                                <div class="mt-1">
+                                    <span v-if="activeUpiField === 'phonepe' && upiError" class="text-red-500 text-sm">
+                                        {{ upiError }}
+                                    </span>
+                                    <!-- <span v-if="submitCount > 0 && phonePe_upi_idError" class="text-red-500 text-sm">{{ phonePe_upi_idError }}</span> -->
                                 </div>
                             </div>
 
@@ -131,7 +167,24 @@
                                     maxlength="10"
                                 />
                                 <div class="mt-1">
-                                    <span v-if="submitCount > 0 && phonePeError" class="text-red-500 text-sm">{{ phonePeError }}</span>
+                                    <!-- <span v-if="submitCount > 0 && phonePeError" class="text-red-500 text-sm">{{ phonePeError }}</span> -->
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="font-semibold text-gray-700">Paytm UPI ID</label>
+                                <input
+                                    v-model="payTm_upi_id"
+                                    type="text"
+                                    placeholder="Enter UPI ID (example@okaxis)"
+                                    class="text-gray-700 w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring focus:border-blue-300"
+                                    @input="payTm_upi_id = payTm_upi_id.toLowerCase()"
+                                    @focus="activeUpiField = 'paytm'"
+                                />
+                                <div class="mt-1">
+                                    <span v-if="activeUpiField === 'paytm' && upiError" class="text-red-500 text-sm">
+                                        {{ upiError }}
+                                    </span>
                                 </div>
                             </div>
 
@@ -210,14 +263,44 @@
             userID.value = computed(() => page.props.auth.user?.id)
             cardID.value = JSON.parse(localStorage.getItem('cardId'))
 
-            const gPay = ref()
-            const phonePe = ref()
-            const payTm = ref()
+            const gPay = ref('')
+            const gPay_upi_id = ref('')
+            const phonePe = ref('')
+            const phonePe_upi_id = ref('')
+            const payTm = ref('')
+            const payTm_upi_id = ref('')
+            const activeUpiField = ref('')
+
+            // gpay upi id validation
+            const upiError = computed(() => {
+                let value = ''
+
+                if (activeUpiField.value === 'gpay') {
+                    value = gPay_upi_id.value
+                } else if (activeUpiField.value === 'phonepe') {
+                    value = phonePe_upi_id.value
+                } else if (activeUpiField.value === 'paytm') {
+                    value = payTm_upi_id.value
+                }
+
+                if (!value) return ""
+
+                const upiRegex = /^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/;
+
+                if (!upiRegex.test(value)) {
+                    return "Invalid UPI ID format"
+                }
+
+                return ""
+            })
 
             const form = ref({
                 gPay: null,
+                gPay_upi_id: null,
                 phonePe: null,
-                payTm: null
+                phonePe_upi_id: null,
+                payTm: null,
+                payTm_upi_id: null,
             });
 
             const preview = ref({
@@ -275,7 +358,10 @@
                 isSubmitting.value = true;
                 try {
                     const formData = new FormData();
-                    formData.append('gPay', gPay.value);
+                    formData.append('gPay', gPay.value);z
+                    formData.append('gPay_upi_id', gPay_upi_id.value);z
+                    formData.append('phonePe_upi_id', phonePe_upi_id.value);
+                    formData.append('payTm_upi_id', payTm_upi_id.value);
                     formData.append('phonePe', phonePe.value);
                     formData.append('payTm', payTm.value);
                     formData.append('gPayFile', form.gPay || '');
@@ -292,6 +378,9 @@
                     });
 
                     gPay.value = '';
+                    gPay_upi_id.value = '';
+                    phonePe_upi_id.value = '';
+                    payTm_upi_id.value = '';
                     phonePe.value = '';
                     payTm.value = '';
                     rowid.value = '';
@@ -362,6 +451,7 @@
                 onSubmit,
                 saveAndNext,
                 gPay,
+                gPay_upi_id,
                 phonePe,
                 payTm,
                 rowid,
@@ -371,6 +461,11 @@
                 onImageSelected,
                 s3PaymentUrl,
                 isSubmitting,
+                activeUpiField,
+                upiError,
+                phonePe_upi_id,
+                phonePe_upi_id,
+                payTm_upi_id,
             }
         }
     }
