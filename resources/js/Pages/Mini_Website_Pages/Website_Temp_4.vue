@@ -597,10 +597,10 @@
                                 class="w-full h-full object-contain border-1 border-[#414143]"
                                 @click="openImage(item.img)"
                             />
-                            <p class="text-center text-sm font-semibold mt-2">
+                            <p class="text-center text-sm font-semibold mt-2 bg-white p-2">
                                 {{ item.name }}
                             </p>
-                            <p class="text-center text-sm font-semibold mt-2">
+                            <p class="text-center text-sm font-semibold mt-1 bg-white p-2" @click="payWithUpi(item.upiid, item.name)">
                                 {{ item.upiid }}
                             </p>
                         </div>
@@ -1675,6 +1675,16 @@
                 }
             };
 
+            const payWithUpi = (upiId, name) => {
+                const url = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(name)}&cu=INR`;
+
+                if (/Android|iPhone/i.test(navigator.userAgent)) {
+                    window.location.href = url;
+                } else {
+                    alert("Please open on mobile to make payment");
+                }
+            }
+
             // ---------------- Feedback data ----------------
             const feedbackVerifyData = ref({})
             const loadFeedbackVerifyData = async () => {
@@ -2150,6 +2160,7 @@
                 templateId,
                 purchaseID,
                 fb_shareUrl,
+                payWithUpi,
             }
         }
     }
