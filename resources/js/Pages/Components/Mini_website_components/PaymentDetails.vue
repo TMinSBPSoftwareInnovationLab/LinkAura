@@ -359,7 +359,7 @@
                 try {
                     const formData = new FormData();
                     formData.append('gPay', gPay.value);z
-                    formData.append('gPay_upi_id', gPay_upi_id.value);z
+                    formData.append('gPay_upi_id', gPay_upi_id.value);
                     formData.append('phonePe_upi_id', phonePe_upi_id.value);
                     formData.append('payTm_upi_id', payTm_upi_id.value);
                     formData.append('phonePe', phonePe.value);
