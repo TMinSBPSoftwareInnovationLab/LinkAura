@@ -584,25 +584,40 @@
                 <div v-if="paymentQrs.length" class="flex flex-col w-full">
 
                     <!-- qr section -->
-                    <div class="grid grid-cols-1 gap-4 px-3 py-5">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 px-4 py-6">
 
                         <div
                             v-for="(item, index) in paymentQrs"
                             :key="index"
-                            class="flex flex-col w-full h-full  shadow-2xl rounded-xl p-2"
+                            class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition duration-300 p-4 flex flex-col items-center"
                         >
-                            <img
-                                :src="item.img"
-                                :alt="item.name"
-                                class="w-full h-full object-contain border-1 border-[#414143]"
-                                @click="openImage(item.img)"
-                            />
-                            <p class="text-center text-sm font-semibold mt-2 bg-white p-2">
+                            <!-- QR Image -->
+                            <div class="w-full h-48 flex items-center justify-center bg-gray-50 rounded-xl overflow-hidden">
+                                <img
+                                    :src="item.img"
+                                    :alt="item.name"
+                                    class="h-full object-contain cursor-pointer hover:scale-105 transition"
+                                    @click="openImage(item.img)"
+                                />
+                            </div>
+
+                            <!-- Name -->
+                            <p class="text-lg font-semibold mt-4 text-gray-800">
                                 {{ item.name }}
                             </p>
-                            <p class="text-center text-sm font-semibold mt-1 bg-white p-2" @click="payWithUpi(item.upiid, item.name)">
+
+                            <!-- UPI ID -->
+                            <p class="text-sm text-gray-500 mt-1 break-all">
                                 {{ item.upiid }}
                             </p>
+
+                            <!-- Pay Button -->
+                            <button
+                                @click="payWithUpi(item.upiid, item.name)"
+                                class="mt-4 w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-2 rounded-xl font-semibold shadow hover:scale-105 transition"
+                            >
+                                💰 Pay Now
+                            </button>
                         </div>
 
                     </div>
