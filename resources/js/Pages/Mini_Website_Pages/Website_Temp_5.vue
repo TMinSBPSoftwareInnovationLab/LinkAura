@@ -1916,6 +1916,16 @@
                 }
             };
 
+            const payWithUpi = (upiId, name) => {
+                const url = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(name)}&cu=INR`;
+
+                if (/Android|iPhone/i.test(navigator.userAgent)) {
+                    window.location.href = url;
+                } else {
+                    alert("Please open on mobile to make payment");
+                }
+            }
+
             // ---------------- Feedback data ----------------
             const feedbackVerifyData = ref({})
             const loadFeedbackVerifyData = async () => {
@@ -2395,7 +2405,8 @@
                 cd_id,
                 templateId,
                 purchaseID,
-                fb_shareUrl
+                fb_shareUrl,
+                payWithUpi
             }
         }
     }
