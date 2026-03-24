@@ -1870,18 +1870,29 @@ class MiniWebsiteController extends Controller
 
         $encoded = base64_encode($company->website_id);
 
-        // 🔥 capture full query string
-        $queryString = $request->getQueryString();
+        // 🔥 REQUIRED param build
+        $mainParam = base64_encode("cd_id={$company->id}&template_id={$company->website_id}");
 
+        // 🔥 base URL
         $finalUrl = url('/') . '/' 
             . $company->company_slug
             . '/' . $company->id
             . '/Website_Temp_' . $encoded;
 
-        // ✅ append query if exists
-        if ($queryString) {
-            $finalUrl .= '?' . $queryString;
+        // 🔥 existing query params எடுத்துக்கோ
+        $params = [];
+        if ($request->getQueryString()) {
+            parse_str($request->getQueryString(), $params);
         }
+
+        // 🔥 முக்கிய param set பண்ணு (override safe)
+        $params['ilp88LAsBvm'] = $mainParam;
+
+        // 🔥 product_id கூட சேர்க்கலாம் (optional but useful 😎)
+        $params['product_id'] = $product->id;
+
+        // ✅ final இணைப்பு
+        $finalUrl .= '?' . http_build_query($params);
 
         return view('product_share_template', [
             'product' => $product,
