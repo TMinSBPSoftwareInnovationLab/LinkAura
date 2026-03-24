@@ -312,7 +312,7 @@
                             <div class="grid grid-cols-2">
                                 <button
                                     class="bg-[#07254b] text-white text-[11px] py-2 font-bold"
-                                    @click="buyProduct(item.id, item.product_img, item.product_name, item.orginal_price)">
+                                    @click="buyProduct(item.id, item.product_img, item.product_name, item.final_price)">
                                 Buy
                                 </button>
                                 <button

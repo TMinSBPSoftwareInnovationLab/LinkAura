@@ -380,7 +380,7 @@
                             <button
                                 class="bg-[#3bbc4d] p-[10px] text-white text-[11px] md:text-[12px]
                                 font-bold rounded-lg uppercase leading-none flex items-center justify-center"
-                                @click="buyProduct(item.id, item.product_img, item.product_name, item.orginal_price)"
+                                @click="buyProduct(item.id, item.product_img, item.product_name, item.final_price)"
                             >
                                 Buy
                             </button>

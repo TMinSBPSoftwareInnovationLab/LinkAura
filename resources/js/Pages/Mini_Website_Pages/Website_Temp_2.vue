@@ -317,7 +317,7 @@
                                 <div class="flex gap-2 p-2">
                                     <button
                                         class="flex-1 bg-[#52b84a] text-white text-[11px] py-2 rounded-lg font-semibold"
-                                        @click="buyProduct(item.id, item.product_img, item.product_name, item.orginal_price)"
+                                        @click="buyProduct(item.id, item.product_img, item.product_name, item.final_price)"
                                         >
                                     Buy Now
                                     </button>

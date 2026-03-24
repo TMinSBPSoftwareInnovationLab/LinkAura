@@ -307,7 +307,7 @@
 
                                     <button 
                                         class="flex-1 bg-[#3d023a] text-white text-[11px] py-2 rounded-md font-semibold hover:bg-[#5a0456] transition"
-                                        @click="buyProduct(item.id, item.product_img, item.product_name, item.orginal_price)"
+                                        @click="buyProduct(item.id, item.product_img, item.product_name, item.final_price)"
                                     >
                                         Buy Now
                                     </button>

@@ -291,7 +291,7 @@
                                 <p class="mt-1 text-sm text-gray-400 leading-snug">
                                     Original Price: <span class="ml-1">{{ item.orginal_price }}</span>
                                 </p>
-                                <button class="px-2  bg-[#04a143] text-white text-[12px] rounded-lg" @click="buyProduct(item.id, item.product_img, item.product_name, item.orginal_price)">
+                                <button class="px-2  bg-[#04a143] text-white text-[12px] rounded-lg" @click="buyProduct(item.id, item.product_img, item.product_name, item.final_price)">
                                     Buy Now
                                 </button>
                             </div>
