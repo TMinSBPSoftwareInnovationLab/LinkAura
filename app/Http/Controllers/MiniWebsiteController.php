@@ -1854,7 +1854,7 @@ class MiniWebsiteController extends Controller
     }
 
     // product order
-    public function productShare($id)
+    public function productShare(Request $request, $id)
     {
         $product = DB::table("miniweb_products")
             ->where('id', $id)
@@ -1864,18 +1864,24 @@ class MiniWebsiteController extends Controller
             abort(404);
         }
 
-        // Company details (optional)
         $company = DB::table("miniweb_company_details")
             ->where('id', $product->mini_website_id )
             ->first();
 
-        // Final redirect URL
         $encoded = base64_encode($company->website_id);
+
+        // 🔥 capture full query string
+        $queryString = $request->getQueryString();
 
         $finalUrl = url('/') . '/' 
             . $company->company_slug
             . '/' . $company->id
             . '/Website_Temp_' . $encoded;
+
+        // ✅ append query if exists
+        if ($queryString) {
+            $finalUrl .= '?' . $queryString;
+        }
 
         return view('product_share_template', [
             'product' => $product,
