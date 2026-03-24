@@ -1159,6 +1159,46 @@
         <!-- Premium main /.-->
     </div>
     <!-- mobile plan popup /. -->
+
+    <!-- order popup -->
+    <div v-if="showForm" class="fixed inset-0 bg-black/50 flex items-center justify-center">
+        <div class="bg-white p-4 rounded-lg w-80">
+            
+            <form @submit.prevent="onSubmit">
+
+                <!-- Name -->
+                <input 
+                    v-model="customerName" 
+                    placeholder="Your Name"
+                    class="w-full border p-2 mb-1 rounded"
+                />
+                <span v-if="orderSubmitCount > 0 && customerNameError" class="text-red-500 text-sm">{{ customerNameError }}</span>
+
+                <!-- Phone -->
+                <input 
+                    v-model="customerPhone"
+                    placeholder="Phone Number"
+                    maxlength="10"
+                    @input="customerPhone = customerPhone.replace(/[^0-9]/g, '')"
+                    class="w-full border p-2 mb-1 rounded"
+                />
+                <span v-if="orderSubmitCount > 0 && customerPhoneError" class="text-red-500 text-sm">{{ customerPhoneError }}</span>
+
+                <!-- Button -->
+                <button 
+                    type="submit"
+                    :disabled="isSubmitting"
+                    class="w-full bg-[#3d023a] text-white py-2 rounded mt-2 disabled:opacity-50"
+                >
+                    <span v-if="isSubmitting">Processing...</span>
+                    <span v-else>Continue</span>
+                </button>
+
+                </form>
+
+        </div>
+    </div>
+    <!-- order popup /. -->
 </template>
 
 <script>
@@ -1205,6 +1245,8 @@
             // const route = useRoute();
             // const router = useRouter();
             const cardStore = useCardStore()
+            const showForm = ref(false);
+            const selectedProduct = ref(null);
 
             /* 20-03-2026 
                 const decoded = route.query.ilp88LAsBvm ? atob(decodeURIComponent(route.query.ilp88LAsBvm)) : ''
@@ -1712,31 +1754,71 @@
                 showPlan.value = false
             }
 
-            const buyProduct = async(id, proImage, proName, orginal_price) => {
-                // ✅ Product Share URL (OG preview)
-                const shareUrl = `${window.location.origin}/product-share/${id}`;
-                console.log(id)
-                // ✅ Format mobile number
-                let phone = company_mobile.value;
-
-                // if (phone.length === 10) {
-                //     phone = "91" + phone; // India code
-                // }
-
-                // ✅ Message with product link
-                const message = 
-                `🛒 *NEW ORDER REQUEST*\n\n` +
-                `🔹 *Product:* ${proName}\n` +
-                `🔹 *Price:* ₹${orginal_price}\n\n` +
-                `🔗 *View Product:*\n${shareUrl}\n\n` +
-                `Hi! I want to buy this 😍`;
-
-                // ✅ WhatsApp URL
-                const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-
-                // ✅ Open WhatsApp
-                window.open(whatsappUrl, "_blank");
+            // order product
+            const buyProduct = (id, img, name, price) => {
+                selectedProduct.value = { id, img, name, price };
+                resetForm();
+                showForm.value = true;
             };
+
+            const orderschema = yup.object({
+            customerName: yup
+                .string()
+                .required('Name is required'),
+
+            customerPhone: yup
+                .string()
+                .required('Phone number is required')
+                .matches(/^[0-9]+$/, 'Only numbers allowed')
+                .length(10, 'Must be exactly 10 digits')
+            });
+            const { handleSubmit: handleOrderSubmit, submitCount: orderSubmitCount, isSubmitting, resetForm } = useForm({
+                validationSchema: orderschema
+            });
+
+            const { value: customerName, errorMessage: customerNameError} = useField('customerName');
+            const { value: customerPhone, errorMessage: customerPhoneError} = useField('customerPhone');
+
+            const onSubmit = handleOrderSubmit(async (values) => {
+                try {
+                    const { id, name: proName, price } = selectedProduct.value;
+
+                    const shareUrl = `${window.location.origin}/product-share/${id}`;
+
+                    const message = 
+                    `🛒 *NEW ORDER REQUEST*\n\n` +
+                    `👤 *Name:* ${values.customerName}\n` +
+                    `📞 *Phone:* ${values.customerPhone}\n\n` +
+                    `🔹 *Product:* ${proName}\n` +
+                    `🔹 *Price:* ₹${price}\n\n` +
+                    `${shareUrl}\n\n` +
+                    `Hi! I want to buy this 😍`;
+
+                    // ✅ DB save
+                    await axios.post('/saveProductOrder', {
+                        product_id: id,
+                        product_name: proName,
+                        product_price: price,
+                        customer_name: values.customerName,
+                        customer_phone: values.customerPhone
+                    });
+
+                    let phoneNo = company_mobile.value;
+
+                    window.open(`https://wa.me/${phoneNo}?text=${encodeURIComponent(message)}`, "_blank");
+
+                    // ✅ reset form
+                    resetForm();
+
+                    // ✅ close popup
+                    showForm.value = false;
+
+                } catch (error) {
+                    console.error("Order error:", error);
+                    alert("Something went wrong. Try again.");
+                }
+
+            });
 
             const selectProduct = (name) => {
                 productnameEnquiry.value = name;
@@ -2044,6 +2126,18 @@
                 templateId,
                 purchaseID,
                 fb_shareUrl,
+                payWithUpi,
+                // order area
+                showForm, 
+                selectedProduct,
+                customerName,
+                customerPhone,
+                onSubmit,
+                // orderschema
+                orderschema,
+                customerNameError,
+                customerPhoneError,
+                orderSubmitCount,
             }
         }
     }
