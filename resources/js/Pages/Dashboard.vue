@@ -201,7 +201,7 @@
                 <!-- Price area -->
                 <div class="flex flex-col w-full px-5 pt-5 pb-5 bg-[#066856]">
                     <p class="uppercase font-semibold text-[20px] text-[#066856] bg-white p-4 rounded-2xl">
-                        Price: ₹1499
+                        Price: ₹1999
                     </p>
                     <p class="uppercase text-[20px] text-white font-semibold">
                         Validity: 6 Months
@@ -251,7 +251,7 @@
 
                 <!-- purchase button -->
                 <div class="flex flex-col w-full px-5 pt-2 pb-2 justify-center items-center mt-5 mb-10 bg-[#066856]">
-                    <button @click="purchasePlan(95, 1499, 'Standard Plan')"
+                    <button @click="purchasePlan(95, 1999, 'Standard Plan')"
                     class="w-[150px] text-gray bg-transparent border-1 border-[#ffffff] text-[#ffffff] py-2 rounded-xl transition hover:bg-[#066856] hover:text-white" >
                     Buy Now
                     </button>
