@@ -1752,6 +1752,7 @@
                 `🛒 *NEW ORDER REQUEST*\n\n` +
                 `🔹 *Product:* ${proName}\n` +
                 `🔹 *Price:* ₹${orginal_price}\n\n` +
+                `🔗 *View Product:*\n${shareUrl}\n\n` +
                 `Hi! I want to buy this 😍`;
 
                 // ✅ WhatsApp URL
