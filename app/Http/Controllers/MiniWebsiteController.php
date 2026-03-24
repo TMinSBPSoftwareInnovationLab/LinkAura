@@ -1900,4 +1900,42 @@ class MiniWebsiteController extends Controller
             'final_url' => $finalUrl
         ]);
     }
+
+    // saveProductOrder
+    public function saveProductOrder(Request $request){
+        $validated = $request->validate([
+            'product_id' => 'required|integer',
+            'product_name' => 'required|string|max:255',
+            'product_price' => 'required|numeric',
+            'customer_name' => 'required|string|max:255',
+            'customer_phone' => 'required|digits:10'
+        ]);
+
+         $product = DB::table('miniweb_products')
+            ->where('id', $validated['product_id'])
+            ->first();
+        
+        if (!$product) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid product'
+            ], 404);
+        }
+
+        DB::table('miniweb_orders')->insert([
+            'company_id' => $product->mini_website_id,
+            'product_id' => $validated['product_id'],
+            'product_name' => $validated['product_name'],
+            'product_price' => $validated['product_price'],
+            'customer_name' => $validated['customer_name'],
+            'customer_phone' => $validated['customer_phone'],
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Order saved successfully'
+        ]);
+    }
 }
