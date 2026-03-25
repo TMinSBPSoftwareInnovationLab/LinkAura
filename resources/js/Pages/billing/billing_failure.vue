@@ -100,8 +100,7 @@
         components: { SideNavBar, Header_tab, AgGridVue },
         setup(){
             const page = usePage();
-            const user_id = ref('')
-            user_id.value = computed(() => page.props.auth.user?.id);
+            const user_id = computed(() => page.props.auth.user?.id);
             const rowData = ref({});
             const rejectPopup = ref(false);
             const rejectReason = ref("");

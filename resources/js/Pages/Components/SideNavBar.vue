@@ -129,7 +129,8 @@ import {
     WrenchScrewdriverIcon,
     PhotoIcon,
     CreditCardIcon,
-    PowerIcon
+    PowerIcon,
+    ShoppingBagIcon
 } from "@heroicons/vue/24/outline";
 export default {
     components: { PowerIcon },
@@ -149,15 +150,18 @@ export default {
         const userImage = ref("/default-avatar.png");
         const menu = ref([]);
 
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
-        const isAdmin = user?.id === 1;
+        // const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const user = computed(() => page.props.auth.user || {});
+        // const isAdmin = user?.id == 1;
+        const isAdmin = computed(() => user.value.id === 1);
 
         const allMenus = {
             dashboard: [
                 { name: "Dashboard", icon: HomeIcon, url: "/dashboard" },
                 { name: "Feedback Verify", icon: CheckBadgeIcon, url: "/FeedbackVerify" },
                 { name: "Card Enquiries", icon: InboxStackIcon, url: '/MiniWebEnquiry' },
-                ...(isAdmin
+                { name: "Order Details", icon: ShoppingBagIcon, url: '/ProductOrders' },
+                ...(isAdmin.value
                 ? [
                     { name: "Billing Success", icon: CheckCircleIcon, url: '/BillingSuccess' },
                     { name: "Billing Failure", icon: XCircleIcon, url: '/BillingFailure' },
@@ -184,27 +188,40 @@ export default {
 
         // Fetch user from localStorage
         onMounted(() => {
-            const currentPath = window.location.pathname;
-            const currentMenu = flatMenus.value.find(item => item.url === currentPath);
-            active.value = currentMenu ? currentMenu.name : "";
-            // console.log("active.value : ",currentMenu)
-            // const user = JSON.parse(localStorage.getItem("user"));
-            // if (user) {
-            //     username.value = user.name ?? "User";
-            //     email.value = user.email ?? "email@example.com";
-            //     userImage.value = user.profile ?? "/default-avatar.png";
-            // }
-
             const path = window.location.pathname;
 
-            // if (path === "/dashboard") {
-            if(/^\/(dashboard|FeedbackVerify|MiniWebEnquiry|BillingSuccess|BillingFailure)/.test(path)){
+            if (allMenus.dashboard.some(item => item.url === path)) {
                 menu.value = allMenus.dashboard;
             } 
-            else if (/^\/(Company_details|Website_temp|Address|Aboutus|MediaLinks|Products|Service|Gallery|PaymentDetails)/.test(path)) {
+            else if (allMenus.company_details.some(item => item.url === path)) {
                 menu.value = allMenus.company_details;
             }
+
+            const currentMenu = flatMenus.value.find(item => item.url === path);
+            active.value = currentMenu ? currentMenu.name : "";
         });
+        // onMounted(() => {
+        //     const currentPath = window.location.pathname;
+        //     const currentMenu = flatMenus.value.find(item => item.url === currentPath);
+        //     active.value = currentMenu ? currentMenu.name : "";
+        //     // console.log("active.value : ",currentMenu)
+        //     // const user = JSON.parse(localStorage.getItem("user"));
+        //     // if (user) {
+        //     //     username.value = user.name ?? "User";
+        //     //     email.value = user.email ?? "email@example.com";
+        //     //     userImage.value = user.profile ?? "/default-avatar.png";
+        //     // }
+
+        //     const path = window.location.pathname;
+
+        //     // if (path === "/dashboard") {
+        //     if(/^\/(dashboard|FeedbackVerify|MiniWebEnquiry|ProductOrders|BillingSuccess|BillingFailure|PaymentDetails)/.test(path)){
+        //         menu.value = allMenus.dashboard;
+        //     } 
+        //     else if (/^\/(Company_details|Website_temp|Address|Aboutus|MediaLinks|Products|Service|Gallery)/.test(path)) {
+        //         menu.value = allMenus.company_details;
+        //     }
+        // });
 
         // all methods here
         const goToProfileEdit = async() => {

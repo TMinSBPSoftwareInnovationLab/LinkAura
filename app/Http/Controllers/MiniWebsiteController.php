@@ -1946,11 +1946,15 @@ class MiniWebsiteController extends Controller
 
     // get product orders
     public function getProductOrders(Request $request) {
-         $getData = DB::table("miniweb_orders as mwo")
+        $user_id = $request->user_id;
+        $getData = DB::table("miniweb_orders as mwo")
             ->select(
                 "mwo.*", 
                 DB::raw("DATE_FORMAT(created_at, '%d-%m-%Y %h:%i:%s') as CDate")
             )
+            ->when($user_id != 1, function ($query) use ($user_id) {
+                $query->where("cd.user_id", $user_id);
+            })
             ->orderBy("mwo.id","desc")
             ->get();
 
