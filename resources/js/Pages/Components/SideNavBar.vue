@@ -236,9 +236,12 @@ export default {
 
         // logout
         const logout = () => {
-            localStorage.clear();
-            window.location.href = "/";
-        }
+            router.post('/logout', {}, {
+                onSuccess: () => {
+                    localStorage.clear();
+                }
+            });
+        };
 
         const navigate = (item) => {
             active.value = item.name;

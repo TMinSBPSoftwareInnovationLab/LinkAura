@@ -21,6 +21,13 @@ Route::get('/', function () {
 
 Route::post('/userRegister',[AuthController::class, 'userRegister']);
 Route::post('/login', [AuthController::class, 'login']);
+const logout = () => {
+    router.post('/logout', {}, {
+        onSuccess: () => {
+            localStorage.clear();
+        }
+    });
+};
 Route::post('/checkExistMobile',[AuthController::class, 'checkExistMobile']);
 // old backup
 // forgot password
