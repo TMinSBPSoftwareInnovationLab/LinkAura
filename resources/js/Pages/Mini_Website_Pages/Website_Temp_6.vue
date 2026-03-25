@@ -1161,7 +1161,7 @@
     <!-- mobile plan popup /. -->
 
     <!-- order popup -->
-    <div v-if="showForm" class="fixed inset-0 bg-black/50 flex items-center justify-center">
+    <div v-if="showForm" @click.self="showForm = false" class="fixed inset-0 bg-black/50 flex items-center justify-center">
         <div class="bg-white p-4 rounded-lg w-80">
             
             <form @submit.prevent="onSubmit">
@@ -1683,6 +1683,12 @@
 
 
             onMounted(async () => {
+                window.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        showForm.value = false;
+                    }
+                });
+                
                 if (!cd_id.value) return;
 
                 try {
