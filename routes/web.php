@@ -67,6 +67,7 @@ Route::post('/save_school_datas',[MiniWebsiteController::class, 'saveAdmission']
 
 // save order 
 Route::post('/saveProductOrder',[MiniWebsiteController::class, 'saveProductOrder']);
+Route::post('/getProductOrders',[MiniWebsiteController::class, 'getProductOrders']);
 
 // sample bill generation
 Route::get('/preview-bill', function () {
@@ -185,6 +186,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Billing Failure
     Route::get('/BillingFailure', function () {
         return Inertia::render('billing/billing_failure');
+    });
+    
+    // Product Orders
+    Route::get('/ProductOrders', function () {
+        return Inertia::render('orders/ProductOrders');
     });
 
 });

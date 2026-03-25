@@ -23,7 +23,7 @@
             <!-- heading page -->
             <div class="flex flex-col w-full mt-2">
                 <div class="flex w-full bg-[#000b57] text-white text-center items-center justify-center uppercase font-bold p-2">
-                    <h1>Billing Success</h1>
+                    <h1>Product Orders</h1>
                 </div>
             </div>
             <!-- heading page /. -->
@@ -96,12 +96,11 @@
 
     ModuleRegistry.registerModules([AllCommunityModule]); 
     export default {
-        name: 'Billing_Success',
+        name: 'ProductOrders',
         components: { SideNavBar, Header_tab, AgGridVue },
         setup(){
             const page = usePage();
-            const user_id = ref('')
-            user_id.value = computed(() => page.props.auth.user?.id);
+            const user_id = computed(() => page.props.auth.user?.id)
             const rowData = ref({});
             const rejectPopup = ref(false);
             const rejectReason = ref("");
@@ -122,19 +121,16 @@
 
             const colDefs = ref([
                 { headerName: "S.No", valueGetter: "node.rowIndex + 1", width: 80, },
-                { field: "mini_website_id", headerName: "Wbsite ID",  width:150, editable: true },
-                { field: "plan_id", headerName: "Plan ID",  width:100, editable: true },
-                { field: "plan_name", headerName: "Plan Name", width: 150, editable: true },
-                { field: "txn_amt", headerName: "TXN AMT", width: 100, editable: true },
-                { field: "txn_status", headerName: "TXN Status", width: 120, editable: true },
-                { field: "transaction_id", headerName: "Transaction ID", width: 180, editable: true },
-                { field: "txnDate", headerName: "TXN Date", width: 180, editable: true },
-                { field: "plan_expiry_status_label", headerName: "Plan Expiry", width: 180, editable: true },
+                { field: "customer_name", headerName: "Customer Name", width: 180, editable: true },
+                { field: "customer_phone", headerName: "Customer Phone", width: 150, editable: true },
+                { field: "product_name", headerName: "Product Name",  width:150, editable: true },
+                { field: "product_price", headerName: "Product Price",  width:150, editable: true },
+                { field: "CDate", headerName: "CDate", width: 180, editable: true },
             ]);
 
             const loadBS = async() => {
                 try{
-                    const res = await axios.post("/getBillingSuccess", { user_id: user_id.value }) 
+                    const res = await axios.post("/getProductOrders", { user_id: user_id.value }) 
                     rowData.value = res.data.getData;
 
                     if (res.data.status && Array.isArray(res.data.getData)) {
@@ -171,14 +167,11 @@
                 // We map your colDefs to ExcelJS columns (skipping "Actions" column)
                 worksheet.columns = [
                     { header: 'S.No', key: 'sno', width: 10 },
-                    { header: 'Wbsite ID', key: 'mini_website_id', width: 25 },
-                    { header: 'Plan ID', key: 'plan_id', width: 20 },
-                    { header: 'Plan Name', key: 'plan_name', width: 20 },
-                    { header: 'TXN AMT', key: 'txn_amt', width: 20 },
-                    { header: 'TXN Status', key: 'txn_status', width: 30 },
-                    { header: 'Transaction ID', key: 'transaction_id', width: 20 },
-                    { header: 'Txn Date', key: 'txnDate', width: 20 },
-                    { header: 'Plan Expiry', key: 'plan_expiry_status_label', width: 20 },
+                    { header: 'Customer Name', key: 'customer_name', width: 25 },
+                    { header: 'Customer Phone', key: 'customer_phone', width: 20 },
+                    { header: 'Product Name', key: 'product_name', width: 20 },
+                    { header: 'Product Price', key: 'product_price', width: 20 },
+                    { header: 'Created Date', key: 'CDate', width: 20 },
                 ];
 
                 // 3. Prepare the data
@@ -186,14 +179,12 @@
                 const formattedData = rowData.value.map((row, index) => {
                     return {
                         sno: index + 1,
-                        mini_website_id: row.mini_website_id,
-                        plan_id: row.plan_id,
+                        customer_name: row.customer_name,
+                        customer_phone: row.customer_phone,
+                        product_name: row.product_name,
                         plan_name: row.plan_name,
-                        txn_amt: row.txn_amt,
-                        txn_status: row.txn_status,
-                        transaction_id: row.transaction_id,
-                        txnDate: row.txnDate,
-                        plan_expiry_status_label: row.plan_expiry_status_label,
+                        product_price: row.product_price,
+                        CDate: row.CDate,
                     };
                 });
 
@@ -214,7 +205,7 @@
                 // 6. Generate Buffer and Save File
                 const buffer = await workbook.xlsx.writeBuffer();
                 const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-                saveAs(blob, `Enquiry_Message_${new Date().toISOString().slice(0, 10)}.xlsx`);
+                saveAs(blob, `Product_Order_${new Date().toISOString().slice(0, 10)}.xlsx`);
             };
             
 

@@ -1217,6 +1217,12 @@
                 />
                 <span v-if="orderSubmitCount > 0 && customerPhoneError" class="text-red-500 text-sm">{{ customerPhoneError }}</span>
 
+                <!-- Address -->
+                 <textarea v-model="customerAddress"
+                    type="text" placeholder="Enter Address"
+                    class="w-full border p-2 mb-1 rounded"></textarea>
+                <span v-if="orderSubmitCount > 0 && customerAddressError" class="text-red-500 text-sm">{{ customerAddressError }}</span>
+
                 <!-- Button -->
                 <button 
                     type="submit"
@@ -1799,7 +1805,11 @@
                 .string()
                 .required('Phone number is required')
                 .matches(/^[0-9]+$/, 'Only numbers allowed')
-                .length(10, 'Must be exactly 10 digits')
+                .length(10, 'Must be exactly 10 digits'),
+            
+            customerAddress: yup
+                .string()
+                .required('Address is required')
             });
             const { handleSubmit: handleOrderSubmit, submitCount: orderSubmitCount, isSubmitting, resetForm } = useForm({
                 validationSchema: orderschema
@@ -1807,6 +1817,7 @@
 
             const { value: customerName, errorMessage: customerNameError} = useField('customerName');
             const { value: customerPhone, errorMessage: customerPhoneError} = useField('customerPhone');
+            const { value: customerAddress, errorMessage: customerAddressError} = useField('customerAddress');
 
             const onSubmit = handleOrderSubmit(async (values) => {
                 try {
@@ -1818,6 +1829,7 @@
                     `🛒 *NEW ORDER REQUEST*\n\n` +
                     `👤 *Name:* ${values.customerName}\n` +
                     `📞 *Phone:* ${values.customerPhone}\n\n` +
+                    `📞 *Address:* ${values.customerAddress}\n\n` +
                     `🔹 *Product:* ${proName}\n` +
                     `🔹 *Price:* ₹${price}\n\n` +
                     `${shareUrl}\n\n` +
@@ -1829,7 +1841,8 @@
                         product_name: proName,
                         product_price: price,
                         customer_name: values.customerName,
-                        customer_phone: values.customerPhone
+                        customer_phone: values.customerPhone,
+                        customer_address: values.customerAddress
                     });
 
                     let phoneNo = company_mobile.value;
@@ -2157,6 +2170,7 @@
                 selectedProduct,
                 customerName,
                 customerPhone,
+                customerAddress,
                 onSubmit,
                 // orderschema
                 orderschema,

@@ -1911,7 +1911,8 @@ class MiniWebsiteController extends Controller
             'product_name' => 'required|string|max:255',
             'product_price' => 'required|numeric',
             'customer_name' => 'required|string|max:255',
-            'customer_phone' => 'required|digits:10'
+            'customer_phone' => 'required|digits:10',
+            'customer_address' => 'required'
         ]);
 
          $product = DB::table('miniweb_products')
@@ -1932,6 +1933,7 @@ class MiniWebsiteController extends Controller
             'product_price' => $validated['product_price'],
             'customer_name' => $validated['customer_name'],
             'customer_phone' => $validated['customer_phone'],
+            'customer_address' => $validated['customer_address'],
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -1939,6 +1941,23 @@ class MiniWebsiteController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Order saved successfully'
+        ]);
+    }
+
+    // get product orders
+    public function getProductOrders(Request $request) {
+         $getData = DB::table("miniweb_orders as mwo")
+            ->select(
+                "mwo.*", 
+                DB::raw("DATE_FORMAT(created_at, '%d-%m-%Y %h:%i:%s') as CDate")
+            )
+            ->orderBy("mwo.id","desc")
+            ->get();
+
+        return response()->json([
+            'status' => true,
+            'getData' => $getData,
+            'message' => $getData->isNotEmpty() ? 'Product Order data found' : 'No Product Order data found'
         ]);
     }
 }
