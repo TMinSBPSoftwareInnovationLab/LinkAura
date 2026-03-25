@@ -125,6 +125,7 @@
                 { field: "customer_phone", headerName: "Customer Phone", width: 150, editable: true },
                 { field: "product_name", headerName: "Product Name",  width:150, editable: true },
                 { field: "product_price", headerName: "Product Price",  width:150, editable: true },
+                { field: "customer_address", headerName: "Address",  width:150, editable: true },
                 { field: "CDate", headerName: "CDate", width: 180, editable: true },
             ]);
 
@@ -171,6 +172,7 @@
                     { header: 'Customer Phone', key: 'customer_phone', width: 20 },
                     { header: 'Product Name', key: 'product_name', width: 20 },
                     { header: 'Product Price', key: 'product_price', width: 20 },
+                    { header: 'Address', key: 'product_price', width: 20 },
                     { header: 'Created Date', key: 'CDate', width: 20 },
                 ];
 
@@ -183,6 +185,7 @@
                         customer_phone: row.customer_phone,
                         product_name: row.product_name,
                         plan_name: row.plan_name,
+                        product_price: row.product_price,
                         product_price: row.product_price,
                         CDate: row.CDate,
                     };
