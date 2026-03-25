@@ -1292,7 +1292,10 @@ class MiniWebsiteController extends Controller
                 "cd.created_at"
             )
             ->leftJoin("miniweb_plan_purchase as mpp","cd.id","=","mpp.mini_website_id")
-            ->where("user_id","=",$user_id)
+            // ->where("user_id","=",$user_id)
+             ->when($user_id != 1, function ($query) use ($user_id) {
+                $query->where("cd.user_id", $user_id);
+            })
             ->orderBy('id', 'desc')
             ->get();
 
