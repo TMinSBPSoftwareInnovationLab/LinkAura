@@ -1826,7 +1826,7 @@
                         showForm.value = false;
                     }
                 });
-                
+
                 if (!cd_id.value) return;
 
                 try {
@@ -2286,6 +2286,7 @@
                 orderschema,
                 customerNameError,
                 customerPhoneError,
+                customerAddressError,
                 orderSubmitCount,
             }
         }

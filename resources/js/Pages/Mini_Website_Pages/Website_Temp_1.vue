@@ -1723,7 +1723,7 @@
                         showForm.value = false;
                     }
                 });
-                
+
                 if (!cd_id) return;
 
                 try {
@@ -2191,6 +2191,7 @@
                 orderschema,
                 customerNameError,
                 customerPhoneError,
+                customerAddressError,
                 orderSubmitCount,
             }
         }
