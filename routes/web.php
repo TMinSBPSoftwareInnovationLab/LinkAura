@@ -21,13 +21,13 @@ Route::get('/', function () {
 
 Route::post('/userRegister',[AuthController::class, 'userRegister']);
 Route::post('/login', [AuthController::class, 'login']);
-const logout = () => {
-    router.post('/logout', {}, {
-        onSuccess: () => {
-            localStorage.clear();
-        }
-    });
-};
+Route::post('/logout', function () {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+
+    return redirect('/');
+})->name('logout');
 Route::post('/checkExistMobile',[AuthController::class, 'checkExistMobile']);
 // old backup
 // forgot password
