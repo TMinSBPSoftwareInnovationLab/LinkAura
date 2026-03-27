@@ -310,7 +310,7 @@
                     <div class="w-14 bg-red-600 flex items-center justify-center rounded-l-xl">
                         <span class="text-white text-sm font-semibold rotate-[-90deg] whitespace-nowrap">
                         <!-- ₹1,239 <br> (₹1,050 + ₹189 GST) / 3 Months -->
-                         ₹999 / 3 Months
+                         ₹1499 / 6 Months
                         </span>
                     </div>
 
@@ -320,9 +320,9 @@
                         </div>
                         <div class="flex flex-col w-full px-2 pt-0">
                             <ul class="text-[15px] font-semibold leading-loose">
-                                <li>🛍️ Add up to 5 Products </li>
-                                <li>🛠️ Add up to 5 Services</li>
-                                <li>🖼️ Upload 5 Gallery Images</li>
+                                <li>🛍️ Add up to 25 Products </li>
+                                <li>🛠️ Add up to 25 Services</li>
+                                <li>🖼️ Upload 25 Gallery Images</li>
                                 <li>🔄 Unlimited Updates</li>
                                 <li>✍ Customer Enquiry Section</li>
                                 <li>⭐ Customer Feedback Section</li>
@@ -363,7 +363,7 @@
                         <div class="w-14 bg-[#681c6a] flex items-center justify-center rounded-l-xl">
                             <span class="text-white text-sm font-semibold rotate-[-90deg] whitespace-nowrap">
                             <!-- ₹2,124 <br>(₹1,800 + ₹324 GST) / 6 Months -->
-                             ₹1499 / 6 Months
+                             ₹2499 / 12 Months
                             </span>
                         </div>
 
@@ -373,9 +373,9 @@
                             </div>
                             <div class="flex flex-col w-full px-2 pt-0">
                                 <ul class="text-[15px] font-semibold leading-loose">
-                                    <li>🛍️ Add up to 15 Products </li>
-                                    <li>🛠️ Add up to 15 Services</li>
-                                    <li>🖼️ Upload 15 Gallery Images</li>
+                                    <li>🛍️ Add up to 75 Products </li>
+                                    <li>🛠️ Add up to 75 Services</li>
+                                    <li>🖼️ Upload 75 Gallery Images</li>
                                     <li>🔄 Unlimited Updates</li>
                                     <li>✍ Customer Enquiry Section</li>
                                     <li>⭐ Customer Feedback Section</li>
@@ -416,7 +416,7 @@
                         <div class="w-14 bg-green-600 flex items-center justify-center rounded-l-xl">
                             <span class="text-white text-sm font-semibold rotate-[-90deg] whitespace-nowrap">
                             <!-- ₹3,540 <br>(₹3,000 + ₹540 GST) / 12 Months -->
-                             ₹2,999 / 12 Months
+                             ₹₹7999 / 3 Years
                             </span>
                         </div>
 
@@ -426,9 +426,9 @@
                             </div>
                             <div class="flex flex-col w-full px-2 pt-0">
                                 <ul class="text-[15px] font-semibold leading-loose">
-                                    <li>🛍️ Add up to 30 Products </li>
-                                    <li>🛠️ Add up to 30 Services</li>
-                                    <li>🖼️ Upload 30 Gallery Images</li>
+                                    <li>🛍️ Add up to 300+ Products </li>
+                                    <li>🛠️ Add up to 300+ Services</li>
+                                    <li>🖼️ Upload 300+ Gallery Images</li>
                                     <li>🔄 Unlimited Updates</li>
                                     <li>✍ Customer Enquiry Section</li>
                                     <li>⭐ Customer Feedback Section</li>
