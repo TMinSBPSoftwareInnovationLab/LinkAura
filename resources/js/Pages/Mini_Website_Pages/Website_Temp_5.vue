@@ -1916,9 +1916,9 @@
 
                     if (companyData && Number(companyData.purchased_id) > 0) {
                         const planId = Number(companyData.plan_id);
-                        if (planId === 94) return 5;
-                        if (planId === 95) return 15;
-                        if (planId === 96) return 30;
+                        if (planId === 94) return 25;
+                        if (planId === 95) return 75;
+                        if (planId === 96) return 1000;
                     }
                     
                     return 0; // Default if no valid plan

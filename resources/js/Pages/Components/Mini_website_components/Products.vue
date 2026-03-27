@@ -262,9 +262,9 @@
 
                 if (companyData && companyData.purchased_id > 0) {
                     const planId = Number(companyData.plan_id);
-                    if (planId === 94) allowedCount = 5;
-                    else if (planId === 95) allowedCount = 15;
-                    else if (planId === 96) allowedCount = 30;
+                    if (planId === 94) allowedCount = 25;
+                    else if (planId === 95) allowedCount = 75;
+                    else if (planId === 96) allowedCount = 1000;
                 }
 
                 const res = await axios.post('/getWebsiteDetails', {
@@ -274,7 +274,7 @@
 
                 const data = res.data.getData || [];
 
-                products.value = Array.from({ length: 30 }, (_, index) => {
+                products.value = Array.from({ length: 1000 }, (_, index) => {
                     // If we have DB data for this index, use it
                     if (data[index]) {
                         const item = data[index];
