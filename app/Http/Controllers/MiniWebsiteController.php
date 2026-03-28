@@ -532,7 +532,7 @@ class MiniWebsiteController extends Controller
                 }
             }
             // 3. INSERT MODE
-            else { return "insert";
+            else { return $data;
                 if ($newImagePath) {
                     $data['product_img'] = $newImagePath;
                 }
