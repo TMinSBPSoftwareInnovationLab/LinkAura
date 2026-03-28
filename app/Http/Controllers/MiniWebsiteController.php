@@ -444,8 +444,6 @@ class MiniWebsiteController extends Controller
 
     // save product
     public function saveWebProducts(Request $request) {
-        dd($request->all());
-        exit;
         $products = $request->products;
         $mini_website_id = $request->cardId;
         $rowid = $request->rowid;
@@ -508,7 +506,7 @@ class MiniWebsiteController extends Controller
             ];
             
             // 2. UPDATE MODE
-            if (!empty($rowid) && isset($rowid[$index])) {
+            if (!empty($rowid) && isset($rowid[$index])) { return "row id : ".$rowid;
                 $productId = $rowid[$index];
 
                 // If a new image was uploaded, delete the old one from S3 first
@@ -534,7 +532,7 @@ class MiniWebsiteController extends Controller
                 }
             }
             // 3. INSERT MODE
-            else {
+            else { return "insert";
                 if ($newImagePath) {
                     $data['product_img'] = $newImagePath;
                 }
