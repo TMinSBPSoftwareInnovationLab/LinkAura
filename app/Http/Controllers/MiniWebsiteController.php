@@ -456,12 +456,10 @@ class MiniWebsiteController extends Controller
             return ['status' => false, 'message' => 'No Products Insert!'];
         }
 
-        // Create Image Manager ONCE (performance)
         $manager = new ImageManager(new Driver());
 
         foreach ($products as $index => $p) {
 
-            // Skip empty products
             if (
                 empty($p['name']) &&
                 empty($p['original_price']) &&
@@ -481,23 +479,21 @@ class MiniWebsiteController extends Controller
             $status = (int)($p['status'] ?? 0);
 
             $newImagePath = '';
+            $isImageUpdated = false;
 
+            // ===========================
+            // ✅ Image Upload (if changed)
+            // ===========================
             if (isset($p['image']) && $p['image'] instanceof \Illuminate\Http\UploadedFile) {
 
                 try {
                     $dateTime = now()->format('Ymd_His');
                     $imageName = "{$mini_website_id}_la_{$dateTime}_" . uniqid() . ".webp";
 
-                    // Read image
                     $img = $manager->read($p['image']->getRealPath());
-
-                    // Resize (maintain ratio)
                     $img = $img->scale(width: 800);
-
-                    // Convert to WebP (quality 80)
                     $webpImage = $img->toWebp(80);
 
-                    // Upload to S3
                     Storage::disk('s3_products')->put(
                         $s3Folder . $imageName,
                         $webpImage,
@@ -505,9 +501,9 @@ class MiniWebsiteController extends Controller
                     );
 
                     $newImagePath = $imageName;
+                    $isImageUpdated = true;
 
                 } catch (\Exception $e) {
-                    // optional: skip image error but continue product save
                     continue;
                 }
             }
@@ -519,22 +515,39 @@ class MiniWebsiteController extends Controller
                 'discount_price'  => $discount,
                 'final_price'     => $final,
                 'status'          => $status,
-                'm_date'          => now('Asia/Kolkata')->toDateTimeString()
             ];
 
-            if (!empty($rowid) && isset($rowid[$index])) {
+            $productId = $rowid[$index] ?? null;
 
-                $productId = $rowid[$index];
+            // ===========================
+            // ✅ UPDATE (only if changed)
+            // ===========================
+            if ($productId) {
 
-                if ($newImagePath) {
+                $old = DB::table('miniweb_products')
+                    ->where('id', $productId)
+                    ->first();
 
-                    $oldProduct = DB::table('miniweb_products')
-                        ->where('id', $productId)
-                        ->first();
+                if (!$old) continue;
 
-                    if ($oldProduct && $oldProduct->product_img) {
+                // Check differences
+                $isChanged =
+                    $old->product_name != $name ||
+                    $old->orginal_price != $original ||
+                    $old->discount_price != $discount ||
+                    $old->final_price != $final ||
+                    $old->status != $status ||
+                    $isImageUpdated;
 
-                        $oldPath = $s3Folder . $oldProduct->product_img;
+                if (!$isChanged) {
+                    continue; // ❌ No update if same
+                }
+
+                // Handle image replace
+                if ($isImageUpdated) {
+
+                    if ($old->product_img) {
+                        $oldPath = $s3Folder . $old->product_img;
 
                         if (Storage::disk('s3_products')->exists($oldPath)) {
                             Storage::disk('s3_products')->delete($oldPath);
@@ -544,26 +557,37 @@ class MiniWebsiteController extends Controller
                     $data['product_img'] = $newImagePath;
                 }
 
-                $updated = DB::table('miniweb_products')
+                $data['m_date'] = now('Asia/Kolkata')->toDateTimeString();
+
+                DB::table('miniweb_products')
                     ->where('id', $productId)
                     ->update($data);
 
-                if ($updated || $newImagePath) {
-                    $anyChanges = true;
-                }
+                $anyChanges = true;
             }
-
+        
             else {
 
-                if ($newImagePath) {
+                // Optional duplicate prevent
+                $exists = DB::table('miniweb_products')
+                    ->where('mini_website_id', $mini_website_id)
+                    ->where('product_name', $name)
+                    ->exists();
+
+                if ($exists) {
+                    continue;
+                }
+
+                if ($isImageUpdated) {
                     $data['product_img'] = $newImagePath;
                 }
 
-                $inserted = DB::table('miniweb_products')->insert($data);
+                $data['created_at'] = now('Asia/Kolkata')->toDateTimeString();
+                $data['m_date'] = now('Asia/Kolkata')->toDateTimeString();
 
-                if ($inserted) {
-                    $anyChanges = true;
-                }
+                DB::table('miniweb_products')->insert($data);
+
+                $anyChanges = true;
             }
         }
 
@@ -571,7 +595,7 @@ class MiniWebsiteController extends Controller
             'status'  => $anyChanges,
             'message' => $anyChanges
                 ? "Changes saved successfully"
-                : "No valid products to save",
+                : "No changes detected",
         ];
     }
 
