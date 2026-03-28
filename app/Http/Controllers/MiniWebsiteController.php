@@ -475,15 +475,20 @@ class MiniWebsiteController extends Controller
 
                 // Convert to WEBP (75 = best balance)
                 $compressed = $image->toWebp(75);
+                $webpData = $compressed->toString(); 
 
                 // Upload to S3
                 // Storage::disk('s3_products')->putFileAs($s3Folder, $p['image'], $imageName, 'public');
                 // 👉 Upload to S3
                 Storage::disk('s3_products')->put(
                     $s3Folder . $imageName,
-                    (string) $compressed,
-                    'public'
+                    $webpData,
+                    [
+                        'visibility' => 'public',
+                        'ContentType' => 'image/webp',
+                    ]
                 );
+
                 $newImagePath = $imageName;
             }
 
