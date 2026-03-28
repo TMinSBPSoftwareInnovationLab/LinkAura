@@ -1142,7 +1142,7 @@ class MiniWebsiteController extends Controller
 
                 // correct file check
                 if ($request->hasFile("galleries.$index.image")) {
-
+                    $manager = new ImageManager(new Driver());
                     $file = $request->file("galleries.$index.image");
 
                     $imageName = time() . '_' . uniqid() . '.webp';
@@ -1187,7 +1187,7 @@ class MiniWebsiteController extends Controller
             else {
 
                 if ($request->hasFile("galleries.$index.image")) {
-
+                    $manager = new ImageManager(new Driver());
                     $file = $request->file("galleries.$index.image");
 
                     $imageName = time() . '_' . uniqid() . '.webp';
