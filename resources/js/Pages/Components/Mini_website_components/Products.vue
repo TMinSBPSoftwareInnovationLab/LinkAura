@@ -387,6 +387,8 @@
                 const formData = new FormData();
                 formData.append('cardId',Number(cardStore.cardId));
                 products.value.forEach((p, index) => {
+                    formData.append(`products[${index}][id]`, p.id ?? '');
+                    
                     formData.append(`products[${index}][image]`, p.file);
                     formData.append(`products[${index}][name]`, p.name);
                     formData.append(`products[${index}][original_price]`, p.original_price);
@@ -396,9 +398,9 @@
                 });
 
                 // update data
-                rowid.value.forEach((id, idx) => {
-                    formData.append(`rowid[${idx}]`, id);
-                });
+                // rowid.value.forEach((id, idx) => {
+                //     formData.append(`rowid[${idx}]`, id);
+                // });
                 isSubmitting.value = true;
                 try {
                     const res = await axios.post('/saveWebProducts', formData, {

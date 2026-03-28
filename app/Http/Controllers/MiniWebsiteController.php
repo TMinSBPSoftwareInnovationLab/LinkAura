@@ -459,20 +459,11 @@ class MiniWebsiteController extends Controller
 
         foreach ($products as $index => $p) {
 
-            // ✅ Skip empty rows
-            if (
-                empty($p['name']) &&
-                empty($p['original_price']) &&
-                empty($p['discount_price']) &&
-                empty($p['final_price']) &&
-                !$request->hasFile("products.$index.image")
-            ) {
-                continue;
-            }
+            // ✅ Safe fetch
+            $productId = isset($p['id']) && $p['id'] != '' ? $p['id'] : null;
 
-            // ✅ Name validation
-            $name = ($p['name'] && $p['name'] !== 'undefined') ? trim($p['name']) : '';
-            if (!$name) continue;
+            $name = isset($p['name']) ? trim($p['name']) : '';
+            if ($name === '' || $name === 'undefined') continue;
 
             $original = floatval($p['original_price'] ?? 0);
             $discount = floatval($p['discount_price'] ?? 0);
@@ -488,12 +479,9 @@ class MiniWebsiteController extends Controller
                 'status'          => $status,
             ];
 
-            // ✅ IMPORTANT: get product ID from product itself
-            $productId = $p['id'] ?? null;
-
-            // ===========================
+            // =====================================================
             // 🔵 UPDATE EXISTING PRODUCT
-            // ===========================
+            // =====================================================
             if ($productId) {
 
                 $old = DB::table('miniweb_products')
@@ -504,7 +492,7 @@ class MiniWebsiteController extends Controller
 
                 $isImageUpdated = false;
 
-                // ✅ Image Upload & Replace
+                // ✅ Check image properly
                 if ($request->hasFile("products.$index.image")) {
 
                     try {
@@ -541,14 +529,17 @@ class MiniWebsiteController extends Controller
                     }
                 }
 
-                // ✅ Detect changes
+                // ✅ Always update if ANY difference OR image updated
                 $isChanged =
                     (string)$old->product_name !== (string)$name ||
-                    (float)$old->orginal_price != (float)$original ||
-                    (float)$old->discount_price != (float)$discount ||
-                    (float)$old->final_price != (float)$final ||
-                    (int)$old->status != (int)$status ||
+                    (float)$old->orginal_price != $original ||
+                    (float)$old->discount_price != $discount ||
+                    (float)$old->final_price != $final ||
+                    (int)$old->status != $status ||
                     $isImageUpdated;
+
+                // 🔥 TEMP FIX: if still issue, force update (uncomment below)
+                // $isChanged = true;
 
                 if (!$isChanged) continue;
 
@@ -561,14 +552,12 @@ class MiniWebsiteController extends Controller
                 $anyChanges = true;
             }
 
-            // ===========================
+            // =====================================================
             // 🟢 INSERT NEW PRODUCT
-            // ===========================
+            // =====================================================
             else {
 
-                $isImageUpdated = false;
-
-                // Optional duplicate check
+                // ✅ Prevent duplicate
                 $exists = DB::table('miniweb_products')
                     ->where('mini_website_id', $mini_website_id)
                     ->where('product_name', $name)
@@ -576,7 +565,7 @@ class MiniWebsiteController extends Controller
 
                 if ($exists) continue;
 
-                // ✅ Image upload
+                // ✅ Upload image if exists
                 if ($request->hasFile("products.$index.image")) {
 
                     try {
@@ -596,7 +585,6 @@ class MiniWebsiteController extends Controller
                         );
 
                         $data['product_img'] = $imageName;
-                        $isImageUpdated = true;
 
                     } catch (\Exception $e) {
                         continue;
