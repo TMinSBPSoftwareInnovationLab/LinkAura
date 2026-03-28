@@ -444,6 +444,8 @@ class MiniWebsiteController extends Controller
 
     // save product
     public function saveWebProducts(Request $request) {
+        dd($request->all());
+        exit;
         $products = $request->products;
         $mini_website_id = $request->cardId;
         $rowid = $request->rowid;
