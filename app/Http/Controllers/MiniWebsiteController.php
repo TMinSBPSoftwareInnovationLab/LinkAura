@@ -532,11 +532,11 @@ class MiniWebsiteController extends Controller
                 }
             }
             // 3. INSERT MODE
-            else { return $data;
+            else { 
                 if ($newImagePath) {
                     $data['product_img'] = $newImagePath;
                 }
-
+                return $data;
                 $inserted = DB::table('miniweb_products')->insert($data);
 
                 if ($inserted) {
