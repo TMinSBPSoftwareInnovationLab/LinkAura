@@ -1140,18 +1140,21 @@ class MiniWebsiteController extends Controller
 
                 $isImageUpdated = false;
 
-                // ✅ correct file check
+                // correct file check
                 if ($request->hasFile("galleries.$index.image")) {
 
                     $file = $request->file("galleries.$index.image");
 
                     $imageName = time() . '_' . uniqid() . '.webp';
+                    // resize + compress
+                    $img = $manager->read($file->getRealPath());
+                    $img = $img->scale(width: 800); // optional resize
+                    $webpImage = $img->toWebp(80);  // quality 80%
 
                     // upload
-                    Storage::disk('s3_gallery')->putFileAs(
-                        $s3Folder,
-                        $file,
-                        $imageName,
+                    Storage::disk('s3_gallery')->put(
+                        $s3Folder . $imageName,
+                        $webpImage,
                         'public'
                     );
 
@@ -1188,11 +1191,14 @@ class MiniWebsiteController extends Controller
                     $file = $request->file("galleries.$index.image");
 
                     $imageName = time() . '_' . uniqid() . '.webp';
+                    // ✅ resize + compress
+                    $img = $manager->read($file->getRealPath());
+                    $img = $img->scale(width: 800); // optional resize
+                    $webpImage = $img->toWebp(80);  // quality 80%
 
-                    Storage::disk('s3_gallery')->putFileAs(
-                        $s3Folder,
-                        $file,
-                        $imageName,
+                    Storage::disk('s3_gallery')->put(
+                        $s3Folder . $imageName,
+                        $webpImage,
                         'public'
                     );
 
