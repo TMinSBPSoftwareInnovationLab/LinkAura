@@ -443,8 +443,7 @@ class MiniWebsiteController extends Controller
     }
 
     // save product
-    public function saveWebProducts(Request $request)
-    {
+    public function saveWebProducts(Request $request){
         $products = $request->products ?? [];
         $mini_website_id = $request->cardId;
 
@@ -457,7 +456,6 @@ class MiniWebsiteController extends Controller
         $anyChanges = false;
 
         foreach ($products as $index => $p) {
-
             $productId = $p['id'] ?? null;
             $name = trim($p['name'] ?? '');
 
@@ -472,7 +470,6 @@ class MiniWebsiteController extends Controller
                 'status'          => (int)($p['status'] ?? 0),
             ];
 
-            // ================= UPDATE =================
             if ($productId) {
 
                 $old = DB::table('miniweb_products')->where('id', $productId)->first();
@@ -480,7 +477,6 @@ class MiniWebsiteController extends Controller
 
                 $isImageUpdated = false;
 
-                // ✅ IMAGE UPDATE
                 if ($request->hasFile("products.$index.image")) {
 
                     $file = $request->file("products.$index.image");
@@ -525,9 +521,7 @@ class MiniWebsiteController extends Controller
                 $anyChanges = true;
             }
 
-            // ================= INSERT =================
             else {
-
                 if ($request->hasFile("products.$index.image")) {
 
                     $file = $request->file("products.$index.image");
@@ -884,7 +878,122 @@ class MiniWebsiteController extends Controller
     }
 
     // save service
-    public function saveWebServices(Request $request) {
+    public function saveWebServices(Request $request)
+    {
+        $services = $request->services ?? [];
+        $mini_website_id = $request->cardId;
+
+        if (!$mini_website_id) {
+            return [
+                'status' => false,
+                'message' => 'Invalid Request',
+            ];
+        }
+
+        $anyChanges = false;
+        $s3Folder = "service_images/";
+
+        foreach ($services as $index => $s) {
+
+            $serviceId = isset($s['id']) && $s['id'] != '' ? $s['id'] : null;
+
+            $name = isset($s['service_name']) ? trim($s['service_name']) : '';
+            if (!$name) continue;
+
+            $data = [
+                'mini_website_id' => $mini_website_id,
+                'service_name'    => $name,
+            ];
+
+            // ================= UPDATE =================
+            if ($serviceId) {
+
+                $old = DB::table('miniweb_services')->where('id', $serviceId)->first();
+                if (!$old) continue;
+
+                $isImageUpdated = false;
+
+                // ✅ correct image detection
+                if ($request->hasFile("services.$index.image")) {
+
+                    $file = $request->file("services.$index.image");
+
+                    $imageName = time().'_'.uniqid().'.webp';
+
+                    // upload
+                    Storage::disk('s3_services')->putFileAs(
+                        $s3Folder,
+                        $file,
+                        $imageName,
+                        'public'
+                    );
+
+                    // delete old
+                    if (!empty($old->service_img)) {
+                        $oldPath = $s3Folder . $old->service_img;
+
+                        if (Storage::disk('s3_services')->exists($oldPath)) {
+                            Storage::disk('s3_services')->delete($oldPath);
+                        }
+                    }
+
+                    $data['service_img'] = $imageName;
+                    $isImageUpdated = true;
+                }
+
+                // change detect
+                $isChanged =
+                    $old->service_name != $name ||
+                    $isImageUpdated;
+
+                if (!$isChanged) continue;
+
+                $data['m_date'] = now('Asia/Kolkata')->toDateTimeString();
+
+                DB::table('miniweb_services')
+                    ->where('id', $serviceId)
+                    ->update($data);
+
+                $anyChanges = true;
+            }
+
+            // ================= INSERT =================
+            else {
+
+                if ($request->hasFile("services.$index.image")) {
+
+                    $file = $request->file("services.$index.image");
+
+                    $imageName = time().'_'.uniqid().'.webp';
+
+                    Storage::disk('s3_services')->putFileAs(
+                        $s3Folder,
+                        $file,
+                        $imageName,
+                        'public'
+                    );
+
+                    $data['service_img'] = $imageName;
+                }
+
+                $data['created_at'] = now('Asia/Kolkata')->toDateTimeString();
+                $data['m_date'] = now('Asia/Kolkata')->toDateTimeString();
+
+                DB::table('miniweb_services')->insert($data);
+
+                $anyChanges = true;
+            }
+        }
+
+        return [
+            'status' => $anyChanges,
+            'message' => $anyChanges
+                ? "Services saved successfully"
+                : "No changes detected",
+        ];
+    }
+
+    public function saveWebServices_28032026(Request $request) {
         $services = $request->services;
         $mini_website_id = $request->cardId;
         $rowid = $request->rowid;

@@ -182,9 +182,9 @@
 
                 if (companyData && companyData.purchased_id > 0) {
                     const planId = Number(companyData.plan_id);
-                    if (planId === 94) allowedCount = 5;
-                    else if (planId === 95) allowedCount = 15;
-                    else if (planId === 96) allowedCount = 30;
+                    if (planId === 94) allowedCount = 25;
+                    else if (planId === 95) allowedCount = 75;
+                    else if (planId === 96) allowedCount = 1000;
                 }
 
                 // 2. Fetch Service Details
@@ -197,11 +197,12 @@
                 currData.value = data;
 
                 // 3. Map exactly 30 rows
-                services.value = Array.from({ length: 30 }, (_, index) => {
+                services.value = Array.from({ length: 1000 }, (_, index) => {
                     // If DB data exists for this index, use it
                     if (data[index]) {
                         const item = data[index];
                         return {
+                            id:item.id,
                             service_name: item.service_name || '',
                             file: null,
                             preview: item.service_img ? `${s3ServiceUrl}/service_images/${item.service_img}` : '',
@@ -301,14 +302,15 @@
                 const formData = new FormData();
                 formData.append('cardId',Number(cardStore.cardId));
                 services.value.forEach((p, index) => {
+                    formData.append(`services[${index}][id]`, p.id ?? '');
                     formData.append(`services[${index}][image]`, p.file);
                     formData.append(`services[${index}][service_name]`, p.service_name);
                 });
 
                 // update data
-                rowid.value.forEach((id, idx) => {
-                    formData.append(`rowid[${idx}]`, id);
-                });
+                // rowid.value.forEach((id, idx) => {
+                //     formData.append(`rowid[${idx}]`, id);
+                // });
                 isSubmitting.value = true;
                 try {
                     const res = await axios.post('/saveWebServices', formData, {
