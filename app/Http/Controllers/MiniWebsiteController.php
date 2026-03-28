@@ -443,7 +443,133 @@ class MiniWebsiteController extends Controller
     }
 
     // save product
-    public function saveWebProducts(Request $request) {
+    public function saveWebProducts(Request $request)
+    {
+        $products = $request->products ?? [];
+        $mini_website_id = $request->cardId;
+        $rowid = $request->rowid ?? [];
+
+        $anyChanges = false;
+        $s3Folder = "product_images/";
+
+        if (!$mini_website_id) {
+            return ['status' => false, 'message' => 'No Products Insert!'];
+        }
+
+        foreach ($products as $index => $p) {
+
+            // Skip empty products
+            if (
+                empty($p['name']) &&
+                empty($p['original_price']) &&
+                empty($p['discount_price']) &&
+                empty($p['final_price']) &&
+                empty($p['image'])
+            ) {
+                continue;
+            }
+
+            $name = ($p['name'] && $p['name'] !== 'undefined') ? trim($p['name']) : '';
+            if (!$name) continue;
+
+            $original = floatval($p['original_price'] ?? 0);
+            $discount = floatval($p['discount_price'] ?? 0);
+            $final = floatval($p['final_price'] ?? 0);
+            $status = (int)($p['status'] ?? 0);
+
+            $newImagePath = '';
+
+           
+            if (isset($p['image']) && $p['image'] instanceof \Illuminate\Http\UploadedFile) {
+
+                $dateTime = now()->format('Ymd_His');
+                $imageName = "{$mini_website_id}_la_{$dateTime}_" . uniqid() . ".webp";
+
+                // Load image
+                $img = Image::make($p['image']->getRealPath());
+
+                // Resize (optional but recommended)
+                $img->resize(800, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+
+                // Encode to WebP (quality 75–85 best)
+                $webpImage = $img->encode('webp', 80);
+
+                // Upload to S3
+                Storage::disk('s3_products')->put(
+                    $s3Folder . $imageName,
+                    $webpImage,
+                    'public'
+                );
+
+                $newImagePath = $imageName;
+            }
+
+         
+            $data = [
+                'mini_website_id' => $mini_website_id,
+                'product_name'    => $name,
+                'orginal_price'   => $original,
+                'discount_price'  => $discount,
+                'final_price'     => $final,
+                'status'          => $status,
+                'm_date'          => now('Asia/Kolkata')->toDateTimeString()
+            ];
+
+            if (!empty($rowid) && isset($rowid[$index])) {
+
+                $productId = $rowid[$index];
+
+                if ($newImagePath) {
+                    $oldProduct = DB::table('miniweb_products')
+                        ->where('id', $productId)
+                        ->first();
+
+                    if ($oldProduct && $oldProduct->product_img) {
+                        $oldPath = $s3Folder . $oldProduct->product_img;
+
+                        if (Storage::disk('s3_products')->exists($oldPath)) {
+                            Storage::disk('s3_products')->delete($oldPath);
+                        }
+                    }
+
+                    $data['product_img'] = $newImagePath;
+                }
+
+                $updated = DB::table('miniweb_products')
+                    ->where('id', $productId)
+                    ->update($data);
+
+                if ($updated || $newImagePath) {
+                    $anyChanges = true;
+                }
+            }
+
+            else {
+
+                if ($newImagePath) {
+                    $data['product_img'] = $newImagePath;
+                }
+
+                $inserted = DB::table('miniweb_products')->insert($data);
+
+                if ($inserted) {
+                    $anyChanges = true;
+                }
+            }
+        }
+
+        return [
+            'status'  => $anyChanges,
+            'message' => $anyChanges
+                ? "Changes saved successfully"
+                : "No valid products to save",
+        ];
+    }
+
+    public function saveWebProducts_28_03_2026(Request $request) {
         $products = $request->products;
         $mini_website_id = $request->cardId;
         $rowid = $request->rowid;
