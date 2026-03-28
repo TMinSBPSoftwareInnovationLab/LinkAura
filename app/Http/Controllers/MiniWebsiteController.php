@@ -914,16 +914,18 @@ class MiniWebsiteController extends Controller
 
                 // correct image detection
                 if ($request->hasFile("services.$index.image")) {
-
+                    $manager = new ImageManager(new Driver());
                     $file = $request->file("services.$index.image");
 
                     $imageName = time().'_'.uniqid().'.webp';
+                    $img = $manager->read($file->getRealPath());
+                    $img = $img->scale(width: 800);
+                    $webpImage = $img->toWebp(80);
 
                     // upload
-                    Storage::disk('s3_services')->putFileAs(
-                        $s3Folder,
-                        $file,
-                        $imageName,
+                    Storage::disk('s3_services')->put(
+                        $s3Folder . $imageName,
+                        $webpImage,
                         'public'
                     );
 
@@ -958,15 +960,17 @@ class MiniWebsiteController extends Controller
             else {
 
                 if ($request->hasFile("services.$index.image")) {
-
+                    $manager = new ImageManager(new Driver());
                     $file = $request->file("services.$index.image");
 
                     $imageName = time().'_'.uniqid().'.webp';
+                    $img = $manager->read($file->getRealPath());
+                    $img = $img->scale(width: 800);
+                    $webpImage = $img->toWebp(80);
 
-                    Storage::disk('s3_services')->putFileAs(
-                        $s3Folder,
-                        $file,
-                        $imageName,
+                    Storage::disk('s3_services')->put(
+                        $s3Folder . $imageName,
+                        $webpImage,
                         'public'
                     );
 
