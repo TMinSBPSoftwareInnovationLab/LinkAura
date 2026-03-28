@@ -163,7 +163,6 @@
     import axios from 'axios';
     import { TrashIcon } from '@heroicons/vue/24/solid'
     import Swal from 'sweetalert2';
-    import imageCompression from 'browser-image-compression';
 
     export default{
         name: "Products",
@@ -309,44 +308,7 @@
 
             // upload products area
             const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/gif", "image/webp"];
-            const selectedImage = async (e, i) => {
-                const file = e.target.files[0];
-                if (!file) return;
-
-                // ✅ Type validation
-                if (!allowedTypes.includes(file.type)) {
-                    toast.error("Only JPG, PNG, GIF, WEBP images allowed!");
-                    e.target.value = "";
-                    return;
-                }
-
-                try {
-                    // ✅ Compress image
-                    const compressedFile = await imageCompression(file, {
-                        maxSizeMB: 0.3,            // 300KB max
-                        maxWidthOrHeight: 800,     // resize
-                        useWebWorker: true
-                    });
-
-                    // ✅ Remove old preview (memory leak avoid)
-                    if (products.value[i].preview) {
-                        URL.revokeObjectURL(products.value[i].preview);
-                    }
-
-                    // ✅ Create preview
-                    const previewUrl = URL.createObjectURL(compressedFile);
-
-                    // ✅ Assign values
-                    products.value[i].preview = previewUrl;
-                    products.value[i].file = compressedFile;
-                    products.value[i].isNew = true;
-
-                } catch (error) {
-                    console.error("Compression error:", error);
-                    toast.error("Image processing failed!");
-                }
-            };
-            /* const selectedImage = (e, i) => {
+            const selectedImage = (e, i) => {
                 const file = e.target.files[0];
                 if (!file) return;
 
@@ -362,7 +324,6 @@
                 products.value[i].file = file;
                 products.value[i].isNew = true;
             };
-            */
 
             // remove temp image
             const removeTempImage = (index) => {

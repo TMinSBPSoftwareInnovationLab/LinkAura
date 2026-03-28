@@ -454,8 +454,6 @@ class MiniWebsiteController extends Controller
             return ['status' => false, 'message' => 'No Products Insert!'];
         }
 
-         $manager = new ImageManager(new Driver());
-
         foreach ($products as $index => $p) {
             $newImagePath = '';
             $s3Folder = "product_images/"; // Folder inside S3 bucket
@@ -463,32 +461,11 @@ class MiniWebsiteController extends Controller
             // 1. Handle New Image Upload
             if (isset($p['image']) && $p['image'] instanceof \Illuminate\Http\UploadedFile) {
                 $dateTime = now()->format('Ymd_His');
-                // $ext = $p['image']->getClientOriginalExtension();
-                $imageName = "{$mini_website_id}_la_{$dateTime}_" . uniqid() . ".webp";
-
-                $image = $manager->read($p['image']);
-
-                // Resize (only if bigger)
-                if ($image->width() > 800) {
-                    $image->scale(width: 800);
-                }
-
-                // Convert to WEBP (75 = best balance)
-                $compressed = $image->toWebp(75);
-                $webpData = $compressed->toString(); 
+                $ext = $p['image']->getClientOriginalExtension();
+                $imageName = "{$mini_website_id}_la_{$dateTime}_" . uniqid() . ".{$ext}";
 
                 // Upload to S3
-                // Storage::disk('s3_products')->putFileAs($s3Folder, $p['image'], $imageName, 'public');
-                // 👉 Upload to S3
-                Storage::disk('s3_products')->put(
-                    $s3Folder . $imageName,
-                    $webpData,
-                    [
-                        'visibility' => 'public',
-                        'ContentType' => 'image/webp',
-                    ]
-                );
-
+                Storage::disk('s3_products')->putFileAs($s3Folder, $p['image'], $imageName, 'public');
                 $newImagePath = $imageName;
             }
 
@@ -506,7 +483,7 @@ class MiniWebsiteController extends Controller
             ];
             
             // 2. UPDATE MODE
-            if (!empty($rowid) && isset($rowid[$index])) { return "row id : ".$rowid;
+            if (!empty($rowid) && isset($rowid[$index])) {
                 $productId = $rowid[$index];
 
                 // If a new image was uploaded, delete the old one from S3 first
@@ -532,11 +509,11 @@ class MiniWebsiteController extends Controller
                 }
             }
             // 3. INSERT MODE
-            else { 
+            else {
                 if ($newImagePath) {
                     $data['product_img'] = $newImagePath;
                 }
-                return $data;
+
                 $inserted = DB::table('miniweb_products')->insert($data);
 
                 if ($inserted) {
