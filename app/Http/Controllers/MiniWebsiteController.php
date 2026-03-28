@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\Facades\Image;
 use Razorpay\Api\Api;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
@@ -457,6 +456,9 @@ class MiniWebsiteController extends Controller
             return ['status' => false, 'message' => 'No Products Insert!'];
         }
 
+        // Create Image Manager ONCE (performance)
+        $manager = new ImageManager(new Driver());
+
         foreach ($products as $index => $p) {
 
             // Skip empty products
@@ -480,35 +482,36 @@ class MiniWebsiteController extends Controller
 
             $newImagePath = '';
 
-           
             if (isset($p['image']) && $p['image'] instanceof \Illuminate\Http\UploadedFile) {
 
-                $dateTime = now()->format('Ymd_His');
-                $imageName = "{$mini_website_id}_la_{$dateTime}_" . uniqid() . ".webp";
+                try {
+                    $dateTime = now()->format('Ymd_His');
+                    $imageName = "{$mini_website_id}_la_{$dateTime}_" . uniqid() . ".webp";
 
-                // Load image
-                $img = Image::make($p['image']->getRealPath());
+                    // Read image
+                    $img = $manager->read($p['image']->getRealPath());
 
-                // Resize (optional but recommended)
-                $img->resize(800, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                });
+                    // Resize (maintain ratio)
+                    $img = $img->scale(width: 800);
 
-                // Encode to WebP (quality 75–85 best)
-                $webpImage = $img->encode('webp', 80);
+                    // Convert to WebP (quality 80)
+                    $webpImage = $img->toWebp(80);
 
-                // Upload to S3
-                Storage::disk('s3_products')->put(
-                    $s3Folder . $imageName,
-                    $webpImage,
-                    'public'
-                );
+                    // Upload to S3
+                    Storage::disk('s3_products')->put(
+                        $s3Folder . $imageName,
+                        $webpImage,
+                        'public'
+                    );
 
-                $newImagePath = $imageName;
+                    $newImagePath = $imageName;
+
+                } catch (\Exception $e) {
+                    // optional: skip image error but continue product save
+                    continue;
+                }
             }
 
-         
             $data = [
                 'mini_website_id' => $mini_website_id,
                 'product_name'    => $name,
@@ -524,11 +527,13 @@ class MiniWebsiteController extends Controller
                 $productId = $rowid[$index];
 
                 if ($newImagePath) {
+
                     $oldProduct = DB::table('miniweb_products')
                         ->where('id', $productId)
                         ->first();
 
                     if ($oldProduct && $oldProduct->product_img) {
+
                         $oldPath = $s3Folder . $oldProduct->product_img;
 
                         if (Storage::disk('s3_products')->exists($oldPath)) {
