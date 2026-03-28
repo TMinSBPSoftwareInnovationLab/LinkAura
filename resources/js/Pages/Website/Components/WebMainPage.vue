@@ -416,7 +416,7 @@
                         <div class="w-14 bg-green-600 flex items-center justify-center rounded-l-xl">
                             <span class="text-white text-sm font-semibold rotate-[-90deg] whitespace-nowrap">
                             <!-- ₹3,540 <br>(₹3,000 + ₹540 GST) / 12 Months -->
-                             ₹₹7999 / 3 Years
+                             ₹₹6999 / 3 Years
                             </span>
                         </div>
 
