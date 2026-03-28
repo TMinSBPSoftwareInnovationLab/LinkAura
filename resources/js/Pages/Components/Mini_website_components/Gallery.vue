@@ -174,9 +174,9 @@
 
                 if (companyData && companyData.purchased_id > 0) {
                     const planId = Number(companyData.plan_id);
-                    if (planId === 94) allowedCount = 5;
-                    else if (planId === 95) allowedCount = 15;
-                    else if (planId === 96) allowedCount = 30;
+                    if (planId === 94) allowedCount = 25;
+                    else if (planId === 95) allowedCount = 75;
+                    else if (planId === 96) allowedCount = 1000;
                 }
 
                 // 2. Fetch Gallery Details
@@ -189,11 +189,12 @@
                 currData.value = data;
 
                 // 3. Map exactly 30 rows with the 'isLocked' flag
-                galleries.value = Array.from({ length: 30 }, (_, index) => {
+                galleries.value = Array.from({ length: 1000 }, (_, index) => {
                     // If DB data exists for this specific index
                     if (data[index]) {
                         const item = data[index];
                         return {
+                            id:item.id,
                             file: null,
                             preview: item.gallery ? `${s3GalleryUrl}/gallery_images/${item.gallery}` : '',
                             isLocked: index >= allowedCount 
@@ -295,13 +296,14 @@
                 const formData = new FormData();
                 formData.append('cardId',Number(cardStore.cardId));
                 galleries.value.forEach((p, index) => {
+                    formData.append(`galleries[${index}][id]`, p.id ?? '');
                     formData.append(`galleries[${index}][image]`, p.file);
                 });
 
                 // update data
-                rowid.value.forEach((id, idx) => {
-                    formData.append(`rowid[${idx}]`, id);
-                });
+                // rowid.value.forEach((id, idx) => {
+                //     formData.append(`rowid[${idx}]`, id);
+                // });
                 isSubmitting.value = true;
                 try {
                     const res = await axios.post('/saveWebGallery', formData, {

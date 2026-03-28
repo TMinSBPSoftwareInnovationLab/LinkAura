@@ -905,7 +905,6 @@ class MiniWebsiteController extends Controller
                 'service_name'    => $name,
             ];
 
-            // ================= UPDATE =================
             if ($serviceId) {
 
                 $old = DB::table('miniweb_services')->where('id', $serviceId)->first();
@@ -913,7 +912,7 @@ class MiniWebsiteController extends Controller
 
                 $isImageUpdated = false;
 
-                // ✅ correct image detection
+                // correct image detection
                 if ($request->hasFile("services.$index.image")) {
 
                     $file = $request->file("services.$index.image");
@@ -956,8 +955,6 @@ class MiniWebsiteController extends Controller
 
                 $anyChanges = true;
             }
-
-            // ================= INSERT =================
             else {
 
                 if ($request->hasFile("services.$index.image")) {
@@ -1112,7 +1109,114 @@ class MiniWebsiteController extends Controller
     }
 
     // save gallery 
-    public function saveWebGallery(Request $request) {
+    public function saveWebGallery(Request $request)
+    {
+        $galleries = $request->galleries ?? [];
+        $mini_website_id = $request->cardId;
+
+        if (!$mini_website_id) {
+            return [
+                'status' => false,
+                'message' => 'No Gallery Insert!',
+            ];
+        }
+
+        $anyChanges = false;
+        $s3Folder = "gallery_images/";
+
+        foreach ($galleries as $index => $g) {
+
+            $galleryId = isset($g['id']) && $g['id'] != '' ? $g['id'] : null;
+
+            $data = [
+                'mini_website_id' => $mini_website_id,
+            ];
+
+            // ================= UPDATE =================
+            if ($galleryId) {
+
+                $old = DB::table('miniweb_gallery')->where('id', $galleryId)->first();
+                if (!$old) continue;
+
+                $isImageUpdated = false;
+
+                // ✅ correct file check
+                if ($request->hasFile("galleries.$index.image")) {
+
+                    $file = $request->file("galleries.$index.image");
+
+                    $imageName = time() . '_' . uniqid() . '.webp';
+
+                    // upload
+                    Storage::disk('s3_gallery')->putFileAs(
+                        $s3Folder,
+                        $file,
+                        $imageName,
+                        'public'
+                    );
+
+                    // delete old
+                    if (!empty($old->gallery)) {
+                        $oldPath = $s3Folder . $old->gallery;
+
+                        if (Storage::disk('s3_gallery')->exists($oldPath)) {
+                            Storage::disk('s3_gallery')->delete($oldPath);
+                        }
+                    }
+
+                    $data['gallery'] = $imageName;
+                    $isImageUpdated = true;
+                }
+
+                // 👉 only update if image changed
+                if (!$isImageUpdated) continue;
+
+                $data['m_date'] = now('Asia/Kolkata')->toDateTimeString();
+
+                DB::table('miniweb_gallery')
+                    ->where('id', $galleryId)
+                    ->update($data);
+
+                $anyChanges = true;
+            }
+
+            // ================= INSERT =================
+            else {
+
+                if ($request->hasFile("galleries.$index.image")) {
+
+                    $file = $request->file("galleries.$index.image");
+
+                    $imageName = time() . '_' . uniqid() . '.webp';
+
+                    Storage::disk('s3_gallery')->putFileAs(
+                        $s3Folder,
+                        $file,
+                        $imageName,
+                        'public'
+                    );
+
+                    $data['gallery'] = $imageName;
+
+                    $data['created_at'] = now('Asia/Kolkata')->toDateTimeString();
+                    $data['m_date'] = now('Asia/Kolkata')->toDateTimeString();
+
+                    DB::table('miniweb_gallery')->insert($data);
+
+                    $anyChanges = true;
+                }
+            }
+        }
+
+        return [
+            'status' => $anyChanges,
+            'message' => $anyChanges
+                ? "Gallery saved successfully"
+                : "No changes detected",
+        ];
+    }
+
+    public function saveWebGallery_28032026(Request $request) {
         $galleries = collect($request->galleries)->sortKeys()->all();
         $mini_website_id = $request->cardId;
         $rowid = $request->rowid;
