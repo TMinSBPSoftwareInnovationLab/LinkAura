@@ -454,6 +454,8 @@ class MiniWebsiteController extends Controller
             return ['status' => false, 'message' => 'No Products Insert!'];
         }
 
+         $manager = new ImageManager(new Driver());
+
         foreach ($products as $index => $p) {
             $newImagePath = '';
             $s3Folder = "product_images/"; // Folder inside S3 bucket
@@ -461,11 +463,27 @@ class MiniWebsiteController extends Controller
             // 1. Handle New Image Upload
             if (isset($p['image']) && $p['image'] instanceof \Illuminate\Http\UploadedFile) {
                 $dateTime = now()->format('Ymd_His');
-                $ext = $p['image']->getClientOriginalExtension();
-                $imageName = "{$mini_website_id}_la_{$dateTime}_" . uniqid() . ".{$ext}";
+                // $ext = $p['image']->getClientOriginalExtension();
+                $imageName = "{$mini_website_id}_la_{$dateTime}_" . uniqid() . ".webp";
+
+                $image = $manager->read($p['image']);
+
+                // Resize (only if bigger)
+                if ($image->width() > 800) {
+                    $image->scale(width: 800);
+                }
+
+                // Convert to WEBP (75 = best balance)
+                $compressed = $image->toWebp(75);
 
                 // Upload to S3
-                Storage::disk('s3_products')->putFileAs($s3Folder, $p['image'], $imageName, 'public');
+                // Storage::disk('s3_products')->putFileAs($s3Folder, $p['image'], $imageName, 'public');
+                // 👉 Upload to S3
+                Storage::disk('s3_products')->put(
+                    $s3Folder . $imageName,
+                    (string) $compressed,
+                    'public'
+                );
                 $newImagePath = $imageName;
             }
 
