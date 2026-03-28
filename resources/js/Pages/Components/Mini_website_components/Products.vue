@@ -279,6 +279,7 @@
                     if (data[index]) {
                         const item = data[index];
                         return {
+                            id: item.id,
                             name: item.product_name || '',
                             original_price: item.orginal_price || '',
                             discount_price: item.discount_price || '',
@@ -388,7 +389,7 @@
                 formData.append('cardId',Number(cardStore.cardId));
                 products.value.forEach((p, index) => {
                     formData.append(`products[${index}][id]`, p.id ?? '');
-                    
+
                     formData.append(`products[${index}][image]`, p.file);
                     formData.append(`products[${index}][name]`, p.name);
                     formData.append(`products[${index}][original_price]`, p.original_price);
