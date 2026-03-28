@@ -447,6 +447,183 @@ class MiniWebsiteController extends Controller
     {
         $products = $request->products ?? [];
         $mini_website_id = $request->cardId;
+
+        $anyChanges = false;
+        $s3Folder = "product_images/";
+
+        if (!$mini_website_id) {
+            return ['status' => false, 'message' => 'No Products Insert!'];
+        }
+
+        $manager = new ImageManager(new Driver());
+
+        foreach ($products as $index => $p) {
+
+            // ✅ Skip empty rows
+            if (
+                empty($p['name']) &&
+                empty($p['original_price']) &&
+                empty($p['discount_price']) &&
+                empty($p['final_price']) &&
+                !$request->hasFile("products.$index.image")
+            ) {
+                continue;
+            }
+
+            // ✅ Name validation
+            $name = ($p['name'] && $p['name'] !== 'undefined') ? trim($p['name']) : '';
+            if (!$name) continue;
+
+            $original = floatval($p['original_price'] ?? 0);
+            $discount = floatval($p['discount_price'] ?? 0);
+            $final = floatval($p['final_price'] ?? 0);
+            $status = (int)($p['status'] ?? 0);
+
+            $data = [
+                'mini_website_id' => $mini_website_id,
+                'product_name'    => $name,
+                'orginal_price'   => $original,
+                'discount_price'  => $discount,
+                'final_price'     => $final,
+                'status'          => $status,
+            ];
+
+            // ✅ IMPORTANT: get product ID from product itself
+            $productId = $p['id'] ?? null;
+
+            // ===========================
+            // 🔵 UPDATE EXISTING PRODUCT
+            // ===========================
+            if ($productId) {
+
+                $old = DB::table('miniweb_products')
+                    ->where('id', $productId)
+                    ->first();
+
+                if (!$old) continue;
+
+                $isImageUpdated = false;
+
+                // ✅ Image Upload & Replace
+                if ($request->hasFile("products.$index.image")) {
+
+                    try {
+                        $file = $request->file("products.$index.image");
+
+                        $dateTime = now()->format('Ymd_His');
+                        $imageName = "{$mini_website_id}_la_{$dateTime}_" . uniqid() . ".webp";
+
+                        $img = $manager->read($file->getRealPath());
+                        $img = $img->scale(width: 800);
+                        $webpImage = $img->toWebp(80);
+
+                        // ✅ Upload new image
+                        Storage::disk('s3_products')->put(
+                            $s3Folder . $imageName,
+                            $webpImage,
+                            'public'
+                        );
+
+                        // ✅ Delete old image
+                        if (!empty($old->product_img)) {
+                            $oldPath = $s3Folder . $old->product_img;
+
+                            if (Storage::disk('s3_products')->exists($oldPath)) {
+                                Storage::disk('s3_products')->delete($oldPath);
+                            }
+                        }
+
+                        $data['product_img'] = $imageName;
+                        $isImageUpdated = true;
+
+                    } catch (\Exception $e) {
+                        continue;
+                    }
+                }
+
+                // ✅ Detect changes
+                $isChanged =
+                    (string)$old->product_name !== (string)$name ||
+                    (float)$old->orginal_price != (float)$original ||
+                    (float)$old->discount_price != (float)$discount ||
+                    (float)$old->final_price != (float)$final ||
+                    (int)$old->status != (int)$status ||
+                    $isImageUpdated;
+
+                if (!$isChanged) continue;
+
+                $data['m_date'] = now('Asia/Kolkata')->toDateTimeString();
+
+                DB::table('miniweb_products')
+                    ->where('id', $productId)
+                    ->update($data);
+
+                $anyChanges = true;
+            }
+
+            // ===========================
+            // 🟢 INSERT NEW PRODUCT
+            // ===========================
+            else {
+
+                $isImageUpdated = false;
+
+                // Optional duplicate check
+                $exists = DB::table('miniweb_products')
+                    ->where('mini_website_id', $mini_website_id)
+                    ->where('product_name', $name)
+                    ->exists();
+
+                if ($exists) continue;
+
+                // ✅ Image upload
+                if ($request->hasFile("products.$index.image")) {
+
+                    try {
+                        $file = $request->file("products.$index.image");
+
+                        $dateTime = now()->format('Ymd_His');
+                        $imageName = "{$mini_website_id}_la_{$dateTime}_" . uniqid() . ".webp";
+
+                        $img = $manager->read($file->getRealPath());
+                        $img = $img->scale(width: 800);
+                        $webpImage = $img->toWebp(80);
+
+                        Storage::disk('s3_products')->put(
+                            $s3Folder . $imageName,
+                            $webpImage,
+                            'public'
+                        );
+
+                        $data['product_img'] = $imageName;
+                        $isImageUpdated = true;
+
+                    } catch (\Exception $e) {
+                        continue;
+                    }
+                }
+
+                $data['created_at'] = now('Asia/Kolkata')->toDateTimeString();
+                $data['m_date'] = now('Asia/Kolkata')->toDateTimeString();
+
+                DB::table('miniweb_products')->insert($data);
+
+                $anyChanges = true;
+            }
+        }
+
+        return [
+            'status'  => $anyChanges,
+            'message' => $anyChanges
+                ? "Changes saved successfully"
+                : "No changes detected",
+        ];
+    }
+
+    public function saveWebProducts_28032026(Request $request)
+    {
+        $products = $request->products ?? [];
+        $mini_website_id = $request->cardId;
         $rowid = $request->rowid ?? [];
 
         $anyChanges = false;
