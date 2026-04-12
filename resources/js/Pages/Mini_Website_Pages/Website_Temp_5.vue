@@ -1524,6 +1524,16 @@
             
             <form @submit.prevent="onSubmit">
 
+                <!-- qty -->
+                <label class="font-bold" v-if="1==2">Enter Qty</label>
+                <input 
+                    v-model="productQty"
+                    placeholder="Enter Qty"
+                    maxlength="10"
+                    @input="productQty = productQty.replace(/[^0-9]/g, '')"
+                    class="w-full border p-2 mb-1 rounded"
+                />
+                <span v-if="orderSubmitCount > 0 && productQtyError" class="text-red-500 text-sm">{{ productQtyError }}</span>
                 <!-- Name -->
                 <input 
                     v-model="customerName" 
@@ -2133,6 +2143,10 @@
             };
 
             const orderschema = yup.object({
+            productQty: yup
+                .string()
+                .required('Qty is required'),
+                
             customerName: yup
                 .string()
                 .required('Name is required'),
@@ -2151,6 +2165,7 @@
                 validationSchema: orderschema
             });
 
+            const { value: productQty, errorMessage: productQtyError} = useField('productQty');
             const { value: customerName, errorMessage: customerNameError} = useField('customerName');
             const { value: customerPhone, errorMessage: customerPhoneError} = useField('customerPhone');
             const { value: customerAddress, errorMessage: customerAddressError} = useField('customerAddress');
@@ -2160,22 +2175,26 @@
                     const { id, name: proName, price } = selectedProduct.value;
 
                     const shareUrl = `${window.location.origin}/product-share/${id}`;
+                    const totalPrice = price * values.productQty;
 
                     const message = 
-                    `🛒 *NEW ORDER REQUEST*\n\n` +
-                    `👤 *Name:* ${values.customerName}\n` +
-                    `📞 *Phone:* ${values.customerPhone}\n\n` +
-                    `📞 *Address:* ${values.customerAddress}\n\n` +
-                    `🔹 *Product:* ${proName}\n` +
-                    `🔹 *Price:* ₹${price}\n\n` +
-                    `${shareUrl}\n\n` +
-                    `Hi! I want to buy this 😍`;
+                        `🛒 *NEW ORDER REQUEST*\n\n` +
+                        `👤 *Name:* ${values.customerName}\n` +
+                        `📞 *Phone:* ${values.customerPhone}\n\n` +
+                        `📞 *Address:* ${values.customerAddress}\n\n` +
+                        `🔹 *Product:* ${proName}\n` +
+                        `🔹 *Qty:* ${values.productQty}\n` +
+                        `🔹 *Price:* ₹${price}\n\n` +
+                        `🔹 *Total Price:* ₹${totalPrice}\n\n` +
+                        `${shareUrl}\n\n` +
+                        `Hi! I want to buy this 😍`;
 
                     // ✅ DB save
                     await axios.post('/saveProductOrder', {
                         product_id: id,
                         product_name: proName,
                         product_price: price,
+                        productQty: values.productQty,
                         customer_name: values.customerName,
                         customer_phone: values.customerPhone,
                         customer_address: values.customerAddress
@@ -2511,15 +2530,17 @@
                 // order area
                 showForm, 
                 selectedProduct,
+                productQty,
                 customerName,
                 customerPhone,
                 customerAddress,
                 onSubmit,
                 // orderschema
                 orderschema,
+                productQtyError,
                 customerNameError,
                 customerPhoneError,
-                
+                customerAddressError,
                 orderSubmitCount,
             }
         }
