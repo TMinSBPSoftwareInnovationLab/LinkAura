@@ -1856,6 +1856,8 @@
 
                     const shareUrl = `${window.location.origin}/product-share/${id}`;
 
+                    const totalPrice = price * values.productQty;
+
                     const message = 
                     `🛒 *NEW ORDER REQUEST*\n\n` +
                     `👤 *Name:* ${values.customerName}\n` +
@@ -1864,6 +1866,7 @@
                     `🔹 *Product:* ${proName}\n` +
                     `🔹 *Qty:* ${values.productQty}\n` +
                     `🔹 *Price:* ₹${price}\n\n` +
+                    `🔹 *Total Price:* ₹${totalPrice}\n\n` +
                     `${shareUrl}\n\n` +
                     `Hi! I want to buy this 😍`;
 
