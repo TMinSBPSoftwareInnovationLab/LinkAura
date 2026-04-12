@@ -1204,7 +1204,19 @@
             
             <form @submit.prevent="onSubmit">
 
+                <!-- qty -->
+                 <label class="font-bold" v-if="1==2">Enter Qty</label>
+                 <input 
+                    v-model="productQty"
+                    placeholder="Enter Qty"
+                    maxlength="10"
+                    @input="productQty = productQty.replace(/[^0-9]/g, '')"
+                    class="w-full border p-2 mb-1 rounded"
+                />
+                <span v-if="orderSubmitCount > 0 && productQtyError" class="text-red-500 text-sm">{{ productQtyError }}</span>
+                
                 <!-- Name -->
+                 <label class="font-bold" v-if="1==2">Enter Name</label>
                 <input 
                     v-model="customerName" 
                     placeholder="Your Name"
@@ -1213,6 +1225,7 @@
                 <span v-if="orderSubmitCount > 0 && customerNameError" class="text-red-500 text-sm">{{ customerNameError }}</span>
 
                 <!-- Phone -->
+                <label class="font-bold" v-if="1==2">Enter Phone Number</label>
                 <input 
                     v-model="customerPhone"
                     placeholder="Phone Number"
@@ -1223,6 +1236,7 @@
                 <span v-if="orderSubmitCount > 0 && customerPhoneError" class="text-red-500 text-sm">{{ customerPhoneError }}</span>
                 
                 <!-- Address -->
+                 <label class="font-bold" v-if="1==2">Enter Address</label>
                  <textarea v-model="customerAddress"
                     type="text" placeholder="Enter Address"
                     class="w-full border p-2 mb-1 rounded"></textarea>
@@ -1238,7 +1252,7 @@
                     <span v-else>Continue</span>
                 </button>
 
-                </form>
+            </form>
 
         </div>
     </div>
@@ -1807,7 +1821,11 @@
             };
 
             const orderschema = yup.object({
-            customerName: yup
+            productQty: yup
+                .string()
+                .required('Qty is required'),
+            
+                customerName: yup
                 .string()
                 .required('Name is required'),
 
@@ -1827,6 +1845,7 @@
                 validationSchema: orderschema
             });
 
+            const { value: productQty, errorMessage: productQtyError} = useField('productQty');
             const { value: customerName, errorMessage: customerNameError} = useField('customerName');
             const { value: customerPhone, errorMessage: customerPhoneError} = useField('customerPhone');
             const { value: customerAddress, errorMessage: customerAddressError} = useField('customerAddress');
@@ -1843,6 +1862,7 @@
                     `📞 *Phone:* ${values.customerPhone}\n\n` +
                     `📞 *Address:* ${values.customerAddress}\n\n` +
                     `🔹 *Product:* ${proName}\n` +
+                    `🔹 *Qty:* ${values.productQty}\n` +
                     `🔹 *Price:* ₹${price}\n\n` +
                     `${shareUrl}\n\n` +
                     `Hi! I want to buy this 😍`;
@@ -1852,6 +1872,7 @@
                         product_id: id,
                         product_name: proName,
                         product_price: price,
+                        productQty: values.productQty,
                         customer_name: values.customerName,
                         customer_phone: values.customerPhone,
                         customer_address: values.customerAddress
@@ -2183,12 +2204,14 @@
                 // order area
                 showForm, 
                 selectedProduct,
+                productQty,
                 customerName,
                 customerPhone,
                 customerAddress,
                 onSubmit,
                 // orderschema
                 orderschema,
+                productQtyError,
                 customerNameError,
                 customerPhoneError,
                 customerAddressError,

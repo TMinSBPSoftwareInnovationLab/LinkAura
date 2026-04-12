@@ -2401,6 +2401,7 @@ class MiniWebsiteController extends Controller
     public function saveProductOrder(Request $request){
         $validated = $request->validate([
             'product_id' => 'required|integer',
+            'productQty' => 'required',
             'product_name' => 'required|string|max:255',
             'product_price' => 'required|numeric',
             'customer_name' => 'required|string|max:255',
@@ -2422,6 +2423,7 @@ class MiniWebsiteController extends Controller
         DB::table('miniweb_orders')->insert([
             'company_id' => $product->mini_website_id,
             'product_id' => $validated['product_id'],
+            'productQty' => $validated['productQty'],
             'product_name' => $validated['product_name'],
             'product_price' => $validated['product_price'],
             'customer_name' => $validated['customer_name'],
