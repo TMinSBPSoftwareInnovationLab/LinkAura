@@ -255,7 +255,7 @@ Route::get('/{company}/Website_Temp_{themeIdEnc}', function ($company, $themeIdE
 */
 
 // Vue Routerக்கு பதிலா இது catch-all route
-Route::get('/{any}', function () {
+/* Route::get('/{any}', function () {
     $linauraLogo = asset('images/linkAuraLogo300.png');
     $meta = [
         'metaTitle' => 'LinkAura - Build Your Digital Identity',
@@ -266,3 +266,14 @@ Route::get('/{any}', function () {
 
     return Inertia::render('Website/Index', $meta);
 })->where('any', '.*');
+*/
+Route::get('/', function () {
+
+    $linauraLogo = asset('images/linkAuraLogo300.png');
+
+    return Inertia::render('Website/Index', [
+        'metaTitle' => 'LinkAura - Build Your Digital Identity',
+        'metaDescription' => 'Create your mini website, share products & grow your business easily with LinkAura.',
+        'metaImage' => $linauraLogo,
+    ]);
+});

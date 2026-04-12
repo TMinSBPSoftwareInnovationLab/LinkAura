@@ -1,6 +1,6 @@
 <template>
     <Head>
-        <title>{{ metaTitle }}</title>
+        <title inertia>{{ metaTitle }}</title>
         <meta name="description" :content="metaDescription" />
         <meta property="og:title" :content="metaTitle" />
         <meta property="og:description" :content="metaDescription" />
@@ -26,6 +26,9 @@
             metaDescription: String,
             metaImage: String
         },
+        /* mounted() {
+            console.log("metaTitle :", this.metaTitle);
+        }*/
         // return {
 
         // }
