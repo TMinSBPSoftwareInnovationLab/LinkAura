@@ -12,7 +12,7 @@
         <meta property="og:type" content="website">
         <meta property="og:title" content="{{ $metaTitle ?? 'LinkAura' }}">
         <meta property="og:description" content="{{ $metaDescription ?? 'LinkAura Digital Platform' }}">
-        <meta property="og:image" content="{{ $metaImage ?? asset('default-share-image.png') }}">
+        <meta property="og:image" content="{{ $metaImage ?? asset('images/linkAuraLogo.png') }}">
         <meta property="og:url" content="{{ url()->current() }}">
 
         <link rel="preconnect" href="https://fonts.bunny.net">
