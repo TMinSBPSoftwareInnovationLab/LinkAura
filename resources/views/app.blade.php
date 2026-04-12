@@ -5,14 +5,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title inertia>{{ $metaTitle ?? 'LinkAura' }}</title>
+        <title inertia>{{ $page['props']['metaTitle'] ?? 'LinkAura' }}</title>
 
-        <meta name="description" content="{{ $metaDescription ?? 'LinkAura Digital Platform' }}">
+        <meta name="description" content="{{ $page['props']['metaDescription'] ?? 'LinkAura Digital Platform' }}">
 
         <meta property="og:type" content="website">
-        <meta property="og:title" content="{{ $metaTitle ?? 'LinkAura 5' }}">
-        <meta property="og:description" content="{{ $metaDescription ?? 'LinkAura Digital Platform' }}">
-        <meta property="og:image" content="{{ $metaImage ?? asset('images/linkAuraLogo.png') }}">
+        <meta property="og:title" content="{{ $page['props']['metaTitle'] ?? 'LinkAura' }}">
+        <meta property="og:description" content="{{ $page['props']['metaDescription'] ?? 'LinkAura Digital Platform' }}">
+        <meta property="og:image" content="{{ $page['props']['metaImage'] ?? asset('images/linkAuraLogo.png') }}">
         <meta property="og:url" content="{{ url()->current() }}">
 
         <link rel="preconnect" href="https://fonts.bunny.net">
