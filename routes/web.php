@@ -269,7 +269,8 @@ Route::get('/{company}/Website_Temp_{themeIdEnc}', function ($company, $themeIdE
 */
 Route::get('/', function () {
 
-    $linauraLogo = asset("images/linkAuraLogo300.png");
+    // $linauraLogo = asset("images/linkAuraLogo300.png");
+    $linauraLogo = url("images/linkAuraLogo300.png");
 
     return Inertia::render('Website/Index', [
         'metaTitle' => 'LinkAura - Build Your Digital Identity',
