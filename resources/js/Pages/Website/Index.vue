@@ -4,7 +4,7 @@
         <meta name="description" :content="metaDescription" />
         <meta property="og:title" :content="metaTitle" />
         <meta property="og:description" :content="metaDescription" />
-        <meta property="og:image" :content="metaImage" />
+        <!-- <meta property="og:image" :content="metaImage" /> -->
     </Head>
     <HeadSection />
     <WebMainPage />
