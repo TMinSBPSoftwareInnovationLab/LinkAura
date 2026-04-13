@@ -1,9 +1,9 @@
 <template>
     <Head>
-        <title inertia>{{ metaTitle }}</title>
+        <!-- <title inertia>{{ metaTitle }}</title>
         <meta name="description" :content="metaDescription" />
         <meta property="og:title" :content="metaTitle" />
-        <meta property="og:description" :content="metaDescription" />
+        <meta property="og:description" :content="metaDescription" /> -->
         <!-- <meta property="og:image" :content="metaImage" /> -->
     </Head>
     <HeadSection />
