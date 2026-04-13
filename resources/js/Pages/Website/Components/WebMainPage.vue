@@ -13,7 +13,7 @@
                 </div>
                 <div class="flex flex-col md:flex-col">
                     <p class="p-5 pt-0 pb-0 text-gray-4500">
-                        Packages start at just ₹999.
+                        Packages start at just ₹1499.
                     </p>
                 </div>
                 <div class="flex flex-col md:flex-col p-5">
