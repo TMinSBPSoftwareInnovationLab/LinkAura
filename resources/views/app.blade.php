@@ -13,8 +13,8 @@
         <meta property="og:title" content="{{ $page['props']['metaTitle'] ?? 'LinkAura' }}">
         <meta property="og:description" content="{{ $page['props']['metaDescription'] ?? 'LinkAura Digital Platform' }}">
         {{-- <meta property="og:image" content="{{ $page['props']['metaImage'] ?? asset('images/linkAuraLogo.png') }}"> --}}
-        <meta property="og:image" content="{{ url('images/linkAuraLogo.png') }}">
-        <meta property="og:image:secure_url" content="{{ url('images/linkAuraLogo.png') }}">
+        <meta property="og:image" content="{{ url('images/linkAuraLogo300.png') }}">
+        <meta property="og:image:secure_url" content="{{ url('images/linkAuraLogo300.png') }}">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
         <meta property="og:url" content="{{ url()->current() }}">
