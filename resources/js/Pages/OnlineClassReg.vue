@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-blue-100 flex items-center justify-center p-6">
     <div class="w-full max-w-4xl bg-white rounded-3xl shadow-2xl p-8">
-      <h1 class="text-4xl uppercase font-extrabold text-center mb-1">
+      <h1 class="text-3xl uppercase font-extrabold text-center mb-1">
         thirumurugan academy
       </h1>
       <p class="text-sm font-extralight text-center text-gray-600">
@@ -11,7 +11,7 @@
         Contact: +91 75488 53487, +91 94883 06487
       </p>
       <hr />
-      <h3 class="text-2xl font-extrabold text-center text-gray-800 mt-2 mb-2">
+      <h3 class="text-xl font-extrabold text-center text-gray-800 mt-2 mb-2">
         🎓 Course Registration
       </h3>
       <p class="text-center text-gray-500 mb-8">Join and upgrade your skills 🚀</p>
