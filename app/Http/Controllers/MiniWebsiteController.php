@@ -2459,4 +2459,66 @@ class MiniWebsiteController extends Controller
             'message' => $getData->isNotEmpty() ? 'Product Order data found' : 'No Product Order data found'
         ]);
     }
+
+    // save online course stu reg course
+    public function saveOnlineCourseRegData(Request $request){
+        $studentName = $request->studentName;
+        $gender = $request->gender;
+        $phoneNumber = $request->phoneNumber;
+        $dob = $request->dob;
+        $whatsappNumber = $request->whatsappNumber;
+        $educationType = $request->educationType;
+        $institution = $request->institution;
+        $course = $request->course;
+        $session = $request->session;
+        $fromTime = $request->fromTime;
+        $toTime = $request->toTime;
+        $address = $request->address;
+        $created_at = Now();
+
+        try {
+            $request->validate([
+                'studentName' => 'required',
+                'gender' => 'required',
+                'phoneNumber' => 'required',
+                'whatsappNumber' => 'required',
+                'educationType' => 'required',
+                'session' => 'required',
+                'course' => 'required',
+                'fromTime' => 'required',
+                'toTime' => 'required',
+            ]);
+
+            DB::table('online_course_reg')->insert([
+                'student_name'     => $request->studentName,
+                'gender'           => $request->gender,
+                'phone_number'     => $request->phoneNumber,
+                'email'            => $request->email ?? '',
+                'dob'              => $request->dob,
+                'whatsapp_number'  => $request->whatsappNumber,
+                'education_type'   => $request->educationType,
+                'institution'      => $request->institution,
+                'course'           => $request->course,
+                'session'          => $request->session,
+                'from_time'        => $request->fromTime,
+                'to_time'          => $request->toTime,
+                'address'          => $request->address,
+                'created_at'       => now('Asia/Kolkata')
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Registration Successful'
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+
+        
+    }
 }

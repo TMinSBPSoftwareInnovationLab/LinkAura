@@ -126,6 +126,12 @@ Route::get('/FeedbackVerify', function () {
     return Inertia::render('FeedbackVerify');
 });
 
+// online registration form
+Route::get('/OnlineClassReg', function () {
+    return Inertia::render('OnlineClassReg');
+});
+Route::post('/saveOnlineCourseRegData',[MiniWebsiteController::class, 'saveOnlineCourseRegData']);
+
 
 /*
 |--------------------------------------------------------------------------
