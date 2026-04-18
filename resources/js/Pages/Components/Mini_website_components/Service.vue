@@ -165,7 +165,7 @@
                 return p.service_name  || p.preview;
             };
 
-             // FILTER (NO SPREAD BUG)
+            // FILTER (NO SPREAD BUG)
             const filteredservice = computed(() => {
                 if (!services.value) return [];
 

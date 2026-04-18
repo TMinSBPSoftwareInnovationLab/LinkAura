@@ -48,6 +48,29 @@
                 </div>
                 <!-- heading page /. -->
 
+                <div class="flex flex-row items-center gap-6 w-full mt-2 bg-white p-2">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" value="all" v-model="filterType">
+                        <span>All</span>
+                    </label>
+
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" value="filled" v-model="filterType">
+                        <span>Filled</span>
+                    </label>
+
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" value="empty" v-model="filterType">
+                        <span>Not Filled</span>
+                    </label>
+                </div>
+
+                <div class="flex flex-col w-full mt-2">
+                    <p class="text-sm text-gray-500 mb-2">
+                        Showing {{ filteredgallery.length }} Service
+                    </p>
+                </div>
+
                 <!-- main content area -->
                 <div class="grid grid-cols-1 mt-2 bg-white p-5">
                     <!-- Gallery Area -->
@@ -55,17 +78,17 @@
                         <div class="flex flex-col">
                             <!-- Gallery view area -->
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                                <div v-for="(gallery, index) in galleries" :key="index" class="border p-4 rounded-lg">
+                                <div v-for="(gallery, index) in filteredgallery" :key="index" class="border p-4 rounded-lg" >
                                     <!-- remove icons -->
                                     <div class="w-full flex justify-end">
                                         <button v-if="gallery.preview && !gallery.isNew"
-                                            @click="removeProductImage(index)"
+                                            @click="removeProductImage(gallery._index)"
                                             class="bg-red-500 text-white text-xs p-1">
                                             <TrashIcon class="h-[30px] w-10 p-1" />
                                         </button>
 
                                         <button v-if="gallery.preview && gallery.isNew"
-                                            @click="removeTempImage(index)"
+                                            @click="removeTempImage(gallery._index)"
                                             class="bg-yellow-500 text-white text-xs p-1">
                                             <TrashIcon class="h-[30px] w-10 p-1" />
                                         </button>
@@ -74,7 +97,7 @@
 
                                     <!-- file upload  area -->
                                     <label class="block cursor-pointer">
-                                        <input type="file" class="hidden" @change="selectedImage($event, index)" accept="image/png, image/jpg, image/webp, image/gif, image/jpeg">
+                                        <input type="file" class="hidden" @change="selectedImage($event, gallery._index)" accept="image/png, image/jpg, image/webp, image/gif, image/jpeg">
                                         <div class="w-full h-32 flex items-center justify-center border border-gray-200 rounded-lg overflow-hidden">
                                         <img v-if="gallery.preview" :src="gallery.preview" class="object-cover w-full h-full" />
                                         <span v-else class="text-gray-400 text-center">Upload Gallery</span>
@@ -105,7 +128,7 @@
 </template>
 
 <script>
-    import { ref, onMounted } from 'vue';
+    import { ref, onMounted, computed } from 'vue';
     import SideNavBar from '../SideNavBar.vue';
     import Header_tab from '../Header_tab.vue';
     import { useCardStore } from '@/stores/cardStore';
@@ -126,7 +149,35 @@
             const cardStore = useCardStore()
             const isSubmitting = ref(false);
             const s3GalleryUrl = import.meta.env.VITE_AWS_URL_GALLERY;
+            const filterType = ref("all");
 
+            // CHECK FILLED
+            const isGalleryFilled = (p) => {
+                return p.preview;
+            };
+
+            // FILTER (NO SPREAD BUG)
+            const filteredgallery = computed(() => {
+            if (!galleries.value) return [];
+
+            return galleries.value
+                .map((p, index) => {
+                    p._index = index;
+                    return p;
+                })
+                .filter((p) => {
+
+                    if (p.isLocked) return false;
+
+                    // KEEP EDITED ITEMS VISIBLE ALWAYS
+                    if (p.isDirty) return true;
+
+                    if (filterType.value === "filled") return isGalleryFilled(p);
+                    if (filterType.value === "empty") return !isGalleryFilled(p);
+
+                    return true;
+                });
+        });
 
             // get data
             const currData = ref({})
@@ -163,15 +214,15 @@
             // upload gallery area
             
             onMounted(async () => {
+                let allowedCount = 1000;
                 // 1. Fetch Plan Details to determine allowedCount
                 const planRes = await axios.post("/collectAllWebsiteDatas", {
                     table_name: "miniweb_company_details",
                     cd_id: Number(cardStore.cardId)
                 });
 
-                const companyData = planRes.data[0];
-                let allowedCount = 0;
-
+                const companyData = planRes.data.getData[0];
+                
                 if (companyData && companyData.purchased_id > 0) {
                     const planId = Number(companyData.plan_id);
                     if (planId === 94) allowedCount = 25;
@@ -229,6 +280,7 @@
                 reader.readAsDataURL(file);
                 galleries.value[i].file = file;
                 galleries.value[i].isNew = true;
+                galleries.value[i].isDirty = true;
             };
 
             // remove temp image
@@ -296,6 +348,9 @@
                 const formData = new FormData();
                 formData.append('cardId',Number(cardStore.cardId));
                 galleries.value.forEach((p, index) => {
+                    if (p.isLocked) return;
+                    if (!isGalleryFilled(p)) return;
+
                     formData.append(`galleries[${index}][id]`, p.id ?? '');
                     formData.append(`galleries[${index}][image]`, p.file);
                 });
@@ -338,7 +393,9 @@
                 removeTempImage,
                 removeProductImage,
                 isSubmitting,
-                s3GalleryUrl
+                s3GalleryUrl,
+                filteredgallery,
+                filterType,
             }
         }
     }
