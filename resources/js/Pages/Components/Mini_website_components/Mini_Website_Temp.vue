@@ -185,6 +185,12 @@
                 ✕
             </button>
 
+            <!-- Save & Next Button -->
+            <button @click="saveAndNext"
+                class="mb-10 mt-4 w-full bg-blue-600 text-white py-2 rounded-lg font-semibold shadow-lg active:scale-95">
+                Save & Next (Address)
+            </button>
+
             <div class="w-full">
                 <Website_Temp_1 
                     v-if="selectedWebsiteId == 1"
