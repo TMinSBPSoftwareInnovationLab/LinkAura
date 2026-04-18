@@ -180,17 +180,28 @@
                     max-h-[90vh]">
 
             <!-- Close Btn -->
-            <button @click="showMobilePopup = false"
+            <button @click="showMobilePopup = false" v-if="1==2"
                     class="absolute top-2 right-2 text-white bg-red-500 p-4">
                 ✕
             </button>
 
             <!-- Save & Next Button -->
-            <button @click="saveAndNext"
-                :disabled="isSubmitting"
-                class="mb-0 mt-4 w-full bg-blue-600 text-white py-2 rounded-lg font-semibold shadow-lg active:scale-95">
-                Save & Next (Address)
-            </button>
+            <div class="sticky top-0 z-50 bg-white pb-2 flex justify-between items-center">
+    
+                <button 
+                    @click="saveAndNext"
+                    :disabled="isSubmitting"
+                    class="flex-1 bg-blue-600 text-white py-2 rounded-lg font-semibold shadow-lg">
+                    {{ isSubmitting ? "Saving..." : "Save & Next Address" }}
+                </button>
+
+                <button 
+                    @click="showMobilePopup = false"
+                    class="ml-2 text-white bg-red-500 px-3 py-2 rounded">
+                    ✕
+                </button>
+
+            </div>
 
             <div class="w-full">
                 <Website_Temp_1 
@@ -243,10 +254,10 @@
             </div>
 
             <!-- Save & Next Button -->
-            <button @click="saveAndNext"
+            <button @click="saveAndNext" v-if="1==2"
                 :disabled="isSubmitting"
                 class="mb-10 mt-4 w-full bg-blue-600 text-white py-2 rounded-lg font-semibold shadow-lg active:scale-95">
-                Save & Next (Address)
+                {{ isSubmitting ? "Saving..." : "Save & Next Address" }}
             </button>
 
         </div>
