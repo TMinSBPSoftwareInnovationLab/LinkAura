@@ -126,8 +126,8 @@
                 { field: "customer_address", headerName: "Address",  width:150, editable: true },
                 { field: "product_name", headerName: "Product Name",  width:150, editable: true },
                 { field: "product_price", headerName: "Product Price",  width:150, editable: true },
-                { field: "Qty", headerName: "qty",  width:150, editable: true },
-                { field: "Total Amount", headerName: "total_price",  width:150, editable: true },
+                { field: "qty", headerName: "Qty",  width:150, editable: true },
+                { field: "total_price", headerName: "Total Amount",  width:150, editable: true },
                 { field: "CDate", headerName: "CDate", width: 180, editable: true },
             ]);
 
