@@ -108,24 +108,21 @@
                                     <!-- Product Name -->
                                     <input type="text" 
                                     v-model="product.name" 
-                                    @focus="product.isEditing = true"
-                                    @blur="product.isEditing = false"
+                                    @input="product.isDirty = true"
                                     placeholder="Enter Product Name" class="w-full px-3 py-2 mt-2 border border-[#333c79]" />
                                     <!-- Product Name /.-->
 
                                     <!-- Original Proce -->
                                     <input type="number" 
                                     v-model="product.original_price" 
-                                    @focus="product.isEditing = true"
-                                    @blur="product.isEditing = false"
+                                    @input="product.isDirty = true"
                                     placeholder="Original Price" class="w-full px-3 py-2 mt-2 border border-[#333c79]"  @change="changeOriginalPrice(product._index)" />
                                     <!-- Original Proce -->
 
                                     <!-- Discount Proce -->
                                     <input type="number" 
                                     v-model="product.discount_price" 
-                                    @focus="product.isEditing = true"
-                                    @blur="product.isEditing = false"
+                                    @input="product.isDirty = true"
                                     placeholder="Discount Price" class="w-full px-3 py-2 mt-2 border border-[#333c79]"  @change="changeDiscountPrice(product._index)"  />
                                     <!-- Discount Proce /.-->
 
@@ -222,13 +219,16 @@ export default {
 
             return products.value
                 .map((p, index) => {
-                    p._index = index; // ✅ keep original index
+                    p._index = index;
                     return p;
                 })
                 .filter((p) => {
 
                     if (p.isLocked) return false;
-                    if (p.isEditing) return true;
+
+                    // 🔥 KEEP EDITED ITEMS VISIBLE ALWAYS
+                    if (p.isDirty) return true;
+
                     if (filterType.value === "filled") return isProductFilled(p);
                     if (filterType.value === "empty") return !isProductFilled(p);
 
@@ -346,6 +346,7 @@ export default {
             reader.readAsDataURL(file);
             products.value[i].file = file;
             products.value[i].isNew = true;
+            products.value[i].isDirty = true;
         };
 
         const removeTempImage = (i) => {
@@ -433,7 +434,7 @@ export default {
             changeOriginalPrice,
             changeDiscountPrice,
             saveAndNext,
-            isEditing: false
+            isDirty: false
         };
     }
 };
