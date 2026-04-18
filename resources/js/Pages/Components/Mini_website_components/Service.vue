@@ -48,6 +48,28 @@
                 </div>
                 <!-- heading page /. -->
 
+                <div class="flex flex-row items-center gap-6 w-full mt-2 bg-white p-2">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" value="all" v-model="filterType">
+                        <span>All</span>
+                    </label>
+
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" value="filled" v-model="filterType">
+                        <span>Filled</span>
+                    </label>
+
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" value="empty" v-model="filterType">
+                        <span>Not Filled</span>
+                    </label>
+                </div>
+
+                <div class="flex flex-col w-full mt-2">
+                    <p class="text-sm text-gray-500 mb-2">
+                        Showing {{ filteredservice.length }} Service
+                    </p>
+                </div>
                 <!-- main content area -->
                 <div class="grid grid-cols-1 mt-2 bg-white p-5">
                     <!-- Service Area -->
@@ -55,17 +77,17 @@
                         <div class="flex flex-col">
                             <!-- service view area -->
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                                <div v-for="(service, index) in services" :key="index" class="border p-4 rounded-lg">
+                                <div v-for="(service, index) in filteredservice" :key="index" class="border p-4 rounded-lg">
                                     <!-- remove icons -->
                                     <div class="w-full flex justify-end">
                                         <button v-if="service.preview && !service.isNew"
-                                            @click="removeProductImage(index)"
+                                            @click="removeProductImage(service._index)"
                                             class="bg-red-500 text-white text-xs p-1">
                                             <TrashIcon class="h-[30px] w-10 p-1" />
                                         </button>
 
                                         <button v-if="service.preview && service.isNew"
-                                            @click="removeTempImage(index)"
+                                            @click="removeTempImage(service._index)"
                                             class="bg-yellow-500 text-white text-xs p-1">
                                             <TrashIcon class="h-[30px] w-10 p-1" />
                                         </button>
@@ -74,7 +96,7 @@
 
                                     <!-- file upload  area -->
                                     <label class="block cursor-pointer">
-                                        <input type="file" class="hidden" @change="selectedImage($event, index)" accept="image/png, image/jpg, image/webp, image/gif, image/jpeg">
+                                        <input type="file" class="hidden" @change="selectedImage($event, service._index)" accept="image/png, image/jpg, image/webp, image/gif, image/jpeg">
                                         <div class="w-full h-32 flex items-center justify-center border border-gray-200 rounded-lg overflow-hidden">
                                         <img v-if="service.preview" :src="service.preview" class="object-cover w-full h-full" />
                                         <span v-else class="text-gray-400 text-center">Upload Service</span>
@@ -84,7 +106,10 @@
                                     <!-- file upload  area /. -->
 
                                     <!-- Service Name -->
-                                    <input type="text" v-model="service.service_name" placeholder="Enter Service Name" class="w-full px-3 py-2 mt-2 border border-[#333c79]" />
+                                    <input type="text" 
+                                    v-model="service.service_name" 
+                                    @input="services.isDirty = true"
+                                    placeholder="Enter Service Name" class="w-full px-3 py-2 mt-2 border border-[#333c79]" />
                                     <!-- Service Name /.-->
 
                                 </div>
@@ -110,7 +135,7 @@
 </template>
 
 <script>
-    import { ref, onMounted } from 'vue';
+    import { ref, onMounted, computed } from 'vue';
     import SideNavBar from '../SideNavBar.vue';
     import Header_tab from '../Header_tab.vue';
     import { useCardStore } from '@/stores/cardStore';
@@ -120,7 +145,7 @@
     import axios from 'axios';
     import { TrashIcon } from '@heroicons/vue/24/solid'
     import Swal from 'sweetalert2';
-    const s3ServiceUrl = import.meta.env.VITE_AWS_URL_SERVICE_IMAGES;
+    
 
     export default{
         name: "Service",
@@ -131,11 +156,41 @@
             const rowid = ref()
             const cardStore = useCardStore()
             const isSubmitting = ref(false);
+            const s3ServiceUrl = import.meta.env.VITE_AWS_URL_SERVICE_IMAGES;
+            const services = ref([]);
+            const filterType = ref("all");
+
+            // CHECK FILLED
+            const isServiceFilled = (p) => {
+                return p.service_name  || p.preview;
+            };
+
+             // FILTER (NO SPREAD BUG)
+            const filteredservice = computed(() => {
+                if (!services.value) return [];
+
+                return services.value
+                    .map((p, index) => {
+                        p._index = index;
+                        return p;
+                    })
+                    .filter((p) => {
+
+                        if (p.isLocked) return false;
+
+                        // KEEP EDITED ITEMS VISIBLE ALWAYS
+                        if (p.isDirty) return true;
+
+                        if (filterType.value === "filled") return isServiceFilled(p);
+                        if (filterType.value === "empty") return !isServiceFilled(p);
+
+                        return true;
+                    });
+            });
 
 
             // get data
             const currData = ref({})
-            const services = ref();
             // onMounted(async () => {
             //     const res = await axios.post('/getWebsiteDetails', {
             //         table: 'miniweb_services',
@@ -171,14 +226,16 @@
             // upload services area
             
             onMounted(async () => {
+                let allowedCount = 1000;
+
                 // 1. Fetch Plan Details
                 const planRes = await axios.post("/collectAllWebsiteDatas", {
                     table_name: "miniweb_company_details",
                     cd_id: Number(cardStore.cardId)
                 });
 
-                const companyData = planRes.data[0];
-                let allowedCount = 0;
+                const companyData = planRes.data.getData[0];
+                // let allowedCount = 0;
 
                 if (companyData && companyData.purchased_id > 0) {
                     const planId = Number(companyData.plan_id);
@@ -238,6 +295,7 @@
                 reader.readAsDataURL(file);
                 services.value[i].file = file;
                 services.value[i].isNew = true;
+                services.value[i].isDirty = true;
             };
 
             // remove temp image
@@ -302,6 +360,9 @@
                 const formData = new FormData();
                 formData.append('cardId',Number(cardStore.cardId));
                 services.value.forEach((p, index) => {
+                    if (p.isLocked) return;
+                    if (!isServiceFilled(p)) return;
+
                     formData.append(`services[${index}][id]`, p.id ?? '');
                     formData.append(`services[${index}][image]`, p.file);
                     formData.append(`services[${index}][service_name]`, p.service_name);
@@ -347,6 +408,8 @@
                 removeProductImage,
                 isSubmitting,
                 s3ServiceUrl,
+                filteredservice,
+                filterType,
             }
         }
     }

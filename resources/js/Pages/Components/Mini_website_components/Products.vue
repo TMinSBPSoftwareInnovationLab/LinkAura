@@ -43,7 +43,7 @@
                 <!-- heading page -->
                 <div class="flex flex-col w-full mt-2">
                     <div class="flex w-full bg-[#000b57] text-white text-center items-center justify-center uppercase font-bold p-2">
-                        <h1>Products 4</h1>
+                        <h1>Products</h1>
                     </div>
                 </div>
                 <!-- heading page /. -->
