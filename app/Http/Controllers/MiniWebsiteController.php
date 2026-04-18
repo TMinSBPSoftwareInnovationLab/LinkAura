@@ -2402,6 +2402,7 @@ class MiniWebsiteController extends Controller
         $validated = $request->validate([
             'product_id' => 'required|integer',
             'productQty' => 'required',
+            'totalPrice' => 'required',
             'product_name' => 'required|string|max:255',
             'product_price' => 'required|numeric',
             'customer_name' => 'required|string|max:255',
@@ -2424,6 +2425,7 @@ class MiniWebsiteController extends Controller
             'company_id' => $product->mini_website_id,
             'product_id' => $validated['product_id'],
             'qty' => $validated['productQty'],
+            'total_price' => $validated['totalPrice'],
             'product_name' => $validated['product_name'],
             'product_price' => $validated['product_price'],
             'customer_name' => $validated['customer_name'],
