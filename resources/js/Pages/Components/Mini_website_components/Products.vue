@@ -81,13 +81,13 @@
                                     <!-- remove icons -->
                                     <div class="w-full flex justify-end">
                                         <button v-if="product.preview && !product.isNew"
-                                            @click="removeProductImage(index)"
+                                            @click="removeProductImage(product._index)"
                                             class="bg-red-500 text-white text-xs p-1">
                                             <TrashIcon class="h-[30px] w-10 p-1" />
                                         </button>
 
                                         <button v-if="product.preview && product.isNew"
-                                            @click="removeTempImage(index)"
+                                            @click="removeTempImage(product._index)"
                                             class="bg-yellow-500 text-white text-xs p-1">
                                             <TrashIcon class="h-[30px] w-10 p-1" />
                                         </button>
@@ -96,7 +96,7 @@
 
                                     <!-- file upload  area -->
                                     <label class="block cursor-pointer">
-                                        <input type="file" class="hidden" @change="selectedImage($event, index)" accept="image/png, image/jpg, image/webp, image/gif, image/jpeg">
+                                        <input type="file" class="hidden" @change="selectedImage($event, product._index)" accept="image/png, image/jpg, image/webp, image/gif, image/jpeg">
                                         <div class="w-full h-32 flex items-center justify-center border border-gray-200 rounded-lg overflow-hidden">
                                         <img v-if="product.preview" :src="product.preview" class="object-cover w-full h-full" />
                                         <span v-else class="text-gray-400 text-center">Upload Products</span>
@@ -106,15 +106,27 @@
                                     <!-- file upload  area /. -->
 
                                     <!-- Product Name -->
-                                    <input type="text" v-model="product.name" placeholder="Enter Product Name" class="w-full px-3 py-2 mt-2 border border-[#333c79]" />
+                                    <input type="text" 
+                                    v-model="product.name" 
+                                    @focus="product.isEditing = true"
+                                    @blur="product.isEditing = false"
+                                    placeholder="Enter Product Name" class="w-full px-3 py-2 mt-2 border border-[#333c79]" />
                                     <!-- Product Name /.-->
 
                                     <!-- Original Proce -->
-                                    <input type="number" v-model="product.original_price" placeholder="Original Price" class="w-full px-3 py-2 mt-2 border border-[#333c79]"  @change="changeOriginalPrice(index)" />
+                                    <input type="number" 
+                                    v-model="product.original_price" 
+                                    @focus="product.isEditing = true"
+                                    @blur="product.isEditing = false"
+                                    placeholder="Original Price" class="w-full px-3 py-2 mt-2 border border-[#333c79]"  @change="changeOriginalPrice(product._index)" />
                                     <!-- Original Proce -->
 
                                     <!-- Discount Proce -->
-                                    <input type="number" v-model="product.discount_price" placeholder="Discount Price" class="w-full px-3 py-2 mt-2 border border-[#333c79]"  @change="changeDiscountPrice(index)"  />
+                                    <input type="number" 
+                                    v-model="product.discount_price" 
+                                    @focus="product.isEditing = true"
+                                    @blur="product.isEditing = false"
+                                    placeholder="Discount Price" class="w-full px-3 py-2 mt-2 border border-[#333c79]"  @change="changeDiscountPrice(product._index)"  />
                                     <!-- Discount Proce /.-->
 
                                     <!-- Final Proce -->
@@ -216,7 +228,7 @@ export default {
                 .filter((p) => {
 
                     if (p.isLocked) return false;
-
+                    if (p.isEditing) return true;
                     if (filterType.value === "filled") return isProductFilled(p);
                     if (filterType.value === "empty") return !isProductFilled(p);
 
@@ -420,8 +432,8 @@ export default {
             removeProductImage,
             changeOriginalPrice,
             changeDiscountPrice,
-
-            saveAndNext
+            saveAndNext,
+            isEditing: false
         };
     }
 };
