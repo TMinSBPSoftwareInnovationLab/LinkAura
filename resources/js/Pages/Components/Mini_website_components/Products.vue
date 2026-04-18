@@ -201,19 +201,19 @@ export default {
     setup() {
 
         const rowid = ref([]);
-        const products = ref([]); // ✅ FIXED
+        const products = ref([]); // FIXED
         const cardStore = useCardStore();
         const isSubmitting = ref(false);
         const filterType = ref("all");
 
         const s3ProductUrl = import.meta.env.VITE_AWS_URL_PRODUCT_IMAGES;
 
-        // ✅ CHECK FILLED
+        // CHECK FILLED
         const isProductFilled = (p) => {
             return p.name || p.original_price || p.discount_price || p.final_price || p.preview;
         };
 
-        // ✅ FILTER (NO SPREAD BUG)
+        // FILTER (NO SPREAD BUG)
         const filteredProducts = computed(() => {
             if (!products.value) return [];
 
@@ -226,7 +226,7 @@ export default {
 
                     if (p.isLocked) return false;
 
-                    // 🔥 KEEP EDITED ITEMS VISIBLE ALWAYS
+                    // KEEP EDITED ITEMS VISIBLE ALWAYS
                     if (p.isDirty) return true;
 
                     if (filterType.value === "filled") return isProductFilled(p);
@@ -236,7 +236,7 @@ export default {
                 });
         });
 
-        // ✅ PRICE
+        // PRICE
         const validateNumber = (value, fieldName) => {
             const num = parseFloat(value);
             if (!num) {
@@ -328,7 +328,7 @@ export default {
             rowid.value = data.map(item => item.id);
         });
 
-        // ✅ IMAGE
+        // IMAGE
         const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/gif", "image/webp"];
 
         const selectedImage = (e, i) => {
@@ -376,7 +376,7 @@ export default {
             p.preview = null;
         };
 
-        // ✅ SAVE
+        // SAVE
         const saveAndNext = async () => {
 
             const formData = new FormData();
