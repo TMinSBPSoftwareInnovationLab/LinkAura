@@ -1969,6 +1969,7 @@
                         product_name: proName,
                         product_price: price,
                         productQty: values.productQty,
+                        totalPrice: totalPrice,
                         customer_name: values.customerName,
                         customer_phone: values.customerPhone,
                         customer_address: values.customerAddress
