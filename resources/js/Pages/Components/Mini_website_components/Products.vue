@@ -43,11 +43,33 @@
                 <!-- heading page -->
                 <div class="flex flex-col w-full mt-2">
                     <div class="flex w-full bg-[#000b57] text-white text-center items-center justify-center uppercase font-bold p-2">
-                        <h1>Products</h1>
+                        <h1>Products 4</h1>
                     </div>
                 </div>
                 <!-- heading page /. -->
 
+                <div class="flex flex-row items-center gap-6 w-full mt-2 bg-white p-2">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" value="all" v-model="filterType">
+                        <span>All</span>
+                    </label>
+
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" value="filled" v-model="filterType">
+                        <span>Filled</span>
+                    </label>
+
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" value="empty" v-model="filterType">
+                        <span>Not Filled</span>
+                    </label>
+                </div>
+
+                <div class="flex flex-col w-full mt-2">
+                    <p class="text-sm text-gray-500 mb-2">
+                        Showing {{ filteredProducts.length }} products
+                    </p>
+                </div>
                 <!-- main content area -->
                 <div class="grid grid-cols-1 mt-2 bg-white p-5">
                     <!-- Products Area -->
@@ -55,7 +77,7 @@
                         <div class="flex flex-col">
                             <!-- product view area -->
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                                <div v-for="(product, index) in products" :key="index" class="border p-4 rounded-lg">
+                                <div v-for="(product, index) in filteredProducts" :key="index" class="border p-4 rounded-lg" :class="product.isLocked ? 'opacity-40 pointer-events-none' : ''">
                                     <!-- remove icons -->
                                     <div class="w-full flex justify-end">
                                         <button v-if="product.preview && !product.isNew"
@@ -153,296 +175,254 @@
 </template>
 
 <script>
-    import { ref, onMounted } from 'vue';
-    import SideNavBar from '../SideNavBar.vue';
-    import Header_tab from '../Header_tab.vue';
-    import { useCardStore } from '@/stores/cardStore';
-    // import { useRouter } from "vue-router";
-    import { router, usePage } from '@inertiajs/vue3'
-    import { toast } from 'vue3-toastify'
-    import axios from 'axios';
-    import { TrashIcon } from '@heroicons/vue/24/solid'
-    import Swal from 'sweetalert2';
+import { ref, onMounted, computed } from 'vue';
+import SideNavBar from '../SideNavBar.vue';
+import Header_tab from '../Header_tab.vue';
+import { useCardStore } from '@/stores/cardStore';
+import { router, usePage } from '@inertiajs/vue3'
+import { toast } from 'vue3-toastify'
+import axios from 'axios';
+import { TrashIcon } from '@heroicons/vue/24/solid'
+import Swal from 'sweetalert2';
 
-    export default{
-        name: "Products",
-        components: { SideNavBar, Header_tab, TrashIcon },
-        setup() {
-            const page = usePage();
-            // const router = useRouter()
-            const rowid = ref()
-            const cardStore = useCardStore()
-            const isSubmitting = ref(false);
-            const s3ProductUrl = import.meta.env.VITE_AWS_URL_PRODUCT_IMAGES;
+export default {
+    name: "Products",
+    components: { SideNavBar, Header_tab, TrashIcon },
 
-            const changeOriginalPrice = (i) => {
-                const product = products.value[i];
-                product.original_price = validateNumber(product.original_price, "Original Price");
-            };
+    setup() {
 
-            const changeDiscountPrice = (i) => {
-                const p = products.value[i];
+        const rowid = ref([]);
+        const products = ref([]); // ✅ FIXED
+        const cardStore = useCardStore();
+        const isSubmitting = ref(false);
+        const filterType = ref("all");
 
-                const origip = validateNumber(p.original_price, "Original Price");
-                const dicp = validateNumber(p.discount_price, "Discount Price");
+        const s3ProductUrl = import.meta.env.VITE_AWS_URL_PRODUCT_IMAGES;
 
-                if (!origip || !dicp) {
-                    p.discount_price = "";
-                    p.final_price = "";
-                    return;
-                }
+        // ✅ CHECK FILLED
+        const isProductFilled = (p) => {
+            return p.name || p.original_price || p.discount_price || p.final_price || p.preview;
+        };
 
-                if (dicp >= origip) {
-                    p.discount_price = "";
-                    p.final_price = "";
-                    return toast.error("Discount must be less than Original Price");
-                }
+        // ✅ FILTER (NO SPREAD BUG)
+        const filteredProducts = computed(() => {
+            if (!products.value) return [];
 
-                p.discount_price = dicp;
-                p.final_price = origip - dicp;
-            };
+            return products.value
+                .map((p, index) => {
+                    p._index = index; // ✅ keep original index
+                    return p;
+                })
+                .filter((p) => {
 
+                    if (p.isLocked) return false;
 
-             const validateNumber = (value, fieldName) => {
-                const num = parseFloat(value);
-                if (!num) {
-                    toast.error(`Invalid ${fieldName}`);
-                    return null;
-                }
-                return num;
-            };
+                    if (filterType.value === "filled") return isProductFilled(p);
+                    if (filterType.value === "empty") return !isProductFilled(p);
 
-            // get data
-            const currData = ref({})
-            const products = ref();
-            // onMounted(async () => {
-            //     const res = await axios.post('/getWebsiteDetails', {
-            //         table: 'miniweb_products',
-            //         cardId: Number(cardStore.cardId)
-            //     });
-
-            //     const data = res.data.getData;
-
-            //      If no products → load default 30 empty rows
-            //     if (!data || data.length === 0) {
-            //         products.value = Array.from({ length: 30 }, () => ({
-            //             preview: null,
-            //             file: null,
-            //             name: '',
-            //             original_price: "",
-            //             discount_price: "",
-            //             final_price: "",
-            //         }));
-            //         rowid.value = []; // No rowid
-            //         return;
-            //     }
-
-            //      If products exist → load DB products
-            //     currData.value = data;
-            //     products.value = data.map(item => ({
-            //         name: item.product_name || '',
-            //         original_price: item.orginal_price || '',
-            //         discount_price: item.discount_price || '',
-            //         final_price: item.final_price || '',
-            //         file: null,
-            //         preview: item.product_img ? `${s3ProductUrl}/product_images/${item.product_img}` : '',
-            //     }));
-
-            //     rowid.value = data.map(item => item.id);
-            // });
-
-            onMounted(async () => {
-                const planRes = await axios.post("/collectAllWebsiteDatas", {
-                    table_name: "miniweb_company_details",
-                    cd_id: Number(cardStore.cardId) // Assuming cd_id matches cardId
+                    return true;
                 });
+        });
 
-                const companyData = planRes.data[0];
-                let allowedCount = 0;
+        // ✅ PRICE
+        const validateNumber = (value, fieldName) => {
+            const num = parseFloat(value);
+            if (!num) {
+                toast.error(`Invalid ${fieldName}`);
+                return null;
+            }
+            return num;
+        };
 
-                if (companyData && companyData.purchased_id > 0) {
-                    const planId = Number(companyData.plan_id);
-                    if (planId === 94) allowedCount = 25;
-                    else if (planId === 95) allowedCount = 75;
-                    else if (planId === 96) allowedCount = 1000;
-                }
+        const changeOriginalPrice = (i) => {
+            const p = products.value[i];
+            p.original_price = validateNumber(p.original_price, "Original Price");
+        };
 
-                const res = await axios.post('/getWebsiteDetails', {
-                    table: 'miniweb_products',
-                    cardId: Number(cardStore.cardId)
-                });
+        const changeDiscountPrice = (i) => {
+            const p = products.value[i];
 
-                const data = res.data.getData || [];
+            const o = validateNumber(p.original_price, "Original Price");
+            const d = validateNumber(p.discount_price, "Discount Price");
 
-                products.value = Array.from({ length: 1000 }, (_, index) => {
-                    // If we have DB data for this index, use it
-                    if (data[index]) {
-                        const item = data[index];
-                        return {
-                            id: item.id,
-                            name: item.product_name || '',
-                            original_price: item.orginal_price || '',
-                            discount_price: item.discount_price || '',
-                            final_price: item.final_price || '',
-                            file: null,
-                            preview: item.product_img ? `${s3ProductUrl}/product_images/${item.product_img}` : '',
-                            status: item.status || '', // 'trending', 'new', or '',
-                            // Add a flag to identify if this row is disabled based on the plan
-                            isLocked: index >= allowedCount
-                        };
-                    }
+            if (!o || !d || d >= o) {
+                p.discount_price = "";
+                p.final_price = "";
+                return;
+            }
 
-                    // Otherwise, return an empty row template
-                    return {
-                        preview: null,
-                        file: null,
-                        name: '',
-                        original_price: "",
-                        discount_price: "",
-                        final_price: "",
-                        isLocked: index >= allowedCount
-                    };
-                });
+            p.final_price = o - d;
+        };
 
-                rowid.value = data.map(item => item.id);
+        // LOAD DATA
+        onMounted(async () => {
+
+            let allowedCount = 1000; // FIXED
+
+            const planRes = await axios.post("/collectAllWebsiteDatas", {
+                table_name: "miniweb_company_details",
+                cd_id: Number(cardStore.cardId)
             });
 
-            // upload products area
-            const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/gif", "image/webp"];
-            const selectedImage = (e, i) => {
-                const file = e.target.files[0];
-                if (!file) return;
+            const companyData = planRes.data.getData[0];
+            if (companyData && companyData.purchased_id > 0) {
+                const planId = Number(companyData.plan_id);
 
-                if (!allowedTypes.includes(file.type)) {
-                    toast.error("Only JPG, PNG, GIF, WEBP images allowed!");
-                    return (e.target.value = "");
-                }
-
-                const reader = new FileReader();
-                reader.onload = (ev) => products.value[i].preview = ev.target.result;
-
-                reader.readAsDataURL(file);
-                products.value[i].file = file;
-                products.value[i].isNew = true;
-            };
-
-            // remove temp image
-            const removeTempImage = (index) => {
-                products.value[index].file = null;
-                products.value[index].preview = '';
-                products.value[index].isNew = false;
-            };
-
-            // remove from db and path
-            const removeProductImage = async (index) => {
-                const product = products.value[index];
-                if (!product.preview) return;
-
-                const result = await Swal.fire({
-                    title: "Are you sure?",
-                    text: "Are you Sure want to Remove This Product Image",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#d33",
-                    cancelButtonColor: "#3085d6",
-                    confirmButtonText: "Yes, delete it!",
-                });
-
-                if (!result.isConfirmed) return;
-
-                try {
-                    const fileNameOnly = product.preview.split('/').pop();
-                    const res = await axios.post("/removeProductImage", { id: rowid.value[index], image: fileNameOnly, });
-
-                    if (res.data.status) {
-                    products.value[index].file = null;
-                    products.value[index].preview = null;
-
-                    Swal.fire({
-                        title: "Success",
-                        text: res.data.message,
-                        icon: "success",
-                        confirmButtonText: "OK",
-                    });
-                    } else {
-                    Swal.fire({
-                        title: "Error",
-                        text: res.data.message || "Failed to delete image.",
-                        icon: "error",
-                        confirmButtonText: "OK",
-                    });
-                    }
-                } catch (error) {
-                    console.error(error);
-                    Swal.fire({
-                    title: "Error",
-                    text: "Something went wrong while deleting the image.",
-                    icon: "error",
-                    confirmButtonText: "OK",
-                    });
-                }
-            };
-
-            // save products
-            const saveAndNext = async() => {
-                const formData = new FormData();
-                formData.append('cardId',Number(cardStore.cardId));
-                products.value.forEach((p, index) => {
-                    formData.append(`products[${index}][id]`, p.id ?? '');
-
-                    formData.append(`products[${index}][image]`, p.file);
-                    formData.append(`products[${index}][name]`, p.name);
-                    formData.append(`products[${index}][original_price]`, p.original_price);
-                    formData.append(`products[${index}][discount_price]`, p.discount_price);
-                    formData.append(`products[${index}][final_price]`, p.final_price);
-                    formData.append(`products[${index}][status]`, p.status); // 1-Trending, 2-New Arrival
-                });
-
-                // update data
-                // rowid.value.forEach((id, idx) => {
-                //     formData.append(`rowid[${idx}]`, id);
-                // });
-                isSubmitting.value = true;
-                try {
-                    const res = await axios.post('/saveWebProducts', formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                });
-                if(res.data.status == true){
-                        document.querySelectorAll('input[type="file"]').forEach(input => {
-                            input.value = '';
-                        });
-                        products.value = [];
-                        toast.success(res.data.message)
-                        router.visit('/Service')
-                    }
-                    else
-                    {
-                        toast.warning(res.data.message)
-                    }
-                } catch (error) {
-                    toast.error("Something went wrong: " + error);
-                }
-                finally {
-                    isSubmitting.value = false;
-                }
-
+                if (planId === 94) allowedCount = 25;
+                else if (planId === 95) allowedCount = 75;
+                else if (planId === 96) allowedCount = 1000;
             }
 
-            return {
-                currData,
-                rowid,
-                saveAndNext,
-                products,
-                changeOriginalPrice,
-                changeDiscountPrice,
-                validateNumber,
-                selectedImage,
-                allowedTypes,
-                removeTempImage,
-                removeProductImage,
-                isSubmitting,
-                s3ProductUrl
+            const res = await axios.post('/getWebsiteDetails', {
+                table: 'miniweb_products',
+                cardId: Number(cardStore.cardId)
+            });
+
+            const data = res.data.getData || [];
+
+            products.value = Array.from({ length: 1000 }, (_, index) => {
+
+                if (data[index]) {
+                    const item = data[index];
+
+                    return {
+                        id: item.id,
+                        name: item.product_name || '',
+                        original_price: item.orginal_price || '',
+                        discount_price: item.discount_price || '',
+                        final_price: item.final_price || '',
+                        file: null,
+                        preview: item.product_img
+                            ? `${s3ProductUrl}/product_images/${item.product_img}`
+                            : '',
+                        status: item.status || '',
+                        isLocked: index >= allowedCount
+                    };
+                }
+
+                return {
+                    id: null,
+                    name: '',
+                    original_price: '',
+                    discount_price: '',
+                    final_price: '',
+                    file: null,
+                    preview: null,
+                    status: '',
+                    isLocked: index >= allowedCount
+                };
+            });
+
+            rowid.value = data.map(item => item.id);
+        });
+
+        // ✅ IMAGE
+        const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/gif", "image/webp"];
+
+        const selectedImage = (e, i) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (!allowedTypes.includes(file.type)) {
+                toast.error("Only JPG, PNG, GIF, WEBP images allowed!");
+                return;
             }
-        }
+
+            const reader = new FileReader();
+            reader.onload = (ev) => products.value[i].preview = ev.target.result;
+
+            reader.readAsDataURL(file);
+            products.value[i].file = file;
+            products.value[i].isNew = true;
+        };
+
+        const removeTempImage = (i) => {
+            products.value[i].file = null;
+            products.value[i].preview = null;
+        };
+
+        const removeProductImage = async (i) => {
+            const p = products.value[i];
+            if (!p.preview) return;
+
+            const result = await Swal.fire({
+                title: "Are you sure?",
+                icon: "warning",
+                showCancelButton: true
+            });
+
+            if (!result.isConfirmed) return;
+
+            const fileName = p.preview.split('/').pop();
+
+            await axios.post("/removeProductImage", {
+                id: rowid.value[i],
+                image: fileName
+            });
+
+            p.preview = null;
+        };
+
+        // ✅ SAVE
+        const saveAndNext = async () => {
+
+            const formData = new FormData();
+            formData.append('cardId', Number(cardStore.cardId));
+
+            products.value.forEach((p, i) => {
+
+                if (p.isLocked) return;
+                if (!isProductFilled(p)) return;
+
+                formData.append(`products[${i}][id]`, p.id ?? '');
+                formData.append(`products[${i}][name]`, p.name);
+                formData.append(`products[${i}][original_price]`, p.original_price);
+                formData.append(`products[${i}][discount_price]`, p.discount_price);
+                formData.append(`products[${i}][final_price]`, p.final_price);
+                formData.append(`products[${i}][status]`, p.status);
+
+                if (p.file) {
+                    formData.append(`products[${i}][image]`, p.file);
+                }
+            });
+
+            isSubmitting.value = true;
+
+            try {
+                const res = await axios.post('/saveWebProducts', formData);
+
+                if (res.data.status) {
+                    toast.success(res.data.message);
+                    router.visit('/Service');
+                } else {
+                    toast.warning(res.data.message);
+                }
+            } catch (e) {
+                toast.error("Error");
+            } finally {
+                isSubmitting.value = false;
+            }
+        };
+
+        return {
+            // currData,
+            rowid,
+            validateNumber,
+            products,
+            allowedTypes,
+            filteredProducts,
+            filterType,
+            isSubmitting,
+            s3ProductUrl,
+            isProductFilled,
+            selectedImage,
+            removeTempImage,
+            removeProductImage,
+            changeOriginalPrice,
+            changeDiscountPrice,
+
+            saveAndNext
+        };
     }
+};
 </script>
