@@ -123,9 +123,11 @@
                 { headerName: "S.No", valueGetter: "node.rowIndex + 1", width: 80, },
                 { field: "customer_name", headerName: "Customer Name", width: 180, editable: true },
                 { field: "customer_phone", headerName: "Customer Phone", width: 150, editable: true },
+                { field: "customer_address", headerName: "Address",  width:150, editable: true },
                 { field: "product_name", headerName: "Product Name",  width:150, editable: true },
                 { field: "product_price", headerName: "Product Price",  width:150, editable: true },
-                { field: "customer_address", headerName: "Address",  width:150, editable: true },
+                { field: "Qty", headerName: "qty",  width:150, editable: true },
+                { field: "Total Amount", headerName: "total_price",  width:150, editable: true },
                 { field: "CDate", headerName: "CDate", width: 180, editable: true },
             ]);
 
@@ -170,9 +172,12 @@
                     { header: 'S.No', key: 'sno', width: 10 },
                     { header: 'Customer Name', key: 'customer_name', width: 25 },
                     { header: 'Customer Phone', key: 'customer_phone', width: 20 },
+                    { header: 'Address', key: 'customer_address', width: 20 },                    
                     { header: 'Product Name', key: 'product_name', width: 20 },
                     { header: 'Product Price', key: 'product_price', width: 20 },
-                    { header: 'Address', key: 'product_price', width: 20 },
+                    { header: 'Qty', key: 'qty', width: 20 },
+                    { header: 'Total Amount', key: 'total_price', width: 20 },
+                    
                     { header: 'Created Date', key: 'CDate', width: 20 },
                 ];
 
@@ -183,10 +188,11 @@
                         sno: index + 1,
                         customer_name: row.customer_name,
                         customer_phone: row.customer_phone,
-                        product_name: row.product_name,
-                        plan_name: row.plan_name,
+                        customer_address: row.customer_address,
+                        product_name: row.product_name,                        
                         product_price: row.product_price,
-                        product_price: row.product_price,
+                        qty: row.qty,
+                        total_price: row.total_price,
                         CDate: row.CDate,
                     };
                 });
