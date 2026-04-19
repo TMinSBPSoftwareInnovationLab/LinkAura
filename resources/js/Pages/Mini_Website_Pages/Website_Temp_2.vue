@@ -335,7 +335,7 @@
                             <button 
                                 v-if="hasMore && !isLoading"
                                 @click="loadMoreProducts"
-                                class="mx-auto block border border-[#52b84a] text-[#52b84a] text-[9px] px-3 py-[3px] rounded-full"
+                                class="mx-auto block bg-white border border-[#52b84a] text-[#52b84a] text-[11px] px-3 py-[3px] rounded-full"
                             >
                                 Load More
                             </button>
