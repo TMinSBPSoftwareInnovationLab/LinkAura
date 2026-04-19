@@ -422,7 +422,7 @@
                             <button 
                                 v-if="serviceHasMore && !serviceLoading"
                                 @click="loadServices('loadMore')"
-                                class="w-full bg-[#3d023a] text-white py-2 rounded-lg"
+                                class="mx-auto block bg-[#52b84a] border border-[#52b84a] text-white text-[12px] px-5 py-2 rounded-full shadow-sm hover:bg-[#52b84a] hover:text-white transition"
                             >
                                 Load More Services
                             </button>
@@ -627,7 +627,7 @@
                         <button 
                             v-if="galleryHasMore && !galleryLoading"
                             @click="loadGallery('loadMore')"
-                            class="w-full bg-[#3d023a] text-white py-2 rounded-lg"
+                            class="mx-auto block bg-[#52b84a] border border-[#52b84a] text-white text-[12px] px-5 py-2 rounded-full shadow-sm hover:bg-[#52b84a] hover:text-white transition"
                         >
                             Load More Gallery
                         </button>
