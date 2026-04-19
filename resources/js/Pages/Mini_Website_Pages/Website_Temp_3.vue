@@ -269,7 +269,7 @@
                 <!-- header  area /. -->
 
                 <!-- product areas -->
-                <span v-if="products.length > 0">
+                <span v-if="!isInitialLoading && products.length > 0">
                     <div class="grid grid-cols-2 gap-2 mt-5 pt-5 pb-5 px-2 ">
                         <div
                             v-for="(item, index) in products"
@@ -321,7 +321,25 @@
                                 Enquiry
                                 </button>
                             </div>
-                            </div>
+                        </div>
+                        <!-- CORRECT PLACE -->
+                        <div class="px-3 mt-4">
+                            <button 
+                                v-if="hasMore && !isLoading"
+                                @click="loadMoreProducts"
+                                class="mx-auto block bg-[#e52228] border border-[#e52228] text-white text-[12px] px-5 py-2 rounded-full shadow-sm"
+                            >
+                                Load More
+                            </button>
+
+                            <p v-if="isLoading" class="text-center mt-3 text-sm text-gray-500">
+                                Loading...
+                            </p>
+
+                            <p v-if="!hasMore && products.length > 0" class="text-center mt-3 text-sm text-gray-400">
+                                No more products
+                            </p>
+                        </div>
                     </div>
                 </span>
                 <span v-else class="bg-white shadow-2xl">
@@ -357,29 +375,48 @@
                 <!-- service content -->
                 <div class="flex flex-col w-full">
                     <span v-if="serviceData.length > 0">
-                    <div class="grid grid-cols-2 gap-2">
-                        <div
-                            v-for="(item, index) in serviceData"
-                            :key="index"
-                            class="flex flex-col w-full items-center shadow-2xl mt-5">
-                            <!-- service image -->
-                            <div class="flex flex-col w-full h-[250px] p-2 items-center overflow-hidden">
-                                <img
-                                    :src="item.service_img"
-                                    :alt="item.service_img"
-                                    @click="openImage(item.service_img)"
-                                    class="w-full h-full object-cover rounded-md"
-                                >
-                            </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div
+                                v-for="(item, index) in serviceData"
+                                :key="index"
+                                class="flex flex-col w-full items-center shadow-2xl mt-5">
+                                <!-- service image -->
+                                <div class="flex flex-col w-full h-[250px] p-2 items-center overflow-hidden">
+                                    <img
+                                        :src="item.service_img"
+                                        :alt="item.service_img"
+                                        @click="openImage(item.service_img)"
+                                        class="w-full h-full object-cover rounded-md"
+                                    >
+                                </div>
 
-                            <!-- service name -->
-                            <div class="flex flex-col w-full text-center p-2">
-                                <p class="text-[14px] font-semibold">
-                                    {{ item.service_name }}
-                                </p>
+                                <!-- service name -->
+                                <div class="flex flex-col w-full text-center p-2">
+                                    <p class="text-[14px] font-semibold">
+                                        {{ item.service_name }}
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        <!-- LOAD MORE -->
+                        <div class="px-3 mt-4">
+                            <button 
+                                v-if="serviceHasMore && !serviceLoading"
+                                @click="loadServices('loadMore')"
+                                class="mx-auto block bg-[#e52228] border border-[#e52228] text-white text-[12px] px-5 py-2 rounded-full shadow-sm"
+                            >
+                                Load More Services
+                            </button>
+
+                            <p v-if="serviceLoading" class="text-center mt-3 text-sm text-gray-500">
+                                Loading...
+                            </p>
+
+                            <p v-if="!serviceHasMore && serviceData.length > 0" 
+                                class="text-center mt-3 text-sm text-gray-400">
+                                No more services
+                            </p>
+                        </div>
                     </span>
                     <span v-else class="bg-white shadow-2xl">
                         <p class="p-5 font-semibold text-[#e52228]">
@@ -510,6 +547,26 @@
                                     class="w-full h-full object-cover rounded-md"
                                 >
                             </div>
+                        </div>
+
+                        <!-- 🔥 LOAD MORE -->
+                        <div class="px-5 mt-4">
+                            <button 
+                                v-if="galleryHasMore && !galleryLoading"
+                                @click="loadGallery('loadMore')"
+                                class="mx-auto block bg-[#e52228] border border-[#e52228] text-white text-[12px] px-5 py-2 rounded-full shadow-sm"
+                            >
+                                Load More Gallery
+                            </button>
+
+                            <p v-if="galleryLoading" class="text-center mt-3 text-sm text-gray-500">
+                                Loading...
+                            </p>
+
+                            <p v-if="!galleryHasMore && galleryData.length > 0" 
+                                class="text-center mt-3 text-sm text-gray-400">
+                                No more images
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -1511,72 +1568,163 @@
                 },
             ]);
 
+            const currentPage = ref(1);
+            const perPage = 10;
+            const isLoading = ref(false);
+            const hasMore = ref(true);
+            const isInitialLoading = ref(true);
+
+            const servicePage = ref(1);
+            const serviceHasMore = ref(true);
+            const serviceLoading = ref(false);
+
+            const galleryPage = ref(1);
+            const galleryHasMore = ref(true);
+            const galleryLoading = ref(false);
+
             // products, serive and gallery
-            const initWebsiteData = async () => {
+            const initWebsiteData = async (type = "init") => {
                 try {
-                    // Execute Plan check ONCE
-                    const allowedCount = await getAllowedCount(cd_id.value);
 
-                    // Run both data fetches in parallel for better performance
-                    const [prodRes, servRes, gallRes] = await Promise.all([
-                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_products", cd_id:cd_id.value }),
-                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_services", cd_id:cd_id.value }),
-                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_gallery", cd_id:cd_id.value })
-                    ]);
+                    if (isLoading.value) return;
 
-                    // get all response data
-                    const prodData = prodRes?.data?.getData;
-                    const servData = servRes?.data?.getData;
-                    const gallData = gallRes?.data?.getData;
+                    isLoading.value = true;
 
-                    // Map Products using allowedCount
-                    if (Array.isArray(prodData) && prodData.length > 0) {
-                        const formatted = prodData
-                            .filter(item => item.product_name && item.final_price > 0)
-                            .map(item => ({
-                                id: item.id,
-                                product_name: item.product_name,
-                                product_img: item.product_img ? `${s3ProductsUrl}/product_images/${item.product_img}` : "",
-                                orginal_price: Number(item.orginal_price),
-                                discount_price: Number(item.discount_price),
-                                final_price: Number(item.final_price),
-                                status: Number(item.status),
-                            }));
+                    const offset = (currentPage.value - 1) * perPage;
 
-                        products.value = allowedCount > 0 ? formatted.slice(0, allowedCount) : formatted;
+                    const prodRes = await axios.post("/collectAllWebsiteDatas", { 
+                        table_name: "miniweb_products", 
+                        cd_id: cd_id.value,
+                        limit: perPage,
+                        offset: offset
+                    });
+
+                    const prodData = prodRes?.data?.getData || [];
+
+                    const formatted = prodData
+                        .filter(item => item.product_name && item.final_price > 0)
+                        .map(item => ({
+                            id: item.id,
+                            product_name: item.product_name,
+                            product_img: item.product_img 
+                                ? `${s3ProductsUrl}/product_images/${item.product_img}` 
+                                : "",
+                            orginal_price: Number(item.orginal_price),
+                            discount_price: Number(item.discount_price),
+                            final_price: Number(item.final_price),
+                            status: Number(item.status),
+                        }));
+
+                    if (type === "init") {
+                        products.value = formatted;
                     } else {
-                        products.value = [];
+                        products.value.push(...formatted);
                     }
 
-                    // Map Services using allowedCount
-                    if (Array.isArray(servData) && servData.length > 0) {
-                        const formatted = servData
-                            .filter(item => item.service_name && item.service_img)
-                            .map(item => ({
-                                service_name: item.service_name,
-                                service_img: item.service_img ? `${s3ServiceUrl}/service_images/${item.service_img}` : pro6,
-                            }));
-
-                        serviceData.value = allowedCount > 0 ? formatted.slice(0, allowedCount) : formatted;
+                    // 🔥 IMPORTANT FIX
+                    if (prodData.length < perPage) {
+                        hasMore.value = false;
                     }
 
-                    // --- Step 5: Map Gallery (NEW) ---
-                    if (Array.isArray(gallData) && gallData.length > 0) {
-                        const formatted = gallData
-                            .filter(item => item.gallery)
-                            .map(item => ({
-                                gallery: item.gallery
-                                    ? `${s3GalleryUrl}/gallery_images/${item.gallery}`
-                                    : pro6,
-                            }));
-                        // Apply the same plan-based limit to the gallery
-                        galleryData.value = allowedCount > 0 ? formatted.slice(0, allowedCount) : formatted;
-                    } else {
-                        galleryData.value = [];
-                    }
+                    currentPage.value++;
 
                 } catch (error) {
-                    console.error("Initialization Error:", error);
+                    console.error(error);
+                } finally {
+                    isLoading.value = false;
+                    isInitialLoading.value = false; // 🔥 FIX
+                }
+            };
+
+            const loadMoreProducts = () => {
+                if (!hasMore.value) return;
+                initWebsiteData("loadMore");
+            };
+
+            // load service
+            const loadServices = async (type = "init") => {
+                try {
+                    if (serviceLoading.value) return;
+
+                    serviceLoading.value = true;
+
+                    const offset = (servicePage.value - 1) * perPage;
+
+                    const res = await axios.post("/collectAllWebsiteDatas", {
+                        table_name: "miniweb_services",
+                        cd_id: cd_id.value,
+                        limit: perPage,
+                        offset: offset
+                    });
+
+                    const data = res?.data?.getData || [];
+
+                    const formatted = data
+                        .filter(item => item.service_name && item.service_img)
+                        .map(item => ({
+                            service_name: item.service_name,
+                            service_img: `${s3ServiceUrl}/service_images/${item.service_img}`
+                        }));
+
+                    if (type === "init") {
+                        serviceData.value = formatted;
+                    } else {
+                        serviceData.value.push(...formatted);
+                    }
+
+                    if (data.length < perPage) {
+                        serviceHasMore.value = false;
+                    }
+
+                    servicePage.value++;
+
+                } catch (err) {
+                    console.error(err);
+                } finally {
+                    serviceLoading.value = false;
+                }
+            };
+
+            // load gallery 
+            const loadGallery = async (type = "init") => {
+                try {
+                    if (galleryLoading.value) return;
+
+                    galleryLoading.value = true;
+
+                    const offset = (galleryPage.value - 1) * perPage;
+
+                    const res = await axios.post("/collectAllWebsiteDatas", {
+                        table_name: "miniweb_gallery",
+                        cd_id: cd_id.value,
+                        limit: perPage,
+                        offset: offset
+                    });
+
+                    const data = res?.data?.getData || [];
+
+                    const formatted = data
+                        .filter(item => item.gallery)
+                        .map(item => ({
+                            gallery: `${s3GalleryUrl}/gallery_images/${item.gallery}`
+                        }));
+
+                    if (type === "init") {
+                        galleryData.value = formatted;
+                    } else {
+                        galleryData.value.push(...formatted);
+                    }
+
+                    if (data.length < perPage) {
+                        galleryHasMore.value = false;
+                    }
+
+                    galleryPage.value++;
+
+                } catch (err) {
+                    console.error(err);
+                } finally {
+                    galleryLoading.value = false;
                 }
             };
 
@@ -1742,6 +1890,8 @@
                         // loadProducts(),
                         // loadService(),
                         initWebsiteData(),
+                        loadServices(),
+                        loadGallery(),
                         getAllowedCount(),
                         // loadGallery(),
                         loadPayments(),
@@ -2206,6 +2356,23 @@
                 customerPhoneError,
                 customerAddressError,
                 orderSubmitCount,
+                // products
+                currentPage,
+                perPage,
+                isLoading,
+                hasMore,
+                loadMoreProducts,
+                isInitialLoading,
+
+                // SERVICES (if using)
+                loadServices,
+                serviceHasMore,
+                serviceLoading,
+
+                // GALLERY (IMPORTANT FIX)
+                loadGallery,
+                galleryHasMore,
+                galleryLoading,
             }
         }
 
