@@ -1661,6 +1661,9 @@ class MiniWebsiteController extends Controller
                 case 'miniweb_products':
                     $query = DB::table('miniweb_products')
                         ->where("mini_website_id", "=", $cd_id)
+                        ->whereNotNull('product_name')
+                        ->where('product_name', '!=', '')
+                        ->where('final_price', '>', 0)
                         ->orderBy('id', 'desc');
 
                     if ($limit) {
