@@ -401,7 +401,7 @@
                             </div>
                         </div>
                         <!-- LOAD MORE -->
-                        <div class="px-3 mt-4">
+                        <div class="px-3 mt-4 mb-4">
                             <button 
                                 v-if="serviceHasMore && !serviceLoading"
                                 @click="loadServices('loadMore')"
