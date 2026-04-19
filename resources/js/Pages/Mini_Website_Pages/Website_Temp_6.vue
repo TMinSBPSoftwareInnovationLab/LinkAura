@@ -516,11 +516,11 @@
                         </div>
                     </div>
                     <!-- 🔥 LOAD MORE -->
-                    <div class="px-5 mt-4 mt-5">
+                    <div class="px-5 mt-4 mb-5">
                         <button 
                             v-if="galleryHasMore && !galleryLoading"
                             @click="loadGallery('loadMore')"
-                            class="mx-auto block bg-[#e52228] border border-[#e52228] text-white text-[12px] px-5 py-2 rounded-full shadow-sm"
+                            class="mx-auto block bg-green-500 text-white text-[12px] px-5 py-2 rounded-full shadow-sm"
                         >
                             Load More Gallery
                         </button>
