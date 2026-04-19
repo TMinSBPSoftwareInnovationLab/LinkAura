@@ -317,7 +317,7 @@
 
                     </div>
 
-                    <!-- ✅ CORRECT PLACE -->
+                    <!-- CORRECT PLACE -->
                     <div class="px-3 mt-4">
                         <button 
                             v-if="hasMore && !isLoading"
@@ -359,52 +359,84 @@
 
             <!-- Service Section -->
             <div id="services" class="flex flex-col w-full mt-3 bg-[#f3f4f6] pt-5 border-2 border-l-0 border-r-0 border-b-0 border-t-[#3d023a]">
-            <!-- Header -->
-            <div class="grid grid-flow-row justify-center mb-4">
-                <div class="inline-block border-2 border-[#3d023a] text-[#3d023a] p-2 
-                    min-w-[120px] max-w-[250px] text-center
-                    [clip-path:polygon(10%_0%,100%_0%,90%_100%,0%_100%)]">
-                    Our Service
-                </div>
-            </div>
-            <span v-if="serviceData.length > 0">
-                <div class="grid grid-cols-2 gap-4 px-3">
-                    <div 
-                        v-for="(item, index) in serviceData" 
-                        :key="index"
-                        class="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden group">
-                        <!-- Service Image -->
-                        <div class="relative h-[180px] overflow-hidden">
-                        <img 
-                            :src="item.service_img" 
-                            :alt="item.service_name"
-                            @click="openImage(item.service_img)"
-                            class="w-full h-full object-cover transition duration-300 group-hover:scale-110 cursor-pointer"
-                            />
-                        </div>
-                        <!-- Service Name -->
-                        <div class="p-3 text-center">
-                        <p class="text-[14px] font-semibold text-gray-800 group-hover:text-[#3d023a] transition">
-                            {{ item.service_name }}
-                        </p>
-                        </div>
+
+                <!-- Header -->
+                <div class="grid grid-flow-row justify-center mb-4">
+                    <div class="inline-block border-2 border-[#3d023a] text-[#3d023a] p-2 
+                        min-w-[120px] max-w-[250px] text-center
+                        [clip-path:polygon(10%_0%,100%_0%,90%_100%,0%_100%)]">
+                        Our Service
                     </div>
                 </div>
-            </span>
-            <span v-else>
-                <p class="p-5 font-semibold text-[#6b3f69]">
-                    Currently, our services are being updated. We'll be back shortly!
-                </p>
-            </span>
-            <!-- Wave Footer -->
-            <div class="flex flex-col gap-4 w-full max-w-[430px] mt-6">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-                    <path fill="#3d023a" fill-opacity="1"
-                        d="M0,96L60,112C120,128,240,160,360,192C480,224,600,256,720,229.3C840,203,960,117,1080,96C1200,75,1320,117,1380,138.7L1440,160L1440,320L0,320Z"></path>
-                </svg>
+
+                <span v-if="serviceData.length > 0">
+
+                    <!-- GRID -->
+                    <div class="grid grid-cols-2 gap-4 px-3">
+                        <div 
+                            v-for="(item, index) in serviceData" 
+                            :key="item.id || index"
+                            class="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden group">
+
+                            <!-- Image -->
+                            <div class="relative h-[180px] overflow-hidden">
+                                <img 
+                                    :src="item.service_img" 
+                                    :alt="item.service_name"
+                                    loading="lazy"
+                                    @click="openImage(item.service_img)"
+                                    class="w-full h-full object-cover transition duration-300 group-hover:scale-110 cursor-pointer"
+                                />
+                            </div>
+
+                            <!-- Name -->
+                            <div class="p-3 text-center">
+                                <p class="text-[14px] font-semibold text-gray-800 group-hover:text-[#3d023a] transition">
+                                    {{ item.service_name }}
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- 🔥 LOAD MORE -->
+                    <div class="px-3 mt-4">
+                        <button 
+                            v-if="serviceHasMore && !serviceLoading"
+                            @click="loadServices('loadMore')"
+                            class="w-full bg-[#3d023a] text-white py-2 rounded-lg"
+                        >
+                            Load More Services
+                        </button>
+
+                        <p v-if="serviceLoading" class="text-center mt-3 text-sm text-gray-500">
+                            Loading...
+                        </p>
+
+                        <p v-if="!serviceHasMore && serviceData.length > 0" 
+                            class="text-center mt-3 text-sm text-gray-400">
+                            No more services
+                        </p>
+                    </div>
+
+                </span>
+
+                <span v-else>
+                    <p class="p-5 font-semibold text-[#6b3f69]">
+                        Currently, our services are being updated. We'll be back shortly!
+                    </p>
+                </span>
+
+                <!-- Wave Footer -->
+                <div class="flex flex-col gap-4 w-full max-w-[430px] mt-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                        <path fill="#3d023a" fill-opacity="1"
+                            d="M0,96L60,112C120,128,240,160,360,192C480,224,600,256,720,229.3C840,203,960,117,1080,96C1200,75,1320,117,1380,138.7L1440,160L1440,320L0,320Z"></path>
+                    </svg>
+                </div>
+
             </div>
-            </div>
-             <!-- Service Section /. -->
+            <!-- Service Section /. -->
 
             <!-- video -->
             <div id="Videos" class="flex flex-col w-full mb-2 shadow-2xl mt-5 pt-5 border-2 border-l-0 border-r-0 border-b-0 border-t-[#3d023a]">
@@ -488,40 +520,62 @@
             <!-- video /. -->
 
             <!-- gallery section -->
-            <div id="gallery" class="flex flex-col w-full pt-5 bg-gradient-to-bl from-[#ffe4e6]  to-[#ccfbf1] border-2 border-l-0 border-r-0 border-b-0 border-t-[#3d023a]">
-                <!-- header name -->
+            <div id="gallery" class="flex flex-col w-full pt-5 bg-gradient-to-bl from-[#ffe4e6] to-[#ccfbf1] border-2 border-l-0 border-r-0 border-b-0 border-t-[#3d023a]">
+
+                <!-- header -->
                 <div class="grid grid-flow-row justify-center mx-auto">
                     <div class="inline-block border-2 border-[#3d023a] text-[#3d023a] p-2 
-                                min-w-[120px] max-w-[250px] text-center
-                                [clip-path:polygon(10%_0%,100%_0%,90%_100%,0%_100%)] 
-                                ">
-                                Gallery
+                        min-w-[120px] max-w-[250px] text-center
+                        [clip-path:polygon(10%_0%,100%_0%,90%_100%,0%_100%)]">
+                        Gallery
                     </div>
                 </div>
-                <!-- header name /. -->
+
+                <!-- GRID -->
                 <div class="grid grid-cols-2 gap-4 pt-5 px-5">
                     <div 
                         v-for="(item, index) in galleryData" 
-                        :key="index"
-                        class="flex flex-col w-full h-full shadow-2xl rounded-lg bg-white"
-                    >
+                        :key="item.id || index"
+                        class="flex flex-col w-full h-full shadow-2xl rounded-lg bg-white">
+
                         <img 
                             :src="item.gallery" 
-                            alt="item.gallery" 
+                            loading="lazy"
                             class="w-full h-full object-contain cursor-pointer"
                             @click="openImage(item.gallery)"
                         >
                     </div>
                 </div>
-                <!-- footer designing Corner -->
+
+                <!-- 🔥 LOAD MORE -->
+                <div class="px-5 mt-4">
+                    <button 
+                        v-if="galleryHasMore && !galleryLoading"
+                        @click="loadGallery('loadMore')"
+                        class="w-full bg-[#3d023a] text-white py-2 rounded-lg"
+                    >
+                        Load More Gallery
+                    </button>
+
+                    <p v-if="galleryLoading" class="text-center mt-3 text-sm text-gray-500">
+                        Loading...
+                    </p>
+
+                    <p v-if="!galleryHasMore && galleryData.length > 0" 
+                        class="text-center mt-3 text-sm text-gray-400">
+                        No more images
+                    </p>
+                </div>
+
+                <!-- footer -->
                 <div class="flex flex-col gap-4 w-full max-w-[430px]">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
                         <path class="animate-wavey" fill="#3d023a" fill-opacity="1"
-                        d="M0,96L60,112C120,128,240,160,360,192C480,224,600,256,720,229.3C840,203,960,117,1080,96C1200,75,1320,117,1380,138.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z">
+                        d="M0,96L60,112C120,128,240,160,360,192C480,224,600,256,720,229.3C840,203,960,117,1080,96C1200,75,1320,117,1380,138.7L1440,160L1440,320L0,320Z">
                         </path>
                     </svg>
                 </div>
-                <!-- footer designing Corner /. -->
+
             </div>
             <!-- gallery section /. -->
 
@@ -1535,6 +1589,14 @@
             const hasMore = ref(true);
             const isInitialLoading = ref(true);
 
+            const servicePage = ref(1);
+            const serviceHasMore = ref(true);
+            const serviceLoading = ref(false);
+
+            const galleryPage = ref(1);
+            const galleryHasMore = ref(true);
+            const galleryLoading = ref(false);
+
             // products, serive and gallery
             const initWebsiteData = async (type = "init") => {
                 try {
@@ -1592,6 +1654,93 @@
             const loadMoreProducts = () => {
                 if (!hasMore.value) return;
                 initWebsiteData("loadMore");
+            };
+
+            // load service
+            const loadServices = async (type = "init") => {
+                try {
+                    if (serviceLoading.value) return;
+
+                    serviceLoading.value = true;
+
+                    const offset = (servicePage.value - 1) * perPage;
+
+                    const res = await axios.post("/collectAllWebsiteDatas", {
+                        table_name: "miniweb_services",
+                        cd_id: cd_id.value,
+                        limit: perPage,
+                        offset: offset
+                    });
+
+                    const data = res?.data?.getData || [];
+
+                    const formatted = data
+                        .filter(item => item.service_name && item.service_img)
+                        .map(item => ({
+                            service_name: item.service_name,
+                            service_img: `${s3ServiceUrl}/service_images/${item.service_img}`
+                        }));
+
+                    if (type === "init") {
+                        serviceData.value = formatted;
+                    } else {
+                        serviceData.value.push(...formatted);
+                    }
+
+                    if (data.length < perPage) {
+                        serviceHasMore.value = false;
+                    }
+
+                    servicePage.value++;
+
+                } catch (err) {
+                    console.error(err);
+                } finally {
+                    serviceLoading.value = false;
+                }
+            };
+
+            // load gallery 
+            const loadGallery = async (type = "init") => {
+                try {
+                    if (galleryLoading.value) return;
+
+                    galleryLoading.value = true;
+
+                    const offset = (galleryPage.value - 1) * perPage;
+
+                    const res = await axios.post("/collectAllWebsiteDatas", {
+                        table_name: "miniweb_gallery",
+                        cd_id: cd_id.value,
+                        limit: perPage,
+                        offset: offset
+                    });
+
+                    const data = res?.data?.getData || [];
+
+                    const formatted = data
+                        .filter(item => item.gallery)
+                        .map(item => ({
+                            gallery: `${s3GalleryUrl}/gallery_images/${item.gallery}`
+                        }));
+
+                    if (type === "init") {
+                        galleryData.value = formatted;
+                    } else {
+                        galleryData.value.push(...formatted);
+                    }
+
+                    if (data.length < perPage) {
+                        galleryHasMore.value = false;
+                    }
+
+                    galleryPage.value++;
+
+                } catch (err) {
+                    console.error(err);
+                } finally {
+                    galleryLoading.value = false;
+                }
             };
 
             // Helper to get plan limits
@@ -1759,6 +1908,8 @@
                         // loadGallery(),
                         getAllowedCount(),
                         initWebsiteData(),
+                        loadServices(),
+                        loadGallery(),
                         loadPayments(),
                         loadFeedbackVerifyData(),
                         loadQrCode(),
@@ -2235,6 +2386,12 @@
                 hasMore,
                 loadMoreProducts,
                 isInitialLoading,
+                servicePage,
+                serviceHasMore,
+                serviceLoading,
+                galleryPage,
+                galleryHasMore,
+                galleryLoading,
             }
         }
     }
