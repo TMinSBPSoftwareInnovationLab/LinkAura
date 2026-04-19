@@ -238,7 +238,7 @@
                 <!-- header name /. -->
 
                 <!-- product areas -->
-                <span v-if="products.length > 0">
+                <span v-if="!isInitialLoading && products.length > 0">
 
                     <div class="grid grid-cols-2 gap-2 mt-6 px-3">
 
@@ -331,14 +331,14 @@
                             Loading...
                         </p>
 
-                        <p v-if="!hasMore" class="text-center mt-3 text-sm text-gray-400">
+                        <p v-if="!hasMore && products.length > 0" class="text-center mt-3 text-sm text-gray-400">
                             No more products
                         </p>
                     </div>
 
                 </span>
 
-                <span v-else>
+                <span v-else-if="!isInitialLoading">
                     <p class="p-5 font-semibold text-[#6b3f69]">
                         Current products are out of stock. We will update them shortly.
                     </p>
@@ -1533,22 +1533,18 @@
             const perPage = 10;
             const isLoading = ref(false);
             const hasMore = ref(true);
+            const isInitialLoading = ref(true);
 
             // products, serive and gallery
             const initWebsiteData = async (type = "init") => {
                 try {
 
-                    // prevent multiple calls
                     if (isLoading.value) return;
 
                     isLoading.value = true;
 
-                    const allowedCount = await getAllowedCount(cd_id.value);
-
-                    // pagination calc
                     const offset = (currentPage.value - 1) * perPage;
 
-                    // 👉 PRODUCTS (pagination)
                     const prodRes = await axios.post("/collectAllWebsiteDatas", { 
                         table_name: "miniweb_products", 
                         cd_id: cd_id.value,
@@ -1556,98 +1552,40 @@
                         offset: offset
                     });
 
-                    const prodData = prodRes?.data?.getData;
+                    const prodData = prodRes?.data?.getData || [];
 
-                    if (Array.isArray(prodData) && prodData.length > 0) {
+                    const formatted = prodData
+                        .filter(item => item.product_name && item.final_price > 0)
+                        .map(item => ({
+                            id: item.id,
+                            product_name: item.product_name,
+                            product_img: item.product_img 
+                                ? `${s3ProductsUrl}/product_images/${item.product_img}` 
+                                : "",
+                            orginal_price: Number(item.orginal_price),
+                            discount_price: Number(item.discount_price),
+                            final_price: Number(item.final_price),
+                            status: Number(item.status),
+                        }));
 
-                        if (prodData.length < perPage) {
-                            hasMore.value = false;
-                        }
-
-                        const formatted = prodData
-                            .filter(item => item.product_name && item.final_price > 0)
-                            .map(item => ({
-                                id: item.id,
-                                product_name: item.product_name,
-                                product_img: item.product_img 
-                                    ? `${s3ProductsUrl}/product_images/${item.product_img}` 
-                                    : "",
-                                orginal_price: Number(item.orginal_price),
-                                discount_price: Number(item.discount_price),
-                                final_price: Number(item.final_price),
-                                status: Number(item.status),
-                            }));
-
-                        // 👉 IMPORTANT CHANGE
-                        if (type === "init") {
-                            products.value = formatted;
-                        } else {
-                            products.value.push(...formatted);
-                        }
-
-                        currentPage.value++;
-
+                    if (type === "init") {
+                        products.value = formatted;
                     } else {
+                        products.value.push(...formatted);
+                    }
+
+                    // 🔥 IMPORTANT FIX
+                    if (prodData.length < perPage) {
                         hasMore.value = false;
                     }
 
-
-                    // 👉 SERVICES (only first load)
-                    if (type === "init") {
-                        const servRes = await axios.post("/collectAllWebsiteDatas", { 
-                            table_name: "miniweb_services", 
-                            cd_id: cd_id.value,
-                            limit: 10
-                        });
-
-                        const servData = servRes?.data?.getData;
-
-                        if (Array.isArray(servData) && servData.length > 0) {
-                            const formatted = servData
-                                .filter(item => item.service_name && item.service_img)
-                                .map(item => ({
-                                    service_name: item.service_name,
-                                    service_img: item.service_img 
-                                        ? `${s3ServiceUrl}/service_images/${item.service_img}` 
-                                        : pro6,
-                                }));
-
-                            serviceData.value = allowedCount > 0 
-                                ? formatted.slice(0, allowedCount) 
-                                : formatted;
-                        }
-                    }
-
-
-                    // 👉 GALLERY (only first load)
-                    if (type === "init") {
-                        const gallRes = await axios.post("/collectAllWebsiteDatas", { 
-                            table_name: "miniweb_gallery", 
-                            cd_id: cd_id.value,
-                            limit: 10
-                        });
-
-                        const gallData = gallRes?.data?.getData;
-
-                        if (Array.isArray(gallData) && gallData.length > 0) {
-                            const formatted = gallData
-                                .filter(item => item.gallery)
-                                .map(item => ({
-                                    gallery: item.gallery
-                                        ? `${s3GalleryUrl}/gallery_images/${item.gallery}`
-                                        : pro6,
-                                }));
-
-                            galleryData.value = allowedCount > 0 
-                                ? formatted.slice(0, allowedCount) 
-                                : formatted;
-                        }
-                    }
+                    currentPage.value++;
 
                 } catch (error) {
-                    console.error("Initialization Error:", error);
+                    console.error(error);
                 } finally {
                     isLoading.value = false;
+                    isInitialLoading.value = false; // 🔥 FIX
                 }
             };
 
@@ -2296,6 +2234,7 @@
                 isLoading,
                 hasMore,
                 loadMoreProducts,
+                isInitialLoading,
             }
         }
     }
