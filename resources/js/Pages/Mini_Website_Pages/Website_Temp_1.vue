@@ -2379,17 +2379,21 @@
                 customerPhoneError,
                 customerAddressError,
                 orderSubmitCount,
-                // load more
+                // products
                 currentPage,
                 perPage,
                 isLoading,
                 hasMore,
                 loadMoreProducts,
                 isInitialLoading,
-                servicePage,
+
+                // SERVICES (if using)
+                loadServices,
                 serviceHasMore,
                 serviceLoading,
-                galleryPage,
+
+                // GALLERY (IMPORTANT FIX)
+                loadGallery,
                 galleryHasMore,
                 galleryLoading,
             }
