@@ -214,7 +214,7 @@
             // upload gallery area
             
             onMounted(async () => {
-                let allowedCount = 1000;
+                let allowedCount = 500;
                 // 1. Fetch Plan Details to determine allowedCount
                 const planRes = await axios.post("/collectAllWebsiteDatas", {
                     table_name: "miniweb_company_details",
@@ -225,9 +225,9 @@
                 
                 if (companyData && companyData.purchased_id > 0) {
                     const planId = Number(companyData.plan_id);
-                    if (planId === 94) allowedCount = 25;
-                    else if (planId === 95) allowedCount = 75;
-                    else if (planId === 96) allowedCount = 1000;
+                    if (planId === 94) allowedCount = 10;
+                    else if (planId === 95) allowedCount = 40;
+                    else if (planId === 96) allowedCount = 500;
                 }
 
                 // 2. Fetch Gallery Details
