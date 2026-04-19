@@ -226,7 +226,7 @@
             // upload services area
             
             onMounted(async () => {
-                let allowedCount = 1000;
+                let allowedCount = 50;
 
                 // 1. Fetch Plan Details
                 const planRes = await axios.post("/collectAllWebsiteDatas", {
@@ -239,9 +239,9 @@
 
                 if (companyData && companyData.purchased_id > 0) {
                     const planId = Number(companyData.plan_id);
-                    if (planId === 94) allowedCount = 25;
-                    else if (planId === 95) allowedCount = 75;
-                    else if (planId === 96) allowedCount = 1000;
+                    if (planId === 94) allowedCount = 5;
+                    else if (planId === 95) allowedCount = 15;
+                    else if (planId === 96) allowedCount = 50;
                 }
 
                 // 2. Fetch Service Details
