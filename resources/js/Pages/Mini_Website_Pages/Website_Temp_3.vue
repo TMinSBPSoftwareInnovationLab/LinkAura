@@ -322,24 +322,24 @@
                                 </button>
                             </div>
                         </div>
-                        <!-- CORRECT PLACE -->
-                        <div class="px-3 mt-4">
-                            <button 
-                                v-if="hasMore && !isLoading"
-                                @click="loadMoreProducts"
-                                class="mx-auto block bg-[#e52228] border border-[#e52228] text-white text-[12px] px-5 py-2 rounded-full shadow-sm"
-                            >
-                                Load More
-                            </button>
+                    </div>
+                    <!-- CORRECT PLACE -->
+                    <div class="px-3 mt-4">
+                        <button 
+                            v-if="hasMore && !isLoading"
+                            @click="loadMoreProducts"
+                            class="mx-auto block bg-[#e52228] border border-[#e52228] text-white text-[12px] px-5 py-2 rounded-full shadow-sm"
+                        >
+                            Load More
+                        </button>
 
-                            <p v-if="isLoading" class="text-center mt-3 text-sm text-gray-500">
-                                Loading...
-                            </p>
+                        <p v-if="isLoading" class="text-center mt-3 text-sm text-gray-500">
+                            Loading...
+                        </p>
 
-                            <p v-if="!hasMore && products.length > 0" class="text-center mt-3 text-sm text-gray-400">
-                                No more products
-                            </p>
-                        </div>
+                        <p v-if="!hasMore && products.length > 0" class="text-center mt-3 text-sm text-gray-400">
+                            No more products
+                        </p>
                     </div>
                 </span>
                 <span v-else class="bg-white shadow-2xl">
@@ -548,26 +548,25 @@
                                 >
                             </div>
                         </div>
+                    </div>
+                    <!-- 🔥 LOAD MORE -->
+                    <div class="px-5 mt-4">
+                        <button 
+                            v-if="galleryHasMore && !galleryLoading"
+                            @click="loadGallery('loadMore')"
+                            class="mx-auto block bg-[#e52228] border border-[#e52228] text-white text-[12px] px-5 py-2 rounded-full shadow-sm"
+                        >
+                            Load More Gallery
+                        </button>
 
-                        <!-- 🔥 LOAD MORE -->
-                        <div class="px-5 mt-4">
-                            <button 
-                                v-if="galleryHasMore && !galleryLoading"
-                                @click="loadGallery('loadMore')"
-                                class="mx-auto block bg-[#e52228] border border-[#e52228] text-white text-[12px] px-5 py-2 rounded-full shadow-sm"
-                            >
-                                Load More Gallery
-                            </button>
+                        <p v-if="galleryLoading" class="text-center mt-3 text-sm text-gray-500">
+                            Loading...
+                        </p>
 
-                            <p v-if="galleryLoading" class="text-center mt-3 text-sm text-gray-500">
-                                Loading...
-                            </p>
-
-                            <p v-if="!galleryHasMore && galleryData.length > 0" 
-                                class="text-center mt-3 text-sm text-gray-400">
-                                No more images
-                            </p>
-                        </div>
+                        <p v-if="!galleryHasMore && galleryData.length > 0" 
+                            class="text-center mt-3 text-sm text-gray-400">
+                            No more images
+                        </p>
                     </div>
                 </div>
                 <!-- gallery content /. -->
