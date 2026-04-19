@@ -325,79 +325,97 @@
                 <!-- products header /. -->
 
                 <!-- PRODUCT AREA -->
-                <span v-if="products.length > 0">
-                <div class="grid grid-cols-2 gap-2 items-stretch px-1 mt-5">
+                <span v-if="!isInitialLoading && products.length > 0">
+                    <div class="grid grid-cols-2 gap-2 items-stretch px-1 mt-5">
 
-                    <!-- PRODUCT CARD -->
-                    <div v-for="(item, index) in products" :key="index" class="flex flex-col w-full h-full bg-white p-3 rounded-[10px]">
-                        <!-- product image -->
-                        <div class="w-full h-[200px] md:h-[250px] rounded-[10px] bg-white border border-gray-300 cursor-pointer" @click="openImage(item.product_img)"  v-if="1==2">
-                            <img :src="item.product_img" class="w-full h-full object-contain" >
-                        </div>
+                        <!-- PRODUCT CARD -->
+                        <div v-for="(item, index) in products" :key="index" class="flex flex-col w-full h-full bg-white p-3 rounded-[10px]">
+                            <!-- product image -->
+                            <div class="w-full h-[200px] md:h-[250px] rounded-[10px] bg-white border border-gray-300 cursor-pointer" @click="openImage(item.product_img)"  v-if="1==2">
+                                <img :src="item.product_img" class="w-full h-full object-contain" >
+                            </div>
 
-                        <div class="w-full h-[200px] md:h-[250px] rounded-[15px] bg-white border border-gray-300 cursor-pointer  relative" @click="openImage(item.product_img)">
-    
-                            <span v-if="item.status == 1" class="absolute -top-2 right-2 bg-orange-500 text-white text-[10px] px-2 py-1 rounded-md font-bold uppercase shadow-sm z-10">
-                                Trending
-                            </span>
-                            
-                            <span v-else-if="item.status === 2" class="absolute -top-2 right-2 bg-green-600 text-white text-[10px] px-2 py-1 rounded-md font-bold uppercase shadow-sm z-10">
-                                New Arrival
-                            </span>
+                            <div class="w-full h-[200px] md:h-[250px] rounded-[15px] bg-white border border-gray-300 cursor-pointer  relative" @click="openImage(item.product_img)">
+        
+                                <span v-if="item.status == 1" class="absolute -top-2 right-2 bg-orange-500 text-white text-[10px] px-2 py-1 rounded-md font-bold uppercase shadow-sm z-10">
+                                    Trending
+                                </span>
+                                
+                                <span v-else-if="item.status === 2" class="absolute -top-2 right-2 bg-green-600 text-white text-[10px] px-2 py-1 rounded-md font-bold uppercase shadow-sm z-10">
+                                    New Arrival
+                                </span>
 
-                            <img :src="item.product_img" class="w-full h-full object-cover">
-                        </div>
+                                <img :src="item.product_img" class="w-full h-full object-cover">
+                            </div>
 
-                        <!-- product name -->
-                        <p class="font-bold text-[14px] text-gray-800 mt-2">
-                            {{ item.product_name }}
-                        </p>
-
-                        <!-- price area -->
-                        <div class="flex items-center gap-2 mt-1">
-                            <p
-                                class="relative text-[16px] font-semibold text-gray-500
-                                after:content-[''] after:absolute after:left-0 after:top-1/2
-                                after:w-full after:h-[2px] after:bg-gray-200 after:-rotate-12"
-                            >
-                                ₹{{ item.orginal_price }}
+                            <!-- product name -->
+                            <p class="font-bold text-[14px] text-gray-800 mt-2">
+                                {{ item.product_name }}
                             </p>
 
-                            <p class="text-[16px] font-bold text-gray-900">
-                                ₹{{ item.final_price }}
+                            <!-- price area -->
+                            <div class="flex items-center gap-2 mt-1">
+                                <p
+                                    class="relative text-[16px] font-semibold text-gray-500
+                                    after:content-[''] after:absolute after:left-0 after:top-1/2
+                                    after:w-full after:h-[2px] after:bg-gray-200 after:-rotate-12"
+                                >
+                                    ₹{{ item.orginal_price }}
+                                </p>
+
+                                <p class="text-[16px] font-bold text-gray-900">
+                                    ₹{{ item.final_price }}
+                                </p>
+                            </div>
+
+                            <!-- discount -->
+                            <p class="font-bold text-[12px] text-red-800 mt-1">
+                                DISCOUNT ₹{{ item.discount_price }}
+                            </p>
+
+                            <!-- FLEX SPACER -->
+                            <div class="flex-1"></div>
+
+                            <div class="grid grid-cols-2 gap-2 mt-3 w-full">
+                                <button
+                                    class="bg-[#3bbc4d] p-[10px] text-white text-[11px] md:text-[12px]
+                                    font-bold rounded-lg uppercase leading-none flex items-center justify-center"
+                                    @click="buyProduct(item.id, item.product_img, item.product_name, item.final_price)"
+                                >
+                                    Buy
+                                </button>
+                                
+                                <button
+                                    class="bg-[#DF1968] p-[10px] text-white text-[11px] md:text-[12px]
+                                    font-bold rounded-lg uppercase leading-none flex items-center justify-center"
+                                    @click="selectProduct(item.product_name)"
+                                >
+                                    Enquiry
+                                </button>
+                            </div>
+
+                        </div>
+                        <!-- PRODUCT CARD /. -->
+
+                        <!-- CORRECT PLACE -->
+                        <div class="px-3 mt-4">
+                            <button 
+                                v-if="hasMore && !isLoading"
+                                @click="loadMoreProducts"
+                                class="mx-auto block bg-[#DF1968] border border-[#DF1968] text-white text-[12px] px-5 py-2 rounded-full shadow-sm"
+                            >
+                                Load More
+                            </button>
+
+                            <p v-if="isLoading" class="text-center mt-3 text-sm text-gray-800">
+                                Loading...
+                            </p>
+
+                            <p v-if="!hasMore && products.length > 0" class="text-center mt-3 text-sm text-gray-800">
+                                No more products
                             </p>
                         </div>
-
-                        <!-- discount -->
-                        <p class="font-bold text-[12px] text-red-800 mt-1">
-                            DISCOUNT ₹{{ item.discount_price }}
-                        </p>
-
-                        <!-- FLEX SPACER -->
-                        <div class="flex-1"></div>
-
-                        <div class="grid grid-cols-2 gap-2 mt-3 w-full">
-                            <button
-                                class="bg-[#3bbc4d] p-[10px] text-white text-[11px] md:text-[12px]
-                                font-bold rounded-lg uppercase leading-none flex items-center justify-center"
-                                @click="buyProduct(item.id, item.product_img, item.product_name, item.final_price)"
-                            >
-                                Buy
-                            </button>
-                            
-                            <button
-                                class="bg-[#DF1968] p-[10px] text-white text-[11px] md:text-[12px]
-                                font-bold rounded-lg uppercase leading-none flex items-center justify-center"
-                                @click="selectProduct(item.product_name)"
-                            >
-                                Enquiry
-                            </button>
-                        </div>
-
                     </div>
-                    <!-- PRODUCT CARD /. -->
-
-                </div>
                 </span>
                 <span v-else class="bg-white shadow-2xl">
                     <p class="p-5 font-semibold text-[#e52228]">
@@ -466,29 +484,48 @@
                 <!-- service content -->
                 <div class="flex flex-col w-full">
                     <span v-if="serviceData.length > 0">
-                    <div class="grid grid-cols-2 gap-2">
-                        <div 
-                            v-for="(item, index) in serviceData" 
-                            :key="index"
-                            class="flex flex-col w-full items-center  mt-5">
-                            <!-- service image -->
-                            <div class="flex flex-col w-[150px] h-[150px] p-2 items-center overflow-hidden">
-                                <img 
-                                    :src="item.service_img" 
-                                    :alt="item.service_img"
-                                    @click="openImage(item.service_img)"
-                                    class="w-full h-full object-cover rounded-full"
-                                >
-                            </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div 
+                                v-for="(item, index) in serviceData" 
+                                :key="index"
+                                class="flex flex-col w-full items-center  mt-5">
+                                <!-- service image -->
+                                <div class="flex flex-col w-[150px] h-[150px] p-2 items-center overflow-hidden">
+                                    <img 
+                                        :src="item.service_img" 
+                                        :alt="item.service_img"
+                                        @click="openImage(item.service_img)"
+                                        class="w-full h-full object-cover rounded-full"
+                                    >
+                                </div>
 
-                            <!-- service name -->
-                            <div class="flex flex-col w-full text-center p-2"> 
-                                <p class="text-[14px] font-semibold">
-                                    {{ item.service_name }}
-                                </p>
+                                <!-- service name -->
+                                <div class="flex flex-col w-full text-center p-2"> 
+                                    <p class="text-[14px] font-semibold">
+                                        {{ item.service_name }}
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        <!-- LOAD MORE -->
+                        <div class="px-3 mt-4 mb-4">
+                            <button 
+                                v-if="serviceHasMore && !serviceLoading"
+                                @click="loadServices('loadMore')"
+                                class="mx-auto block bg-[#DF1968] border border-[#DF1968] text-white text-[12px] px-5 py-2 rounded-full shadow-sm"
+                            >
+                                Load More Services
+                            </button>
+
+                            <p v-if="serviceLoading" class="text-center mt-3 text-sm text-gray-800">
+                                Loading...
+                            </p>
+
+                            <p v-if="!serviceHasMore && serviceData.length > 0" 
+                                class="text-center mt-3 text-sm text-gray-800">
+                                No more services
+                            </p>
+                        </div>
                     </span>
                     <span v-else class="bg-white shadow-2xl">
                         <p class="p-5 font-semibold text-[#e52228]">
@@ -684,6 +721,25 @@
                                 >
                             </div>
                         </div>
+                    </div>
+                    <!-- 🔥 LOAD MORE -->
+                    <div class="px-5 mt-4">
+                        <button 
+                            v-if="galleryHasMore && !galleryLoading"
+                            @click="loadGallery('loadMore')"
+                            class="mx-auto block bg-[#e52228] border border-[#e52228] text-white text-[12px] px-5 py-2 rounded-full shadow-sm"
+                        >
+                            Load More Gallery
+                        </button>
+
+                        <p v-if="galleryLoading" class="text-center mt-3 text-sm text-gray-500">
+                            Loading...
+                        </p>
+
+                        <p v-if="!galleryHasMore && galleryData.length > 0" 
+                            class="text-center mt-3 text-sm text-gray-400">
+                            No more images
+                        </p>
                     </div>
                 </div>
                 <!-- gallery content /. -->
@@ -1837,71 +1893,163 @@
             ]);
 
             // products, serive and gallery
-            const initWebsiteData = async () => {
+            const currentPage = ref(1);
+            const perPage = 10;
+            const isLoading = ref(false);
+            const hasMore = ref(true);
+            const isInitialLoading = ref(true);
+
+            const servicePage = ref(1);
+            const serviceHasMore = ref(true);
+            const serviceLoading = ref(false);
+
+            const galleryPage = ref(1);
+            const galleryHasMore = ref(true);
+            const galleryLoading = ref(false);
+
+            // products, serive and gallery
+            const initWebsiteData = async (type = "init") => {
                 try {
-                    // Execute Plan check ONCE
-                    const allowedCount = await getAllowedCount(cd_id.value);
 
-                    // Run both data fetches in parallel for better performance
-                    const [prodRes, servRes, gallRes] = await Promise.all([
-                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_products", cd_id:cd_id.value }),
-                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_services", cd_id:cd_id.value }),
-                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_gallery", cd_id:cd_id.value })
-                    ]);
+                    if (isLoading.value) return;
 
-                    // get all response data
-                    const prodData = prodRes?.data?.getData;
-                    const servData = servRes?.data?.getData;
-                    const gallData = gallRes?.data?.getData;
+                    isLoading.value = true;
 
-                    // Map Products using allowedCount
-                    if (Array.isArray(prodData) && prodData.length > 0) {
-                        const formatted = prodData
-                            .filter(item => item.product_name && item.final_price > 0)
-                            .map(item => ({
-                                id: item.id,
-                                product_name: item.product_name,
-                                product_img: item.product_img ? `${s3ProductsUrl}/product_images/${item.product_img}` : "",
-                                orginal_price: Number(item.orginal_price),
-                                discount_price: Number(item.discount_price),
-                                final_price: Number(item.final_price),
-                                status: Number(item.status),
-                            }));
+                    const offset = (currentPage.value - 1) * perPage;
 
-                        products.value = allowedCount > 0 ? formatted.slice(0, allowedCount) : formatted;
+                    const prodRes = await axios.post("/collectAllWebsiteDatas", { 
+                        table_name: "miniweb_products", 
+                        cd_id: cd_id.value,
+                        limit: perPage,
+                        offset: offset
+                    });
+
+                    const prodData = prodRes?.data?.getData || [];
+
+                    const formatted = prodData
+                        .filter(item => item.product_name && item.final_price > 0)
+                        .map(item => ({
+                            id: item.id,
+                            product_name: item.product_name,
+                            product_img: item.product_img 
+                                ? `${s3ProductsUrl}/product_images/${item.product_img}` 
+                                : "",
+                            orginal_price: Number(item.orginal_price),
+                            discount_price: Number(item.discount_price),
+                            final_price: Number(item.final_price),
+                            status: Number(item.status),
+                        }));
+
+                    if (type === "init") {
+                        products.value = formatted;
                     } else {
-                        products.value = [];
+                        products.value.push(...formatted);
                     }
 
-                    // Map Services using allowedCount
-                    if (Array.isArray(servData) && servData.length > 0) {
-                        const formatted = servData
-                            .filter(item => item.service_name && item.service_img)
-                            .map(item => ({
-                                service_name: item.service_name,
-                                service_img: item.service_img ? `${s3ServiceUrl}/service_images/${item.service_img}` : pro6,
-                            }));
-
-                        serviceData.value = allowedCount > 0 ? formatted.slice(0, allowedCount) : formatted;
+                    // 🔥 IMPORTANT FIX
+                    if (prodData.length < perPage) {
+                        hasMore.value = false;
                     }
 
-                    // --- Step 5: Map Gallery (NEW) ---
-                    if (Array.isArray(gallData) && gallData.length > 0) {
-                        const formatted = gallData
-                            .filter(item => item.gallery)
-                            .map(item => ({
-                                gallery: item.gallery
-                                    ? `${s3GalleryUrl}/gallery_images/${item.gallery}`
-                                    : pro6,
-                            }));
-                        // Apply the same plan-based limit to the gallery
-                        galleryData.value = allowedCount > 0 ? formatted.slice(0, allowedCount) : formatted;
-                    } else {
-                        galleryData.value = [];
-                    }
+                    currentPage.value++;
 
                 } catch (error) {
-                    console.error("Initialization Error:", error);
+                    console.error(error);
+                } finally {
+                    isLoading.value = false;
+                    isInitialLoading.value = false; // 🔥 FIX
+                }
+            };
+
+            const loadMoreProducts = () => {
+                if (!hasMore.value) return;
+                initWebsiteData("loadMore");
+            };
+
+            // load service
+            const loadServices = async (type = "init") => {
+                try {
+                    if (serviceLoading.value) return;
+
+                    serviceLoading.value = true;
+
+                    const offset = (servicePage.value - 1) * perPage;
+
+                    const res = await axios.post("/collectAllWebsiteDatas", {
+                        table_name: "miniweb_services",
+                        cd_id: cd_id.value,
+                        limit: perPage,
+                        offset: offset
+                    });
+
+                    const data = res?.data?.getData || [];
+
+                    const formatted = data
+                        .filter(item => item.service_name && item.service_img)
+                        .map(item => ({
+                            service_name: item.service_name,
+                            service_img: `${s3ServiceUrl}/service_images/${item.service_img}`
+                        }));
+
+                    if (type === "init") {
+                        serviceData.value = formatted;
+                    } else {
+                        serviceData.value.push(...formatted);
+                    }
+
+                    if (data.length < perPage) {
+                        serviceHasMore.value = false;
+                    }
+
+                    servicePage.value++;
+
+                } catch (err) {
+                    console.error(err);
+                } finally {
+                    serviceLoading.value = false;
+                }
+            };
+
+            // load gallery 
+            const loadGallery = async (type = "init") => {
+                try {
+                    if (galleryLoading.value) return;
+
+                    galleryLoading.value = true;
+
+                    const offset = (galleryPage.value - 1) * perPage;
+
+                    const res = await axios.post("/collectAllWebsiteDatas", {
+                        table_name: "miniweb_gallery",
+                        cd_id: cd_id.value,
+                        limit: perPage,
+                        offset: offset
+                    });
+
+                    const data = res?.data?.getData || [];
+
+                    const formatted = data
+                        .filter(item => item.gallery)
+                        .map(item => ({
+                            gallery: `${s3GalleryUrl}/gallery_images/${item.gallery}`
+                        }));
+
+                    if (type === "init") {
+                        galleryData.value = formatted;
+                    } else {
+                        galleryData.value.push(...formatted);
+                    }
+
+                    if (data.length < perPage) {
+                        galleryHasMore.value = false;
+                    }
+
+                    galleryPage.value++;
+
+                } catch (err) {
+                    console.error(err);
+                } finally {
+                    galleryLoading.value = false;
                 }
             };
 
@@ -2070,6 +2218,8 @@
                         // loadService(),
                         // loadGallery(),
                         initWebsiteData(),
+                        loadServices(),
+                        loadGallery(),
                         getAllowedCount(),
                         loadPayments(),
                         loadFeedbackVerifyData(),
@@ -2543,6 +2693,23 @@
                 customerPhoneError,
                 customerAddressError,
                 orderSubmitCount,
+                // products
+                currentPage,
+                perPage,
+                isLoading,
+                hasMore,
+                loadMoreProducts,
+                isInitialLoading,
+
+                // SERVICES (if using)
+                loadServices,
+                serviceHasMore,
+                serviceLoading,
+
+                // GALLERY (IMPORTANT FIX)
+                loadGallery,
+                galleryHasMore,
+                galleryLoading,
             }
         }
     }
