@@ -1677,7 +1677,11 @@ class MiniWebsiteController extends Controller
                 // Services
                 case 'miniweb_services':
                     $query = DB::table('miniweb_services')
-                        ->where("mini_website_id", "=", $cd_id)
+                        ->where("mini_website_id", $cd_id)
+                        ->whereNotNull('service_img')
+                        ->where('service_img', '!=', '')
+                        ->whereNotNull('service_name')
+                        ->where('service_name', '!=', '')
                         ->orderBy('id', 'desc');
 
                     if ($limit) {
