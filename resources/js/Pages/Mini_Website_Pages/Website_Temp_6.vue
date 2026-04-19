@@ -289,7 +289,7 @@
 
                     </div>
                     <!-- CORRECT PLACE -->
-                    <div class="px-3 mt-4">
+                    <div class="px-3 mt-4 mb-4">
                         <button 
                             v-if="hasMore && !isLoading"
                             @click="loadMoreProducts"
@@ -516,7 +516,7 @@
                         </div>
                     </div>
                     <!-- 🔥 LOAD MORE -->
-                    <div class="px-5 mt-4">
+                    <div class="px-5 mt-4 mt-5">
                         <button 
                             v-if="galleryHasMore && !galleryLoading"
                             @click="loadGallery('loadMore')"
