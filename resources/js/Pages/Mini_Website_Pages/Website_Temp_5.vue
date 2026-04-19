@@ -396,25 +396,24 @@
 
                         </div>
                         <!-- PRODUCT CARD /. -->
+                    </div>
+                    <!-- CORRECT PLACE -->
+                    <div class="px-3 mt-4">
+                        <button 
+                            v-if="hasMore && !isLoading"
+                            @click="loadMoreProducts"
+                            class="mx-auto block bg-[#DF1968] border border-[#DF1968] text-white text-[12px] px-5 py-2 rounded-full shadow-sm"
+                        >
+                            Load More
+                        </button>
 
-                        <!-- CORRECT PLACE -->
-                        <div class="px-3 mt-4">
-                            <button 
-                                v-if="hasMore && !isLoading"
-                                @click="loadMoreProducts"
-                                class="mx-auto block bg-[#DF1968] border border-[#DF1968] text-white text-[12px] px-5 py-2 rounded-full shadow-sm"
-                            >
-                                Load More
-                            </button>
+                        <p v-if="isLoading" class="text-center mt-3 text-sm text-gray-400">
+                            Loading...
+                        </p>
 
-                            <p v-if="isLoading" class="text-center mt-3 text-sm text-gray-800">
-                                Loading...
-                            </p>
-
-                            <p v-if="!hasMore && products.length > 0" class="text-center mt-3 text-sm text-gray-800">
-                                No more products
-                            </p>
-                        </div>
+                        <p v-if="!hasMore && products.length > 0" class="text-center mt-3 text-sm text-gray-400">
+                            No more products
+                        </p>
                     </div>
                 </span>
                 <span v-else class="bg-white shadow-2xl">
