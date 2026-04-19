@@ -239,11 +239,13 @@
 
                 <!-- product areas -->
                 <span v-if="products.length > 0">
+
                     <div class="grid grid-cols-2 gap-2 mt-6 px-3">
+
                         <div 
                             v-for="(item, index) in products" 
                             :key="index"
-                            class="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden border-1 border-[#3d023a]"
+                            class="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden border border-[#3d023a]"
                         >
 
                             <!-- Image Area -->
@@ -261,18 +263,13 @@
                                 </span>
 
                                 <!-- Image -->
-                                <img v-if="1==2"
-                                    :src="item.product_img"
-                                    class="h-full object-contain transition duration-300 group-hover:scale-110 cursor-pointer"
-                                    @click="openImage(item.product_img)"
-                                >
-                                <div class="relative group bg-gray-100 h-[200px] w-full overflow-hidden rounded-t-xl">
+                                <div class="relative bg-gray-100 h-[200px] w-full overflow-hidden rounded-t-xl">
                                     <img 
                                         :src="item.product_img"
+                                        loading="lazy"
                                         class="w-full h-full object-cover transition duration-300 group-hover:scale-110 cursor-pointer"
                                         @click="openImage(item.product_img)"
                                     >
-
                                 </div>
 
                             </div>
@@ -280,14 +277,11 @@
                             <!-- Content -->
                             <div class="p-3 flex flex-col gap-2">
 
-                                <!-- Product Name -->
                                 <h3 class="text-[14px] font-semibold text-gray-800 text-center">
                                     {{ item.product_name }}
                                 </h3>
 
-                                <!-- Prices -->
                                 <div class="flex flex-col text-center text-[13px]">
-
                                     <span class="text-gray-400 line-through">
                                         ₹ {{ item.orginal_price }}
                                     </span>
@@ -299,33 +293,51 @@
                                     <span class="text-green-600 font-semibold text-[12px]">
                                         Save ₹ {{ item.discount_price }}
                                     </span>
-
                                 </div>
 
-                                <!-- Buttons -->
                                 <div class="flex gap-2 mt-2">
-
                                     <button 
-                                        class="flex-1 bg-[#3d023a] text-white text-[11px] py-2 rounded-md font-semibold hover:bg-[#5a0456] transition"
+                                        class="flex-1 bg-[#3d023a] text-white text-[11px] py-2 rounded-md font-semibold hover:bg-[#5a0456]"
                                         @click="buyProduct(item.id, item.product_img, item.product_name, item.final_price)"
                                     >
                                         Buy Now
                                     </button>
 
                                     <button 
-                                        class="flex-1 border border-[#3d023a] text-[#3d023a] text-[11px] py-2 rounded-md font-semibold hover:bg-[#3d023a] hover:text-white transition"
+                                        class="flex-1 border border-[#3d023a] text-[#3d023a] text-[11px] py-2 rounded-md font-semibold hover:bg-[#3d023a] hover:text-white"
                                         @click="selectProduct(item.product_name)"
                                     >
                                         Enquiry
                                     </button>
-
                                 </div>
 
                             </div>
 
                         </div>
+
                     </div>
+
+                    <!-- ✅ CORRECT PLACE -->
+                    <div class="px-3 mt-4">
+                        <button 
+                            v-if="hasMore && !isLoading"
+                            @click="loadMoreProducts"
+                            class="w-full bg-[#3d023a] text-white py-2 rounded-lg"
+                        >
+                            Load More
+                        </button>
+
+                        <p v-if="isLoading" class="text-center mt-3 text-sm text-gray-500">
+                            Loading...
+                        </p>
+
+                        <p v-if="!hasMore" class="text-center mt-3 text-sm text-gray-400">
+                            No more products
+                        </p>
+                    </div>
+
                 </span>
+
                 <span v-else>
                     <p class="p-5 font-semibold text-[#6b3f69]">
                         Current products are out of stock. We will update them shortly.
@@ -1517,73 +1529,131 @@
                 },
             ]);
             
+            const currentPage = ref(1);
+            const perPage = 10;
+            const isLoading = ref(false);
+            const hasMore = ref(true);
+
             // products, serive and gallery
-            const initWebsiteData = async () => {
+            const initWebsiteData = async (type = "init") => {
                 try {
-                    // Execute Plan check ONCE
+
+                    // prevent multiple calls
+                    if (isLoading.value) return;
+
+                    isLoading.value = true;
+
                     const allowedCount = await getAllowedCount(cd_id.value);
 
-                    // Run both data fetches in parallel for better performance
-                    const [prodRes, servRes, gallRes] = await Promise.all([
-                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_products", cd_id:cd_id.value }),
-                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_services", cd_id:cd_id.value }),
-                        axios.post("/collectAllWebsiteDatas", { table_name: "miniweb_gallery", cd_id:cd_id.value })
-                    ]);
+                    // pagination calc
+                    const offset = (currentPage.value - 1) * perPage;
 
-                    // get all response data
+                    // 👉 PRODUCTS (pagination)
+                    const prodRes = await axios.post("/collectAllWebsiteDatas", { 
+                        table_name: "miniweb_products", 
+                        cd_id: cd_id.value,
+                        limit: perPage,
+                        offset: offset
+                    });
+
                     const prodData = prodRes?.data?.getData;
-                    const servData = servRes?.data?.getData;
-                    const gallData = gallRes?.data?.getData;
 
-                    // Map Products using allowedCount
                     if (Array.isArray(prodData) && prodData.length > 0) {
+
+                        if (prodData.length < perPage) {
+                            hasMore.value = false;
+                        }
+
                         const formatted = prodData
                             .filter(item => item.product_name && item.final_price > 0)
                             .map(item => ({
                                 id: item.id,
                                 product_name: item.product_name,
-                                product_img: item.product_img ? `${s3ProductsUrl}/product_images/${item.product_img}` : "",
+                                product_img: item.product_img 
+                                    ? `${s3ProductsUrl}/product_images/${item.product_img}` 
+                                    : "",
                                 orginal_price: Number(item.orginal_price),
                                 discount_price: Number(item.discount_price),
                                 final_price: Number(item.final_price),
                                 status: Number(item.status),
                             }));
 
-                        products.value = allowedCount > 0 ? formatted.slice(0, allowedCount) : formatted;
+                        // 👉 IMPORTANT CHANGE
+                        if (type === "init") {
+                            products.value = formatted;
+                        } else {
+                            products.value.push(...formatted);
+                        }
+
+                        currentPage.value++;
+
                     } else {
-                        products.value = [];
+                        hasMore.value = false;
                     }
 
-                    // Map Services using allowedCount
-                    if (Array.isArray(servData) && servData.length > 0) {
-                        const formatted = servData
-                            .filter(item => item.service_name && item.service_img)
-                            .map(item => ({
-                                service_name: item.service_name,
-                                service_img: item.service_img ? `${s3ServiceUrl}/service_images/${item.service_img}` : pro6,
-                            }));
 
-                        serviceData.value = allowedCount > 0 ? formatted.slice(0, allowedCount) : formatted;
+                    // 👉 SERVICES (only first load)
+                    if (type === "init") {
+                        const servRes = await axios.post("/collectAllWebsiteDatas", { 
+                            table_name: "miniweb_services", 
+                            cd_id: cd_id.value,
+                            limit: 10
+                        });
+
+                        const servData = servRes?.data?.getData;
+
+                        if (Array.isArray(servData) && servData.length > 0) {
+                            const formatted = servData
+                                .filter(item => item.service_name && item.service_img)
+                                .map(item => ({
+                                    service_name: item.service_name,
+                                    service_img: item.service_img 
+                                        ? `${s3ServiceUrl}/service_images/${item.service_img}` 
+                                        : pro6,
+                                }));
+
+                            serviceData.value = allowedCount > 0 
+                                ? formatted.slice(0, allowedCount) 
+                                : formatted;
+                        }
                     }
 
-                    // --- Step 5: Map Gallery (NEW) ---
-                    if (Array.isArray(gallData) && gallData.length > 0) {
-                        const formatted = gallData
-                            .filter(item => item.gallery)
-                            .map(item => ({
-                                gallery: item.gallery
-                                    ? `${s3GalleryUrl}/gallery_images/${item.gallery}`
-                                    : pro6,
-                            }));
-                        // Apply the same plan-based limit to the gallery
-                        galleryData.value = allowedCount > 0 ? formatted.slice(0, allowedCount) : formatted;
-                    } else {
-                        galleryData.value = [];
+
+                    // 👉 GALLERY (only first load)
+                    if (type === "init") {
+                        const gallRes = await axios.post("/collectAllWebsiteDatas", { 
+                            table_name: "miniweb_gallery", 
+                            cd_id: cd_id.value,
+                            limit: 10
+                        });
+
+                        const gallData = gallRes?.data?.getData;
+
+                        if (Array.isArray(gallData) && gallData.length > 0) {
+                            const formatted = gallData
+                                .filter(item => item.gallery)
+                                .map(item => ({
+                                    gallery: item.gallery
+                                        ? `${s3GalleryUrl}/gallery_images/${item.gallery}`
+                                        : pro6,
+                                }));
+
+                            galleryData.value = allowedCount > 0 
+                                ? formatted.slice(0, allowedCount) 
+                                : formatted;
+                        }
                     }
 
                 } catch (error) {
                     console.error("Initialization Error:", error);
+                } finally {
+                    isLoading.value = false;
                 }
+            };
+
+            const loadMoreProducts = () => {
+                if (!hasMore.value) return;
+                initWebsiteData("loadMore");
             };
 
             // Helper to get plan limits
@@ -2220,6 +2290,12 @@
                 customerPhoneError,
                 customerAddressError,
                 orderSubmitCount,
+                // load more
+                currentPage,
+                perPage,
+                isLoading,
+                hasMore,
+                loadMoreProducts,
             }
         }
     }

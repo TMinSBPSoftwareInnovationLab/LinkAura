@@ -1621,6 +1621,9 @@ class MiniWebsiteController extends Controller
         $table_name = trim($request->table_name);
         $cd_id = $request->cd_id;
 
+        $limit = $request->limit ?? null;
+        $offset = $request->offset ?? 0;
+
         if ($cd_id && $table_name) {
             switch ($table_name) {
                 // company data
@@ -1656,23 +1659,42 @@ class MiniWebsiteController extends Controller
                 
                 // Products
                 case 'miniweb_products':
-                    $getData = DB::table('miniweb_products')
+                    $query = DB::table('miniweb_products')
                         ->where("mini_website_id", "=", $cd_id)
-                        ->get();
+                        ->orderBy('id', 'desc');
+
+                    if ($limit) {
+                        $query->limit($limit)->offset($offset);
+                    }
+
+                    $getData = $query->get();
                     break;
+
                 
                 // Services
                 case 'miniweb_services':
-                    $getData = DB::table('miniweb_services')
+                    $query = DB::table('miniweb_services')
                         ->where("mini_website_id", "=", $cd_id)
-                        ->get();
+                        ->orderBy('id', 'desc');
+
+                    if ($limit) {
+                        $query->limit($limit)->offset($offset);
+                    }
+
+                    $getData = $query->get();
                     break;
                 
                 // Gallery
                 case 'miniweb_gallery':
-                    $getData = DB::table('miniweb_gallery')
+                    $query = DB::table('miniweb_gallery')
                         ->where("mini_website_id", "=", $cd_id)
-                        ->get();
+                        ->orderBy('id', 'desc');
+
+                    if ($limit) {
+                        $query->limit($limit)->offset($offset);
+                    }
+
+                    $getData = $query->get();
                     break;
                 
                 // Payment details
