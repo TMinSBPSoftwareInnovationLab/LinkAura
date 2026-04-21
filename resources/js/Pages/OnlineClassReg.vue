@@ -175,7 +175,7 @@
             >
               <option value="">Choose your course</option>
 
-              <option v-for="(item, index) in courseList" :key="index" :value="item" >
+              <option v-for="(item, index) in filteredCourses" :key="index" :value="item" >
                 {{ item }}
               </option>
             </select>
@@ -301,17 +301,6 @@
     name: "OnlineClassReg",
     components: { Form, Field, ErrorMessage },
     setup() {
-      const courseList = [
-        "Online AI With Python",
-        "Online Python",
-        "Online PHP/MySQL",
-        "Online Web Design",
-        "Online Web Development",
-        "Online Full Stack Web Development",
-        "Online Android App Development",
-        "Online Tally with Advance Excel",
-        "Online Excel With PowerBI"
-      ];
       
       const sessionList = [
         "Morning",
@@ -442,10 +431,47 @@
         }
       });
 
+      const schoolCourses = [
+        "6th Tuition",
+        "7th Tuition",
+        "8th Tuition",
+        "9th Tuition",
+        "10th Maths",
+        "11th Maths",
+        "11th Computer Science",
+        "11th Computer Science",
+        "12th Maths",
+        "12th Biology",
+        "12th Computer Science",
+        "Online Python",
+        "Online Tally",
+      ];
+
+      const collegeCourses = [
+        "Online AI With Python",
+        "Online Python",
+        "Online PHP/MySQL",
+        "Online Web Design",
+        "Online Web Development",
+        "Online Full Stack Web Development",
+        "Online Android App Development",
+        "Online Tally with Advance Excel",
+        "Online Excel With PowerBI"
+      ];
+
+      const filteredCourses = computed(() => {
+        if (educationType.value === "school") {
+          return schoolCourses;
+        } else if (educationType.value === "college") {
+          return collegeCourses;
+        }
+        return [];
+      });
         
 
       return {
-        courseList,
+        filteredCourses,
+        // courseList,
         sessionList,
         schema,
         onlineCourseOnSubmit,
