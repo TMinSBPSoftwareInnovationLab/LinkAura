@@ -455,8 +455,12 @@
         "Online Web Development",
         "Online Full Stack Web Development",
         "Online Android App Development",
+        "Online Tally",
+        "Online Excel",
+        "Online PowerBI",
         "Online Tally with Advance Excel",
-        "Online Excel With PowerBI"
+        "Online Excel With PowerBI",
+        "Online Excel, Tally & PowerBI"
       ];
 
       const filteredCourses = computed(() => {
