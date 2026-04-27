@@ -1,7 +1,7 @@
 <template>
   <div class="pb-20"> <!-- extra bottom padding so content doesn't hide behind footer -->
     <!-- Fixed Footer Navigation -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-md">
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-md z-50">
       <div class="flex overflow-x-auto md:justify-center">
         <button
           v-for="item in menuLists"
