@@ -1250,7 +1250,7 @@
     <!-- mobile plan popup /. -->
 
     <!-- order popup -->
-    <div v-if="showForm" @click.self="showForm = false" class="fixed inset-0 bg-black/50 flex items-center justify-center">
+    <div v-if="showForm" @click.self="showForm = false" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
         <div class="bg-white p-4 rounded-lg w-80">
             
             <form @submit.prevent="onSubmit">
