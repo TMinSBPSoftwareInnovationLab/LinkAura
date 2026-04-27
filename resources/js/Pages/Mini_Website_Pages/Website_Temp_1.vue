@@ -263,8 +263,8 @@
                                 </span>
 
                                 <!-- Image -->
-                                <div class="relative bg-gray-100 h-[200px] w-full overflow-hidden rounded-t-xl relative">
-                                     <span v-if="item.status == 1" class="absolute -top-2 right-2 bg-orange-500 text-white text-[10px] px-2 py-1 rounded-md font-bold uppercase shadow-sm z-10">
+                                <div class="relative bg-gray-100 h-[200px] w-full overflow-hidden rounded-t-xl">
+                                     <span v-if="item.status == 1" class="absolute top-2 right-2 bg-orange-500 text-white text-[10px] px-2 py-1 rounded-md font-bold uppercase shadow-sm z-10">
                                         Trending
                                     </span>
                                     
