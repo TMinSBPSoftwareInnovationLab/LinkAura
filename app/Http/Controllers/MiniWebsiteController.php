@@ -2552,4 +2552,22 @@ class MiniWebsiteController extends Controller
 
         
     }
+
+    // get product orders
+    public function getCourseRegistration(Request $request) {
+        $user_id = $request->user_id;
+        $getData = DB::table("online_course_reg as ocr")
+            ->select(
+                "ocr.*", 
+                DB::raw("DATE_FORMAT(created_at, '%d-%m-%Y %h:%i:%s') as CDate")
+            )
+            ->orderBy("ocr.id","desc")
+            ->get();
+
+        return response()->json([
+            'status' => true,
+            'getData' => $getData,
+            'message' => $getData->isNotEmpty() ? 'Course Registration data found' : 'No Course Registration data found'
+        ]);
+    }
 }

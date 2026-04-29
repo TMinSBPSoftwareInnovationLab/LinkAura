@@ -4,30 +4,18 @@
         <div class="col-span-1">
             <SideNavBar />
         </div>
-
         <!-- Right Content -->
         <div class="col-span-3 bg-gray-100 p-4 min-h-screen">
             <Header_tab />
-            <!-- main content area -->
-            <div class="flex w-full py-5 px-5 bg-white mt-2 justify-end" v-if="1==2">
-                <Link to="/Company_details">
-                    <button
-                        class="bg-[#000b57] text-white py-2 px-4 rounded-xl 
-                                transition-all duration-500 
-                                hover:-translate-y-2 hover:shadow-xl">
-                            Create Mini Website
-                    </button>
-                </Link>
-            </div>
 
+            <!-- main content area -->
             <!-- heading page -->
             <div class="flex flex-col w-full mt-2">
                 <div class="flex w-full bg-[#000b57] text-white text-center items-center justify-center uppercase font-bold p-2">
-                    <h1>Product Orders</h1>
+                    <h1>Course Registration</h1>
                 </div>
             </div>
             <!-- heading page /. -->
-
             <!-- export excel / date range / common search -->
             <div class="flex flex-row w-full bg-white items-center justify-between p-5 border-b">
                 <div class="flex-1 flex justify-start">
@@ -63,7 +51,7 @@
                 </div>
 
             </div>
-
+            
             <div class="flex flex-col w-full bg-white p-5">
                 <ag-grid-vue
                     class="ag-theme-alpine"
@@ -75,37 +63,39 @@
                     :paginationPageSize="10"
                     @grid-ready="onGridReady" 
                 />
-
-             </div>
+            </div>
+            <!-- main content area /.-->
         </div>
     </div>
 </template>
-
 <script>
-    import SideNavBar from '../Components/SideNavBar.vue';
-    import Header_tab from '../Components/Header_tab.vue';
-    import { ref, onMounted,computed } from "vue";
-    import { AgGridVue } from "ag-grid-vue3";
-    import { ModuleRegistry, AllCommunityModule } from "ag-grid-community";
-    import axios from 'axios';
+    import defaultLogo from '@/assets/images/commonImages/linkAura_logo.png'
+    import SideNavBar from './Components/SideNavBar.vue';
+    import Header_tab from './Components/Header_tab.vue';
+    import { ref, onMounted } from "vue";
+    import { computed } from "vue";
     import { toast } from 'vue3-toastify'
     import Swal from 'sweetalert2';
+    // import { useRouter } from "vue-router";
+    import { useCardStore } from '@/stores/cardStore';
+    import axios from "axios";
+    import { AgGridVue } from "ag-grid-vue3";
+    import { ModuleRegistry, AllCommunityModule } from "ag-grid-community";
+    ModuleRegistry.registerModules([AllCommunityModule]);
+
     import ExcelJS from 'exceljs';
     import { saveAs } from 'file-saver';
     import { router, usePage } from '@inertiajs/vue3'
-
-    ModuleRegistry.registerModules([AllCommunityModule]); 
+    
+    import { PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon } from '@heroicons/vue/24/solid'
     export default {
-        name: 'ProductOrders',
-        components: { SideNavBar, Header_tab, AgGridVue },
+        components: { SideNavBar, Header_tab, AgGridVue, PaperAirplaneIcon, CurrencyRupeeIcon, RocketLaunchIcon },
+        name: 'CourseRegistration',
         setup(){
             const page = usePage();
-            const user_id = computed(() => page.props.auth.user?.id)
-            const rowData = ref({});
-            const rejectPopup = ref(false);
-            const rejectReason = ref("");
-            const selectedRow = ref(null);
-    
+            const userId = computed(() => page.props.auth.user?.id);
+            const rowData = ref([]);
+
             const gridApi = ref(null);
             const searchText = ref("");
 
@@ -113,27 +103,15 @@
             const onGridReady = (params) => {
                 gridApi.value = params.api;
             };
-    
+
             // Apply the quick filter
             const onFilterTextBoxChanged = () => {
                 gridApi.value.setGridOption('quickFilterText', searchText.value);
             };
-
-            const colDefs = ref([
-                { headerName: "S.No", valueGetter: "node.rowIndex + 1", width: 80, },
-                { field: "customer_name", headerName: "Customer Name", width: 180, editable: true },
-                { field: "customer_phone", headerName: "Customer Phone", width: 150, editable: true },
-                { field: "customer_address", headerName: "Address",  width:150, editable: true },
-                { field: "product_name", headerName: "Product Name",  width:150, editable: true },
-                { field: "product_price", headerName: "Product Price",  width:150, editable: true },
-                { field: "qty", headerName: "Qty",  width:150, editable: true },
-                { field: "total_price", headerName: "Total Amount",  width:150, editable: true },
-                { field: "CDate", headerName: "CDate", width: 180, editable: true },
-            ]);
-
+            
             const loadBS = async() => {
                 try{
-                    const res = await axios.post("/getProductOrders", { user_id: user_id.value }) 
+                    const res = await axios.post("/getCourseRegistration") 
                     rowData.value = res.data.getData;
 
                     if (res.data.status && Array.isArray(res.data.getData)) {
@@ -147,9 +125,7 @@
                     console.error("Feedback load error:", error);
                     rowData.value = [];
                 }
-                
-            };
-
+            }
             onMounted(async () => {
                 try{
                     await Promise.all([
@@ -157,50 +133,65 @@
                     ])
                 }
                 catch(error){
-                    console.log("Feedback Data Status", error)
+                    console.log("Course registration Data Status", error)
                 }
             })
+            const colDefs = ref([
+                { headerName: "S.No", valueGetter: "node.rowIndex + 1", width: 80, },
+                { field: "student_name", headerName: "Student Name", width: 180, editable: true },
+                { field: "gender", headerName: "Gender", width: 120, editable: true },
+                { field: "email", headerName: "Email", width: 150, editable: true },
+                { field: "phone_number", headerName: "Phone Number", width: 130, editable: true },
+                { field: "whatsapp_number", headerName: "WhatsApp Number", width: 130, editable: true },
+                { field: "education_type", headerName: "Edu Type", width: 100, editable: true },
+                { field: "institution", headerName: "Institu", width: 150, editable: true },
+                { field: "course", headerName: "Course", width: 150, editable: true },
+                { field: "session", headerName: "Session", width: 100, editable: true },
+                { field: "from_time", headerName: "From Time", width: 100, editable: true },
+                { field: "to_time", headerName: "To Time", width: 100, editable: true },
+                { field: "to_time", headerName: "To Time", width: 100, editable: true },
+                { field: "created_at", headerName: "CDate", width: 170, editable: true },
+            ]);
 
             const exportToExcel = async () => {
-                // 1. Create workbook and worksheet
                 const workbook = new ExcelJS.Workbook();
-                const worksheet = workbook.addWorksheet('Product Order Data');
+                const worksheet = workbook.addWorksheet('Course Registration Data');
 
-                // 2. Define the columns for Excel 
-                // We map your colDefs to ExcelJS columns (skipping "Actions" column)
                 worksheet.columns = [
                     { header: 'S.No', key: 'sno', width: 10 },
-                    { header: 'Customer Name', key: 'customer_name', width: 25 },
-                    { header: 'Customer Phone', key: 'customer_phone', width: 20 },
-                    { header: 'Address', key: 'customer_address', width: 20 },                    
-                    { header: 'Product Name', key: 'product_name', width: 20 },
-                    { header: 'Product Price', key: 'product_price', width: 20 },
-                    { header: 'Qty', key: 'qty', width: 20 },
-                    { header: 'Total Amount', key: 'total_price', width: 20 },
-                    
+                    { header: 'Student Name', key: 'student_name', width: 25 },
+                    { header: 'Gender', key: 'gender', width: 20 },
+                    { header: 'Email', key: 'email', width: 20 },                    
+                    { header: 'Phone Number', key: 'phone_number', width: 20 },
+                    { header: 'WhatsApp Number', key: 'whatsapp_number', width: 20 },
+                    { header: 'Edu Type', key: 'education_type', width: 20 },
+                    { header: 'Institution', key: 'institution', width: 20 },
+                    { header: 'Course', key: 'course', width: 20 },
+                    { header: 'Session', key: 'session', width: 20 },
+                    { header: 'From Time', key: 'from_time', width: 20 },
+                    { header: 'To Time', key: 'to_time', width: 20 },
                     { header: 'Created Date', key: 'CDate', width: 20 },
                 ];
 
-                // 3. Prepare the data
-                // We transform the numeric status into text for the Excel file
                 const formattedData = rowData.value.map((row, index) => {
                     return {
                         sno: index + 1,
-                        customer_name: row.customer_name,
-                        customer_phone: row.customer_phone,
-                        customer_address: row.customer_address,
-                        product_name: row.product_name,                        
-                        product_price: row.product_price,
-                        qty: row.qty,
-                        total_price: row.total_price,
+                        student_name: row.student_name,
+                        gender: row.gender,
+                        email: row.email,
+                        phone_number: row.phone_number,                        
+                        whatsapp_number: row.whatsapp_number,
+                        education_type: row.education_type,
+                        institution: row.institution,
+                        course: row.course,
+                        session: row.session,
+                        from_time: row.from_time,
+                        to_time: row.to_time,
                         CDate: row.CDate,
                     };
                 });
 
-                // 4. Add data to worksheet
                 worksheet.addRows(formattedData);
-
-                // 5. Styling the header row (Optional but recommended)
                 worksheet.getRow(1).eachCell((cell) => {
                     cell.font = { bold: true, color: { argb: 'FFFFFF' } };
                     cell.fill = {
@@ -214,22 +205,21 @@
                 // 6. Generate Buffer and Save File
                 const buffer = await workbook.xlsx.writeBuffer();
                 const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-                saveAs(blob, `Product_Order_${new Date().toISOString().slice(0, 10)}.xlsx`);
-            };
-            
+                saveAs(blob, `Course_Registration_${new Date().toISOString().slice(0, 10)}.xlsx`);
 
-            return { 
-                rowData, 
+            };
+
+            
+            return {
+                userId,
+                rowData,
                 colDefs,
-                user_id,
-                rejectPopup,
-                rejectReason,
-                selectedRow,
-                exportToExcel,
-                onGridReady,
+                gridApi,
                 searchText,
                 onFilterTextBoxChanged,
-            };
+                onGridReady,
+                exportToExcel,
+            }
         }
     }
 </script>

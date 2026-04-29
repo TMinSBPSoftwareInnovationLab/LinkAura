@@ -76,6 +76,9 @@ Route::post('/save_school_datas',[MiniWebsiteController::class, 'saveAdmission']
 Route::post('/saveProductOrder',[MiniWebsiteController::class, 'saveProductOrder']);
 Route::post('/getProductOrders',[MiniWebsiteController::class, 'getProductOrders']);
 
+// get course registration data
+Route::post('/getCourseRegistration',[MiniWebsiteController::class, 'getCourseRegistration']);
+
 // sample bill generation
 Route::get('/preview-bill', function () {
     // Inga neenga template-ku dummy data anupanum, illana error varum
@@ -132,6 +135,10 @@ Route::get('/OnlineClassReg', function () {
 });
 Route::post('/saveOnlineCourseRegData',[MiniWebsiteController::class, 'saveOnlineCourseRegData']);
 
+// Online and Course Registration
+Route::get('/CourseRegistration', function () {
+    return Inertia::render('CourseRegistration');
+});
 
 /*
 |--------------------------------------------------------------------------

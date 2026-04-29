@@ -165,6 +165,7 @@ export default {
                 ? [
                     { name: "Billing Success", icon: CheckCircleIcon, url: '/BillingSuccess' },
                     { name: "Billing Failure", icon: XCircleIcon, url: '/BillingFailure' },
+                    { name: "Course Registration", icon: CheckBadgeIcon, url: '/CourseRegistration' },
                   ]
                 : []),
             ],
