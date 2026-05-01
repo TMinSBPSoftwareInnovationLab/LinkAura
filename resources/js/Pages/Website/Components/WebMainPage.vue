@@ -403,7 +403,7 @@
                             <div class="flex flex-col text-center p-5">
                                 <Link href="/login" target="_blank">
                                     <button class="mt-8 bg-[#681c6a] text-white px-6 py-2 rounded-full text-sm font-semibold">
-                                    BuY NOW
+                                    BUY NOW
                                     </button>
                                 </Link>
                             </div>

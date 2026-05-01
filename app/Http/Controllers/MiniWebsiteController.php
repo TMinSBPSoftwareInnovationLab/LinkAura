@@ -2044,7 +2044,7 @@ class MiniWebsiteController extends Controller
                 'plan_name' => $data['plan_name'],
                 'description' => $planDesc,
                 'amount' => $data['txn_amt'],
-                'from_address' => "TMinSBP Software innovation Lab \n A Product of LinkAura,\nNo 288, Royalone Medical Centre Near, Anangur Corner,\nB.Komarapalayam(TK), Namakkal(DT),\nTamil Nadu - 600001",
+                'from_address' => "Thirumurugan Software Lab \n A Product of LinkAura,\nNo 288, Salem Main Road, Royal One Medical Centre Near, Anangur Corner,\nB.Komarapalayam(TK), Namakkal(DT),\nTamil Nadu - 600001",
                 'to_address' => $userCompanyDetails->company_name."\n". $userAddress,
             ];
 
