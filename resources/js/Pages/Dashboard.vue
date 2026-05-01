@@ -143,8 +143,8 @@
                 <div class="flex flex-col w-full px-5 pt-2">
                     <ul class="text-[15px] font-semibold leading-loose">
                         <li>🛍️ Add up to 25 Products </li>
-                        <li>🛠️ Add up to 25 Services</li>
-                        <li>🖼️ Upload 25 Gallery Images</li>
+                        <li>🛠️ Add up to 5 Services</li>
+                        <li>🖼️ Upload 10 Gallery Images</li>
                         <li>🔄 Unlimited Updates</li>
                         <li>✍ Customer Enquiry Section</li>
                         <li>⭐ Customer Feedback Section</li>
@@ -221,8 +221,8 @@
                 <div class="flex flex-col w-full px-5 pt-2">
                     <ul class="text-[15px] font-semibold leading-loose">
                         <li>🛍️ Add up to 75 Products </li>
-                        <li>🛠️ Add up to 75 Services</li>
-                        <li>🖼️ Upload 75 Gallery Images</li>
+                        <li>🛠️ Add up to 15 Services</li>
+                        <li>🖼️ Upload 40 Gallery Images</li>
                         <li>🔄 Unlimited Updates</li>
                         <li>✍ Customer Enquiry Section</li>
                         <li>⭐ Customer Feedback Section</li>
@@ -299,7 +299,7 @@
                 <div class="flex flex-col w-full px-5 pt-2">
                     <ul class="text-[15px] font-semibold leading-loose">
                         <li>🛍️ Add up to 300+ Products </li>
-                        <li>🛠️ Add up to 300+ Services</li>
+                        <li>🛠️ Add up to 40+ Services</li>
                         <li>🖼️ Upload 300+ Gallery Images</li>
                         <li>🔄 Unlimited Updates</li>
                         <li>✍ Customer Enquiry Section</li>
