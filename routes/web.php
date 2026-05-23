@@ -83,7 +83,7 @@ Route::post('/getCourseRegistration',[MiniWebsiteController::class, 'getCourseRe
 Route::get('/preview-bill', function () {
     // Inga neenga template-ku dummy data anupanum, illana error varum
     $data = [
-        'business_name' => 'TMinSBP Software Innovation Lab',
+        'business_name' => 'Thirumurugan Software Lab',
         'from_address' => "5 Martin Pl\nSydney NSW 2000\nAustralia",
         'to_address' => "Your Client\n100 Harris St\nSydney NSW 2009",
         'invoice_no' => '2022445',
