@@ -473,12 +473,11 @@ class MiniWebsiteController extends Controller
             if ($productId) {
 
                 $old = DB::table('miniweb_products')->where('id', $productId)->first();
-                return $old;
                 if (!$old) continue;
 
                 $isImageUpdated = false;
 
-                if ($request->hasFile("products.$index.image")) {
+                if ($request->hasFile("products.$index.image")) { return products.$index.image;
 
                     $file = $request->file("products.$index.image");
 
@@ -501,7 +500,7 @@ class MiniWebsiteController extends Controller
                     $data['product_img'] = $imageName;
                     $isImageUpdated = true;
                 }
-
+                return $isImageUpdated;
                 // change check
                 $isChanged =
                     $old->product_name != $data['product_name'] ||
