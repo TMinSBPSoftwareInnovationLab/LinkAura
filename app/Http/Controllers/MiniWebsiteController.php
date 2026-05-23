@@ -471,8 +471,9 @@ class MiniWebsiteController extends Controller
             ];
 
             if ($productId) {
-                return "if : ".$productId;
+
                 $old = DB::table('miniweb_products')->where('id', $productId)->first();
+                return $old;
                 if (!$old) continue;
 
                 $isImageUpdated = false;
@@ -522,7 +523,6 @@ class MiniWebsiteController extends Controller
             }
 
             else {
-            return "else";
                 if ($request->hasFile("products.$index.image")) {
 
                     $file = $request->file("products.$index.image");
