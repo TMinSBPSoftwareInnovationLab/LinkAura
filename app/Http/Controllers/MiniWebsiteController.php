@@ -462,6 +462,7 @@ class MiniWebsiteController extends Controller
             $name = trim($p['name'] ?? '');
             $test[] = [
                 'index' => $index,
+                'productId ' => $productId,
                 'hasFile' => $request->hasFile("products.$index.image"),
                 'file' => $request->file("products.$index.image"),
             ];
