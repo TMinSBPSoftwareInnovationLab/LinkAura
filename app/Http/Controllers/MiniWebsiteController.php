@@ -455,10 +455,16 @@ class MiniWebsiteController extends Controller
         $s3Folder = "product_images/";
         $anyChanges = false;
 
+        $test = [];
+
         foreach ($products as $index => $p) {
             $productId = $p['id'] ?? null;
             $name = trim($p['name'] ?? '');
-
+            $test[] = [
+                'index' => $index,
+                'hasFile' => $request->hasFile("products.$index.image"),
+                'file' => $request->file("products.$index.image"),
+            ];
             if (!$name) continue;
 
             $data = [
@@ -477,7 +483,7 @@ class MiniWebsiteController extends Controller
 
                 $isImageUpdated = false;
 
-                if ($request->hasFile("products.$index.image")) { return products.$index.image;
+                if ($request->hasFile("products.$index.image")) {
 
                     $file = $request->file("products.$index.image");
 
@@ -500,7 +506,7 @@ class MiniWebsiteController extends Controller
                     $data['product_img'] = $imageName;
                     $isImageUpdated = true;
                 }
-                return "Else : ".$isImageUpdated;
+
                 // change check
                 $isChanged =
                     $old->product_name != $data['product_name'] ||
@@ -544,7 +550,7 @@ class MiniWebsiteController extends Controller
                 $anyChanges = true;
             }
         }
-
+        return $test;
         return [
             'status' => $anyChanges,
             'message' => $anyChanges ? 'Saved Successfully' : 'No Changes'
