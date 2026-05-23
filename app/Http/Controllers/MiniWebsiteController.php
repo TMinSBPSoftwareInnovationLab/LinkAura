@@ -500,7 +500,7 @@ class MiniWebsiteController extends Controller
                     $data['product_img'] = $imageName;
                     $isImageUpdated = true;
                 }
-                return $isImageUpdated;
+                return "Else : ".$isImageUpdated;
                 // change check
                 $isChanged =
                     $old->product_name != $data['product_name'] ||
