@@ -445,7 +445,6 @@ class MiniWebsiteController extends Controller
     // save product
     public function saveWebProducts(Request $request){
         $products = $request->products ?? [];
-        return $products;
         $mini_website_id = $request->cardId;
 
         if (!$mini_website_id) {
@@ -472,7 +471,7 @@ class MiniWebsiteController extends Controller
             ];
 
             if ($productId) {
-
+                return "if : ".$productId;
                 $old = DB::table('miniweb_products')->where('id', $productId)->first();
                 if (!$old) continue;
 
@@ -523,6 +522,7 @@ class MiniWebsiteController extends Controller
             }
 
             else {
+            return "else";
                 if ($request->hasFile("products.$index.image")) {
 
                     $file = $request->file("products.$index.image");
