@@ -443,31 +443,34 @@ class MiniWebsiteController extends Controller
     }
 
     // save product
-    public function saveWebProducts(Request $request){
-        $products = $request->products ?? [];
+    public function saveWebProducts(Request $request) {
+        $products = $request->products ?? [];    
         $mini_website_id = $request->cardId;
-
-        if (!$mini_website_id) {
-            return ['status' => false, 'message' => 'Invalid Request'];
+    
+        if (!$mini_website_id) {    
+            return [
+                'status' => false,
+                'message' => 'Invalid Request'
+            ];
         }
-
-        $manager = new ImageManager(new Driver());
-        $s3Folder = "product_images/";
+    
+        $manager = new ImageManager(new Driver());    
+        $s3Folder = "product_images/";    
         $anyChanges = false;
-
-        $test = [];
-
-        foreach ($products as $index => $p) {
-            $productId = $p['id'] ?? null;
+    
+        $test = [];    
+        foreach ($products as $index => $p) {    
+            $productId = $p['id'] ?? null;    
             $name = trim($p['name'] ?? '');
+    
             $test[] = [
                 'index' => $index,
-                'productId ' => $productId,
+                'productId' => $productId,
                 'hasFile' => $request->hasFile("products.$index.image"),
                 'file' => $request->file("products.$index.image"),
-            ];
+            ];    
             if (!$name) continue;
-
+    
             $data = [
                 'mini_website_id' => $mini_website_id,
                 'product_name'    => $name,
@@ -476,39 +479,43 @@ class MiniWebsiteController extends Controller
                 'final_price'     => floatval($p['final_price'] ?? 0),
                 'status'          => (int)($p['status'] ?? 0),
             ];
-
-            if ($productId) {
-
-                $old = DB::table('miniweb_products')->where('id', $productId)->first();
-                if (!$old) continue;
-
+    
+            // =====================================================
+            // UPDATE EXISTING PRODUCT
+            // =====================================================
+    
+            if ($productId) {    
+                $old = DB::table('miniweb_products')
+                    ->where('id', $productId)
+                    ->first();
+    
+                if (!$old) continue;    
                 $isImageUpdated = false;
-
-                if ($request->hasFile("products.$index.image")) {
-
-                    $file = $request->file("products.$index.image");
-
-                    $imageName = time().'_'.uniqid().'.webp';
-
-                    $img = $manager->read($file->getRealPath())->scale(width: 800);
+    
+                $oldImage = $old->product_img ?? null;    
+                // IMAGE UPDATE
+                if( $request->hasFile("products.$index.image") && $request->file("products.$index.image")->isValid() ) {    
+                    $file = $request->file("products.$index.image");    
+                    $imageName = time() . '_' . uniqid() . '.webp';
+    
+                    $img = $manager
+                        ->read($file->getRealPath())
+                        ->scale(width: 800);    
                     $webp = $img->toWebp(80);
-
-                    Storage::disk('s3_products')->put($s3Folder.$imageName, $webp, 'public');
-
-                    // delete old
-                    if (!empty($old->product_img)) {
-                        $oldPath = $s3Folder.$old->product_img;
-
-                        if (Storage::disk('s3_products')->exists($oldPath)) {
-                            Storage::disk('s3_products')->delete($oldPath);
-                        }
-                    }
-
-                    $data['product_img'] = $imageName;
+    
+                    // UPLOAD NEW IMAGE
+                    Storage::disk('s3_products')->put(
+                        $s3Folder . $imageName,
+                        $webp,
+                        'public'
+                    );
+    
+                    // ASSIGN NEW IMAGE
+                    $data['product_img'] = $imageName;    
                     $isImageUpdated = true;
                 }
-
-                // change check
+    
+                // CHECK CHANGES
                 $isChanged =
                     $old->product_name != $data['product_name'] ||
                     $old->orginal_price != $data['orginal_price'] ||
@@ -516,45 +523,56 @@ class MiniWebsiteController extends Controller
                     $old->final_price != $data['final_price'] ||
                     $old->status != $data['status'] ||
                     $isImageUpdated;
-
-                if (!$isChanged) continue;
-
+    
+                if (!$isChanged) continue;    
                 $data['m_date'] = now();
-
-                DB::table('miniweb_products')
+    
+                // UPDATE DATABASE
+                $updated = DB::table('miniweb_products')
                     ->where('id', $productId)
                     ->update($data);
-
+    
+                // DELETE OLD IMAGE ONLY AFTER SUCCESSFUL DB UPDATE
+                if ( $updated &&  $isImageUpdated && !empty($oldImage) ) {    
+                    $oldPath = $s3Folder . $oldImage;    
+                    if (Storage::disk('s3_products')->exists($oldPath)) {    
+                        Storage::disk('s3_products')->delete($oldPath);
+                    }
+                }
+    
                 $anyChanges = true;
             }
-
-            else {
-                if ($request->hasFile("products.$index.image")) {
-
-                    $file = $request->file("products.$index.image");
-
-                    $imageName = time().'_'.uniqid().'.webp';
-
-                    $img = $manager->read($file->getRealPath())->scale(width: 800);
+            // INSERT NEW PRODUCT    
+            else {    
+                if ( $request->hasFile("products.$index.image") && $request->file("products.$index.image")->isValid() ) {    
+                    $file = $request->file("products.$index.image");    
+                    $imageName = time() . '_' . uniqid() . '.webp';
+    
+                    $img = $manager
+                        ->read($file->getRealPath())
+                        ->scale(width: 800);    
                     $webp = $img->toWebp(80);
-
-                    Storage::disk('s3_products')->put($s3Folder.$imageName, $webp, 'public');
-
+    
+                    Storage::disk('s3_products')->put(
+                        $s3Folder . $imageName,
+                        $webp,
+                        'public'
+                    );    
                     $data['product_img'] = $imageName;
                 }
-
-                $data['created_at'] = now();
-                $data['m_date'] = now();
-
-                DB::table('miniweb_products')->insert($data);
-
+    
+                $data['created_at'] = now();    
+                $data['m_date'] = now();    
+                DB::table('miniweb_products')->insert($data);    
                 $anyChanges = true;
             }
-        }
-        // return $test;
+        }    
+        // return $test;    
         return [
             'status' => $anyChanges,
-            'message' => $anyChanges ? 'Saved Successfully' : 'No Changes'
+            'message' => $anyChanges
+                ? 'Saved Successfully'
+                : 'No Changes'
         ];
     }
 
