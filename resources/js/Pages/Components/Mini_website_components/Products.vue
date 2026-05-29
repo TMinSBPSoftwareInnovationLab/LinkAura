@@ -394,7 +394,7 @@ export default {
                 formData.append(`products[${productIndex}][final_price]`, p.final_price);
                 formData.append(`products[${productIndex}][status]`, p.status);
 
-                if (p.file) {
+                if (p.file instanceof File) {
                     formData.append(`products[${productIndex}][image]`, p.file);
                 }
                 productIndex++;
