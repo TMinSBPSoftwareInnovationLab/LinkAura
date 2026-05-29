@@ -381,22 +381,23 @@ export default {
 
             const formData = new FormData();
             formData.append('cardId', Number(cardStore.cardId));
-
-            products.value.forEach((p, i) => {
+            let productIndex = 0;
+            products.value.forEach((p) => {
 
                 if (p.isLocked) return;
                 if (!isProductFilled(p)) return;
 
-                formData.append(`products[${i}][id]`, p.id ?? '');
-                formData.append(`products[${i}][name]`, p.name);
-                formData.append(`products[${i}][original_price]`, p.original_price);
-                formData.append(`products[${i}][discount_price]`, p.discount_price);
-                formData.append(`products[${i}][final_price]`, p.final_price);
-                formData.append(`products[${i}][status]`, p.status);
+                formData.append(`products[${productIndex}][id]`, p.id ?? '');
+                formData.append(`products[${productIndex}][name]`, p.name);
+                formData.append(`products[${productIndex}][original_price]`, p.original_price);
+                formData.append(`products[${productIndex}][discount_price]`, p.discount_price);
+                formData.append(`products[${productIndex}][final_price]`, p.final_price);
+                formData.append(`products[${productIndex}][status]`, p.status);
 
                 if (p.file) {
-                    formData.append(`products[${i}][image]`, p.file);
+                    formData.append(`products[${productIndex}][image]`, p.file);
                 }
+                productIndex++;
             });
 
             isSubmitting.value = true;
