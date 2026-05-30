@@ -43,7 +43,7 @@
         { id: 'products', label: 'PRODUCTS', icon: ShoppingBagIcon },
         { id: 'services', label: 'SERVICE', icon: Cog6ToothIcon },
         { id: 'Videos', label: 'VIDEOS', icon: PlayCircleIcon },
-        { id: 'gallery', label: 'GALLERY', icon: PhotoIcon },
+        // { id: 'gallery', label: 'GALLERY', icon: PhotoIcon },
         { id: 'payments', label: 'PAYMENTS', icon: BanknotesIcon },
         { id: 'enquiry', label: 'ENQUIRY', icon: DocumentTextIcon },
         { id: 'feedback', label: 'FEEDBACK', icon: EnvelopeIcon },        
