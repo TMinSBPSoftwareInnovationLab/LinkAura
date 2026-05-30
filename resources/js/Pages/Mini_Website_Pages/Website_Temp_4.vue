@@ -552,7 +552,7 @@
             <!-- video /. -->
 
             <!-- gallery -->
-            <div id="gallery" class="flex flex-col w-full mb-2 shadow-2xl">
+            <div id="gallery" v-if="1==2" class="flex flex-col w-full mb-2 shadow-2xl">
                 <!-- header -->
                 <div class="relative flex flex-col w-full mt-1.5 p-1 overflow-hidden animate-liquid bg-gradient-to-br from-[#1d1f21] via-[#07873a] via-[#1d1f21] to-[#07873a] bg-[size:400%_400%] 
                 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-1/2 after:h-[3px] after:bg-[#1d1f21]">
