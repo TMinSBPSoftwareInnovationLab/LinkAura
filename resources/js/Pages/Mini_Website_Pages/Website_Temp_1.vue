@@ -527,7 +527,7 @@
             <!-- video /. -->
 
             <!-- gallery section -->
-            <div id="gallery" class="flex flex-col w-full pt-5 bg-gradient-to-bl from-[#ffe4e6] to-[#ccfbf1] border-2 border-l-0 border-r-0 border-b-0 border-t-[#3d023a]">
+            <div id="gallery" v-if="1==2" class="flex flex-col w-full pt-5 bg-gradient-to-bl from-[#ffe4e6] to-[#ccfbf1] border-2 border-l-0 border-r-0 border-b-0 border-t-[#3d023a]">
 
                 <!-- header -->
                 <div class="grid grid-flow-row justify-center mx-auto">
