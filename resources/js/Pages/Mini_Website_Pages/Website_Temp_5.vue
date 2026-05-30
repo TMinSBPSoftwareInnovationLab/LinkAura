@@ -678,7 +678,7 @@
             <!-- videos /.-->
 
             <!-- gallery -->
-            <div id="gallery" class="flex flex-col w-full mt-2 bg-[#262323] pt-2">
+            <div id="gallery" v-if="1==2" class="flex flex-col w-full mt-2 bg-[#262323] pt-2">
                 <!-- gallery header -->
                 <div class="flex flex-col w-full">
                      <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 320 56">
