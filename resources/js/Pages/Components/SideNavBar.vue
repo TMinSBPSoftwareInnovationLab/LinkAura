@@ -178,7 +178,7 @@ export default {
                 { name: "Media Links", icon: LinkIcon, url: "/MediaLinks" },
                 { name: "Products", icon: RectangleGroupIcon, url: "/Products" },
                 { name: "Services", icon: WrenchScrewdriverIcon, url: "/Service" },
-                { name: "Gallery", icon: PhotoIcon, url: "/Gallery" },
+                // { name: "Gallery", icon: PhotoIcon, url: "/Gallery" },
                 { name: "Payment Details", icon: CreditCardIcon, url: "/PaymentDetails" },
             ],
         };
