@@ -381,16 +381,14 @@
                         document.querySelectorAll('input[type="file"]').forEach(input => {
                             input.value = '';
                         });
-                        services.value = [];                      
+                        services.value = [];
+                        toast.success(res.data.message)
                         router.visit('/PaymentDetails')
-                        alert('if: PaymentDetails')
-                        toast.success(res.data.message)  
                     }
                     else
                     {
-                        router.visit('/PaymentDetails')
-                        alert('else : PaymentDetails')
                         toast.warning(res.data.message)
+                        router.visit('/PaymentDetails')                        
                     }
                 } catch (error) {
                     toast.error("Something went wrong: " + error);
