@@ -485,6 +485,12 @@ class MiniWebsiteController extends Controller
             // =====================================================
     
             if ($productId) {    
+                return [
+                    'productId' => $productId,
+                    'hasFile' => $request->hasFile("products.$index.image"),
+                    'isValid' => $request->file("products.$index.image")?->isValid(),
+                    'file' => $request->file("products.$index.image"),
+                ];
                 $old = DB::table('miniweb_products')
                     ->where('id', $productId)
                     ->first();
