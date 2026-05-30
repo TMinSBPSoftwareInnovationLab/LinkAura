@@ -485,10 +485,13 @@ class MiniWebsiteController extends Controller
             // =====================================================
     
             if ($productId) {    
+                $imageFile = data_get($request->file('products'), '0.image');
+                
                 return [
-                    'allFiles' => $request->allFiles(),
-                    'productsFile' => $request->file('products'),
-                    'image0' => data_get($request->file('products'), '0.image'),
+                    'class' => get_class($imageFile),
+                    'originalName' => $imageFile?->getClientOriginalName(),
+                    'isValid' => $imageFile?->isValid(),
+                    'error' => $imageFile?->getError(),
                 ];
                 $old = DB::table('miniweb_products')
                     ->where('id', $productId)
