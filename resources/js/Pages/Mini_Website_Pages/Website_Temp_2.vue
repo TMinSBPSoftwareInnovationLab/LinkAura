@@ -549,7 +549,7 @@
             <!-- videos /. -->
 
             <!-- gallery  -->
-            <div id="gallery" class="mt-0 flex flex-col w-full border-1 border-b-[#52b84a] bg-[#06402a] px-2 ">
+            <div id="gallery" v-if="1==2" class="mt-0 flex flex-col w-full border-1 border-b-[#52b84a] bg-[#06402a] px-2 ">
                 <!-- theme top bg -->
                 <div class="flex justify-center items-center w-full">
                     <div class="w-48 h-9 bg-gradient-to-br from-[#2A7B9B] via-[#57C785] to-[#52b84a]"
