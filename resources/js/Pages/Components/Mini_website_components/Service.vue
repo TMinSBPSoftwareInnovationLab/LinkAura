@@ -388,6 +388,7 @@
                     else
                     {
                         toast.warning(res.data.message)
+                        router.visit('/PaymentDetails')
                     }
                 } catch (error) {
                     toast.error("Something went wrong: " + error);
