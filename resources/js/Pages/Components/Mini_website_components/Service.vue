@@ -383,7 +383,7 @@
                         });
                         services.value = [];
                         toast.success(res.data.message)
-                        router.visit('/Gallery')
+                        router.visit('/PaymentDetails')
                     }
                     else
                     {
