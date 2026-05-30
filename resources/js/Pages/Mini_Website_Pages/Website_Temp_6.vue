@@ -482,7 +482,7 @@
             <!-- videos /.-->
 
             <!-- gallery -->
-            <div id="gallery" class="relative flex flex-col w-full mt-5 shadow-2xl">
+            <div id="gallery" v-if="1==2" class="relative flex flex-col w-full mt-5 shadow-2xl">
                 <!-- header -->
                 <div class="relative flex flex-col w-full max-w-4xl">
                     <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 798 153" class="w-full h-auto">
