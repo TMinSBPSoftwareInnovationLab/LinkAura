@@ -485,12 +485,12 @@ class MiniWebsiteController extends Controller
             // =====================================================
     
             if ($productId) {    
-                dd([
-                    'upload_max_filesize' => ini_get('upload_max_filesize'),
-                    'post_max_size' => ini_get('post_max_size'),
-                    'memory_limit' => ini_get('memory_limit'),
-                ]);
-                exit;
+                // dd([
+                //     'upload_max_filesize' => ini_get('upload_max_filesize'),
+                //     'post_max_size' => ini_get('post_max_size'),
+                //     'memory_limit' => ini_get('memory_limit'),
+                // ]);
+                // exit;
                 $old = DB::table('miniweb_products')
                     ->where('id', $productId)
                     ->first();
