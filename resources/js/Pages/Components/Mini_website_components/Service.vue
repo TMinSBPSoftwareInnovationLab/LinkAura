@@ -33,7 +33,7 @@
                             md:py-2 md:px-4 md:text-base
                             rounded-xl transition-all duration-500
                             hover:-translate-y-2 hover:shadow-xl">
-                        {{ isSubmitting ? "Saving..." : "Save & Next Gallery" }}
+                        {{ isSubmitting ? "Saving..." : "Save & Next Payment Details" }}
                     </button>
                     <!-- Right Side Button /.-->
 
@@ -119,7 +119,7 @@
                             <div class="flex mt-3 justify-center">
                                 <button @click="saveAndNext" :disabled="isSubmitting"
                                     class="bg-[#000b57] text-white  py-1.5 px-3 text-sm md:py-2 md:px-4 md:text-base rounded-xl transition-all duration-500  hover:-translate-y-2 hover:shadow-xl">
-                                    {{ isSubmitting ? "Saving..." : "Save & Next Gallery" }}
+                                    {{ isSubmitting ? "Saving..." : "Save & Next Payment Details" }}
                                 </button>
                             </div>
                             <!-- submit area /. -->
@@ -381,16 +381,16 @@
                         document.querySelectorAll('input[type="file"]').forEach(input => {
                             input.value = '';
                         });
-                        services.value = [];
-                        toast.success(res.data.message)                        
+                        services.value = [];                      
                         router.visit('/PaymentDetails')
                         alert('if: PaymentDetails')
+                        toast.success(res.data.message)  
                     }
                     else
                     {
-                        toast.warning(res.data.message)
                         router.visit('/PaymentDetails')
                         alert('else : PaymentDetails')
+                        toast.warning(res.data.message)
                     }
                 } catch (error) {
                     toast.error("Something went wrong: " + error);
