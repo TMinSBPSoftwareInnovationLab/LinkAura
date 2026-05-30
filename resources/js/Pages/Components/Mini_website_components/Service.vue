@@ -382,13 +382,15 @@
                             input.value = '';
                         });
                         services.value = [];
-                        toast.success(res.data.message)
+                        toast.success(res.data.message)                        
                         router.visit('/PaymentDetails')
+                        alert('if: PaymentDetails')
                     }
                     else
                     {
                         toast.warning(res.data.message)
                         router.visit('/PaymentDetails')
+                        alert('else : PaymentDetails')
                     }
                 } catch (error) {
                     toast.error("Something went wrong: " + error);
