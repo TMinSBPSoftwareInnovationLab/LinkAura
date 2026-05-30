@@ -404,6 +404,7 @@ export default {
 
             try {
                 const res = await axios.post('/saveWebProducts', formData);
+                headers: { 'Content-Type': 'multipart/form-data' }
 
                 if (res.data.status) {
                     toast.success(res.data.message);
