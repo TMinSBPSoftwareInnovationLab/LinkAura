@@ -515,7 +515,7 @@
             <!-- videos /. -->
 
             <!-- gallery -->
-            <div id="gallery" class="flex flex-col w-full pt-5 mt-1 border-1 border-b-[#07254b]  border-b-0 border-l-0 border-r-0" :style="{ backgroundImage: `url(${galleryBG})`, backgroundSize: 'cover'}" >
+            <div id="gallery" v-if="1==2" class="flex flex-col w-full pt-5 mt-1 border-1 border-b-[#07254b]  border-b-0 border-l-0 border-r-0" :style="{ backgroundImage: `url(${galleryBG})`, backgroundSize: 'cover'}" >
                 <!-- header  area -->
                 <div class="flex w-full pt-5">
                     <div class="flex w-[50%] bg-no-repeat h-[50px] " :style="{ backgroundImage: `url(${defaultHeaderBg})`, backgroundSize: 'contain'}">
