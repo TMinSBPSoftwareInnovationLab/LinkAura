@@ -101,6 +101,7 @@
         setup(){
             const page = usePage();
             const user_id = computed(() => page.props.auth.user?.id)
+            console.log("user_id: ",user_id.value)
             const rowData = ref({});
             const rejectPopup = ref(false);
             const rejectReason = ref("");
