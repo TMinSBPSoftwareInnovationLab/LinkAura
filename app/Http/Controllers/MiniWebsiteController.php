@@ -98,6 +98,12 @@ class MiniWebsiteController extends Controller
         } else { // New Insert
             $insert = DB::table('miniweb_company_details')->insert($addData);
             $last_Id = DB::getPdo()->lastInsertId();
+            // update company id on user dable
+            DB::table('users')
+                ->where('id', $user_id)
+                ->update([
+                    'company_id' => $last_Id
+                ]);
 
             return [
                 'status' => $insert ? true : false,
