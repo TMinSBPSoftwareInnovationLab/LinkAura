@@ -2515,7 +2515,7 @@ class MiniWebsiteController extends Controller
                 "mwo.*", 
                 DB::raw("DATE_FORMAT(created_at, '%d-%m-%Y %h:%i:%s') as CDate")
             )
-            ->when($company_id != 1, function ($query) use ($company_id) {
+            ->when($company_id != 0, function ($query) use ($company_id) {
                 $query->where("mwo.company_id", $company_id);
             })
             ->orderBy("mwo.id","desc")
