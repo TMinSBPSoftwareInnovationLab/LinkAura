@@ -287,7 +287,7 @@ Route::get('/', function () {
 
     return Inertia::render('Website/Index', [
         'metaTitle' => 'LinkAura - Build Your Digital Identity',
-        'metaDescription' => 'Create your mini website, share products & grow your business easily with LinkAura.',
+        'metaDescription' => 'Create a professional mini website for your business, showcase products and services, share your digital profile, attract more customers, and grow your brand online with LinkAura.',
         'metaImage' => $linauraLogo,
     ]);
 });
