@@ -11,7 +11,7 @@
             <Header_tab />
 
             <!-- main content area -->
-             <div class="flex w-full py-5 px-5 bg-white mt-2 justify-end">
+             <div class="flex w-full py-5 px-5 bg-white mt-2 justify-end" v-if="company_id==0">
                 <button @click="gotoCompany_details"
                     class="bg-[#000b57] text-white py-2 px-4 rounded-xl 
                             transition-all duration-500 
@@ -368,6 +368,7 @@ export default {
     setup(){
         const page = usePage();
         const userId = computed(() => page.props.auth.user?.id); // get user loged id
+        const company_id = computed(() => page.props.auth.user?.company_id)
         // const router = useRouter();
         const cardStore = useCardStore() // store card id
         const user_id = ref('')
@@ -819,6 +820,7 @@ export default {
             logoFile,
             handleWhatsAppShare,
             userId,
+            company_id
         };
     }
 };

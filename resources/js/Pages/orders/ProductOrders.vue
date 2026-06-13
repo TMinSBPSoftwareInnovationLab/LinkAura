@@ -101,7 +101,7 @@
         setup(){
             const page = usePage();
             const user_id = computed(() => page.props.auth.user?.id)
-            console.log("user_id: ",user_id.value)
+            const company_id = computed(() => page.props.auth.user?.company_id)
             const rowData = ref({});
             const rejectPopup = ref(false);
             const rejectReason = ref("");
@@ -134,7 +134,7 @@
 
             const loadBS = async() => {
                 try{
-                    const res = await axios.post("/getProductOrders", { user_id: user_id.value }) 
+                    const res = await axios.post("/getProductOrders", { company_id: company_id.value }) 
                     rowData.value = res.data.getData;
 
                     if (res.data.status && Array.isArray(res.data.getData)) {
@@ -223,6 +223,7 @@
                 rowData, 
                 colDefs,
                 user_id,
+                company_id,
                 rejectPopup,
                 rejectReason,
                 selectedRow,
