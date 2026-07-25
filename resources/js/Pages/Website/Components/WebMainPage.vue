@@ -322,7 +322,6 @@
                             <ul class="text-[15px] font-semibold leading-loose">
                                 <li>🛍️ Add up to 25 Products </li>
                                 <li>🛠️ Add up to 5 Services</li>
-                                <li>🖼️ Upload 10 Gallery Images</li>
                                 <li>🔄 Unlimited Updates</li>
                                 <li>✍ Customer Enquiry Section</li>
                                 <li>⭐ Customer Feedback Section</li>
@@ -375,7 +374,6 @@
                                 <ul class="text-[15px] font-semibold leading-loose">
                                     <li>🛍️ Add up to 75 Products </li>
                                     <li>🛠️ Add up to 15 Services</li>
-                                    <li>🖼️ Upload 40 Gallery Images</li>
                                     <li>🔄 Unlimited Updates</li>
                                     <li>✍ Customer Enquiry Section</li>
                                     <li>⭐ Customer Feedback Section</li>
@@ -428,7 +426,6 @@
                                 <ul class="text-[15px] font-semibold leading-loose">
                                     <li>🛍️ Add up to 300+ Products </li>
                                     <li>🛠️ Add up to 40+ Services</li>
-                                    <li>🖼️ Upload 300+ Gallery Images</li>
                                     <li>🔄 Unlimited Updates</li>
                                     <li>✍ Customer Enquiry Section</li>
                                     <li>⭐ Customer Feedback Section</li>
