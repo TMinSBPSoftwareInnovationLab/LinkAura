@@ -1440,21 +1440,17 @@
                 is_purchased.value = data.purchased_id
                 company_mobile.value = data.company_mobile 
 
+                // One-time reload
+                const reloadKey = `company_reload_${cd_id.value}`;
+                const alreadyReloaded = sessionStorage.getItem(reloadKey);
                 // Guard check
-                if (cd_id.value && is_purchased.value <= 0) {
+                if (cd_id.value && is_purchased.value <= 0 && !alreadyReloaded) {
                     // console.log('Access blocked:', cd_id, is_purchased.value)
 
                     // remove query string
                     // router.replace({
                     //     path: route.path
                     // })
-                    const reloadKey = `reloaded_${cd_id.value}`;
-        
-                    // Itha munnadi reload pannirukom-nu check panrom (Infinite loop avoid seiya)
-                    if (!sessionStorage.getItem(reloadKey)) {
-                        sessionStorage.setItem(reloadKey, 'true');
-                        window.location.reload();
-                    }
                     router.visit(window.location.pathname, {
                         replace: true,
                         preserveState: true,
