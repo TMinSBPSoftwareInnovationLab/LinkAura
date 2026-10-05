@@ -1466,6 +1466,7 @@
             const currentAddress = ref("")
 
             const loadAddressDetails = async () => {
+                if(is_purchased.value <=0) return; 
                 const res = await axios.post('/collectAllWebsiteDatas', { 'table_name':'miniweb_contact', cd_id:cd_id.value });
                 const data = res?.data?.getData?.[0];
                 if (!data) return;
@@ -1763,6 +1764,7 @@
                 }
 
                 try {
+                    if(is_purchased.value <= 0) return;
                     const planRes = await axios.post("/collectAllWebsiteDatas", {
                         table_name: "miniweb_company_details",
                         cd_id:cd_id.value
