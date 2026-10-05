@@ -1428,6 +1428,7 @@
             const company_mobile = ref("")
 
             const loadCompanyDetails = async () => {
+                if(is_purchased.value <=0) return; 
                 const res = await axios.post('/collectAllWebsiteDatas', {'table_name':'miniweb_company_details', cd_id:cd_id.value });
                 const data = res?.data?.getData?.[0];
                 if (!data) return;
