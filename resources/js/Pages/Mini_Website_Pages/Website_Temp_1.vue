@@ -1440,14 +1440,8 @@
                 is_purchased.value = data.purchased_id
                 company_mobile.value = data.company_mobile 
 
-                // One-time reload
-                const reloadKey = `company_reload_${cd_id.value}`;
-                const alreadyReloaded = sessionStorage.getItem(reloadKey);
                 // Guard check
-                if(cd_id.value){
-                    // console.log('Access allowed:', cd_id, is_purchased.value)
-                }
-                else if (cd_id.value && is_purchased.value <= 0 && !alreadyReloaded) {
+                if (cd_id.value && is_purchased.value <= 0) {
                     // console.log('Access blocked:', cd_id, is_purchased.value)
 
                     // remove query string
@@ -1458,7 +1452,9 @@
                         replace: true,
                         preserveState: true,
                     });
-                } 
+                } else if (cd_id.value) {
+                    // console.log('Access allowed:', cd_id, is_purchased.value)
+                }
             };
             
             // ---------------- Address Details ----------------
@@ -1617,42 +1613,46 @@
                     isLoading.value = true;
 
                     const offset = (currentPage.value - 1) * perPage;
-
-                    const prodRes = await axios.post("/collectAllWebsiteDatas", { 
-                        table_name: "miniweb_products", 
-                        cd_id: cd_id.value,
-                        limit: perPage,
-                        offset: offset
-                    });
-
-                    const prodData = prodRes?.data?.getData || [];
-
-                    const formatted = prodData
-                        .filter(item => item.product_name && item.final_price > 0)
-                        .map(item => ({
-                            id: item.id,
-                            product_name: item.product_name,
-                            product_img: item.product_img 
-                                ? `${s3ProductsUrl}/product_images/${item.product_img}` 
-                                : "",
-                            orginal_price: Number(item.orginal_price),
-                            discount_price: Number(item.discount_price),
-                            final_price: Number(item.final_price),
-                            status: Number(item.status),
-                        }));
-
-                    if (type === "init") {
-                        products.value = formatted;
-                    } else {
-                        products.value.push(...formatted);
+                    if(is_purchased.value <= 0){
                     }
+                    else if(is_purchased.value > 0){
+                    
+                        const prodRes = await axios.post("/collectAllWebsiteDatas", { 
+                            table_name: "miniweb_products", 
+                            cd_id: cd_id.value,
+                            limit: perPage,
+                            offset: offset
+                        });
 
-                    // 🔥 IMPORTANT FIX
-                    if (prodData.length < perPage) {
-                        hasMore.value = false;
+                        const prodData = prodRes?.data?.getData || [];
+
+                        const formatted = prodData
+                            .filter(item => item.product_name && item.final_price > 0)
+                            .map(item => ({
+                                id: item.id,
+                                product_name: item.product_name,
+                                product_img: item.product_img 
+                                    ? `${s3ProductsUrl}/product_images/${item.product_img}` 
+                                    : "",
+                                orginal_price: Number(item.orginal_price),
+                                discount_price: Number(item.discount_price),
+                                final_price: Number(item.final_price),
+                                status: Number(item.status),
+                            }));
+
+                        if (type === "init") {
+                            products.value = formatted;
+                        } else {
+                            products.value.push(...formatted);
+                        }
+
+                        // 🔥 IMPORTANT FIX
+                        if (prodData.length < perPage) {
+                            hasMore.value = false;
+                        }
+
+                        currentPage.value++;
                     }
-
-                    currentPage.value++;
 
                 } catch (error) {
                     console.error(error);
