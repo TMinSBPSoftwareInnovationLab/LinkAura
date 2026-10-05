@@ -1444,7 +1444,10 @@
                 const reloadKey = `company_reload_${cd_id.value}`;
                 const alreadyReloaded = sessionStorage.getItem(reloadKey);
                 // Guard check
-                if (cd_id.value && is_purchased.value <= 0 && !alreadyReloaded) {
+                if(cd_id.value){
+                    // console.log('Access allowed:', cd_id, is_purchased.value)
+                }
+                else if (cd_id.value && is_purchased.value <= 0 && !alreadyReloaded) {
                     // console.log('Access blocked:', cd_id, is_purchased.value)
 
                     // remove query string
@@ -1455,9 +1458,7 @@
                         replace: true,
                         preserveState: true,
                     });
-                } else if (cd_id.value) {
-                    // console.log('Access allowed:', cd_id, is_purchased.value)
-                }
+                } 
             };
             
             // ---------------- Address Details ----------------
