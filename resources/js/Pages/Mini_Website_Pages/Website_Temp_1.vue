@@ -1448,7 +1448,13 @@
                     // router.replace({
                     //     path: route.path
                     // })
-                    window.location.reload();
+                    const reloadKey = `reloaded_${cd_id.value}`;
+        
+                    // Itha munnadi reload pannirukom-nu check panrom (Infinite loop avoid seiya)
+                    if (!sessionStorage.getItem(reloadKey)) {
+                        sessionStorage.setItem(reloadKey, 'true');
+                        window.location.reload();
+                    }
                     router.visit(window.location.pathname, {
                         replace: true,
                         preserveState: true,
