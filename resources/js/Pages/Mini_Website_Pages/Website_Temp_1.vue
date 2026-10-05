@@ -1448,6 +1448,7 @@
                     // router.replace({
                     //     path: route.path
                     // })
+                    window.location.reload();
                     router.visit(window.location.pathname, {
                         replace: true,
                         preserveState: true,
